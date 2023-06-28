@@ -58,6 +58,20 @@ const api = {
     }
 
     entry.push(listener);
+  },
+
+  removeListener(channel: string, listener: APIListener<any, any>): void {
+    const entry = apiListeners.get(channel);
+    if (entry == undefined) {
+      return;
+    }
+
+    const i = entry.indexOf(listener);
+    if (i === -1) {
+      return;
+    }
+
+    entry.splice(i, 1);
   }
 };
 

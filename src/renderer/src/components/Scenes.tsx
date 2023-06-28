@@ -1,15 +1,29 @@
-import { createSignal } from 'solid-js';
+import { createSignal, onCleanup, onMount } from 'solid-js';
+import { NoScene } from './scenes/NoScene';
 
 
 
 export default function Scenes(props) {
-  const [sceneID, setSceneID] = createSignal("");
-  let id = 0;
+  const [scene, setScene] = createSignal("");
 
-  return (
-    <div>
-      {props.children.find(e => e.id === sceneID())}
-      <button onClick={() => setSceneID("scene-" + (++id % 3))}>Switch</button>
-    </div>
-  );
+  const listener = (s: string) => setScene(s);
+  const eventHandler = (event) => {
+    if (!(event instanceof CustomEvent)) {
+      return;
+    }
+
+    setScene(event.detail.scene);
+  };
+
+  onMount(() => {
+    window.api.listen("changeScene", listener);
+    window.addEventListener("changeScene", eventHandler);
+  });
+
+  onCleanup(() => {
+    window.api.removeListener("changeScene", listener);
+    window.removeEventListener("changeScene", eventHandler);
+  });
+
+  return props.children.find(e => e.id === scene()) ?? <NoScene></NoScene>;
 }
