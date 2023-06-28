@@ -2,7 +2,7 @@ import { createSignal } from 'solid-js';
 
 
 
-export function DirSelectScene() {
+export default function DirSelectScene() {
   const [dir, setDir] = createSignal("")
 
   const selectDir = async () => {
@@ -19,7 +19,7 @@ export function DirSelectScene() {
   }
 
   return (
-    <div id="dir-select">
+    <div id="dir-select scene">
       <div class="center column">
         <button onClick={selectDir}>Select your osu! Songs directory</button>
         <h3><code>{dir()}</code></h3>

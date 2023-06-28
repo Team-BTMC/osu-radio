@@ -1,5 +1,5 @@
 export function NoScene() {
   return (
-    <div></div>
+    <div class="scene"></div>
   );
 }

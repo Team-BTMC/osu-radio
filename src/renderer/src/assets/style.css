@@ -178,8 +178,8 @@ button.icon {
 
 
 html {
-  background-color: rgba(var(--color-fg));
-  color: rgba(var(--color-bg));
+  background-color: rgba(var(--color-bg));
+  color: rgba(var(--color-fg));
 }
 
 body {
@@ -220,25 +220,26 @@ body {
 
 
 
-.app {
-  width: 100%;
-  height: 100%;
-
+.main {
   z-index: var(--NORMAL_CONTENT);
   overflow: hidden;
   display: grid;
   grid-template-columns: 64px 320px 1fr;
+}
+
+.scene {
+  width: 100%;
+  height: 100%;
 
   color: rgba(var(--color-fg));
   background-color: rgba(var(--color-bg), var(--level-bg));
-  /* backdrop-filter: blur(max(25vh, 25vw)); */
 }
 
-.app > * {
+.main > * {
   overflow: auto;
 }
 
-.app * {
+.main * {
   z-index: inherit;
 }
 
