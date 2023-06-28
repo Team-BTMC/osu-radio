@@ -123,7 +123,7 @@ export default function MainScene() {
           </div>
 
           <div class="seeker">
-            <Bar filled={0.1}/>
+            <Bar fill={0.1}/>
             <div class="time">
               <span class="currently">0:01:09</span><span class="duration">0:04:20</span>
             </div>
@@ -140,12 +140,12 @@ export default function MainScene() {
                   <div class="menu-wrapper">
                     <div class="selectors local">
                       <span>Local</span>
-                      <Bar filled={0.1} alignment="vertical"/>
+                      <Bar fill={0.1} alignment="vertical"/>
                     </div>
 
                     <div class="selectors global">
                       <span>Global</span>
-                      <Bar filled={0.1} alignment="vertical"/>
+                      <Bar fill={0.1} alignment="vertical"/>
                     </div>
                   </div>
                 </div>

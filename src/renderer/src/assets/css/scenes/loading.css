@@ -1,0 +1,24 @@
+#loading {
+  gap: 8px;
+}
+
+#loading .title {
+  margin-bottom: 16px;
+}
+
+#loading .hint {
+  color: rgba(var(--color-fg), var(--level-3));
+}
+
+#loading .container {
+  position: relative;
+  display: grid;
+  width: 200px;
+}
+
+#loading .label {
+  position: absolute;
+  left: calc(100% + 8px);
+  top: 50%;
+  translate: 0 -50%;
+}

@@ -3,9 +3,10 @@ import Gradient from './components/Gradient';
 import MainScene from './components/scenes/MainScene';
 import DirSelectScene from './components/scenes/DirSelectScene';
 import { NoScene } from './components/scenes/NoScene';
+import LoadingScene from './components/scenes/LoadingScene';
 export default function App() {
     const [topColor, setTopColor] = createSignal('dodgerblue');
-    const [scene, setScene] = createSignal("");
+    const [scene, setScene] = createSignal("loading");
     const listener = (s) => {
         setScene(s);
     };
@@ -34,6 +35,9 @@ export default function App() {
         </Match>
         <Match when={scene() === "main"}>
           <MainScene />
+        </Match>
+        <Match when={scene() === "loading"}>
+          <LoadingScene />
         </Match>
       </Switch>
     </Gradient>);
