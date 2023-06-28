@@ -12,7 +12,7 @@ export default function DirSelectScene() {
     const submitDir = async () => {
         await window.api.request("dirSubmit", dir());
     };
-    return (<>
+    return (<div id="dir-select" class="scene">
       <div class="column">
         <h2>Your osu! Songs folder:</h2>
         <code classList={{ empty: dir() === "" }}>
@@ -23,5 +23,5 @@ export default function DirSelectScene() {
           <button onClick={submitDir}>Submit</button>
         </div>
       </div>
-    </>);
+    </div>);
 }

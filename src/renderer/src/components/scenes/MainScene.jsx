@@ -1,6 +1,6 @@
 import image from "../../assets/hololive IDOL PROJECT - BLUE CLAPPER_2761277.jpg";
 export default function MainScene() {
-    return (<>
+    return (<div id="main" class="scene">
       <nav>
         <button class="icon">Aa</button>
         <button class="icon">Aa</button>
@@ -155,5 +155,5 @@ export default function MainScene() {
           </div>
         </div>
       </main>
-    </>);
+    </div>);
 }

@@ -21,4 +21,6 @@ Router.respond("dirSelect", () => {
 Router.respond("dirSubmit", (_evt, dir) => {
   const settings = Storage.getTable("settings");
   settings.write("osuSongsDir", dir);
+
+  //todo refer to flowchart [parse folder]
 });
