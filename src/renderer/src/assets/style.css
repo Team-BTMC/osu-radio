@@ -1,0 +1,400 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+
+:root {
+  --FIXED: 0;
+  --NORMAL_CONTENT: 1;
+  --border-radius: 10px;
+
+  --circle-0: dodgerblue;
+  --circle-1: crimson;
+
+  --color-fg: 0, 0, 0;
+  --color-bg: 255, 255, 255;
+
+  --level-bg: 0.64;
+  --level-0: 0.08;
+  --level-1: 0.16;
+  --level-2: 0.24;
+
+  --font-size: 14px;
+  --font-default: 'Inter', sans-serif;
+  --font-monospace: 'JetBrains Mono', monospace;
+}
+
+
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-fg: 255, 255, 255;
+    --color-bg: 0, 0, 0;
+  }
+}
+
+
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(var(--color-fg), var(--level-0));
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(var(--color-fg), var(--level-1));
+}
+
+
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+button {
+  background-color: rgba(var(--color-fg), var(--level-0));
+  color: rgba(var(--color-fg));
+  border: unset;
+  padding: 8px;
+  border-radius: var(--border-radius);
+  outline: 1px solid rgba(var(--color-fg), 0);
+
+  transition: background-color 250ms, outline-color 250ms;
+}
+
+button:focus {
+  outline: 1px solid rgba(var(--color-fg), var(--level-2));
+}
+
+button:hover {
+  background-color: rgba(var(--color-fg), var(--level-1));
+  cursor: pointer;
+
+  transition: background-color 0ms;
+}
+
+button.icon {
+  aspect-ratio: 1/1;
+  font-family: var(--font-monospace);
+}
+
+
+
+.bar {
+  --fill-per: 0%;
+
+  min-height: 0.5em;
+  min-width: 100%;
+  border-radius: var(--border-radius);
+  background-color: rgba(var(--color-fg), var(--level-0));
+  overflow: hidden;
+}
+
+.bar.vertical {
+  min-height: 100%;
+  min-width: 0.5em;
+  display: flex;
+  align-items: flex-end;
+}
+
+.bar .filling {
+  background-color: rgba(var(--color-fg), var(--level-1));
+}
+
+.bar:not(.vertical) .filling {
+  min-height: 0.5em;
+  width: var(--fill-per);
+}
+
+.bar.vertical .filling {
+  min-width: 0.5em;
+  height: var(--fill-per);
+}
+
+
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown .menu {
+  display: none;
+  position: absolute;
+  padding-bottom: 8px;
+  bottom: 100%;
+  right: 0;
+}
+
+.dropdown:hover .menu {
+  display: block;
+}
+
+.dropdown .menu .menu-wrapper {
+  display: flex;
+  background-color: rgba(var(--color-fg), var(--level-0));
+  backdrop-filter: blur(0.5em);
+  padding: 8px;
+  gap: 8px;
+  border-radius: var(--border-radius);
+}
+
+
+
+.controls .dropdown .menu-wrapper {
+  width: calc(44px + 8px + 44px);
+  justify-content: space-between;
+}
+
+.controls .dropdown .menu-wrapper .selectors {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.controls .dropdown .menu-wrapper .selectors span {
+  font-size: 0.8em;
+}
+
+.controls .dropdown .menu-wrapper .selectors .bar.vertical {
+  width: 0.5em;
+  height: 80px;
+  min-height: unset;
+  min-width: unset;
+}
+
+
+
+html {
+  background-color: rgba(var(--color-fg));
+  color: rgba(var(--color-bg));
+}
+
+body {
+  width: 100vw;
+  height: 100vh;
+
+  overflow: hidden;
+  font-family: var(--font-default);
+
+  user-select: none;
+  font-size: var(--font-size);
+}
+
+#root {
+    width: 100vw;
+    height: 100vh;
+
+    overflow: hidden;
+}
+
+.gradient {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  background: radial-gradient(
+    circle at top left,
+    var(--circle-0),
+    transparent max(125vw, 125vh)
+  ), radial-gradient(
+    circle at bottom right,
+    var(--circle-1),
+    transparent max(125vw, 125vh)
+  );
+
+    transition: background 500ms;
+}
+
+
+
+.app {
+  width: 100%;
+  height: 100%;
+
+  z-index: var(--NORMAL_CONTENT);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 64px 320px 1fr;
+
+  color: rgba(var(--color-fg));
+  background-color: rgba(var(--color-bg), var(--level-bg));
+  /* backdrop-filter: blur(max(25vh, 25vw)); */
+}
+
+.app > * {
+  overflow: auto;
+}
+
+.app * {
+  z-index: inherit;
+}
+
+
+
+nav {
+  background-color: rgba(var(--color-fg), var(--level-1));
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  gap: 8px;
+}
+
+nav > .icon {
+  width: 100%;
+  aspect-ratio: 1/1;
+  background-color: rgba(var(--color-fg), var(--level-0));
+  border-radius: var(--border-radius);
+
+  transition: background-color 250ms;
+}
+
+nav > .icon:hover {
+  background-color: rgba(var(--color-fg), var(--level-1));
+  cursor: pointer;
+
+  transition: background-color 0ms;
+}
+
+nav > div.icon {
+  display: grid;
+  place-items: center;
+}
+
+
+
+.side-pane {
+  background-color: rgba(var(--color-fg), var(--level-0));
+  display: grid;
+  grid-template-rows: 64px 1fr;
+  overflow: hidden;
+}
+
+.side-pane > :not(.no-pd) {
+  padding: 16px;
+}
+
+.side-pane .list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: auto;
+}
+
+.side-pane .list .item {
+  min-height: 80px;
+  width: 100%;
+  display: grid;
+  gap: 4px;
+  grid-template-columns: 80px 1fr;
+  overflow: hidden;
+  font-size: 0.85em;
+  border-radius: var(--border-radius);
+
+  transition: background-color 250ms;
+}
+
+.side-pane .list .item:hover {
+  background-color: rgba(var(--color-fg), var(--level-0));
+
+  transition: background-color 0ms;
+}
+
+.side-pane .list .item img {
+  height: 80px;
+  padding: 4px;
+  border-radius: var(--border-radius);
+  aspect-ratio: 1/1;
+  place-self: center;
+  object-fit: cover;
+}
+
+.side-pane .list .item .column {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
+
+
+
+main {
+  background-color: rgba(var(--color-fg), 0);
+}
+
+main > .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+main .song {
+  padding: 16px;
+  width: max(232px, 25vw);
+  border-radius: var(--border-radius);
+  transition: background-color 250ms;
+}
+
+main .song:hover {
+  background-color: rgba(var(--color-fg), var(--level-0));
+
+  transition: background-color 0ms;
+}
+
+main .song img {
+  width: 100%;
+  border-radius: var(--border-radius);
+  aspect-ratio: 1/1;
+  object-fit: cover;
+}
+
+main .song h3 {
+  margin-top: 16px;
+}
+
+
+
+main .seeker {
+  width: calc(max(232px, 25vw) - 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+main .seeker span {
+  font-size: 0.8em;
+}
+
+main .seeker .time {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+
+main .controls {
+  max-width: max(200px, 25vw);
+}
+
+main .controls .wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+main .controls button {
+  width: 44px;
+}
