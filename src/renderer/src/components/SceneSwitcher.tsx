@@ -3,10 +3,12 @@ import { NoScene } from './scenes/NoScene';
 
 
 
-export default function Scenes(props) {
+export default function SceneSwitcher(props) {
   const [scene, setScene] = createSignal("");
 
-  const listener = (s: string) => setScene(s);
+  const listener = (s: string) => {
+    setScene(s);
+  }
   const eventHandler = (event) => {
     if (!(event instanceof CustomEvent)) {
       return;
@@ -25,5 +27,9 @@ export default function Scenes(props) {
     window.removeEventListener("changeScene", eventHandler);
   });
 
-  return props.children.find(e => e.id === scene()) ?? <NoScene></NoScene>;
+  return (
+    <>
+      {props.children.find(e => e.id === scene()) ?? <NoScene></NoScene>}
+    </>
+  );
 }

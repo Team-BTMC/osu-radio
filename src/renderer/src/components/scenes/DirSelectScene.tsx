@@ -19,12 +19,12 @@ export default function DirSelectScene() {
   }
 
   return (
-    <div id="dir-select scene">
+    <>
       <div class="center column">
         <button onClick={selectDir}>Select your osu! Songs directory</button>
         <h3><code>{dir()}</code></h3>
         <button onClick={submitDir}>Submit</button>
       </div>
-    </div>
+    </>
   );
 }

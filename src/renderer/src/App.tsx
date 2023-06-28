@@ -2,7 +2,7 @@ import type { JSX } from 'solid-js';
 import { createSignal, onMount } from 'solid-js';
 import Gradient from './components/Gradient';
 import MainScene from './components/scenes/MainScene';
-import Scenes from './components/Scenes';
+import SceneSwitcher from './components/SceneSwitcher';
 import DirSelectScene from './components/scenes/DirSelectScene';
 
 
@@ -18,10 +18,15 @@ export default function App(): JSX.Element {
 
   return (
     <Gradient bottomColor='crimson' topColor={topColor()}>
-      <Scenes>
-        <DirSelectScene />
-        <MainScene />
-      </Scenes>
+      <SceneSwitcher>
+        <div id="dir-select" class="scene">
+          <DirSelectScene />
+        </div>
+
+        <div id="main" class="scene">
+          <MainScene />
+        </div>
+      </SceneSwitcher>
     </Gradient>
   );
 }
