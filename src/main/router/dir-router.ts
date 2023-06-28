@@ -7,7 +7,7 @@ import { dialog } from 'electron';
 
 Router.respond("dirSelect", () => {
   const path = dialog.showOpenDialogSync({
-    title: "Select your osu! Songs directory",
+    title: "Select your osu! Songs folder",
     properties: ["openDirectory"]
   });
 
