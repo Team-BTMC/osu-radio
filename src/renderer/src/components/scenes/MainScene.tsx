@@ -1,4 +1,5 @@
 import image from "../../assets/hololive IDOL PROJECT - BLUE CLAPPER_2761277.jpg";
+import Bar from '../Bar';
 
 
 
@@ -122,9 +123,7 @@ export default function MainScene() {
           </div>
 
           <div class="seeker">
-            <div class="bar">
-              <div class="filling"></div>
-            </div>
+            <Bar filled={0.1}/>
             <div class="time">
               <span class="currently">0:01:09</span><span class="duration">0:04:20</span>
             </div>
@@ -141,16 +140,12 @@ export default function MainScene() {
                   <div class="menu-wrapper">
                     <div class="selectors local">
                       <span>Local</span>
-                      <div class="bar vertical">
-                        <div class="filling"></div>
-                      </div>
+                      <Bar filled={0.1} alignment="vertical"/>
                     </div>
 
                     <div class="selectors global">
                       <span>Global</span>
-                      <div class="bar vertical">
-                        <div class="filling"></div>
-                      </div>
+                      <Bar filled={0.1} alignment="vertical"/>
                     </div>
                   </div>
                 </div>
