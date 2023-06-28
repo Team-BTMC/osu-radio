@@ -1,0 +1,32 @@
+.bar {
+  --fill-per: 0%;
+
+  min-height: 0.5em;
+  min-width: 100%;
+  border-radius: var(--border-radius);
+  background-color: rgba(var(--color-fg), var(--level-0));
+  overflow: hidden;
+}
+
+.bar.vertical {
+  min-height: 100%;
+  min-width: 0.5em;
+  display: flex;
+  align-items: flex-end;
+}
+
+.bar .filling {
+  background-color: rgba(var(--color-fg), var(--level-1));
+
+  transition: width 150ms linear;
+}
+
+.bar:not(.vertical) .filling {
+  min-height: 0.5em;
+  width: var(--fill-per);
+}
+
+.bar.vertical .filling {
+  min-width: 0.5em;
+  height: var(--fill-per);
+}

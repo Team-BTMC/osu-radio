@@ -5,11 +5,11 @@ import "../assets/css/bar.css";
 
 
 export type BarAlignment = "vertical" | "v" | "horizontal" | "h";
-const Bar: Component<{ alignment?: BarAlignment, filled: number }> = props => {
+const Bar: Component<{ alignment?: BarAlignment, fill: number }> = props => {
   return (
     <div
       class={'bar' + (props.alignment !== undefined ? ` ${props.alignment}` : "")}
-      style={{ "--fill-per": clamp(0, 1, props.filled) }}
+      style={{ "--fill-per": clamp(0, 1, props.fill) * 100 + "%" }}
     >
       <div class="filling"></div>
     </div>
