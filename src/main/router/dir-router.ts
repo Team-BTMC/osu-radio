@@ -1,7 +1,7 @@
 import { Router } from '../lib/route-pass/Router';
-import dialog = Electron.dialog;
 import { none, some } from '../lib/rust-like-utils-backend/Optional';
 import { Storage } from '../lib/storage/Storage';
+import { dialog } from 'electron';
 
 
 
