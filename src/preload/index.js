@@ -17,7 +17,7 @@ ipcRenderer.on("communication/renderer", async (_evt, packet) => {
     const responses = [];
     const promises = [];
     for (let i = 0; i < listeners.length; i++) {
-        const got = listeners[i](packet.data);
+        const got = listeners[i](...packet.data);
         if (got instanceof Promise) {
             promises.push(got);
             got.then(x => {

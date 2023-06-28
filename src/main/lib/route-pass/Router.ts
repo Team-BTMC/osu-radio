@@ -1,4 +1,4 @@
-import type { API, APIFunction, Packet } from '../../../@types';
+import type { RequestAPI, APIFunction, Packet, ListenAPI } from '../../../@types';
 import { BrowserWindow, ipcMain } from 'electron';
 import { TokenNamespace } from '../tungsten/token';
 import { assertNever } from '../tungsten/assertNever';
@@ -37,11 +37,11 @@ ipcMain.on("communication/main", (_evt, packet: Packet<any>) => {
 
 
 export class Router {
-  static respond<E extends keyof API>(event: E, fn: APIFunction<API[E]>): void {
+  static respond<E extends keyof RequestAPI>(event: E, fn: APIFunction<RequestAPI[E]>): void {
     ipcMain.handle(event, fn as any);
   }
 
-  static dispatch(window: BrowserWindow, channel: string, data: any): Promise<any> {
+  static dispatch<E extends keyof ListenAPI>(window: BrowserWindow, channel: E, ...data: Parameters<ListenAPI[E]>): Promise<any> {
     const packet = cratePacket(channel, tokens.create(), data);
 
     const promise = new Promise((resolve, reject) => {

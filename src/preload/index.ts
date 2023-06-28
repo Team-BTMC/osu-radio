@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import type { API, APIListener, Packet, PacketType } from '../@types';
+import type { RequestAPI, APIListener, Packet, PacketType } from '../@types';
+import { ListenAPI } from '../@types';
 
 
 
@@ -9,7 +10,7 @@ function createPacketPreload<T>(channel: string, token: string, data: T, type: P
   }
 }
 
-const apiListeners = new Map<string, APIListener<any, any>[]>();
+const apiListeners = new Map<string, APIListener<any>[]>();
 
 ipcRenderer.on("communication/renderer", async (_evt, packet: Packet<any>) => {
   const p = createPacketPreload(packet.channel, packet.token, undefined as any);
@@ -26,7 +27,7 @@ ipcRenderer.on("communication/renderer", async (_evt, packet: Packet<any>) => {
   const promises: Promise<any>[] = [];
 
   for (let i = 0; i < listeners.length; i++) {
-    const got = listeners[i](packet.data);
+    const got = listeners[i](...packet.data);
 
     if (got instanceof Promise) {
       promises.push(got);
@@ -45,11 +46,11 @@ ipcRenderer.on("communication/renderer", async (_evt, packet: Packet<any>) => {
 });
 
 const api = {
-  request<E extends keyof API>(event: E, ...args: Parameters<API[E]>): Promise<ReturnType<API[E]>> {
+  request<E extends keyof RequestAPI>(event: E, ...args: Parameters<RequestAPI[E]>): Promise<ReturnType<RequestAPI[E]>> {
     return ipcRenderer.invoke(event, ...args) as any;
   },
 
-  listen(channel: string, listener: APIListener<any, any>): void {
+  listen<E extends keyof ListenAPI>(channel: E, listener: APIListener<ListenAPI[E]>): void {
     const entry = apiListeners.get(channel);
 
     if (entry === undefined) {
@@ -60,7 +61,7 @@ const api = {
     entry.push(listener);
   },
 
-  removeListener(channel: string, listener: APIListener<any, any>): void {
+  removeListener<E extends keyof ListenAPI>(channel: E, listener: APIListener<ListenAPI[E]>): void {
     const entry = apiListeners.get(channel);
     if (entry == undefined) {
       return;

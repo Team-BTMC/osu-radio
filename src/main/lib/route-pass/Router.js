@@ -26,7 +26,7 @@ export class Router {
     static respond(event, fn) {
         ipcMain.handle(event, fn);
     }
-    static dispatch(window, channel, data) {
+    static dispatch(window, channel, ...data) {
         const packet = cratePacket(channel, tokens.create(), data);
         const promise = new Promise((resolve, reject) => {
             pending.push({

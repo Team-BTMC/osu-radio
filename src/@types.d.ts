@@ -1,9 +1,9 @@
 declare global {
   interface Window {
     api: {
-      request<E extends keyof API>(event: E, ...data: Parameters<API[E]>): Promise<ReturnType<API[E]>>,
-      listen(channel: string, listener: APIListener<any, any>): void,
-      removeListener(channel: string, listener: APIListener<any, any>): void,
+      request<E extends keyof RequestAPI>(event: E, ...data: Parameters<RequestAPI[E]>): Promise<ReturnType<RequestAPI[E]>>,
+      listen<E extends keyof ListenAPI>(channel: E, listener: APIListener<ListenAPI[E]>): void,
+      removeListener<E extends keyof ListenAPI>(channel: E, listener: APIListener<ListenAPI[E]>): void,
     }
   }
 }
@@ -78,7 +78,7 @@ type OmitPropsWithReturnType<O extends { [K: string]: (...args: unknown[]) => un
 }
 
 
-export type APIFunction<F extends (...args: unknown) => unknown> = (evt: Electron.IpcMainInvokeEvent, ...args: Parameters<F>) => ReturnType<F> | Promise<ReturnType<F>>;
+export type APIFunction<F extends (...args: any) => any> = (evt: Electron.IpcMainInvokeEvent, ...args: Parameters<F>) => ReturnType<F> | Promise<ReturnType<F>>
 
 export type PacketType = 'DATA' | 'ERROR'
 
@@ -90,14 +90,29 @@ export type Packet<T> = {
   reason?: string,
 }
 
-export type APIListener<A, R> = (...args: A) => R
+export type APIListener<F extends (...args: any) => any> = (...args: Parameters<F>) => ReturnType<F> | Promise<ReturnType<F>>
 
 
 
-export type API = {
+export type RequestAPI = {
   queueCurrent: () => Song,
   queueNext: () => void,
   queuePrevious: () => void,
   dirSelect: () => Optional<string>,
   dirSubmit: (dir: string) => void,
+}
+
+
+
+export type LoadingSceneSettings = {
+  title: string,
+  hint: string,
+  max: number
+}
+
+export type ListenAPI = {
+  changeScene: (scene: string) => void,
+  loadingSettings: (settings: LoadingSceneSettings) => void,
+  loadingUpdate: (n: number) => void,
+  loadingSetHint: (hint: string) => void,
 }
