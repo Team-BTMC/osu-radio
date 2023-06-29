@@ -2,12 +2,12 @@ import { createSignal, Match, onCleanup, onMount, Switch } from 'solid-js';
 import Gradient from './components/Gradient';
 import MainScene from './components/scenes/MainScene';
 import DirSelectScene from './components/scenes/DirSelectScene';
-import { NoScene } from './components/scenes/NoScene';
+import NoScene from './components/scenes/NoScene';
 import LoadingScene from './components/scenes/LoadingScene';
 import ErrorScene from './components/scenes/ErrorScene';
 export default function App() {
     const [topColor, setTopColor] = createSignal('dodgerblue');
-    const [scene, setScene] = createSignal("error");
+    const [scene, setScene] = createSignal("");
     const listener = (s) => {
         setScene(s);
     };

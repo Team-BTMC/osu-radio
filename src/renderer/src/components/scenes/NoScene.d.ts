@@ -1,1 +1,1 @@
-export declare function NoScene(): import("solid-js").JSX.Element;
+export default function NoScene(): import("solid-js").JSX.Element;

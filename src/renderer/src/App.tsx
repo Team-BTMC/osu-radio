@@ -3,7 +3,7 @@ import { createSignal, Match, onCleanup, onMount, Switch } from 'solid-js';
 import Gradient from './components/Gradient';
 import MainScene from './components/scenes/MainScene';
 import DirSelectScene from './components/scenes/DirSelectScene';
-import { NoScene } from './components/scenes/NoScene';
+import NoScene from './components/scenes/NoScene';
 import LoadingScene from './components/scenes/LoadingScene';
 import { Scenes } from '../../@types';
 import ErrorScene from './components/scenes/ErrorScene';
