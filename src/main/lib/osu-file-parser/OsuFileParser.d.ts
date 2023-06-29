@@ -5,13 +5,14 @@ export type UpdateSignalType = {
     total: number;
     file: string;
 };
+export type DirParseResult = Promise<Result<Map<string, Song>, string>>;
 export declare class OsuFileParser {
     private readonly file;
     private audioSourceToken;
     private constructor();
     static new(file: string): Optional<OsuFileParser>;
     static parseSong(osuFile: string, obj: any): Promise<Result<Song, string>>;
-    static parseDir(dir: string, update?: Signal<UpdateSignalType>): Promise<Result<Map<string, Song>, string>>;
+    static parseDir(dir: string, update?: Signal<UpdateSignalType>): DirParseResult;
     getAudioSource(): Optional<string>;
     parseFile(): Promise<Result<Song, string>>;
 }

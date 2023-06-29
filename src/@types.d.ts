@@ -17,7 +17,6 @@ export type Optional<T> = {
   isNone: true
 }
 
-
 export type Result<T, E> = {
   value: T,
   isError: false,
@@ -27,20 +26,20 @@ export type Result<T, E> = {
 }
 
 
+
 export type WatchFile = {
   /** Only file name, not absolute path */
   fileName: string,
   ctime: string
 };
 
-
 export type Song = {
   /** Path to audio source (unique factor) */
   id: string,
 
-  audio?: WatchFile & { volume?: number },
+  audio: WatchFile & { volume?: number },
   bg?: WatchFile,
-  config?: WatchFile,
+  config: WatchFile,
   dir: string,
 
   title: string,
@@ -56,15 +55,19 @@ export type Song = {
   tags?: string[],
 };
 
-
 export type SongIndex = {
   id: string,
   t: string,
   a: string,
   c: string,
-  tags: string[],
+  tags?: string[],
   bpm: number
 };
+
+export type System = {
+  indexes: SongIndex[],
+  allTags: { [key: string]: string[] }
+}
 
 
 export type Settings = {

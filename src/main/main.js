@@ -5,12 +5,11 @@ import { dirSubmit } from './router/dir-router';
 import { OsuFileParser } from './lib/osu-file-parser/OsuFileParser';
 import { Signal } from './lib/Signal';
 import { showError } from './router/error-router';
+import { collectTagsAndIndexSongs } from './lib/osu-file-parser/song';
 export async function main(window) {
-    //todo testing only [2]
     const settings = Storage.getTable("settings");
-    settings.delete("osuSongsDir");
     if (settings.get("osuSongsDir").isNone) {
-        let songs;
+        let songsMap;
         do {
             await Router.dispatch(window, "changeScene", "dir-select");
             const dir = await dirSubmit();
@@ -31,19 +30,48 @@ export async function main(window) {
                     updateTimer = undefined;
                 }, 100);
             });
-            songs = await OsuFileParser.parseDir(dir, s);
+            songsMap = await OsuFileParser.parseDir(dir, s);
             clearTimeout(updateTimer);
-            if (songs.isError === true) {
-                await showError(window, songs.error);
+            if (songsMap.isError === true) {
+                await showError(window, songsMap.error);
                 continue;
             }
             settings.write("osuSongsDir", dir);
             break;
         } while (true);
         await Router.dispatch(window, "loadingUpdate", {
-            max: songs.value.size,
-            current: songs.value.size,
-            hint: `Imported total of ${songs.value.size} songs`
+            max: songsMap.value.size,
+            current: songsMap.value.size,
+            hint: `Imported total of ${songsMap.value.size} songs`
+        });
+        const primitive = Object.fromEntries(songsMap.value);
+        Storage.setTable("songs", primitive);
+        const total = Object.values(primitive).length;
+        let updateTimer = undefined;
+        await Router.dispatch(window, "loadingSetTitle", "Indexing songs");
+        const [indexes, tags] = collectTagsAndIndexSongs(primitive, (i, song) => {
+            if (updateTimer !== undefined) {
+                return;
+            }
+            updateTimer = setTimeout(async () => {
+                await Router.dispatch(window, "loadingUpdate", {
+                    current: i,
+                    hint: song,
+                    max: total
+                });
+                updateTimer = undefined;
+            }, 10);
+        });
+        clearTimeout(updateTimer);
+        const system = Storage.getTable("system");
+        system.hold();
+        system.write("indexes", indexes);
+        system.write("allTags", Object.fromEntries(tags));
+        system.writeBack();
+        await Router.dispatch(window, "loadingUpdate", {
+            current: total,
+            hint: "Indexed " + total + " songs",
+            max: total
         });
     }
 }

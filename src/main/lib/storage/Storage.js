@@ -1,7 +1,7 @@
-import fs from "fs";
-import path from "path";
-import { app } from "electron";
-import { Table } from "./Table";
+import fs from 'fs';
+import path from 'path';
+import { app } from 'electron';
+import { Table } from './Table';
 export class Storage {
     static cache = new Map();
     static getTable(name) {
@@ -9,18 +9,28 @@ export class Storage {
         if (hit !== undefined) {
             return hit;
         }
-        const tablePath = path.join(app.getPath("userData"), `/storage/${name}.json`);
+        const tablePath = path.join(app.getPath('userData'), `/storage/${name}.json`);
         if (!fs.existsSync(tablePath)) {
-            fs.mkdirSync(path.join(app.getPath("userData"), "/storage"), { recursive: true });
-            fs.writeFileSync(tablePath, "{}");
+            fs.mkdirSync(path.join(app.getPath('userData'), '/storage'), { recursive: true });
+            fs.writeFileSync(tablePath, '{}');
             return new Table(tablePath, {});
         }
-        const table = new Table(tablePath, JSON.parse(fs.readFileSync(tablePath, { encoding: "utf8" })));
+        const table = new Table(tablePath, JSON.parse(fs.readFileSync(tablePath, { encoding: 'utf8' })));
         this.cache.set(name, table);
         return table;
     }
+    static setTable(name, contents) {
+        const tablePath = path.join(app.getPath('userData'), `/storage/${name}.json`);
+        if (!fs.existsSync(tablePath)) {
+            fs.mkdirSync(path.join(app.getPath('userData'), '/storage'), { recursive: true });
+        }
+        fs.writeFileSync(tablePath, JSON.stringify(contents));
+        const t = new Table(tablePath, contents);
+        this.cache.set(name, t);
+        return t;
+    }
     static removeTable(name) {
         this.cache.delete(name);
-        fs.unlinkSync(path.join(app.getPath("userData"), `/storage/${name}.json`));
+        fs.unlinkSync(path.join(app.getPath('userData'), `/storage/${name}.json`));
     }
 }

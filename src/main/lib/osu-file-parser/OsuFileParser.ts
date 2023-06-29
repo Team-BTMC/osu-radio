@@ -38,7 +38,6 @@ type FileState =
   | 'Colours'
   | 'HitObjects';
 
-type BPM = number[];
 const OFFSET = 0;
 const BPM = 1;
 
@@ -51,6 +50,8 @@ export type UpdateSignalType = {
   total: number,
   file: string
 };
+
+export type DirParseResult = Promise<Result<Map<string, Song>, string>>;
 
 export class OsuFileParser {
   private readonly file: string;
@@ -123,7 +124,7 @@ export class OsuFileParser {
     return ok(obj as Song);
   }
 
-  static async parseDir(dir: string, update?: Signal<UpdateSignalType>): Promise<Result<Map<string, Song>, string>> {
+  static async parseDir(dir: string, update?: Signal<UpdateSignalType>): DirParseResult {
     if (!fs.existsSync(dir)) {
       return fail('Directory does not exists.');
     }
