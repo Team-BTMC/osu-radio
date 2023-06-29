@@ -5,14 +5,16 @@ import MainScene from './components/scenes/MainScene';
 import DirSelectScene from './components/scenes/DirSelectScene';
 import { NoScene } from './components/scenes/NoScene';
 import LoadingScene from './components/scenes/LoadingScene';
+import { Scenes } from '../../@types';
+import ErrorScene from './components/scenes/ErrorScene';
 
 
 
 export default function App(): JSX.Element {
   const [topColor, setTopColor] = createSignal('dodgerblue');
-  const [scene, setScene] = createSignal("");
+  const [scene, setScene] = createSignal<Scenes>("error");
 
-  const listener = (s: string) => {
+  const listener = (s: Scenes) => {
     setScene(s);
   }
   const eventHandler = (event) => {
@@ -49,6 +51,9 @@ export default function App(): JSX.Element {
         </Match>
         <Match when={scene() === "loading"}>
           <LoadingScene/>
+        </Match>
+        <Match when={scene() === "error"}>
+          <ErrorScene/>
         </Match>
       </Switch>
     </Gradient>

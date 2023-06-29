@@ -100,6 +100,7 @@ export type RequestAPI = {
   queuePrevious: () => void,
   dirSelect: () => Optional<string>,
   dirSubmit: (dir: string) => void,
+  errorDismissed: () => void,
 }
 
 
@@ -116,4 +117,5 @@ export type ListenAPI = {
   changeScene: (scene: Scenes) => void,
   loadingSetTitle: (title: string) => void;
   loadingUpdate: (update: LoadingSceneUpdate) => void,
+  errorSetMessage: (msg: string) => void;
 }

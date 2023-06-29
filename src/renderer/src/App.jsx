@@ -4,9 +4,10 @@ import MainScene from './components/scenes/MainScene';
 import DirSelectScene from './components/scenes/DirSelectScene';
 import { NoScene } from './components/scenes/NoScene';
 import LoadingScene from './components/scenes/LoadingScene';
+import ErrorScene from './components/scenes/ErrorScene';
 export default function App() {
     const [topColor, setTopColor] = createSignal('dodgerblue');
-    const [scene, setScene] = createSignal("");
+    const [scene, setScene] = createSignal("error");
     const listener = (s) => {
         setScene(s);
     };
@@ -38,6 +39,9 @@ export default function App() {
         </Match>
         <Match when={scene() === "loading"}>
           <LoadingScene />
+        </Match>
+        <Match when={scene() === "error"}>
+          <ErrorScene />
         </Match>
       </Switch>
     </Gradient>);
