@@ -1,10 +1,10 @@
 import fs from 'fs';
 import readline from 'readline';
 import path from 'path';
-import getAudioDurationInSeconds from 'get-audio-duration';
 import { WatchFile } from './WatchFile';
 import { none, some } from '../rust-like-utils-backend/Optional';
 import { fail, ok } from '../rust-like-utils-backend/Result';
+import { getAudioDurationInSeconds } from 'get-audio-duration';
 const bgFileNameRegex = /.*"(?<!Video.*)(.*)".*/;
 const beatmapSetIDRegex = /([0-9]+) .*/;
 const propertiesMap = new Map([
@@ -83,12 +83,6 @@ export class OsuFileParser {
         const audioSources = new Set();
         const songs = new Map();
         for (let i = 0; i < dirs.length; i++) {
-            if (update !== undefined) {
-                update.value = {
-                    i: i + 1,
-                    total: dirs.length
-                };
-            }
             const subDirPath = path.join(dir, dirs[i]);
             if (!fs.lstatSync(subDirPath).isDirectory()) {
                 continue;
@@ -97,6 +91,13 @@ export class OsuFileParser {
             for (let j = 0; j < files.length; j++) {
                 if (!files[j].endsWith('.osu')) {
                     continue;
+                }
+                if (update !== undefined) {
+                    update.value = {
+                        i: i + 1,
+                        total: dirs.length,
+                        file: files[j]
+                    };
                 }
                 const parser = OsuFileParser.new(path.join(subDirPath, files[j]));
                 if (parser.isNone) {

@@ -7,33 +7,29 @@ export default function LoadingScene() {
     const [hint, setHint] = createSignal("");
     const [current, setCurrent] = createSignal(0);
     const [max, setMax] = createSignal(1);
-    const settings = (s) => {
-        if (s.title !== undefined) {
-            setTitle(s.title ?? "");
+    const update = (u) => {
+        setCurrent(u.current);
+        if (u.max !== undefined) {
+            setMax(clamp(1, Infinity, u.max));
         }
-        if (s.hint !== undefined) {
-            setHint(s.hint ?? "");
-        }
-        if (s.title !== undefined) {
-            setMax(clamp(1, Infinity, s.max));
+        if (u.hint !== undefined) {
+            setHint(u.hint ?? "");
         }
     };
     onMount(() => {
-        window.api.listen("loadingSettings", settings);
-        window.api.listen("loadingUpdate", setCurrent);
-        window.api.listen("loadingUpdate", setHint);
+        window.api.listen("loadingSetTitle", setTitle);
+        window.api.listen("loadingUpdate", update);
     });
     onCleanup(() => {
-        window.api.removeListener("loadingSettings", settings);
-        window.api.removeListener("loadingUpdate", setCurrent);
-        window.api.removeListener("loadingUpdate", setHint);
+        window.api.removeListener("loadingSetTitle", setTitle);
+        window.api.removeListener("loadingUpdate", update);
     });
     return (<div id="loading" class="scene center col">
       <h3 class="title">{title()}</h3>
 
       <div class="container">
         <Bar fill={current() / max()}/>
-        <span class="label">{current()}/{max()}</span>
+        {/*<span class="label">{current()}/{max()}</span>*/}
       </div>
 
       <span class="hint">{hint()}</span>

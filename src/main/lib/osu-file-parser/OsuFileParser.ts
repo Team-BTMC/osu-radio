@@ -2,11 +2,11 @@ import { Optional, Result, Song } from '../../../@types';
 import fs from 'fs';
 import readline from 'readline';
 import path from 'path';
-import getAudioDurationInSeconds from 'get-audio-duration';
 import { WatchFile } from './WatchFile';
 import { none, some } from '../rust-like-utils-backend/Optional';
 import { fail, ok } from '../rust-like-utils-backend/Result';
 import { Signal } from '../Signal';
+import { getAudioDurationInSeconds } from 'get-audio-duration';
 
 
 
@@ -45,6 +45,12 @@ const BPM = 1;
 const audioSourceNotFound = 'Audio does not exists.' as const;
 
 
+
+export type UpdateSignalType = {
+  i: number,
+  total: number,
+  file: string
+};
 
 export class OsuFileParser {
   private readonly file: string;
@@ -117,10 +123,7 @@ export class OsuFileParser {
     return ok(obj as Song);
   }
 
-  static async parseDir(dir: string, update?: Signal<{
-    i: number,
-    total: number
-  }>): Promise<Result<Map<string, Song>, string>> {
+  static async parseDir(dir: string, update?: Signal<UpdateSignalType>): Promise<Result<Map<string, Song>, string>> {
     if (!fs.existsSync(dir)) {
       return fail('Directory does not exists.');
     }
@@ -130,13 +133,6 @@ export class OsuFileParser {
     const songs = new Map<string, Song>();
 
     for (let i = 0; i < dirs.length; i++) {
-      if (update !== undefined) {
-        update.value = {
-          i: i + 1,
-          total: dirs.length
-        };
-      }
-
       const subDirPath = path.join(dir, dirs[i]);
       if (!fs.lstatSync(subDirPath).isDirectory()) {
         continue;
@@ -146,6 +142,14 @@ export class OsuFileParser {
       for (let j = 0; j < files.length; j++) {
         if (!files[j].endsWith('.osu')) {
           continue;
+        }
+
+        if (update !== undefined) {
+          update.value = {
+            i: i + 1,
+            total: dirs.length,
+            file: files[j]
+          };
         }
 
         const parser = OsuFileParser.new(path.join(subDirPath, files[j]));

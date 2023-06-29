@@ -10,7 +10,7 @@ import LoadingScene from './components/scenes/LoadingScene';
 
 export default function App(): JSX.Element {
   const [topColor, setTopColor] = createSignal('dodgerblue');
-  const [scene, setScene] = createSignal("loading");
+  const [scene, setScene] = createSignal("");
 
   const listener = (s: string) => {
     setScene(s);

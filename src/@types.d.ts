@@ -104,15 +104,16 @@ export type RequestAPI = {
 
 
 
-export type LoadingSceneSettings = {
-  title: string,
-  hint: string,
-  max: number
+export type LoadingSceneUpdate = {
+  current: number,
+  hint?: string,
+  max?: number
 }
 
+export type Scenes = "loading" | "dir-select" | "main" | "error";
+
 export type ListenAPI = {
-  changeScene: (scene: string) => void,
-  loadingSettings: (settings: LoadingSceneSettings) => void,
-  loadingUpdate: (n: number) => void,
-  loadingSetHint: (hint: string) => void,
+  changeScene: (scene: Scenes) => void,
+  loadingSetTitle: (title: string) => void;
+  loadingUpdate: (update: LoadingSceneUpdate) => void,
 }

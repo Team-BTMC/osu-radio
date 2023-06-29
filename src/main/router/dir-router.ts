@@ -1,9 +1,10 @@
 import { Router } from '../lib/route-pass/Router';
 import { none, some } from '../lib/rust-like-utils-backend/Optional';
-import { Storage } from '../lib/storage/Storage';
 import { dialog } from 'electron';
 
 
+
+let waitList: ((dir: string) => void)[] = [];
 
 Router.respond("dirSelect", () => {
   const path = dialog.showOpenDialogSync({
@@ -19,8 +20,17 @@ Router.respond("dirSelect", () => {
 });
 
 Router.respond("dirSubmit", (_evt, dir) => {
-  const settings = Storage.getTable("settings");
-  settings.write("osuSongsDir", dir);
+  for (let i = 0; i < waitList.length; i++) {
+    waitList[i](dir);
+  }
 
-  //todo refer to flowchart [parse folder]
+  waitList = [];
 });
+
+
+
+export function dirSubmit(): Promise<string> {
+  return new Promise(resolve => {
+    waitList.push(resolve);
+  });
+}

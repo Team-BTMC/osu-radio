@@ -8,6 +8,9 @@
 
 #loading .hint {
   color: rgba(var(--color-fg), var(--level-3));
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 #loading .container {

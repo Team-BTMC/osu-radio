@@ -6,7 +6,7 @@ import { NoScene } from './components/scenes/NoScene';
 import LoadingScene from './components/scenes/LoadingScene';
 export default function App() {
     const [topColor, setTopColor] = createSignal('dodgerblue');
-    const [scene, setScene] = createSignal("loading");
+    const [scene, setScene] = createSignal("");
     const listener = (s) => {
         setScene(s);
     };
