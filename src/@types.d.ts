@@ -111,7 +111,7 @@ export type LoadingSceneUpdate = {
   max?: number
 }
 
-export type Scenes = "loading" | "dir-select" | "main" | "error";
+export type Scenes = "" | "loading" | "dir-select" | "main" | "error";
 
 export type ListenAPI = {
   changeScene: (scene: Scenes) => void,

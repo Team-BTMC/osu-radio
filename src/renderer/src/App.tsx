@@ -12,7 +12,7 @@ import ErrorScene from './components/scenes/ErrorScene';
 
 export default function App(): JSX.Element {
   const [topColor, setTopColor] = createSignal('dodgerblue');
-  const [scene, setScene] = createSignal<Scenes>("error");
+  const [scene, setScene] = createSignal<Scenes>("");
 
   const listener = (s: Scenes) => {
     setScene(s);
