@@ -3,4 +3,4 @@ export declare function map(value: number, fromStart: number, fromEnd: number, t
 export declare function sleep(ms: number): Promise<void>;
 export declare function rng(from: number, to: number): number;
 export declare function flatRNG(from: number, to: number): number;
-export declare function hash(str: any): string;
+export declare function hash(str: string, bits?: number): string;

@@ -15,16 +15,17 @@ export function rng(from, to) {
 export function flatRNG(from, to) {
     return Math.floor(rng(from, to));
 }
-const CHARSET = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890-_";
-export function hash(str) {
+const CHARSET = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM-_";
+export function hash(str, bits = 64) {
     let n = 0n;
+    const mask = BigInt("0b" + ("1".repeat(bits)));
     for (let i = 0, len = str.length; i < len; i++) {
         const chr = BigInt(str.charCodeAt(i));
         n = (n << 5n) - n + chr;
-        n &= 0xffffffffffffffffn; // convert to 64 bits
+        n &= mask; // convert to 64 bits
     }
     let hash = "";
-    for (let i = 0; i < Math.ceil(64 / 6); i++) {
+    for (let i = 0; i < Math.ceil(bits / 6); i++) {
         hash += CHARSET[Number(n & 0x3fn)];
         n >>= 6n;
     }

@@ -22,3 +22,25 @@ export function rng(from: number, to: number): number {
 export function flatRNG(from: number, to: number): number {
     return Math.floor(rng(from, to));
 }
+
+
+
+const CHARSET = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM-_";
+export function hash(str: string, bits = 64): string {
+  let n = 0n;
+  const mask = BigInt("0b" + ("1".repeat(bits)));
+
+  for (let i = 0, len = str.length; i < len; i++) {
+    const chr = BigInt(str.charCodeAt(i));
+    n = (n << 5n) - n + chr;
+    n &= mask; // convert to 64 bits
+  }
+
+  let hash = "";
+  for (let i = 0; i < Math.ceil(bits / 6); i++) {
+    hash += CHARSET[Number(n & 0x3fn)];
+    n >>= 6n;
+  }
+
+  return hash;
+}
