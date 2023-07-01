@@ -1,16 +1,18 @@
 import fs from 'fs';
 import path from 'path';
 import { app } from 'electron';
-import { Settings, Song, System } from '../../../@types';
+import { ResourceID, AudioSource, ImageSource, Settings, Song, System } from '../../../@types';
 import { Table } from './Table';
 
 
 
 type TableMap = {
-  'songs': { [key: string]: Song },
-  'playlists': { [key: string]: Song[] },
+  'songs': { [key: ResourceID]: Song },
+  'audio': { [key: ResourceID]: AudioSource },
+  'images': { [key: ResourceID]: ImageSource },
+  'playlists': { [key: string]: ResourceID[] },
   'settings': Settings,
-  'system': System
+  'system': System,
 }
 
 

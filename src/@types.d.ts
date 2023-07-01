@@ -27,20 +27,42 @@ export type Result<T, E> = {
 
 
 
+/** result of absolute file path being hashed (64-bit) */
+export type ResourceID = string;
+
 export type WatchFile = {
   /** Only file name, not absolute path */
   fileName: string,
   ctime: string
 };
 
-export type Song = {
-  /** Path to audio source (unique factor) */
-  id: string,
+export type AudioSource = {
+  /** `osuDir/path` = absolute path */
+  id: ResourceID;
+  path: string;
+  ctime: string;
 
-  audio: WatchFile & { volume?: number },
-  bg?: WatchFile,
+  volume?: number;
+  //todo audio file waveform
+};
+
+export type ImageSource = {
+  /** `osuDir/path` = absolute path */
+  id: ResourceID;
+  path: string;
+  ctime: string;
+
+  //todo prominent colors of image
+}
+
+export type Song = {
+  /** hashed path to config source (unique factor) */
+  id: ResourceID,
+  audio: ResourceID,
+  bg?: ResourceID,
+
   config: WatchFile,
-  dir: string,
+  dir: string;
 
   title: string,
   artist: string,
@@ -64,16 +86,18 @@ export type SongIndex = {
   bpm: number
 };
 
+
+
 export type System = {
   indexes: SongIndex[],
   allTags: { [key: string]: string[] }
 }
 
-
 export type Settings = {
   volume: number,
   osuSongsDir: string,
 };
+
 
 
 type OmitPropsWithReturnType<O extends { [K: string]: (...args: unknown[]) => unknown }, V> = {

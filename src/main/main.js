@@ -8,8 +8,9 @@ import { showError } from './router/error-router';
 import { collectTagsAndIndexSongs } from './lib/osu-file-parser/song';
 export async function main(window) {
     const settings = Storage.getTable("settings");
+    // settings.delete("osuSongsDir");
     if (settings.get("osuSongsDir").isNone) {
-        let songsMap;
+        let maps;
         do {
             await Router.dispatch(window, "changeScene", "dir-select");
             const dir = await dirSubmit();
@@ -30,22 +31,24 @@ export async function main(window) {
                     updateTimer = undefined;
                 }, 100);
             });
-            songsMap = await OsuFileParser.parseDir(dir, s);
+            maps = await OsuFileParser.parseDir(dir, s);
             clearTimeout(updateTimer);
-            if (songsMap.isError === true) {
-                await showError(window, songsMap.error);
+            if (maps.isError === true) {
+                await showError(window, maps.error);
                 continue;
             }
             settings.write("osuSongsDir", dir);
             break;
         } while (true);
         await Router.dispatch(window, "loadingUpdate", {
-            max: songsMap.value.size,
-            current: songsMap.value.size,
-            hint: `Imported total of ${songsMap.value.size} songs`
+            max: maps.value[0].size,
+            current: maps.value[0].size,
+            hint: `Imported total of ${maps.value[0].size} songs`
         });
-        const primitive = Object.fromEntries(songsMap.value);
+        const primitive = Object.fromEntries(maps.value[0]);
         Storage.setTable("songs", primitive);
+        Storage.setTable("audio", Object.fromEntries(maps.value[1]));
+        Storage.setTable("images", Object.fromEntries(maps.value[2]));
         const total = Object.values(primitive).length;
         let updateTimer = undefined;
         await Router.dispatch(window, "loadingSetTitle", "Indexing songs");
