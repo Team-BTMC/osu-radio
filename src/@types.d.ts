@@ -100,6 +100,17 @@ export type Settings = {
 
 
 
+export type TableMap = {
+  'songs': { [key: ResourceID]: Song },
+  'audio': { [key: ResourceID]: AudioSource },
+  'images': { [key: ResourceID]: ImageSource },
+  'playlists': { [key: string]: ResourceID[] },
+  'settings': Settings,
+  'system': System,
+}
+
+
+
 type OmitPropsWithReturnType<O extends { [K: string]: (...args: unknown[]) => unknown }, V> = {
   [K in keyof O as ReturnType<O[K]> extends V ? never : K]: O[K]
 }
