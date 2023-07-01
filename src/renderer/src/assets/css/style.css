@@ -199,7 +199,7 @@ body {
 
 
 
-.main {
+#main {
   z-index: var(--NORMAL_CONTENT);
   overflow: hidden;
   display: grid;

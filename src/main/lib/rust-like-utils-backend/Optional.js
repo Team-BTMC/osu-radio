@@ -9,3 +9,9 @@ export function some(value) {
         isNone: false
     };
 }
+export function orDefault(opt, def) {
+    if (opt.isNone) {
+        return def;
+    }
+    return opt.value;
+}
