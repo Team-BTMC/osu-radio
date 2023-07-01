@@ -11,7 +11,7 @@ export type InfiniteScrollerResponse = Optional<{
 
 type InfinityScrollerProps = {
   apiKey: keyof OmitPropsWithoutReturnType<RequestAPI, InfiniteScrollerResponse>,
-  component: Component,
+  builder: (props: any) => JSX.Element,
   reset?: ResetSignal,
   autoload?: boolean
 } & JSX.HTMLAttributes<HTMLDivElement>;
@@ -71,12 +71,12 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
     }
   });
 
-  const [, rest] = splitProps(props, ["apiKey", "reset", "component", "autoload"]);
+  const [, rest] = splitProps(props, ["apiKey", "reset", "builder", "autoload"]);
 
   return (
     <div ref={container} {...rest}>
       <For each={elements()}>{componentProps =>
-        props.component(componentProps)
+        props.builder(componentProps)
       }</For>
     </div>
   );
