@@ -5,7 +5,6 @@ import path from 'path';
 import { WatchFile } from './WatchFile';
 import { none, some } from '../rust-like-utils-backend/Optional';
 import { fail, ok } from '../rust-like-utils-backend/Result';
-import { Signal } from '../Signal';
 import { getAudioDurationInSeconds } from 'get-audio-duration';
 import { hash } from '../tungsten/math';
 import { SongBuilder } from './SongBuilder';
@@ -46,12 +45,6 @@ const BPM = 1;
 const audioSourceNotFound = 'Audio does not exists.' as const;
 
 
-
-export type UpdateSignalType = {
-  i: number,
-  total: number,
-  file: string
-};
 
 export type DirParseResult = Promise<Result<[Map<ResourceID, Song>, Map<ResourceID, AudioSource>, Map<ResourceID, ImageSource>], string>>;
 
@@ -149,7 +142,7 @@ export class OsuFileParser {
     return ok([builder.build(), audio, bg]);
   }
 
-  static async parseDir(dir: string, update?: Signal<UpdateSignalType>): DirParseResult {
+  static async parseDir(dir: string, update?: (i: number, total: number, file: string) => any): DirParseResult {
     if (!fs.existsSync(dir)) {
       return fail('Directory does not exists.');
     }
@@ -173,11 +166,7 @@ export class OsuFileParser {
         }
 
         if (update !== undefined) {
-          update.value = {
-            i: i + 1,
-            total: dirs.length,
-            file: files[j]
-          };
+          update(i + 1, dirs.length, files[j]);
         }
 
         const parser = OsuFileParser.new(path.join(subDirPath, files[j]), dir);

@@ -5,11 +5,11 @@ import { showError } from './router/error-router';
 import { dirSubmit } from './router/dir-router';
 import "./router/infinite-scroller-router";
 import "./router/resource-router";
-import { DirParseResult, OsuFileParser, UpdateSignalType } from './lib/osu-file-parser/OsuFileParser';
-import { Signal } from './lib/Signal';
+import { DirParseResult, OsuFileParser } from './lib/osu-file-parser/OsuFileParser';
 import { collectTagsAndIndexSongs } from './lib/osu-file-parser/song';
 import Global from './lib/Global';
 import { orDefault } from './lib/rust-like-utils-backend/Optional';
+import { throttle } from './lib/util/throttle';
 
 
 
@@ -47,26 +47,16 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
     await Router.dispatch(mainWindow, "changeScene", "loading");
     await Router.dispatch(mainWindow, "loadingSetTitle", "Importing songs from osu! Songs directory");
 
-    const s = new Signal<UpdateSignalType>();
-    let updateTimer: NodeJS.Timeout | undefined = undefined;
-    s.listen(update => {
-      if (updateTimer !== undefined) {
-        return;
-      }
+    const [update, cancelUpdate] = throttle(async (i: number, total: number, file: string) => {
+      await Router.dispatch(mainWindow, "loadingUpdate", {
+        current: i,
+        max: total,
+        hint: file,
+      });
+    }, 25);
 
-      updateTimer = setTimeout(async () => {
-        await Router.dispatch(mainWindow, "loadingUpdate", {
-          current: update.i,
-          hint: update.file,
-          max: update.total
-        });
-
-        updateTimer = undefined;
-      }, 100);
-    });
-
-    maps = await OsuFileParser.parseDir(dir, s);
-    clearTimeout(updateTimer);
+    maps = await OsuFileParser.parseDir(dir, update);
+    cancelUpdate();
 
     if (maps.isError === true) {
       await showError(mainWindow, maps.error);
@@ -88,31 +78,24 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
     hint: `Imported total of ${maps.value[0].size} songs`
   });
 
-  const primitive = Object.fromEntries(maps.value[0]);
-  Storage.setTable("songs", primitive);
+  const songs = Object.fromEntries(maps.value[0]);
+  Storage.setTable("songs", songs);
   Storage.setTable("audio", Object.fromEntries(maps.value[1]));
   Storage.setTable("images", Object.fromEntries(maps.value[2]));
 
-  const total = Object.values(primitive).length;
-  let updateTimer: NodeJS.Timeout | undefined = undefined;
+  const total = Object.values(songs).length;
   await Router.dispatch(mainWindow, "loadingSetTitle", "Indexing songs");
-  const [indexes, tags] = collectTagsAndIndexSongs(primitive, (i, song) => {
-    if (updateTimer !== undefined) {
-      return;
-    }
 
-    updateTimer = setTimeout(async () => {
-      await Router.dispatch(mainWindow, "loadingUpdate", {
-        current: i,
-        hint: song,
-        max: total
-      });
+  const [update, cancelUpdate] = throttle(async (i: number, song: string) => {
+    await Router.dispatch(mainWindow, "loadingUpdate", {
+      current: i,
+      hint: song,
+      max: total
+    });
+  }, 25);
 
-      updateTimer = undefined;
-    }, 10);
-  });
-
-  clearTimeout(updateTimer);
+  const [indexes, tags] = collectTagsAndIndexSongs(songs, update);
+  cancelUpdate();
 
   const system = Storage.getTable("system");
   system.hold();
