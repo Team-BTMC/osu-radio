@@ -1,11 +1,12 @@
 import { BrowserWindow } from 'electron';
 import { Storage } from './lib/storage/Storage';
 import { Router } from './lib/route-pass/Router';
-import "./router/dir-router";
+import { showError } from './router/error-router';
 import { dirSubmit } from './router/dir-router';
+import "./router/infinite-scroller-router";
+import "./router/resource-router";
 import { DirParseResult, OsuFileParser, UpdateSignalType } from './lib/osu-file-parser/OsuFileParser';
 import { Signal } from './lib/Signal';
-import { showError } from './router/error-router';
 import { collectTagsAndIndexSongs } from './lib/osu-file-parser/song';
 import Global from './lib/Global';
 import { orDefault } from './lib/rust-like-utils-backend/Optional';
@@ -28,7 +29,7 @@ export async function main(window: BrowserWindow) {
     await configureOsuDir(window);
   }
 
-  Global.cache.set("sorted", songsArray.sort((a, b) => (a.artist + a.title).localeCompare(b.artist + b.title)));
+  Global.cache.set("songs", songsArray.sort((a, b) => (a.artist + a.title).localeCompare(b.artist + b.title)));
 
   await Router.dispatch(window, "changeScene", "main");
 }

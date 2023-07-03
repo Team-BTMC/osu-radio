@@ -1,13 +1,19 @@
 import image from "../../assets/hololive IDOL PROJECT - BLUE CLAPPER_2761277.jpg";
 import Bar from '../Bar';
+import InfiniteScroller from '../InfiniteScroller';
+import ResetSignal from '../../lib/ResetSignal';
+import { Song } from '../../../../@types';
+import Item from '../song/Item';
 
 
 
 export default function MainScene() {
+  const resetAllSongs = new ResetSignal();
+
   return (
     <div id="main" class="scene">
       <nav>
-        <button class="icon">Aa</button>
+        <button class="icon" onClick={() => resetAllSongs.reset()}>Aa</button>
         <button class="icon">Aa</button>
         <button class="icon">Aa</button>
         <button class="icon">Aa</button>
@@ -19,99 +25,11 @@ export default function MainScene() {
           <h1>Search...</h1>
         </div>
 
-        <div class="list">
-          <div class="item">
-            <img src={image} alt="art" />
-            <div class="column">
-              <h3>BLUE CLAPPER</h3>
-              <span>hololive IDOL PROJECT</span>
-            </div>
-          </div>
-          <div class="item">
-            <img src={image} alt="art" />
-            <div class="column">
-              <h3>BLUE CLAPPER</h3>
-              <span>hololive IDOL PROJECT</span>
-            </div>
-          </div>
-          <div class="item">
-            <img src={image} alt="art" />
-            <div class="column">
-              <h3>BLUE CLAPPER</h3>
-              <span>hololive IDOL PROJECT</span>
-            </div>
-          </div>
-          <div class="item">
-            <img src={image} alt="art" />
-            <div class="column">
-              <h3>BLUE CLAPPER</h3>
-              <span>hololive IDOL PROJECT</span>
-            </div>
-          </div>
-          <div class="item">
-            <img src={image} alt="art" />
-            <div class="column">
-              <h3>BLUE CLAPPER</h3>
-              <span>hololive IDOL PROJECT</span>
-            </div>
-          </div>
-          <div class="item">
-            <img src={image} alt="art" />
-            <div class="column">
-              <h3>BLUE CLAPPER</h3>
-              <span>hololive IDOL PROJECT</span>
-            </div>
-          </div>
-          <div class="item">
-            <img src={image} alt="art" />
-            <div class="column">
-              <h3>BLUE CLAPPER</h3>
-              <span>hololive IDOL PROJECT</span>
-            </div>
-          </div>
-          <div class="item">
-            <img src={image} alt="art" />
-            <div class="column">
-              <h3>BLUE CLAPPER</h3>
-              <span>hololive IDOL PROJECT</span>
-            </div>
-          </div>
-          <div class="item">
-            <img src={image} alt="art" />
-            <div class="column">
-              <h3>BLUE CLAPPER</h3>
-              <span>hololive IDOL PROJECT</span>
-            </div>
-          </div>
-          <div class="item">
-            <img src={image} alt="art" />
-            <div class="column">
-              <h3>BLUE CLAPPER</h3>
-              <span>hololive IDOL PROJECT</span>
-            </div>
-          </div>
-          <div class="item">
-            <img src={image} alt="art" />
-            <div class="column">
-              <h3>BLUE CLAPPER</h3>
-              <span>hololive IDOL PROJECT</span>
-            </div>
-          </div>
-          <div class="item">
-            <img src={image} alt="art" />
-            <div class="column">
-              <h3>BLUE CLAPPER</h3>
-              <span>hololive IDOL PROJECT</span>
-            </div>
-          </div>
-          <div class="item">
-            <img src={image} alt="art" />
-            <div class="column">
-              <h3>BLUE CLAPPER</h3>
-              <span>hololive IDOL PROJECT</span>
-            </div>
-          </div>
-        </div>
+        {/*todo add "Showing: 1,234 songs"*/}
+
+        <InfiniteScroller class={"list"} apiKey={"allSongs"} reset={resetAllSongs} builder={(song: Song) =>
+          <Item song={song}/>
+        }/>
       </div>
 
       <main class="center">

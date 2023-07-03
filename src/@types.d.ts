@@ -1,3 +1,7 @@
+import type { InfiniteScrollerResponse } from './renderer/src/components/InfiniteScroller';
+
+
+
 declare global {
   interface Window {
     api: {
@@ -61,6 +65,11 @@ export type Song = {
   audio: ResourceID,
   bg?: ResourceID,
 
+
+  /* todo instead of config and dir
+      path: string;
+      ctime: string;
+  */
   config: WatchFile,
   dir: string;
 
@@ -109,10 +118,16 @@ export type TableMap = {
   'system': System,
 }
 
+export type ResourceTables = /* "songs" | */ "audio" | "images";
 
 
-type OmitPropsWithReturnType<O extends { [K: string]: (...args: unknown[]) => unknown }, V> = {
+
+type OmitPropsWithReturnType<O extends { [K: string]: (...args: any[]) => any }, V> = {
   [K in keyof O as ReturnType<O[K]> extends V ? never : K]: O[K]
+}
+
+type OmitPropsWithoutReturnType<O extends { [K: string]: (...args: any[]) => any }, V> = {
+  [K in keyof O as ReturnType<O[K]> extends V ? K : never]: O[K]
 }
 
 
@@ -133,12 +148,14 @@ export type APIListener<F extends (...args: any) => any> = (...args: Parameters<
 
 
 export type RequestAPI = {
+  resourceGet: (id: any, table: ResourceTables) => Result<string, string>,
   queueCurrent: () => Song,
   queueNext: () => void,
   queuePrevious: () => void,
   dirSelect: () => Optional<string>,
   dirSubmit: (dir: string) => void,
   errorDismissed: () => void,
+  allSongs: (index: number) => InfiniteScrollerResponse
 }
 
 
