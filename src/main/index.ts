@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, dialog } from 'electron';
 import { join } from 'path';
 import { electronApp, is, optimizer } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
@@ -31,7 +31,10 @@ async function createWindow() {
     await window.loadFile(join(__dirname, '../renderer/index.html'));
   }
 
-  await main(window);
+  await main(window)
+    .catch(error => {
+      dialog.showErrorBox("Report to the developer team to fix", error);
+    });
 }
 
 app.whenReady().then(async () => {
