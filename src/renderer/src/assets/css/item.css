@@ -1,0 +1,43 @@
+.side-pane .list .item {
+  min-height: 80px;
+  width: 100%;
+  display: grid;
+  gap: 4px;
+  grid-template-columns: 80px 1fr;
+  overflow: hidden;
+  font-size: 0.85em;
+  border-radius: var(--border-radius);
+
+  transition: background-color 250ms;
+}
+
+.side-pane .list .item:hover {
+  background-color: rgba(var(--color-fg), var(--level-0));
+
+  transition: background-color 0ms;
+}
+
+.side-pane .list .item .image {
+  height: 72px;
+  margin: 4px;
+  aspect-ratio: 1/1;
+  border-radius: var(--border-radius);
+  place-self: center;
+  background-size: 200px;
+  background-position: center;
+  transform: translateZ(0);
+
+  transition: background-size 250ms linear;
+}
+
+.side-pane .list .item:hover .image {
+  background-size: 240px;
+
+  transition: background-size 50ms linear;
+}
+
+.side-pane .list .item .column {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}

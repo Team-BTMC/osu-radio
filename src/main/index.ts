@@ -8,6 +8,7 @@ import { main } from './main';
 
 async function createWindow() {
   const window = new BrowserWindow({
+    title: "osu!radio",
     width: 900,
     height: 670,
     show: false,
@@ -40,7 +41,7 @@ async function createWindow() {
 
 app.whenReady().then(async () => {
   // Set app user model id for windows
-  electronApp.setAppUserModelId('com.electron');
+  electronApp.setAppUserModelId('com.osu-radio');
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.

@@ -1,20 +1,32 @@
 import { ResourceID, ResourceTables } from '../../../../@types';
-import { createSignal } from 'solid-js';
 
 
 
-export function getResourcePath(id: ResourceID | undefined, table: ResourceTables) {
-  //todo set default and not ""
-  const [path, setPath] = createSignal("");
+export function getResourcePath(id: ResourceID | undefined, table: ResourceTables): Promise<string> {
+  return new Promise<string>(resolve => {
+    window.api.request("resourceGet", id, table)
+      .then(result => {
+        if (result.isError) {
+          return;
+        }
 
-  window.api.request("resourceGet", id, table)
-    .then(result => {
-      if (result.isError) {
-        return;
-      }
+        resolve(new URL(result.value).href);
+      });
+  });
+}
 
-      setPath(new URL(result.value).href);
+export function availableResource(resource: string, fallback: string): Promise<string> {
+  const img = document.createElement("img");
+
+  const p = new Promise<string>(resolve => {
+    img.addEventListener("load", () => resolve(resource));
+    img.addEventListener("error", () => {
+      console.log("Failed to load: " + resource);
+      resolve(fallback);
     });
+  });
 
-  return path;
+  img.src = resource;
+
+  return p;
 }

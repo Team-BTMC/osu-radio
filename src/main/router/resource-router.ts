@@ -18,7 +18,5 @@ Router.respond("resourceGet", (_evt, id, table) => {
     return fail("Could not provide absolute path because osu! Songs folder is undefined.");
   }
 
-  console.log(path.join(osuDir.value, entry.value.path));
-
   return ok(path.join(osuDir.value, entry.value.path));
 });

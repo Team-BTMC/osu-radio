@@ -23,7 +23,6 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
 
   const load = () => {
     window.api.request(props.apiKey, index).then(response => {
-      console.log(response);
       if (response.isNone) {
         return;
       }
