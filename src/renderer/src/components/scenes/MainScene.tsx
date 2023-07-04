@@ -4,6 +4,7 @@ import InfiniteScroller from '../InfiniteScroller';
 import ResetSignal from '../../lib/ResetSignal';
 import { Song } from '../../../../@types';
 import Item from '../song/Item';
+import Search from '../Search';
 
 
 
@@ -21,9 +22,7 @@ export default function MainScene() {
       </nav>
 
       <div class="side-pane">
-        <div class="search">
-          <h1>Search...</h1>
-        </div>
+        <Search />
 
         {/*todo add "Showing: 1,234 songs"*/}
 
