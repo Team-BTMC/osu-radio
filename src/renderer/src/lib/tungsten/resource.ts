@@ -15,13 +15,30 @@ export function getResourcePath(id: ResourceID | undefined, table: ResourceTable
   });
 }
 
+
+
+const seen = new Map<string, boolean>();
+
 export function availableResource(resource: string, fallback: string): Promise<string> {
+  const entry = seen.get(resource);
+
+  if (entry !== undefined) {
+    return Promise.resolve(
+      entry
+        ? resource
+        : fallback
+    );
+  }
+
   const img = document.createElement("img");
 
   const p = new Promise<string>(resolve => {
-    img.addEventListener("load", () => resolve(resource));
+    img.addEventListener("load", () => {
+      seen.set(resource, true);
+      resolve(resource);
+    });
     img.addEventListener("error", () => {
-      console.log("Failed to load: " + resource);
+      seen.set(resource, false);
       resolve(fallback);
     });
   });
