@@ -1,4 +1,5 @@
 import type { InfiniteScrollerResponse } from './renderer/src/components/InfiniteScroller';
+import type { SongViewProps } from './renderer/src/components/song/SongView';
 
 
 
@@ -147,6 +148,12 @@ export type APIListener<F extends (...args: any) => any> = (...args: Parameters<
 
 
 
+export type SongsQueryPayload = {
+  view: SongViewProps,
+  searchQuery: string,
+  //todo ordering
+}
+
 export type RequestAPI = {
   resourceGet: (id: any, table: ResourceTables) => Result<string, string>,
   queueCurrent: () => Song,
@@ -155,7 +162,8 @@ export type RequestAPI = {
   dirSelect: () => Optional<string>,
   dirSubmit: (dir: string) => void,
   errorDismissed: () => void,
-  allSongs: (index: number) => InfiniteScrollerResponse
+  allSongs: (index: number) => InfiniteScrollerResponse,
+  querySongsPool: (payload: SongsQueryPayload) => Optional<Song[]>
 }
 
 

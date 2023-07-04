@@ -1,10 +1,7 @@
 import image from "../../assets/hololive IDOL PROJECT - BLUE CLAPPER_2761277.jpg";
 import Bar from '../Bar';
-import InfiniteScroller from '../InfiniteScroller';
 import ResetSignal from '../../lib/ResetSignal';
-import { Song } from '../../../../@types';
-import Item from '../song/Item';
-import Search from '../Search';
+import SongView from '../song/SongView';
 
 
 
@@ -22,13 +19,7 @@ export default function MainScene() {
       </nav>
 
       <div class="side-pane">
-        <Search />
-
-        {/*todo add "Showing: 1,234 songs"*/}
-
-        <InfiniteScroller class={"list"} apiKey={"allSongs"} reset={resetAllSongs} builder={(song: Song) =>
-          <Item song={song}/>
-        }/>
+        <SongView isAllSongs={true}/>
       </div>
 
       <main class="center">
