@@ -1,28 +1,29 @@
-import { createEffect, createSignal, onMount } from 'solid-js';
+import { Component, createEffect, onMount, Signal } from 'solid-js';
 
 
 
-export const [searchQuery, setSearchQuery] = createSignal("");
+export type SearchProps = {
+  query: Signal<string>
+}
 
-
-
-export default function Search() {
+const Search: Component<SearchProps> = props => {
+  const [query, setQuery] = props.query;
   let editable;
 
   const input = evt => {
-    setSearchQuery(evt.target.textContent ?? "");
+    setQuery(evt.target.textContent ?? "");
   }
 
   onMount(() => {
-    editable.textContent = searchQuery();
+    editable.textContent = query();
   });
 
   createEffect(() => {
-    if (editable.textContent === searchQuery()) {
+    if (editable.textContent === query()) {
       return;
     }
 
-    editable.textContent = searchQuery();
+    editable.textContent = query();
     const selection = getSelection();
     if (selection === null) {
       return;
@@ -41,3 +42,5 @@ export default function Search() {
     </div>
   );
 }
+
+export default Search

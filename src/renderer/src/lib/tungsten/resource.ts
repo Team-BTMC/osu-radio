@@ -17,6 +17,7 @@ export function getResourcePath(id: ResourceID | undefined, table: ResourceTable
 
 
 
+//todo load on startup and save on shutdown
 const seen = new Map<string, boolean>();
 
 export function availableResource(resource: string, fallback: string): Promise<string> {

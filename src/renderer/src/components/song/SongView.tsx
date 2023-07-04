@@ -1,4 +1,4 @@
-import Search, { searchQuery } from '../Search';
+import Search from '../Search';
 import Item from './Item';
 import { Component, createSignal, For, onMount, Show } from 'solid-js';
 import { Song } from '../../../../@types';
@@ -13,11 +13,12 @@ export type SongViewProps = {
 
 const SongView: Component<SongViewProps> = props => {
   const [songs, setSongs] = createSignal<Song[]>([]);
+  const query = createSignal("");
 
   onMount(async () => {
     const opt = await window.api.request("querySongsPool", {
       view: props,
-      searchQuery: searchQuery()
+      searchQuery: query[0]()
     });
 
     if (opt.isNone) {
@@ -30,7 +31,7 @@ const SongView: Component<SongViewProps> = props => {
 
   return (
     <>
-      <Search/>
+      <Search query={query}/>
 
       <Show when={songs().length !== 0} fallback={<div>No songs...</div>}>
         <div class={"list"}>
