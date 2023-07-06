@@ -257,20 +257,13 @@ nav > div.icon {
 
 .side-pane {
   background-color: rgba(var(--color-fg), var(--level-0));
-  display: grid;
-  grid-template-rows: 64px 1fr;
   overflow: hidden;
+  scroll-behavior: smooth;
 }
 
-.side-pane > :not(.no-pd) {
-  padding: 16px;
-}
-
-.side-pane .list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  overflow: auto;
+.side-pane > * {
+  height: 100vh;
+  width: 100%;
 }
 
 

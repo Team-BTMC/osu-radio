@@ -1,25 +1,32 @@
 import image from "../../assets/hololive IDOL PROJECT - BLUE CLAPPER_2761277.jpg";
 import Bar from '../Bar';
-import ResetSignal from '../../lib/ResetSignal';
 import SongView from '../song/SongView';
+import { createEffect, createSignal, onMount } from 'solid-js';
 
 
 
 export default function MainScene() {
-  const resetAllSongs = new ResetSignal();
+  const [active, setActive] = createSignal(0);
+  let sidePane;
+
+  onMount(() => {
+    createEffect(() => {
+      sidePane.children[active()]?.scrollIntoView();
+    });
+  });
 
   return (
     <div id="main" class="scene">
       <nav>
-        <button class="icon" onClick={() => resetAllSongs.reset()}>Aa</button>
-        <button class="icon">Aa</button>
-        <button class="icon">Aa</button>
-        <button class="icon">Aa</button>
-        <button class="icon">Aa</button>
+        <button class="icon" onClick={() => setActive(0)}>All</button>
+        <button class="icon" onClick={() => setActive(1)}>📃</button>
+        <button class="icon" onClick={() => setActive(2)}>⚙️</button>
       </nav>
 
-      <div class="side-pane">
+      <div class="side-pane" ref={sidePane}>
         <SongView isAllSongs={true}/>
+        <div>Playlists</div>
+        <div>Settings</div>
       </div>
 
       <main class="center">
