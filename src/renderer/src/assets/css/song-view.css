@@ -1,0 +1,50 @@
+.song-view {
+  display: grid;
+  grid-template-rows: 64px 1fr;
+  overflow: hidden;
+}
+
+.song-view > :not(.no-pd) {
+  padding: 16px;
+}
+
+.song-view .list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: auto;
+}
+
+.song-view .list .item {
+  min-height: 80px;
+  width: 100%;
+  display: grid;
+  gap: 4px;
+  grid-template-columns: 80px 1fr;
+  overflow: hidden;
+  font-size: 0.85em;
+  border-radius: var(--border-radius);
+
+  transition: background-color 250ms;
+}
+
+.song-view .list .item:hover {
+  background-color: rgba(var(--color-fg), var(--level-0));
+
+  transition: background-color 0ms;
+}
+
+.song-view .list .item img {
+  height: 80px;
+  padding: 4px;
+  border-radius: var(--border-radius);
+  aspect-ratio: 1/1;
+  place-self: center;
+  object-fit: cover;
+}
+
+.song-view .list .item .column {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
