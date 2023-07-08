@@ -9,7 +9,7 @@
 :root {
   --FIXED: 0;
   --NORMAL_CONTENT: 1;
-  --border-radius: 10px;
+  --border-radius: 4px;
 
   --circle-0: dodgerblue;
   --circle-1: crimson;
@@ -75,22 +75,25 @@
 
 
 
-button {
+button, .button-like {
   background-color: rgba(var(--color-fg), var(--level-0));
   color: rgba(var(--color-fg));
   border: unset;
   padding: 8px;
   border-radius: var(--border-radius);
-  outline: 1px solid rgba(var(--color-fg), 0);
+  outline: 0 solid rgba(var(--color-fg), 0);
 
   transition: background-color 250ms, outline-color 250ms;
 }
 
-button:focus {
-  outline: 1px solid rgba(var(--color-fg), var(--level-2));
+button:focus, .button-like:focus {
+  outline-color: rgba(var(--color-fg), var(--level-2));
+  outline-width: 2px;
+
+  transition: outline-color-color 0ms;
 }
 
-button:hover {
+button:hover, .button-like:hover {
   background-color: rgba(var(--color-fg), var(--level-1));
   cursor: pointer;
 

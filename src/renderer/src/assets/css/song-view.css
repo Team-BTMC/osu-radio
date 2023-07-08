@@ -1,6 +1,6 @@
 .song-view {
-  display: grid;
-  grid-template-rows: 64px 1fr;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 

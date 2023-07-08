@@ -1,0 +1,108 @@
+.search {
+  display: flex;
+  flex-direction: column;
+  padding-top: 16px;
+  gap: 8px;
+}
+
+.search > *:not(.no-pd) {
+  padding: 0 16px;
+}
+
+.search div.row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search .input {
+  width: 100%;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.search .input:hover {
+  cursor: unset;
+}
+
+.search .input:focus-within {
+  outline-color: rgba(var(--color-fg), var(--level-2));
+  outline-width: 2px;
+
+  transition: outline-color-color 0ms;
+}
+
+.search .input > svg {
+  width: 20px;
+  aspect-ratio: 1/1;
+}
+
+.search .input > button.icon {
+  margin-right: 4px;
+  text-align: center;
+  font-weight: 900;
+  font-size: 1.1em;
+  padding: unset !important;
+  background-color: transparent;
+}
+
+.search .input > button.icon:hover {
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.search .input > button.icon:focus {
+  outline: unset;
+}
+
+.search .input .editable {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.search .input .editable:focus {
+  outline: unset;
+}
+
+.search .tag {
+  width: 30px;
+  padding: 4px;
+  aspect-ratio: 1/1;
+  font-size: 0.6em;
+  display: grid;
+  place-content: center;
+}
+
+
+.search .error-inline {
+  background-color: lch(90% 20 0);
+  padding: 0 2px;
+}
+
+.search .error-container {
+  padding: 8px 16px;
+  background-color: lch(25% 70 0);
+  color: white !important;
+}
+
+.search .error-container button {
+  background: transparent;
+  border: unset;
+  padding: unset;
+  color: #ccc !important;
+  font-weight: lighter;
+}
+
+.search .error-container button:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.search .error-container button:focus {
+  outline: unset;
+}
