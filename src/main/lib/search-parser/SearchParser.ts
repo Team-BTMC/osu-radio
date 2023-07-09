@@ -64,6 +64,7 @@ export class SearchParser {
 
                 return {
                     query,
+                    type: "error",
                     error: {
                         message: validation.error.message,
                         start,
@@ -89,6 +90,7 @@ export class SearchParser {
 
         return {
             query,
+            type: "success",
             unnamed,
             properties,
             delimiter: this.config.tokenDelimiter
