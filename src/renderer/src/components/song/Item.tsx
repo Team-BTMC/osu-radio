@@ -9,21 +9,7 @@ import "../../assets/css/item.css";
 
 const setSourceEvent = "setSource";
 
-const lazy = new IntersectionObserver(async entries => {
-  for (let i = 0; i < entries.length; i++) {
-    if (entries[i].isIntersecting === false) {
-      return;
-    }
-
-    const resource = await getResourcePath(String(entries[i].target.getAttribute("data-url")), "images");
-
-    entries[i].target.dispatchEvent(new CustomEvent(setSourceEvent, {
-      detail: await availableResource(resource, defaultBackground)
-    }));
-
-    lazy.unobserve(entries[i].target);
-  }
-}, { rootMargin: "50px" });
+const observers = new Map<string, IntersectionObserver>();
 
 
 
@@ -38,7 +24,32 @@ const Item: Component<{ song: Song }> = props => {
 
   onMount(() => {
     item.addEventListener(setSourceEvent, setSource);
-    lazy.observe(item);
+
+    const group = (item as HTMLElement).closest("[data-item-group]")?.getAttribute("data-item-group") ?? "global-item-group";
+    console.log(`'${group}'`);
+
+    let observer = observers.get(group);
+
+    if (observer === undefined) {
+      observer = new IntersectionObserver(async entries => {
+        for (let i = 0; i < entries.length; i++) {
+          if (entries[i].isIntersecting === false) {
+            return;
+          }
+
+          const resource = await getResourcePath(String(entries[i].target.getAttribute("data-url")), "images");
+
+          entries[i].target.dispatchEvent(new CustomEvent(setSourceEvent, {
+            detail: await availableResource(resource, defaultBackground)
+          }));
+
+          observer?.unobserve(entries[i].target);
+        }
+      }, { rootMargin: "50px" });
+      observers.set(group, observer);
+    }
+
+    observer.observe(item);
   });
 
   onCleanup(() => {
