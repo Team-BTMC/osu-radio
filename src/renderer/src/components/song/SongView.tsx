@@ -1,10 +1,12 @@
 import Search from '../Search';
 import Item from './Item';
-import { Component, createEffect, createSignal, For, onMount, Show } from 'solid-js';
-import { Optional, Song } from '../../../../@types';
+import { Component, createEffect, createSignal, onMount } from 'solid-js';
+import { Optional, SongsQueryPayload } from '../../../../@types';
 import "../../assets/css/song-view.css";
 import { SearchQueryError } from '../../../../main/lib/search-parser/@search-types';
 import { none, some } from '../../lib/rust-like-utils-client/Optional';
+import InfiniteScroller from '../InfiniteScroller';
+import { TokenNamespace } from '../../lib/tungsten/token';
 
 
 
@@ -14,17 +16,17 @@ export type SongViewProps = {
   playlist?: string
 };
 
+const namespace = new TokenNamespace();
+
 const SongView: Component<SongViewProps> = props => {
-  const [songs, setSongs] = createSignal<Song[]>([]);
-  const [isLoading, setIsLoading] = createSignal(true);
-  const query = createSignal("");
+  const querySignal = createSignal("");
+  const [query] = querySignal;
+  const [payload, setPayload] = createSignal<SongsQueryPayload>({ view: props });
+
   const [searchError, setSearchError] = createSignal<Optional<SearchQueryError>>(none());
 
   const searchSongs = async () => {
-    const q = query[0]();
-    console.log(`'${q}'`);
-
-    const parsedQuery = await window.api.request("parseSearch", q);
+    const parsedQuery = await window.api.request("parseSearch", query());
     console.log(parsedQuery);
 
     if (parsedQuery.type === "error") {
@@ -33,19 +35,10 @@ const SongView: Component<SongViewProps> = props => {
     }
 
     setSearchError(none());
-
-    // const opt = await window.api.request("querySongsPool", {
-    //   view: props,
-    //   searchQuery: parsedQuery
-    // });
-    //
-    // if (opt.isNone) {
-    //   setSongs([]);
-    //   return;
-    // }
-    //
-    // setSongs(opt.value);
-    // setIsLoading(false);
+    setPayload({
+      view: props,
+      searchQuery: parsedQuery
+    });
   }
 
   onMount(() => {
@@ -53,18 +46,12 @@ const SongView: Component<SongViewProps> = props => {
   });
 
   return (
-    <div class="song-view">
-      <Search query={query} error={searchError}/>
+    <div class="song-view" data-item-group={namespace.create(true)}>
+      <Search query={querySignal} error={searchError}/>
 
-      <Show when={isLoading() === false} fallback={<div>Loading songs...</div>}>
-        <Show when={songs().length !== 0} fallback={<div>No songs...</div>}>
-          <div class={"list"}>
-            <For each={songs()}>{song =>
-              <Item song={song}/>
-            }</For>
-          </div>
-        </Show>
-      </Show>
+      <InfiniteScroller apiKey={"querySongsPool"} apiData={payload()} builder={s =>
+        <Item song={s}/>
+      }/>
     </div>
   );
 }

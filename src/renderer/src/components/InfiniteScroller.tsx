@@ -1,19 +1,22 @@
-import { Component, createSignal, For, JSX, onCleanup, onMount, splitProps } from 'solid-js';
+import { Component, createSignal, For, JSX, onCleanup, onMount, Setter, splitProps } from 'solid-js';
 import { OmitPropsWithoutReturnType, Optional, RequestAPI } from '../../../@types';
 import ResetSignal from '../lib/ResetSignal';
 
 
 
-export type InfiniteScrollerResponse = Optional<{
+export type InfiniteScrollerResponse<T = any> = Optional<{
   index: number,
-  items: any[]
+  total: number,
+  items: T[]
 }>;
 
 type InfinityScrollerProps = {
   apiKey: keyof OmitPropsWithoutReturnType<RequestAPI, InfiniteScrollerResponse>,
+  apiData?: any,
   builder: (props: any) => JSX.Element,
   reset?: ResetSignal,
   autoload?: boolean
+  setResultCount?: Setter<number>
 } & JSX.HTMLAttributes<HTMLDivElement>;
 
 const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
@@ -22,13 +25,17 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
   const [elements, setElements] = createSignal<any[]>([]);
 
   const load = () => {
-    window.api.request(props.apiKey, index).then(response => {
+    window.api.request(props.apiKey, index, props.apiData).then(response => {
       if (response.isNone) {
         return;
       }
 
       setElements(elements().concat(response.value.items));
       index = response.value.index;
+      if (props.setResultCount !== undefined) {
+        props.setResultCount(response.value.total);
+      }
+
       observer.observe(container.children[container.children.length - 1]);
     });
   }
@@ -73,7 +80,7 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
   const [, rest] = splitProps(props, ["apiKey", "reset", "builder", "autoload"]);
 
   return (
-    <div ref={container} {...rest}>
+    <div class={"list"} ref={container} {...rest}>
       <For each={elements()}>{componentProps =>
         props.builder(componentProps)
       }</For>

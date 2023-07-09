@@ -151,7 +151,7 @@ export type APIListener<F extends (...args: any) => any> = (...args: Parameters<
 
 export type SongsQueryPayload = {
   view: SongViewProps,
-  searchQuery: SearchQuerySuccess,
+  searchQuery?: SearchQuerySuccess,
   //todo ordering
 }
 
@@ -165,7 +165,7 @@ export type RequestAPI = {
   errorDismissed: () => void,
   allSongs: (index: number) => InfiniteScrollerResponse,
   parseSearch: (query: string) => SearchQuery,
-  querySongsPool: (payload: SongsQueryPayload) => Optional<Song[]>
+  querySongsPool: (index: number, payload: SongsQueryPayload) => InfiniteScrollerResponse<Song[]>
 }
 
 
