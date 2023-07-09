@@ -1,5 +1,6 @@
 import type { InfiniteScrollerResponse } from './renderer/src/components/InfiniteScroller';
 import type { SongViewProps } from './renderer/src/components/song/SongView';
+import type { SearchQuery, SearchQuerySuccess } from './main/lib/search-parser/@search-types';
 
 
 
@@ -150,7 +151,7 @@ export type APIListener<F extends (...args: any) => any> = (...args: Parameters<
 
 export type SongsQueryPayload = {
   view: SongViewProps,
-  searchQuery: string,
+  searchQuery: SearchQuerySuccess,
   //todo ordering
 }
 
@@ -163,6 +164,7 @@ export type RequestAPI = {
   dirSubmit: (dir: string) => void,
   errorDismissed: () => void,
   allSongs: (index: number) => InfiniteScrollerResponse,
+  parseSearch: (query: string) => SearchQuery,
   querySongsPool: (payload: SongsQueryPayload) => Optional<Song[]>
 }
 
