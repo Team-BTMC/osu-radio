@@ -80,7 +80,8 @@
 
 
 .search .error-inline {
-  background-color: lch(90% 20 0);
+  background-color: lch(25% 70 0);
+  color: white !important;
   padding: 0 2px;
 }
 

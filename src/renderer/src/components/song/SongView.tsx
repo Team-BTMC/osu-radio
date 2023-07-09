@@ -1,8 +1,10 @@
 import Search from '../Search';
 import Item from './Item';
-import { Component, createSignal, For, onMount, Show } from 'solid-js';
-import { Song } from '../../../../@types';
+import { Component, createEffect, createSignal, For, onMount, Show } from 'solid-js';
+import { Optional, Song } from '../../../../@types';
 import "../../assets/css/song-view.css";
+import { SearchQueryError } from '../../../../main/lib/search-parser/@search-types';
+import { none, some } from '../../lib/rust-like-utils-client/Optional';
 
 
 
@@ -16,25 +18,43 @@ const SongView: Component<SongViewProps> = props => {
   const [songs, setSongs] = createSignal<Song[]>([]);
   const [isLoading, setIsLoading] = createSignal(true);
   const query = createSignal("");
+  const [searchError, setSearchError] = createSignal<Optional<SearchQueryError>>(none());
 
-  onMount(async () => {
-    const opt = await window.api.request("querySongsPool", {
-      view: props,
-      searchQuery: query[0]()
-    });
+  const searchSongs = async () => {
+    const q = query[0]();
+    console.log(`'${q}'`);
 
-    if (opt.isNone) {
-      setSongs([]);
+    const parsedQuery = await window.api.request("parseSearch", q);
+    console.log(parsedQuery);
+
+    if (parsedQuery.type === "error") {
+      setSearchError(some(parsedQuery));
       return;
     }
 
-    setSongs(opt.value);
-    setIsLoading(false);
+    setSearchError(none());
+
+    // const opt = await window.api.request("querySongsPool", {
+    //   view: props,
+    //   searchQuery: parsedQuery
+    // });
+    //
+    // if (opt.isNone) {
+    //   setSongs([]);
+    //   return;
+    // }
+    //
+    // setSongs(opt.value);
+    // setIsLoading(false);
+  }
+
+  onMount(() => {
+    createEffect(searchSongs);
   });
 
   return (
     <div class="song-view">
-      <Search query={query}/>
+      <Search query={query} error={searchError}/>
 
       <Show when={isLoading() === false} fallback={<div>Loading songs...</div>}>
         <Show when={songs().length !== 0} fallback={<div>No songs...</div>}>

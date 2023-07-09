@@ -1,18 +1,30 @@
-import { Component, createEffect, onMount, Signal } from 'solid-js';
+import { Accessor, Component, createEffect, createSignal, onMount, Signal } from 'solid-js';
 import "../assets/css/search.css";
+import { Optional } from '../../../@types';
+import { SearchQueryError } from '../../../main/lib/search-parser/@search-types';
 
 
 
 export type SearchProps = {
-  query: Signal<string>
+  query: Signal<string>,
+  error: Accessor<Optional<SearchQueryError>>
 }
 
 const Search: Component<SearchProps> = props => {
   const [query, setQuery] = props.query;
-  let editable;
+  const [doShowError, setDoShowError] = createSignal(false);
+  const [doShowSuggestion, setDoShowSuggestion] = createSignal(false);
+  let editable, errorMessage, suggestion;
 
-  const input = evt => {
-    setQuery(evt.target.textContent ?? "");
+  const onInput = () => {
+    setQuery(editable.textContent ?? "");
+  }
+
+  const onPaste = evt => {
+    evt.stopPropagation();
+    evt.preventDefault();
+    editable.textContent = evt.clipboardData.getData("Text");
+    onInput();
   }
 
   onMount(() => {
@@ -20,21 +32,29 @@ const Search: Component<SearchProps> = props => {
   });
 
   createEffect(() => {
-    if (editable.textContent === query()) {
+    const opt = props.error();
+
+    if (opt.isNone === true) {
+      setDoShowError(false);
       return;
     }
 
-    editable.textContent = query();
-    const selection = getSelection();
-    if (selection === null) {
-      return;
-    }
+    setDoShowError(true);
+    const error = opt.value.error;
 
-    const r = new Range();
-    const text = editable.childNodes[0];
-    r.setStart(text, text.textContent);
-    selection.removeAllRanges();
-    selection.addRange(r);
+    errorMessage.textContent = error.message;
+
+    if (error.suggestion !== undefined) {
+      setDoShowSuggestion(true);
+      suggestion.textContent = error.suggestion.description;
+      suggestion.onclick = () => {
+        editable.textContent = opt.value.query.substring(0, error.start) + error.suggestion?.fullReplacement + opt.value.query.substring(error.end);
+        onInput();
+      }
+    } else {
+      setDoShowSuggestion(false);
+      suggestion.onclick = () => {};
+    }
   });
 
   return (
@@ -44,7 +64,7 @@ const Search: Component<SearchProps> = props => {
           <svg class="icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M18.319 14.4326C20.7628 11.2941 20.542 6.75347 17.6569 3.86829C14.5327 0.744098 9.46734 0.744098 6.34315 3.86829C3.21895 6.99249 3.21895 12.0578 6.34315 15.182C9.22833 18.0672 13.769 18.2879 16.9075 15.8442C16.921 15.8595 16.9351 15.8745 16.9497 15.8891L21.1924 20.1317C21.5829 20.5223 22.2161 20.5223 22.6066 20.1317C22.9971 19.7412 22.9971 19.1081 22.6066 18.7175L18.364 14.4749C18.3493 14.4603 18.3343 14.4462 18.319 14.4326ZM16.2426 5.28251C18.5858 7.62565 18.5858 11.4246 16.2426 13.7678C13.8995 16.1109 10.1005 16.1109 7.75736 13.7678C5.41421 11.4246 5.41421 7.62565 7.75736 5.28251C10.1005 2.93936 13.8995 2.93936 16.2426 5.28251Z" fill="currentColor"/>
           </svg>
-          <div class="editable" ref={editable} onInput={input} contenteditable={true} spellcheck={false}></div>
+          <div class="editable" ref={editable} onInput={onInput} onPaste={onPaste} contenteditable={true} spellcheck={false}></div>
           <button class="icon">✕</button>
         </div>
       </div>
@@ -65,12 +85,12 @@ const Search: Component<SearchProps> = props => {
         </div>
       </div>
 
-      <div class="error-container">
-        <p class="message">I might have caught ligma.</p>
-        <button class="suggestion">Ligma balls!</button>
+      <div class="error-container" classList={{ 'display-none': !doShowError() }}>
+        <p class="message" ref={errorMessage}></p>
+        <button class="suggestion" ref={suggestion} classList={{ 'display-none': !doShowSuggestion() }}></button>
       </div>
     </div>
   );
 }
 
-export default Search
+export default Search;

@@ -63,6 +63,10 @@
   align-items: center;
 }
 
+.display-none {
+  display: none;
+}
+
 .row {
   display: flex;
   flex-direction: row;
