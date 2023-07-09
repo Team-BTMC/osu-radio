@@ -5,11 +5,12 @@ export type SearchQuerySuggestion = {
 
 export type SearchQueryError = {
     query: string,
+    type: "error",
     error: {
         message: string,
         suggestion?: SearchQuerySuggestion,
-        start?: number,
-        end?: number
+        start: number,
+        end: number
     },
 }
 
@@ -18,12 +19,15 @@ export type SearchProperty = {
     value: any
 }
 
-export type SearchQuery = SearchQueryError | {
+export type SearchQuerySuccess = {
     query: string,
+    type: "success",
     unnamed: string[],
     properties: Record<string, SearchProperty[]>,
     delimiter: string
 }
+
+export type SearchQuery = SearchQueryError | SearchQuerySuccess
 
 
 
