@@ -5,11 +5,13 @@ import { Song, SongIndex } from '../../../@types';
 function createSongIndex(id: string, song: Song): SongIndex {
   return {
     id,
-    t: song.beatmapSetID + song.title + (song.titleUnicode ?? ''),
-    a: song.artist + (song.artistUnicode ?? ''),
-    c: song.creator,
+    t: (song.beatmapSetID + song.title + (song.titleUnicode ?? '')).toLowerCase(),
+    a: (song.artist + (song.artistUnicode ?? '')).toLowerCase(),
+    c: song.creator.toLowerCase(),
+    d: song.duration,
+    m: song.mode,
     tags: song.tags,
-    bpm: averageBPM(song.bpm, song.duration * 1_000)
+    bpm: Math.round(60_000 / (averageBPM(song.bpm, song.duration * 1_000)))
   };
 }
 

@@ -1,6 +1,7 @@
 import type { InfiniteScrollerResponse } from './renderer/src/components/InfiniteScroller';
 import type { SongViewProps } from './renderer/src/components/song/SongView';
 import type { SearchQuery, SearchQuerySuccess } from './main/lib/search-parser/@search-types';
+import { num, set, text, time } from './main/lib/search-parser/validators';
 
 
 
@@ -90,9 +91,11 @@ export type Song = {
 
 export type SongIndex = {
   id: string,
-  t: string,
-  a: string,
-  c: string,
+  t: string, // title
+  a: string, // artist
+  c: string, // creator
+  m?: number, // mode
+  d: number, // duration
   tags?: string[],
   bpm: number
 };
@@ -154,6 +157,10 @@ export type SongsQueryPayload = {
   searchQuery?: SearchQuerySuccess,
   //todo ordering
 }
+
+export type OsuSearchAbleProperties = "bpm" | "artist" | "creator" | "length" | "mode" | "title";
+
+
 
 export type RequestAPI = {
   resourceGet: (id: any, table: ResourceTables) => Result<string, string>,

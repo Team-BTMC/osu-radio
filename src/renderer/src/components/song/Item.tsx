@@ -60,7 +60,7 @@ const Item: Component<{ song: Song }> = props => {
     <div class="item" ref={item} data-url={props.song.bg}>
       <div class="image" style={{ 'background-image': `url(${src()})` }}></div>
       <div class="column">
-        <h3>[{Math.round(60_000 / averageBPM(props.song.bpm, props.song.duration))} BPM] {props.song.title}</h3>
+        <h3>[{Math.round(60_000 / averageBPM(props.song.bpm, props.song.duration * 1_000))} BPM] {props.song.title}</h3>
         <span>{props.song.artist}</span>
       </div>
     </div>

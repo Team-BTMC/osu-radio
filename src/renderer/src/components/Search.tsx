@@ -7,6 +7,7 @@ import { SearchQueryError } from '../../../main/lib/search-parser/@search-types'
 
 export type SearchProps = {
   query: Signal<string>,
+  count: Accessor<number>,
   error: Accessor<Optional<SearchQueryError>>
 }
 
@@ -70,7 +71,7 @@ const Search: Component<SearchProps> = props => {
       </div>
 
       <div class="results row">
-        <button title="Save results as playlist">0 results</button>
+        <button title="Save results as playlist">{props.count()} results</button>
         <div class="row">
           <button>Title (A-Z)</button>
           <button class="tag">

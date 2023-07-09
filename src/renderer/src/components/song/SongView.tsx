@@ -7,6 +7,7 @@ import { SearchQueryError } from '../../../../main/lib/search-parser/@search-typ
 import { none, some } from '../../lib/rust-like-utils-client/Optional';
 import InfiniteScroller from '../InfiniteScroller';
 import { TokenNamespace } from '../../lib/tungsten/token';
+import ResetSignal from '../../lib/ResetSignal';
 
 
 
@@ -21,13 +22,13 @@ const namespace = new TokenNamespace();
 const SongView: Component<SongViewProps> = props => {
   const querySignal = createSignal("");
   const [query] = querySignal;
+  const [count, setCount] = createSignal(0);
   const [payload, setPayload] = createSignal<SongsQueryPayload>({ view: props });
-
-  const [searchError, setSearchError] = createSignal<Optional<SearchQueryError>>(none());
+  const [searchError, setSearchError] = createSignal<Optional<SearchQueryError>>(none(), { equals: false });
+  const listingReset = new ResetSignal();
 
   const searchSongs = async () => {
     const parsedQuery = await window.api.request("parseSearch", query());
-    console.log(parsedQuery);
 
     if (parsedQuery.type === "error") {
       setSearchError(some(parsedQuery));
@@ -39,6 +40,7 @@ const SongView: Component<SongViewProps> = props => {
       view: props,
       searchQuery: parsedQuery
     });
+    listingReset.reset();
   }
 
   onMount(() => {
@@ -47,9 +49,9 @@ const SongView: Component<SongViewProps> = props => {
 
   return (
     <div class="song-view" data-item-group={namespace.create(true)}>
-      <Search query={querySignal} error={searchError}/>
+      <Search query={querySignal} count={count} error={searchError}/>
 
-      <InfiniteScroller apiKey={"querySongsPool"} apiData={payload()} builder={s =>
+      <InfiniteScroller apiKey={"querySongsPool"} apiData={payload()} setResultCount={setCount} reset={listingReset} builder={s =>
         <Item song={s}/>
       }/>
     </div>
