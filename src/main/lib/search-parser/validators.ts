@@ -173,15 +173,11 @@ const timeExtractors: [RegExp, (matches: RegExpMatchArray)=>any][] = [
 
 export function time(): SearchPropertyValidator {
   return (value: string, symbol: string): SearchPropertyValidation => {
-    if (!(symbol === "=" || symbol === "!=" || symbol === "==")) {
+    if (!defaultRelationSymbols.includes(symbol)) {
       return {
         isValid: false,
         error: {
-          message: "Time can only use =, ==, != comparison symbols.",
-          suggestion: {
-            symbol: "=",
-            description: "Use equals instead."
-          }
+          message: `Time can only use ${defaultRelationSymbols.join(", ")} comparison symbols.`
         }
       };
     }
