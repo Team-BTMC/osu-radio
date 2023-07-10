@@ -16,58 +16,7 @@
   justify-content: space-between;
 }
 
-.search .input {
-  width: 100%;
-  padding: 4px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  overflow: hidden;
-}
 
-.search .input:hover {
-  cursor: unset;
-}
-
-.search .input:focus-within {
-  outline-color: rgba(var(--color-fg), var(--level-2));
-  outline-width: 2px;
-
-  transition: outline-color-color 0ms;
-}
-
-.search .input > svg {
-  width: 20px;
-  aspect-ratio: 1/1;
-}
-
-.search .input > button.icon {
-  margin-right: 4px;
-  text-align: center;
-  font-weight: 900;
-  font-size: 1.1em;
-  padding: unset !important;
-  background-color: transparent;
-}
-
-.search .input > button.icon:hover {
-  background-color: transparent;
-  cursor: pointer;
-}
-
-.search .input > button.icon:focus {
-  outline: unset;
-}
-
-.search .input .editable {
-  flex: 1;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
-.search .input .editable:focus {
-  outline: unset;
-}
 
 .search .tag {
   width: 30px;

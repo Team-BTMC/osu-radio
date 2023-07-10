@@ -1,0 +1,54 @@
+.search-text-box {
+  width: 100%;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.search-text-box:hover {
+  cursor: unset;
+}
+
+.search-text-box:focus-within {
+  outline-color: rgba(var(--color-fg), var(--level-2));
+  outline-width: 2px;
+
+  transition: outline-color-color 0ms;
+}
+
+
+
+.search-text-box > svg {
+  width: 20px;
+  aspect-ratio: 1/1;
+}
+
+.search-text-box > button.icon {
+  margin-right: 4px;
+  text-align: center;
+  font-weight: 900;
+  font-size: 1.1em;
+  padding: unset !important;
+  background-color: transparent;
+}
+
+.search-text-box > button.icon:hover {
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.search-text-box > button.icon:focus {
+  outline: unset;
+}
+
+.search-text-box .editable {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.search-text-box .editable:focus {
+  outline: unset;
+}
