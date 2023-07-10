@@ -18,13 +18,22 @@ const Search: Component<SearchProps> = props => {
   let editable, errorMessage, suggestion;
 
   const onInput = () => {
-    setQuery(editable.textContent ?? "");
+    setQuery(editable.textContent.replaceAll(String.fromCharCode(160), String.fromCharCode(32)) ?? "");
   }
 
   const onPaste = evt => {
+    const selection = window.getSelection();
+    if (selection === null) {
+      return;
+    }
+
     evt.stopPropagation();
     evt.preventDefault();
-    editable.textContent = evt.clipboardData.getData("Text");
+
+    selection.deleteFromDocument();
+    selection.getRangeAt(0).insertNode(document.createTextNode(evt.clipboardData.getData("Text")));
+    selection.collapseToEnd();
+
     onInput();
   }
 
