@@ -6,6 +6,7 @@ import SearchTextBox from './search/SearchTextBox';
 import Fa from 'solid-fa';
 import { faTags } from '@fortawesome/free-solid-svg-icons';
 import { globalIconScale } from '../App';
+import Select from './Select';
 
 
 
@@ -17,6 +18,10 @@ export type SearchProps = {
 
 const Search: Component<SearchProps> = props => {
   const [_, setQuery] = props.query;
+  const [order, setOrder] = createSignal("");
+
+  createEffect(() => console.log(order()));
+
   const [editable, setEditable] = createSignal<HTMLElement | undefined>();
   const [doShowError, setDoShowError] = createSignal(false);
   const [doShowSuggestion, setDoShowSuggestion] = createSignal(false);
@@ -71,7 +76,7 @@ const Search: Component<SearchProps> = props => {
       <div class="results row">
         <button title="Save results as playlist">{props.count()} results</button>
         <div class="row">
-          <button>Title (A-Z)</button>
+          <Select setValue={setOrder} options={[{value: "foo", text: "foo"}, {value: "bar", text: "bar", selected: true}]}/>
           <button class="tags">
             <Fa icon={faTags} scale={globalIconScale}/>
           </button>

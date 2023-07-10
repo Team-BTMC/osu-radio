@@ -1,0 +1,8 @@
+.select {
+  appearance: none;
+}
+
+.select option {
+  background-color: rgb(var(--color-bg));
+  color: rgb(var(--color-fg));
+}
