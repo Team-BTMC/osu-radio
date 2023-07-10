@@ -59,3 +59,7 @@ export default function App(): JSX.Element {
     </Gradient>
   );
 }
+
+
+
+export const globalIconScale = 1.32;

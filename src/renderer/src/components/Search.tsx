@@ -3,6 +3,9 @@ import "../assets/css/search/search.css";
 import { Optional } from '../../../@types';
 import { SearchQueryError } from '../../../main/lib/search-parser/@search-types';
 import SearchTextBox from './search/SearchTextBox';
+import Fa from 'solid-fa';
+import { faTags } from '@fortawesome/free-solid-svg-icons';
+import { globalIconScale } from '../App';
 
 
 
@@ -69,14 +72,8 @@ const Search: Component<SearchProps> = props => {
         <button title="Save results as playlist">{props.count()} results</button>
         <div class="row">
           <button>Title (A-Z)</button>
-          <button class="tag">
-            <svg width="24" height="24" version="1.1" id="Vrstva_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
-                 viewBox="0 0 500 500" style="enable-background:new 0 0 500 500;">
-              <path fill="currentColor" d="M453.7,282.5l-31.8-31.8L410,238.8L248.9,77.7c-3.4-4.8-8.9-7.9-15.2-7.9H87.6c-10.3,0-18.7,8.4-18.7,18.7v146.1
-                c0,6.3,3.1,11.8,7.9,15.2l159,159c0.6,0.8,1.2,1.6,1.9,2.3l43.7,43.7c7.2,7.2,18.9,7.2,26.1,0l146.2-146.2
-                C460.9,301.4,460.9,289.7,453.7,282.5z M125.8,189.4c-17.3-17.3-17.3-45.4,0-62.7c17.3-17.3,45.4-17.3,62.7,0
-                c17.3,17.3,17.3,45.4,0,62.7C171.1,206.7,143.1,206.7,125.8,189.4z"/>
-            </svg>
+          <button class="tags">
+            <Fa icon={faTags} scale={globalIconScale}/>
           </button>
         </div>
       </div>

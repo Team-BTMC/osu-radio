@@ -18,11 +18,10 @@
 
 
 
-.search .tag {
+.search .tags {
   width: 30px;
   padding: 4px;
   aspect-ratio: 1/1;
-  font-size: 0.6em;
   display: grid;
   place-content: center;
 }

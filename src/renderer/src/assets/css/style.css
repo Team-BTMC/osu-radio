@@ -106,7 +106,6 @@ button:hover, .button-like:hover {
 
 button.icon {
   aspect-ratio: 1/1;
-  font-family: var(--font-monospace);
 }
 
 
@@ -240,6 +239,8 @@ nav {
 }
 
 nav > .icon {
+  display: grid;
+  place-items: center;
   width: 100%;
   aspect-ratio: 1/1;
   background-color: rgba(var(--color-fg), var(--level-0));

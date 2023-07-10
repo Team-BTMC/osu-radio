@@ -2,6 +2,9 @@ import image from "../../assets/hololive IDOL PROJECT - BLUE CLAPPER_2761277.jpg
 import Bar from '../Bar';
 import SongView from '../song/SongView';
 import { createEffect, createSignal, onMount } from 'solid-js';
+import Fa from 'solid-fa';
+import { faGear, faListUl, faMusic } from '@fortawesome/free-solid-svg-icons';
+import { globalIconScale } from '../../App';
 
 
 
@@ -18,9 +21,15 @@ export default function MainScene() {
   return (
     <div id="main" class="scene">
       <nav>
-        <button class="icon" onClick={() => setActive(0)}>All</button>
-        <button class="icon" onClick={() => setActive(1)}>📃</button>
-        <button class="icon" onClick={() => setActive(2)}>⚙️</button>
+        <button class="icon" onClick={() => setActive(0)}>
+          <Fa icon={faMusic} scale={globalIconScale}/>
+        </button>
+        <button class="icon" onClick={() => setActive(1)}>
+          <Fa icon={faListUl} scale={globalIconScale}/>
+        </button>
+        <button class="icon" onClick={() => setActive(2)}>
+          <Fa icon={faGear} scale={globalIconScale}/>
+        </button>
       </nav>
 
       <div class="side-pane" ref={sidePane}>
