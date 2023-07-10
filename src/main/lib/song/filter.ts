@@ -65,14 +65,14 @@ function* songMapper(indexes: SongIndex[]): Generator<Song> {
 }
 
 function compare(pattern: string, str: string) {
+  pattern = pattern.toLowerCase().replaceAll("_", ""); // underscores are ignored
+
   if (pattern.length === 0) {
     return {
       distance: 0,
       satisfies: true
     }
   }
-
-  pattern = pattern.toLowerCase();
 
   let patternPtr = 0;
   let lastCharPos = -1;
