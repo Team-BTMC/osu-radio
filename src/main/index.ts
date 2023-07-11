@@ -35,7 +35,7 @@ async function createWindow() {
 
   await main(window)
     .catch(error => {
-      dialog.showErrorBox("Report to the developer team to fix", error);
+      dialog.showErrorBox("Report to the developer team to fix", (error as Error).stack ?? String(error));
     });
 }
 
