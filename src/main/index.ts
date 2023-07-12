@@ -35,6 +35,11 @@ async function createWindow() {
 
   await main(window)
     .catch(error => {
+      if (error === null || error === undefined) {
+        dialog.showErrorBox("Unknown error occurred.", "Idk what you should do tbh");
+        return;
+      }
+
       dialog.showErrorBox("Report to the developer team to fix", (error as Error).stack ?? String(error));
     });
 }
