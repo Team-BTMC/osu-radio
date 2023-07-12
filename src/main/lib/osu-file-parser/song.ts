@@ -3,14 +3,21 @@ import { Song, SongIndex } from '../../../@types';
 
 
 function createSongIndex(id: string, song: Song): SongIndex {
+  let diffBuffer = "";
+
+  for (let i = 0; i < song.diffs.length; i++) {
+    diffBuffer += "[" + song.diffs[i] + "]";
+  }
+
   return {
     id,
-    t: (song.beatmapSetID + song.title + (song.titleUnicode ?? '')).toLowerCase(),
+    t: (song.beatmapSetID + song.title + (song.titleUnicode ?? '') + diffBuffer).toLowerCase(),
     a: (song.artist + (song.artistUnicode ?? '')).toLowerCase(),
     c: song.creator.toLowerCase(),
     d: song.duration,
     m: song.mode,
     tags: song.tags,
+    diffs: diffBuffer,
     bpm: Math.round(60_000 / (averageBPM(song.bpm, song.duration * 1_000)))
   };
 }

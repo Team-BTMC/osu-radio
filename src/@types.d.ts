@@ -37,43 +37,30 @@ export type Result<T, E> = {
 /** result of absolute file path being hashed (64-bit) */
 export type ResourceID = string;
 
-export type WatchFile = {
-  /** Only file name, not absolute path */
-  fileName: string,
-  ctime: string
-};
-
-export type AudioSource = {
-  /** `osuDir/path` = absolute path */
+export type Resource = {
+  /** Hashed `Resource.path` */
   id: ResourceID;
+  /** `osuDir/path` = absolute path */
   path: string;
   ctime: string;
-
-  volume?: number;
-  //todo audio file waveform
-};
-
-export type ImageSource = {
-  /** `osuDir/path` = absolute path */
-  id: ResourceID;
-  path: string;
-  ctime: string;
-
-  //todo prominent colors of image
 }
 
+export type AudioSource = {
+  songID: ResourceID;
+  volume?: number;
+  //todo audio file waveform
+} & Resource
+
+export type ImageSource = {
+  songID: ResourceID;
+  //todo prominent colors of image
+} & Resource
+
 export type Song = {
-  /** hashed path to config source (unique factor) */
-  id: ResourceID,
   audio: ResourceID,
   bg?: ResourceID,
 
-
-  /* todo instead of config and dir
-      path: string;
-      ctime: string;
-  */
-  config: WatchFile,
+  dateAdded: string,
   dir: string;
 
   title: string,
@@ -87,7 +74,9 @@ export type Song = {
   titleUnicode?: string,
   artistUnicode?: string,
   tags?: string[],
-};
+
+  diffs: string[],
+} & Resource
 
 export type SongIndex = {
   id: string,
@@ -97,8 +86,9 @@ export type SongIndex = {
   m?: number, // mode
   d: number, // duration
   tags?: string[],
+  diffs: string,
   bpm: number
-};
+}
 
 
 
@@ -110,7 +100,7 @@ export type System = {
 export type Settings = {
   volume: number,
   osuSongsDir: string,
-};
+}
 
 
 
@@ -187,7 +177,7 @@ export type Scenes = "" | "loading" | "dir-select" | "main" | "error";
 
 export type ListenAPI = {
   changeScene: (scene: Scenes) => void,
-  loadingSetTitle: (title: string) => void;
+  loadingSetTitle: (title: string) => void,
   loadingUpdate: (update: LoadingSceneUpdate) => void,
-  errorSetMessage: (msg: string) => void;
+  errorSetMessage: (msg: string) => void, //todo show alert()
 }

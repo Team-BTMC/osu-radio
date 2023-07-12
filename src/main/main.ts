@@ -4,7 +4,7 @@ import { Router } from './lib/route-pass/Router';
 import { showError } from './router/error-router';
 import { dirSubmit } from './router/dir-router';
 import "./router/import";
-import { DirParseResult, OsuFileParser } from './lib/osu-file-parser/OsuFileParser';
+import { DirParseResult, OsuParser } from './lib/osu-file-parser/OsuParser';
 import { collectTagsAndIndexSongs } from './lib/osu-file-parser/song';
 import Global from './lib/Global';
 import { orDefault } from './lib/rust-like-utils-backend/Optional';
@@ -14,7 +14,7 @@ import { throttle } from './lib/util/throttle';
 
 export async function main(window: BrowserWindow) {
   const settings = Storage.getTable("settings");
-  // settings.delete("osuSongsDir");
+  settings.delete("osuSongsDir");
 
   if (settings.get("osuSongsDir").isNone) {
     await configureOsuDir(window);
@@ -35,8 +35,12 @@ export async function main(window: BrowserWindow) {
 
 
 
+const SONGS = 0;
+const AUDIO = 1;
+const IMAGES = 2;
+
 async function configureOsuDir(mainWindow: BrowserWindow) {
-  let maps: Awaited<DirParseResult>;
+  let tables: Awaited<DirParseResult>;
   const settings = Storage.getTable("settings");
 
   do {
@@ -54,15 +58,15 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
       });
     }, 25);
 
-    maps = await OsuFileParser.parseDir(dir, update);
+    tables = await OsuParser.parseDir(dir, update);
     cancelUpdate();
 
-    if (maps.isError === true) {
-      await showError(mainWindow, maps.error);
+    if (tables.isError) {
+      await showError(mainWindow, tables.error);
       continue;
     }
 
-    if (maps.value[0].size === 0) {
+    if (tables.value[SONGS].size === 0) {
       await showError(mainWindow, `No songs found in folder: ${orDefault(settings.get("osuSongsDir"), "[No folder]")}. Please make sure this is the directory where you have all your songs saved.`);
       continue;
     }
@@ -72,15 +76,15 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
   } while(true);
 
   await Router.dispatch(mainWindow, "loadingUpdate", {
-    max: maps.value[0].size,
-    current: maps.value[0].size,
-    hint: `Imported total of ${maps.value[0].size} songs`
+    max: tables.value[SONGS].size,
+    current: tables.value[SONGS].size,
+    hint: `Imported total of ${tables.value[SONGS].size} songs`
   });
 
-  const songs = Object.fromEntries(maps.value[0]);
+  const songs = Object.fromEntries(tables.value[SONGS]);
   Storage.setTable("songs", songs);
-  Storage.setTable("audio", Object.fromEntries(maps.value[1]));
-  Storage.setTable("images", Object.fromEntries(maps.value[2]));
+  Storage.setTable("audio", Object.fromEntries(tables.value[AUDIO]));
+  Storage.setTable("images", Object.fromEntries(tables.value[IMAGES]));
 
   const total = Object.values(songs).length;
   await Router.dispatch(mainWindow, "loadingSetTitle", "Indexing songs");
