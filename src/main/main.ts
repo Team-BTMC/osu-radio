@@ -14,7 +14,7 @@ import { throttle } from './lib/util/throttle';
 
 export async function main(window: BrowserWindow) {
   const settings = Storage.getTable("settings");
-  settings.delete("osuSongsDir");
+  // settings.delete("osuSongsDir");
 
   if (settings.get("osuSongsDir").isNone) {
     await configureOsuDir(window);

@@ -37,7 +37,7 @@ const Item: Component<{ song: Song }> = props => {
             return;
           }
 
-          const resource = await getResourcePath(String(entries[i].target.getAttribute("data-url")), "images");
+          const resource = await getResourcePath(String(entries[i].target.getAttribute("data-url")));
 
           entries[i].target.dispatchEvent(new CustomEvent(setSourceEvent, {
             detail: await availableResource(resource, defaultBackground)

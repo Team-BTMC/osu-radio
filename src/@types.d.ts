@@ -1,7 +1,6 @@
 import type { InfiniteScrollerResponse } from './renderer/src/components/InfiniteScroller';
 import type { SongViewProps } from './renderer/src/components/song/SongView';
 import type { SearchQuery, SearchQuerySuccess } from './main/lib/search-parser/@search-types';
-import { num, set, text, time } from './main/lib/search-parser/validators';
 
 
 
@@ -38,21 +37,21 @@ export type Result<T, E> = {
 export type ResourceID = string;
 
 export type Resource = {
-  /** Hashed `Resource.path` */
-  id: ResourceID;
   /** `osuDir/path` = absolute path */
-  path: string;
+  path: ResourceID;
   ctime: string;
 }
 
 export type AudioSource = {
   songID: ResourceID;
   volume?: number;
+
   //todo audio file waveform
 } & Resource
 
 export type ImageSource = {
   songID: ResourceID;
+
   //todo prominent colors of image
 } & Resource
 
@@ -153,7 +152,7 @@ export type OsuSearchAbleProperties = "bpm" | "artist" | "creator" | "length" | 
 
 
 export type RequestAPI = {
-  resourceGet: (id: any, table: ResourceTables) => Result<string, string>,
+  resourceGet: (id: any) => Result<string, string>,
   queueCurrent: () => Song,
   queueNext: () => void,
   queuePrevious: () => void,

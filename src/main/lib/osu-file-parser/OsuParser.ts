@@ -5,8 +5,6 @@ import { fail, ok } from '../rust-like-utils-backend/Result';
 import { OsuFile } from './OsuFile';
 import { access, getFiles, getSubDirs } from '../fs-promises';
 import fs from 'graceful-fs';
-import { clearInterval } from 'timers';
-import { hash } from '../tungsten/math';
 
 
 
@@ -49,20 +47,6 @@ export class OsuParser {
     const audioTable = new Map<ResourceID, AudioSource>();
     const imageTable = new Map<ResourceID, ImageSource>();
 
-    const stats = {
-      audioErr: 0,
-      found: 0,
-      parseErr: 0,
-      toSongErr: 0,
-    }
-
-    const errors = {};
-
-    const interval = setInterval(
-      () => console.log(stats, errors, "song table:", songTable.size),
-      1_000
-    );
-
     for (let i = 0; i < dirs.length; i++) {
       const subDirPath = path.join(dir, dirs[i]);
 
@@ -76,18 +60,10 @@ export class OsuParser {
         const audioSrc = await OsuFile.getProp(file, "AudioFilename");
 
         if (audioSrc.isError) {
-          stats.audioErr++;
-
-          if (errors[audioSrc.error] !== undefined) {
-            errors[audioSrc.error]++;
-          } else {
-            errors[audioSrc.error] = 1;
-          }
-
           continue;
         }
 
-        const audioID = hash(path.join(dirs[i], audioSrc.value));
+        const audioID = path.join(dirs[i], audioSrc.value);
         let s: Song | undefined = undefined;
 
         if (audioID === lastAudioID) {
@@ -112,76 +88,30 @@ export class OsuParser {
             continue;
           }
 
-          stats.found++;
           s.diffs.push(diff.value);
           continue;
         }
-        // const audioPath = path.resolve(path.join(subDirPath, audioSrc.value));
-
-        // let audioID: string;
-        // if (audioPath === lastAudioPath) {
-        //   audioID = lastAudioHash;
-        // } else {
-        //   audioID = lastAudioHash = hash(audioPath);
-        // }
-        //
-
-        // const audioID = hash(audioPath);
-        // const a = audioTable.get(audioID);
-        //
-        // if (a !== undefined) {
-        //   const parsedSong = songTable.get(a.songID);
-        //   if (parsedSong !== undefined) {
-        //     const diff = OsuFile.getProp(file, "Version");
-        //
-        //     if (diff.isError) {
-        //       continue;
-        //     }
-        //
-        //     s.diffs.push(diff.value);
-        //     continue;
-        //   }
-        // }
 
         const parsed = await OsuParser.parseFile(file);
         if (parsed.isError) {
-          stats.parseErr++;
-
-          if (errors[parsed.error] !== undefined) {
-            errors[parsed.error]++;
-          } else {
-            errors[parsed.error] = 1;
-          }
-
           continue;
         }
 
         const result = await parsed.value.toSong(dir);
         if (result.isError) {
-          stats.toSongErr++;
-
-          if (errors[result.error] !== undefined) {
-            errors[result.error]++;
-          } else {
-            errors[result.error] = 1;
-          }
-
           continue;
         }
 
         const { song, audio, bg } = result.value;
 
-        songTable.set(song.id, song);
-        audioTable.set(audio.id, audio);
+        songTable.set(song.path, song);
+        audioTable.set(audio.path, audio);
 
         if (!bg.isNone) {
-          imageTable.set(bg.value.id, bg.value);
+          imageTable.set(bg.value.path, bg.value);
         }
       }
     }
-
-    clearInterval(interval);
-    console.log(stats, errors, "song table:", songTable.size);
 
     return ok([songTable, audioTable, imageTable]);
   }

@@ -4,7 +4,6 @@ import { AudioSource, ImageSource, Optional, Result, Song } from '../../../@type
 import { none, some } from '../rust-like-utils-backend/Optional';
 import { SongBuilder } from './SongBuilder';
 import path from 'path';
-import { hash } from '../tungsten/math';
 import { getAudioDurationInSeconds } from 'get-audio-duration';
 import { access, readFile, stat } from '../fs-promises';
 
@@ -44,8 +43,6 @@ export class OsuFile {
     const resourcePath = path.relative(osuDir, this.path);
     builder.set("path", resourcePath);
 
-    const id = hash(resourcePath);
-    builder.set("id", id);
     builder.set("beatmapSetID", this.beatmapSetID);
 
     const config = await stat(this.path);
@@ -62,13 +59,12 @@ export class OsuFile {
 
     const audioPath = path.relative(osuDir, songPath);
     const audio: AudioSource = {
-      id: hash(audioPath),
-      songID: id,
+      songID: resourcePath,
       path: audioPath,
       ctime: (await stat(songPath)).ctime.toISOString()
     };
 
-    builder.set("audio", audio.id);
+    builder.set("audio", audio.path);
     let bg = none();
 
     const bgSrc = this.props.get("bgSrc");
@@ -76,15 +72,13 @@ export class OsuFile {
       const imageSource = path.resolve(path.join(dir, bgSrc));
       if (await access(imageSource, fs.constants.F_OK)) {
         const imagePath = path.relative(osuDir, imageSource);
-        const imageID = hash(imageSource);
         bg = some({
-          id: imageID,
-          songID: id,
+          songID: resourcePath,
           path: imagePath,
           ctime: (await stat(imageSource)).ctime.toISOString()
         });
 
-        builder.set("bg", imageID);
+        builder.set("bg", imagePath);
       }
     }
 
