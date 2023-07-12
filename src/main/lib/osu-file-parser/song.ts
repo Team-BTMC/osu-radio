@@ -58,6 +58,9 @@ export function collectTagsAndIndexSongs(songs: { [id: string]: Song }, fn?: Ind
   return [indexes, tags];
 }
 
+/**
+ * @returns Time difference between beats in ms
+ */
 export function averageBPM(bpm: number[][], durationMS: number): number {
   if (bpm.length === 0) {
     return NaN;

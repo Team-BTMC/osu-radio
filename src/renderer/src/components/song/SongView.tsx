@@ -1,4 +1,4 @@
-import Search from '../Search';
+import Search from '../search/Search';
 import Item from './Item';
 import { Component, createEffect, createSignal, onMount } from 'solid-js';
 import { Optional, SongsQueryPayload } from '../../../../@types';
@@ -22,12 +22,14 @@ const namespace = new TokenNamespace();
 const SongView: Component<SongViewProps> = props => {
   const querySignal = createSignal("");
   const [query] = querySignal;
+  const [order, setOrder] = createSignal("title:asc");
   const [count, setCount] = createSignal(0);
-  const [payload, setPayload] = createSignal<SongsQueryPayload>({ view: props });
+  const [payload, setPayload] = createSignal<SongsQueryPayload>({ view: props, order: order() });
   const [searchError, setSearchError] = createSignal<Optional<SearchQueryError>>(none(), { equals: false });
   const listingReset = new ResetSignal();
 
   const searchSongs = async () => {
+    const o = order();
     const parsedQuery = await window.api.request("parseSearch", query());
 
     if (parsedQuery.type === "error") {
@@ -38,18 +40,20 @@ const SongView: Component<SongViewProps> = props => {
     setSearchError(none());
     setPayload({
       view: props,
-      searchQuery: parsedQuery
+      searchQuery: parsedQuery,
+      order: o
     });
     listingReset.reset();
   }
 
   onMount(() => {
     createEffect(searchSongs);
+    createEffect(() => console.log(order()));
   });
 
   return (
     <div class="song-view" data-item-group={namespace.create(true)}>
-      <Search query={querySignal} count={count} error={searchError}/>
+      <Search query={querySignal} setOrder={setOrder} count={count} error={searchError}/>
 
       <InfiniteScroller apiKey={"querySongsPool"} apiData={payload()} setResultCount={setCount} reset={listingReset} builder={s =>
         <Item song={s}/>

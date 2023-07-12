@@ -1,27 +1,64 @@
-import { Accessor, Component, createEffect, createSignal, Signal } from 'solid-js';
-import "../assets/css/search/search.css";
-import { Optional } from '../../../@types';
-import { SearchQueryError } from '../../../main/lib/search-parser/@search-types';
-import SearchTextBox from './search/SearchTextBox';
+import { Accessor, Component, createEffect, createSignal, Setter, Signal } from 'solid-js';
+import "../../assets/css/search/search.css";
+import { Optional } from '../../../../@types';
+import { SearchQueryError } from '../../../../main/lib/search-parser/@search-types';
+import SearchField from './SearchField';
 import Fa from 'solid-fa';
 import { faTags } from '@fortawesome/free-solid-svg-icons';
-import { globalIconScale } from '../App';
-import Select from './Select';
+import { globalIconScale } from '../../App';
+import Select, { SelectOption } from '../Select';
+
+
+
+const orderOptions: SelectOption[] = [{
+  value: "title:asc",
+  text: "Title (A-Z)"
+}, {
+  value: "title:desc",
+  text: "Title (Z-A)"
+}, {
+  value: "artist:asc",
+  text: "Artist (A-Z)"
+}, {
+  value: "artist:desc",
+  text: "Artist (Z-A)"
+}, {
+  value: "creator:asc",
+  text: "Creator (A-Z)"
+}, {
+  value: "creator:desc",
+  text: "Creator (Z-A)"
+}, {
+  value: "bpm:asc",
+  text: "BPM (0-100)"
+}, {
+  value: "bpm:desc",
+  text: "BPM (100-0)"
+}, {
+  value: "duration:asc",
+  text: "Length (Short)"
+}, {
+  value: "duration:desc",
+  text: "Length (Long)"
+}, {
+  value: "dateAdded:asc",
+  text: "Date Added (new)"
+}, {
+  value: "dateAdded:desc",
+  text: "Date Added (old)"
+}];
 
 
 
 export type SearchProps = {
   query: Signal<string>,
   count: Accessor<number>,
-  error: Accessor<Optional<SearchQueryError>>
+  error: Accessor<Optional<SearchQueryError>>,
+  setOrder: Setter<string>
 }
 
 const Search: Component<SearchProps> = props => {
   const [_, setQuery] = props.query;
-  const [order, setOrder] = createSignal("");
-
-  createEffect(() => console.log(order()));
-
   const [editable, setEditable] = createSignal<HTMLElement | undefined>();
   const [doShowError, setDoShowError] = createSignal(false);
   const [doShowSuggestion, setDoShowSuggestion] = createSignal(false);
@@ -70,13 +107,13 @@ const Search: Component<SearchProps> = props => {
   return (
     <div class="search no-pd">
       <div>
-        <SearchTextBox value={props.query} setInput={setEditable}/>
+        <SearchField value={props.query} setInput={setEditable}/>
       </div>
 
       <div class="results row">
         <button title="Save results as playlist">{props.count()} results</button>
         <div class="row">
-          <Select setValue={setOrder} options={[{value: "foo", text: "foo"}, {value: "bar", text: "bar", selected: true}]}/>
+          <Select setValue={props.setOrder} options={orderOptions}/>
           <button class="tags">
             <Fa icon={faTags} scale={globalIconScale}/>
           </button>

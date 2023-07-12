@@ -144,7 +144,7 @@ export type APIListener<F extends (...args: any) => any> = (...args: Parameters<
 export type SongsQueryPayload = {
   view: SongViewProps,
   searchQuery?: SearchQuerySuccess,
-  //todo ordering
+  order: string
 }
 
 export type OsuSearchAbleProperties = "bpm" | "artist" | "creator" | "length" | "mode" | "title";
