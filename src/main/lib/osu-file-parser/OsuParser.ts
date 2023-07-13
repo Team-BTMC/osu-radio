@@ -89,7 +89,7 @@ export class OsuParser {
             continue;
           }
 
-          s.diffs.push(diff.value);
+          s.diffs.push(diff.value.toLowerCase());
           continue;
         }
 

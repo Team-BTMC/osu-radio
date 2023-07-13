@@ -96,7 +96,7 @@ export class OsuFile {
       .set("creator", this.props.get("Creator") ?? "");
 
     const diff = this.props.get("Version");
-    builder.set("diffs", diff !== undefined ? [diff] : []);
+    builder.set("diffs", diff !== undefined ? [diff.toLowerCase()] : []);
 
     const mode = this.props.get("Mode");
     if (mode !== undefined) {

@@ -20,7 +20,6 @@ const parser = new SearchParser({
     length: time(),
     mode: set(["osu", "taiko", "catch", "mania", "o", "t", "c", "m"]),
     title: text(),
-    diff: text(),
   }
 });
 

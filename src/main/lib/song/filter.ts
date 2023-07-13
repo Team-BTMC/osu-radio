@@ -15,16 +15,21 @@ export function filter(query: SongsQueryPayload): Song[] {
     return Array.from(songMapper(opt.value));
   }
 
+  const [title, diffs] = parseUnnamed(query.searchQuery.unnamed);
+
   return Array.from(songMapper(opt.value.filter(s => {
     if (query.searchQuery === undefined) {
       return true;
     }
 
-    const title = query.searchQuery.unnamed.join("");
     const c = compare(title, s.t);
 
     if (!c.satisfies) {
       return false;
+    }
+
+    for (let i = 0; i < diffs.length; i++) {
+      verifyDiff(s.diffs, diffs[i]);
     }
 
     for (const prop in query.searchQuery.properties) {
@@ -52,6 +57,28 @@ export function filter(query: SongsQueryPayload): Song[] {
 
     return true;
   })));
+}
+
+function parseUnnamed(unnamed: string[]): [string, string[]] {
+  let titleBuffer = "";
+  const diffsBuffer: string[] = [];
+
+  for (let i = 0; i < unnamed.length; i++) {
+    const str = unnamed[i];
+
+    if (str[0] === "[" || str[str.length - 1] === "]") {
+      if (str.length - Number(str[0] === "[") - Number(str[str.length - 1] === "]") === 0) {
+        continue;
+      }
+
+      diffsBuffer.push(str);
+      continue
+    }
+
+    titleBuffer += str;
+  }
+
+  return [titleBuffer, diffsBuffer];
 }
 
 function* songMapper(indexes: SongIndex[]): Generator<Song> {
@@ -110,6 +137,7 @@ function getProp(song: SongIndex, prop: OsuSearchAbleProperties): string | numbe
     case 'bpm': return song.bpm;
     case 'creator': return song.c;
     case 'mode': return song.m;
+    case 'diff': return song.diffs.join("");
     default: assertNever(prop);
   }
 
@@ -140,4 +168,29 @@ function verifyValue(indexValue: number, symbol: string, propValue: number) {
   }
 
   return false;
+}
+
+function verifyDiff(indexDiffs: string[], value: string) {
+  const hasOpeningBracket = value[0] === "[";
+  const hasClosingBracket = value[value.length - 1] === "]";
+  const diff = value.substring(Number(hasOpeningBracket), value.length - Number(hasClosingBracket));
+
+  let isPresent = false;
+
+  for (let j = 0; j < indexDiffs.length; j++) {
+    if (hasOpeningBracket && hasClosingBracket) {
+      isPresent = isPresent || indexDiffs[j] === diff;
+      continue;
+    }
+
+    if (hasOpeningBracket) {
+      isPresent = isPresent || indexDiffs[j].startsWith(diff);
+    }
+
+    if (hasClosingBracket) {
+      isPresent = isPresent || indexDiffs[j].endsWith(diff);
+    }
+  }
+
+  return isPresent;
 }
