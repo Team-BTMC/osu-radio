@@ -85,7 +85,7 @@ export type SongIndex = {
   m?: number, // mode
   d: number, // duration
   tags?: string[],
-  diffs: string,
+  diffs: string[],
   bpm: number
 }
 
@@ -147,7 +147,7 @@ export type SongsQueryPayload = {
   order: string
 }
 
-export type OsuSearchAbleProperties = "bpm" | "artist" | "creator" | "length" | "mode" | "title";
+export type OsuSearchAbleProperties = "bpm" | "artist" | "creator" | "length" | "mode" | "title" | "diff";
 
 
 

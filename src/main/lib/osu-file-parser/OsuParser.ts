@@ -14,6 +14,7 @@ const beatmapSetIDRegex = /([0-9]+) .*/;
 
 
 type FileState = 'Initial'
+  | 'NextState'
   | 'General'
   | 'Editor'
   | 'Metadata'
@@ -148,7 +149,7 @@ export class OsuParser {
         continue;
       }
 
-      if (state === 'Initial' || state === 'Editor' || state === 'Difficulty' || state === 'Colours') {
+      if (state === 'Initial' || state === 'NextState' || state === 'Editor' || state === 'Difficulty' || state === 'Colours') {
         continue;
       }
 
@@ -156,6 +157,7 @@ export class OsuParser {
         const bg = bgFileNameRegex.exec(trimmed);
         if (bg !== null) {
           props.set("bgSrc", bg[1]);
+          state = 'NextState';
         }
 
         continue;

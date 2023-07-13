@@ -48,7 +48,6 @@ const SongView: Component<SongViewProps> = props => {
 
   onMount(() => {
     createEffect(searchSongs);
-    createEffect(() => console.log(order()));
   });
 
   return (

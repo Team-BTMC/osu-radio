@@ -17,18 +17,13 @@ export function getResourcePath(id: ResourceID | undefined): Promise<string> {
 
 
 
-//todo load on startup and save on shutdown
 const seen = new Map<string, boolean>();
 
 export function availableResource(resource: string, fallback: string): Promise<string> {
-  const entry = seen.get(resource);
+  const isAvailable = seen.get(resource);
 
-  if (entry !== undefined) {
-    return Promise.resolve(
-      entry
-        ? resource
-        : fallback
-    );
+  if (isAvailable !== undefined) {
+    return Promise.resolve(isAvailable ? resource : fallback);
   }
 
   const img = document.createElement("img");

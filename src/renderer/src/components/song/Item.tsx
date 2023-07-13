@@ -26,7 +26,6 @@ const Item: Component<{ song: Song }> = props => {
     item.addEventListener(setSourceEvent, setSource);
 
     const group = (item as HTMLElement).closest("[data-item-group]")?.getAttribute("data-item-group") ?? "global-item-group";
-    console.log(`'${group}'`);
 
     let observer = observers.get(group);
 
@@ -58,7 +57,7 @@ const Item: Component<{ song: Song }> = props => {
 
   return (
     <div class="item" ref={item} data-url={props.song.bg}>
-      <div class="image" style={{ 'background-image': `url(${src()})` }}></div>
+      <div class="image" style={{ 'background-image': `url('${src().replaceAll("'", "\\'")}')` }}></div>
       <div class="column">
         <h3>[{Math.round(60_000 / averageBPM(props.song.bpm, props.song.duration * 1_000))} BPM] {props.song.title}</h3>
         <span>{props.song.artist} // {props.song.creator}</span>
