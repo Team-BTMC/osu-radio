@@ -1,0 +1,21 @@
+.tag-select {
+  margin: auto !important;
+  background-color: transparent;
+  border: unset;
+  width: max(32vw, 300px);
+  outline: 2px solid rgba(var(--color-fg), var(--level-0));
+}
+
+.tag-select .tag-select-container {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.tag-select .tags-container {
+  min-height: 2em;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
