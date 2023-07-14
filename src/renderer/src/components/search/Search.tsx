@@ -4,9 +4,10 @@ import { Optional } from '../../../../@types';
 import { SearchQueryError } from '../../../../main/lib/search-parser/@search-types';
 import SearchField from './SearchField';
 import Fa from 'solid-fa';
-import { faSearch, faTags } from '@fortawesome/free-solid-svg-icons';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { globalIconScale } from '../../App';
 import Select, { SelectOption } from '../Select';
+import TagSelect from './TagSelect';
 
 
 
@@ -59,6 +60,7 @@ export type SearchProps = {
 
 const Search: Component<SearchProps> = props => {
   const [_, setQuery] = props.query;
+  const tags = createSignal([], { equals: false });
   const [editable, setEditable] = createSignal<HTMLElement | undefined>();
   const [doShowError, setDoShowError] = createSignal(false);
   const [doShowSuggestion, setDoShowSuggestion] = createSignal(false);
@@ -116,9 +118,7 @@ const Search: Component<SearchProps> = props => {
         <button title="Save results as playlist">{props.count()} results</button>
         <div class="row">
           <Select setValue={props.setOrder} options={orderOptions}/>
-          <button class="tags">
-            <Fa icon={faTags} scale={globalIconScale}/>
-          </button>
+          <TagSelect tags={tags}/>
         </div>
       </div>
 

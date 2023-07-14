@@ -21,7 +21,6 @@
 .search .tags {
   width: 30px;
   padding: 4px;
-  aspect-ratio: 1/1;
   display: grid;
   place-content: center;
 }
