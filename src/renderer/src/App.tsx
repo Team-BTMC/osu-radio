@@ -11,7 +11,6 @@ import ErrorScene from './components/scenes/ErrorScene';
 
 
 export default function App(): JSX.Element {
-  const [topColor, setTopColor] = createSignal('dodgerblue');
   const [scene, setScene] = createSignal<Scenes>("");
 
   const listener = (s: Scenes) => {
@@ -30,9 +29,6 @@ export default function App(): JSX.Element {
   onMount(() => {
     window.api.listen("changeScene", listener);
     window.addEventListener("changeScene", eventHandler);
-    window.addEventListener('click', () => {
-      setTopColor('dodgerblue');
-    });
   });
 
   onCleanup(() => {
@@ -41,7 +37,7 @@ export default function App(): JSX.Element {
   });
 
   return (
-    <Gradient bottomColor='crimson' topColor={topColor()}>
+    <Gradient>
       <Switch fallback={<NoScene/>}>
         <Match when={scene() === "dir-select"}>
           <DirSelectScene/>
