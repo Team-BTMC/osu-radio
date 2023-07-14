@@ -182,14 +182,12 @@ export class OsuParser {
         bpm.push([timingPoint[OFFSET], timingPoint[BPM]]);
       }
 
-      const useSpaceAfterColon = state === 'General';
-
-      const split = trimmed.split(useSpaceAfterColon ? ': ' : ':');
-      if (split.length !== 2) {
+      const [prop, value] = this.#splitProp(trimmed);
+      if (prop === undefined) {
         continue;
       }
 
-      props.set(split[0], split[1]);
+      props.set(prop, value ?? "");
     }
 
     stream.destroy();
@@ -201,5 +199,16 @@ export class OsuParser {
       : 0;
 
     return ok(new OsuFile(file, props, bpm, beatmapSetID));
+  }
+
+  static #splitProp(str: string): [] | [string, string] {
+    const colonPos = str.indexOf(":");
+
+    if (colonPos === -1) {
+      return [];
+    }
+
+    const doSkipSpace = str.charCodeAt(colonPos + 1) === 160 || str.charCodeAt(colonPos + 1) === 32;
+    return [str.substring(0, colonPos), str.substring(colonPos + 1 + Number(doSkipSpace))];
   }
 }
