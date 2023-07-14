@@ -1,4 +1,4 @@
-import { OsuSearchAbleProperties, Song, SongIndex, SongsQueryPayload } from '../../../@types';
+import { OsuSearchAbleProperties, Song, SongIndex, SongsQueryPayload, Tag } from '../../../@types';
 import { assertNever } from '../tungsten/assertNever';
 import { Storage } from '../storage/Storage';
 
@@ -30,6 +30,12 @@ export function filter(query: SongsQueryPayload): Song[] {
 
     for (let i = 0; i < diffs.length; i++) {
       verifyDiff(s.diffs, diffs[i]);
+    }
+
+    const passed = tagsFilter(s.tags ?? [], query.tags);
+
+    if (!passed) {
+      return false;
     }
 
     for (const prop in query.searchQuery.properties) {
@@ -193,4 +199,33 @@ function verifyDiff(indexDiffs: string[], value: string) {
   }
 
   return isPresent;
+}
+
+function tagsFilter(indexTags: string[], tags: Tag[]): boolean {
+  if (indexTags.length === 0 || tags.length === 0) {
+    return true;
+  }
+
+  let mustHaveCount = 0;
+  let actuallyHasCount = 0;
+
+  for (let i = 0; i < tags.length; i++) {
+    const includesTag = indexTags.includes(tags[i].name);
+
+    if (tags[i].isSpecial === true) {
+      if (includesTag) {
+        return false;
+      }
+
+      continue;
+    }
+
+    mustHaveCount++;
+
+    if (includesTag) {
+      actuallyHasCount++;
+    }
+  }
+
+  return mustHaveCount === actuallyHasCount;
 }

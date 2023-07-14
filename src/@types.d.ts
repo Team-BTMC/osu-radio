@@ -141,10 +141,16 @@ export type APIListener<F extends (...args: any) => any> = (...args: Parameters<
 
 
 
+export type Tag = {
+  name: string,
+  isSpecial?: boolean
+}
+
 export type SongsQueryPayload = {
   view: SongViewProps,
   searchQuery?: SearchQuerySuccess,
-  order: string
+  order: string,
+  tags: Tag[]
 }
 
 export type OsuSearchAbleProperties = "bpm" | "artist" | "creator" | "length" | "mode" | "title" | "diff";

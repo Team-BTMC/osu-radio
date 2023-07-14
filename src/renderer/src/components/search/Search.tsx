@@ -7,7 +7,7 @@ import Fa from 'solid-fa';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { globalIconScale } from '../../App';
 import Select, { SelectOption } from '../Select';
-import TagSelect from './TagSelect';
+import TagSelect, { Tag } from './TagSelect';
 
 
 
@@ -53,6 +53,7 @@ const orderOptions: SelectOption[] = [{
 
 export type SearchProps = {
   query: Signal<string>,
+  tags: Signal<Tag[]>,
   count: Accessor<number>,
   error: Accessor<Optional<SearchQueryError>>,
   setOrder: Setter<string>
@@ -60,7 +61,6 @@ export type SearchProps = {
 
 const Search: Component<SearchProps> = props => {
   const [_, setQuery] = props.query;
-  const tags = createSignal([], { equals: false });
   const [editable, setEditable] = createSignal<HTMLElement | undefined>();
   const [doShowError, setDoShowError] = createSignal(false);
   const [doShowSuggestion, setDoShowSuggestion] = createSignal(false);
@@ -118,7 +118,7 @@ const Search: Component<SearchProps> = props => {
         <button title="Save results as playlist">{props.count()} results</button>
         <div class="row">
           <Select setValue={props.setOrder} options={orderOptions}/>
-          <TagSelect tags={tags}/>
+          <TagSelect tags={props.tags}/>
         </div>
       </div>
 
