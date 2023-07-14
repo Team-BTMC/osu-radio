@@ -1,5 +1,5 @@
 import { Component, onMount, Setter, Signal } from 'solid-js';
-import { faSearch, faXmark } from "@fortawesome/free-solid-svg-icons";
+import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import "../../assets/css/search/search-field.css";
 import Fa from 'solid-fa';
 import { globalIconScale } from '../../App';
@@ -8,15 +8,20 @@ import { globalIconScale } from '../../App';
 
 type SearchTextBoxProps = {
   value: Signal<string>,
-  setInput: Setter<HTMLElement | undefined>,
+  setInput?: Setter<HTMLElement | undefined>,
+  children?: any
 }
 
+//todo rename to: TextField
 const SearchField: Component<SearchTextBoxProps> = props => {
   const [value, setValue] = props.value;
   let input;
 
   onMount(() => {
-    props.setInput(input);
+    if (props.setInput !== undefined) {
+      props.setInput(input);
+    }
+
     input.textContent = value();
   });
 
@@ -48,7 +53,7 @@ const SearchField: Component<SearchTextBoxProps> = props => {
 
   return (
     <div class="search-field button-like">
-      <Fa icon={faSearch} scale={globalIconScale}/>
+      {props.children}
       <div class="editable" ref={input} onInput={onInput} onPaste={onPaste} contenteditable={true} spellcheck={false}></div>
       <button class="icon" onClick={clear}>
         <Fa icon={faXmark} scale={globalIconScale}/>
