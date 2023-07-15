@@ -183,9 +183,6 @@ export type RequestAPI = {
 
   querySongsPoolInit: () => InfiniteScrollerInitResponse,
   querySongsPool: (request: InfiniteScrollerRequest, payload: SongsQueryPayload) => InfiniteScrollerResponse<Song>,
-
-  bidirectionalInit: () => InfiniteScrollerInitResponse,
-  bidirectional: (request: InfiniteScrollerRequest) => InfiniteScrollerResponse<string>,
 }
 
 
