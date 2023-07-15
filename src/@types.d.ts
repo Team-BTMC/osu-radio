@@ -1,4 +1,7 @@
-import type { InfiniteScrollerResponse } from './renderer/src/components/InfiniteScroller';
+import type {
+  InfiniteScrollerInitResponse, InfiniteScrollerRequest,
+  InfiniteScrollerResponse
+} from './renderer/src/components/InfiniteScroller';
 import type { SongViewProps } from './renderer/src/components/song/SongView';
 import type { SearchQuery, SearchQuerySuccess } from './main/lib/search-parser/@search-types';
 
@@ -149,15 +152,18 @@ export type Tag = {
 export type SongsQueryPayload = {
   view: SongViewProps,
   searchQuery?: SearchQuerySuccess,
+  tags: Tag[],
   order: string,
-  tags: Tag[]
 }
 
+export type QueueView = SongViewProps & { playlists?: string[] };
+
 export type QueueCreatePayload = {
-  view: SongViewProps | { playlists: string[] },
+  view: QueueView,
   searchQuery?: SearchQuerySuccess,
+  tags: Tag[],
   order: string,
-  tags: Tag[]
+  startIndex: number,
 }
 
 export type OsuSearchAbleProperties = "bpm" | "artist" | "creator" | "length" | "mode" | "title" | "diff";
@@ -173,9 +179,13 @@ export type RequestAPI = {
   dirSelect: () => Optional<string>,
   dirSubmit: (dir: string) => void,
   errorDismissed: () => void,
-  allSongs: (index: number) => InfiniteScrollerResponse,
   parseSearch: (query: string) => SearchQuery,
-  querySongsPool: (index: number, payload: SongsQueryPayload) => InfiniteScrollerResponse<Song[]>
+
+  querySongsPoolInit: () => InfiniteScrollerInitResponse,
+  querySongsPool: (request: InfiniteScrollerRequest, payload: SongsQueryPayload) => InfiniteScrollerResponse<Song>,
+
+  bidirectionalInit: () => InfiniteScrollerInitResponse,
+  bidirectional: (request: InfiniteScrollerRequest) => InfiniteScrollerResponse<string>,
 }
 
 

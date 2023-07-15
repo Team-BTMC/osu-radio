@@ -7,9 +7,19 @@ import { Storage } from '../lib/storage/Storage';
 
 
 
+Router.respond("querySongsPoolInit", () => {
+  return {
+    initialIndex: 0
+  };
+});
+
 const BUFFER_SIZE = 50;
 
-Router.respond("querySongsPool", (_evt, i, payload) => {
+Router.respond("querySongsPool", (_evt, request, payload) => {
+  if (request.direction === "up") {
+    return none();
+  }
+
   const opt = Storage.getTable("system").get("indexes");
 
   if (opt.isNone) {
@@ -27,13 +37,13 @@ Router.respond("querySongsPool", (_evt, i, payload) => {
   const songs = Array.from(indexMapper(indexes));
   songs.sort(sortFN.value);
 
-  if (i * BUFFER_SIZE >= songs.length) {
+  if (request.index * BUFFER_SIZE >= songs.length) {
     return none();
   }
 
   return some({
-    index: i + 1,
+    index: request.index + 1,
     total: songs.length,
-    items: songs.slice(i * BUFFER_SIZE, (i + 1) * BUFFER_SIZE)
+    items: songs.slice(request.index * BUFFER_SIZE, (request.index + 1) * BUFFER_SIZE)
   });
 });

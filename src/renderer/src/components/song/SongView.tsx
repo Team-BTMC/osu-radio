@@ -71,9 +71,16 @@ const SongView: Component<SongViewProps> = props => {
         count={count}
         error={searchError}/>
 
-      <InfiniteScroller apiKey={"querySongsPool"} apiData={payload()} setResultCount={setCount} reset={listingReset} builder={s =>
-        <Item song={s}/>
-      }/>
+      <InfiniteScroller
+        apiKey={"querySongsPool"}
+        initAPIKey={"querySongsPoolInit"}
+        apiData={payload()}
+        setResultCount={setCount}
+        reset={listingReset}
+        builder={s =>
+          <Item song={s}/>
+        }
+      />
     </div>
   );
 }
