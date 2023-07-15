@@ -1,10 +1,10 @@
-import { OsuSearchAbleProperties, Song, SongIndex, SongsQueryPayload, Tag } from '../../../@types';
+import { OsuSearchAbleProperties, SongIndex, SongsQueryPayload, Tag } from '../../../@types';
 import { assertNever } from '../tungsten/assertNever';
 import { Storage } from '../storage/Storage';
 
 
 
-export function filter(query: SongsQueryPayload): Song[] {
+export function filter(query: SongsQueryPayload): SongIndex[] {
   const opt = Storage.getTable("system").get("indexes");
 
   if (opt.isNone) {
@@ -12,12 +12,12 @@ export function filter(query: SongsQueryPayload): Song[] {
   }
 
   if (query.searchQuery === undefined) {
-    return Array.from(songMapper(opt.value));
+    return opt.value;
   }
 
   const [title, diffs] = parseUnnamed(query.searchQuery.unnamed);
 
-  return Array.from(songMapper(opt.value.filter(s => {
+  return opt.value.filter(s => {
     if (query.searchQuery === undefined) {
       return true;
     }
@@ -62,7 +62,7 @@ export function filter(query: SongsQueryPayload): Song[] {
     }
 
     return true;
-  })));
+  });
 }
 
 function parseUnnamed(unnamed: string[]): [string, string[]] {
@@ -85,16 +85,6 @@ function parseUnnamed(unnamed: string[]): [string, string[]] {
   }
 
   return [titleBuffer, diffsBuffer];
-}
-
-function* songMapper(indexes: SongIndex[]): Generator<Song> {
-  for (let i = 0; i < indexes.length; i++) {
-    const opt = Storage.getTable("songs").get(indexes[i].id);
-
-    if (!opt.isNone) {
-      yield opt.value;
-    }
-  }
 }
 
 function compare(pattern: string, str: string) {

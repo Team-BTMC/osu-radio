@@ -2,7 +2,7 @@ import fs from 'graceful-fs';
 import { fail, ok } from '../rust-like-utils-backend/Result';
 import { AudioSource, ImageSource, Optional, Result, Song } from '../../../@types';
 import { none, some } from '../rust-like-utils-backend/Optional';
-import { SongBuilder } from './SongBuilder';
+import { SongBuilder } from '../song/SongBuilder';
 import path from 'path';
 import { getAudioDurationInSeconds } from 'get-audio-duration';
 import { access, readFile, stat } from '../fs-promises';

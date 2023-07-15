@@ -1,10 +1,11 @@
 import { fail, ok } from '../rust-like-utils-backend/Result';
-import { Song } from '../../../@types';
-import { averageBPM } from '../osu-file-parser/song';
+import { Result, Song } from '../../../@types';
+import { averageBPM } from './average-bpm';
 
 
 
-export default function order(o: string) {
+
+export default function order(o: string): Result<(a: Song, b: Song) => number, string > {
   const [prop, mode] = o.split(":");
   const sortDirection = mode === "asc" ? 1 : -1;
 
