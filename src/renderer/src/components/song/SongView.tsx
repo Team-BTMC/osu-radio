@@ -13,8 +13,8 @@ import ResetSignal from '../../lib/ResetSignal';
 
 export type SongViewProps = {
   isAllSongs?: boolean,
-  isQueue?: boolean
-  playlist?: string
+  isQueue?: boolean,
+  playlist?: string,
 };
 
 const namespace = new TokenNamespace();

@@ -5,10 +5,10 @@ import { showError } from './router/error-router';
 import { dirSubmit } from './router/dir-router';
 import "./router/import";
 import { DirParseResult, OsuParser } from './lib/osu-file-parser/OsuParser';
-import { collectTagsAndIndexSongs } from './lib/osu-file-parser/song';
 import Global from './lib/Global';
 import { orDefault } from './lib/rust-like-utils-backend/Optional';
 import { throttle } from './lib/throttle';
+import { collectTagsAndIndexSongs } from './lib/song';
 
 
 

@@ -3,13 +3,20 @@ import { none, some } from '../lib/rust-like-utils-backend/Optional';
 import { filter } from '../lib/song/filter';
 import order from '../lib/song/order';
 import { indexMapper } from '../lib/song/indexMapper';
+import { Storage } from '../lib/storage/Storage';
 
 
 
 const BUFFER_SIZE = 50;
 
 Router.respond("querySongsPool", (_evt, i, payload) => {
-  const indexes = filter(payload);
+  const opt = Storage.getTable("system").get("indexes");
+
+  if (opt.isNone) {
+    return none();
+  }
+
+  const indexes = filter(opt.value, payload);
 
   const sortFN = order(payload.order);
 

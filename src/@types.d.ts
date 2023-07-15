@@ -153,6 +153,13 @@ export type SongsQueryPayload = {
   tags: Tag[]
 }
 
+export type QueueCreatePayload = {
+  view: SongViewProps | { playlists: string[] },
+  searchQuery?: SearchQuerySuccess,
+  order: string,
+  tags: Tag[]
+}
+
 export type OsuSearchAbleProperties = "bpm" | "artist" | "creator" | "length" | "mode" | "title" | "diff";
 
 
@@ -162,6 +169,7 @@ export type RequestAPI = {
   queueCurrent: () => Song,
   queueNext: () => void,
   queuePrevious: () => void,
+  queueCreate: (payload: QueueCreatePayload) => void,
   dirSelect: () => Optional<string>,
   dirSubmit: (dir: string) => void,
   errorDismissed: () => void,

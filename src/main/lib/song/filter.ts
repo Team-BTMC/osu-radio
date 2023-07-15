@@ -1,23 +1,16 @@
 import { OsuSearchAbleProperties, SongIndex, SongsQueryPayload, Tag } from '../../../@types';
 import { assertNever } from '../tungsten/assertNever';
-import { Storage } from '../storage/Storage';
 
 
 
-export function filter(query: SongsQueryPayload): SongIndex[] {
-  const opt = Storage.getTable("system").get("indexes");
-
-  if (opt.isNone) {
-    return [];
-  }
-
+export function filter(indexes: SongIndex[], query: SongsQueryPayload): SongIndex[] {
   if (query.searchQuery === undefined) {
-    return opt.value;
+    return indexes;
   }
 
   const [title, diffs] = parseUnnamed(query.searchQuery.unnamed);
 
-  return opt.value.filter(s => {
+  return indexes.filter(s => {
     if (query.searchQuery === undefined) {
       return true;
     }
