@@ -2,6 +2,8 @@
   margin: auto !important;
   background-color: transparent;
   border: unset;
+  border-radius: var(--border-radius);
+  overflow: hidden;
   width: max(32vw, 300px);
   outline: 2px solid rgba(var(--color-fg), var(--level-0));
 }
