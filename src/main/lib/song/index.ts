@@ -1,5 +1,5 @@
 import { Song, SongIndex } from '../../../@types';
-import { averageBPM } from './average-bpm';
+import { averageBPM, msToBPM } from './average-bpm';
 
 
 
@@ -13,7 +13,7 @@ function createSongIndex(id: string, song: Song): SongIndex {
     m: song.mode,
     tags: song.tags,
     diffs: song.diffs,
-    bpm: Math.round(60_000 / (averageBPM(song.bpm, song.duration * 1_000)))
+    bpm: msToBPM(averageBPM(song.bpm, song.duration * 1_000))
   };
 }
 

@@ -33,7 +33,7 @@ export function averageBPM(bpm: number[][], durationMS: number): number {
 
 
 
-export function bpm(ms: number): number {
+export function msToBPM(ms: number): number {
   if (ms === 0 || 60_000 / ms > 10_000) {
     return Infinity;
   }

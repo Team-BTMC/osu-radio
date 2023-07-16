@@ -1,6 +1,6 @@
 import { fail, ok } from '../rust-like-utils-backend/Result';
 import { Result, Song } from '../../../@types';
-import { averageBPM, bpm } from './average-bpm';
+import { averageBPM, msToBPM } from './average-bpm';
 
 
 
@@ -36,8 +36,8 @@ export default function order(ordering: string): Result<(a: Song, b: Song) => nu
 
     case "bpm":
       return ok((a: Song, b: Song) => {
-        const bpmA = bpm(averageBPM(a.bpm, a.duration * 1_000));
-        const bpmB = bpm(averageBPM(b.bpm, b.duration * 1_000));
+        const bpmA = msToBPM(averageBPM(a.bpm, a.duration * 1_000));
+        const bpmB = msToBPM(averageBPM(b.bpm, b.duration * 1_000));
 
         if (Number.isFinite(bpmA)) {
           return 1;
