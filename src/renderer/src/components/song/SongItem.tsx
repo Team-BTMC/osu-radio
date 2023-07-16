@@ -18,7 +18,7 @@ type SongItemProps = {
 
 
 
-const Item: Component<SongItemProps> = props => {
+const SongItem: Component<SongItemProps> = props => {
   const [src, setSRC] = createSignal(defaultBackground);
 
   let item;
@@ -71,4 +71,4 @@ const Item: Component<SongItemProps> = props => {
   );
 }
 
-export default Item;
+export default SongItem;

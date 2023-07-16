@@ -1,5 +1,5 @@
 import Search from '../search/Search';
-import Item from './Item';
+import SongItem from './SongItem';
 import { Component, createEffect, createSignal, onMount } from 'solid-js';
 import { Optional, ResourceID, SongsQueryPayload, Tag } from '../../../../@types';
 import "../../assets/css/song-view.css";
@@ -85,7 +85,7 @@ const SongView: Component<SongViewProps> = props => {
         setResultCount={setCount}
         reset={listingReset}
         builder={s =>
-          <Item song={s} onSelect={createQueue}/>
+          <SongItem song={s} onSelect={createQueue}/>
         }
       />
     </div>
