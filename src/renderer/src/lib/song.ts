@@ -30,3 +30,13 @@ export function averageBPM(bpm: number[][], durationMS: number): number {
 
   return highestEntry[1];
 }
+
+
+
+export function bpm(ms: number): number {
+  if (ms === 0 || 60_000 / ms > 10_000) {
+    return Infinity;
+  }
+
+  return Math.round(60_000 / ms);
+}
