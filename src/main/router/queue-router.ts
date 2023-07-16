@@ -4,6 +4,8 @@ import { Storage } from '../lib/storage/Storage';
 import { filter } from '../lib/song/filter';
 import { indexMapper } from '../lib/song/indexMapper';
 import { mainWindow } from '../main';
+import order from '../lib/song/order';
+import errorIgnored from '../lib/tungsten/errorIgnored';
 
 
 
@@ -21,11 +23,20 @@ Router.respond("queueCreate", async (_evt, payload) => {
 
     index = newIndex;
     lastPayload = payload;
-    await Router.dispatch(mainWindow, "queueIndexMoved", queue[index]);
+    await Router.dispatch(mainWindow, "queueIndexMoved", queue[index])
+      .catch(errorIgnored);
     return;
   }
 
+  lastPayload = payload;
   queue = Array.from(indexMapper(filter(getIndexes(payload.view), payload)));
+
+  const ordering = order(payload.order);
+
+  if (!ordering.isError) {
+    queue.sort(ordering.value);
+  }
+
   const songIndex = queue.findIndex(s => s.path === payload.startSong);
 
   if (songIndex !== -1) {
@@ -34,7 +45,8 @@ Router.respond("queueCreate", async (_evt, payload) => {
     index = 0;
   }
 
-  await Router.dispatch(mainWindow, "queueIndexMoved", queue[index]);
+  await Router.dispatch(mainWindow, "queueIndexMoved", queue[index])
+    .catch(errorIgnored);
 });
 
 function getIndexes(view: QueueView): SongIndex[] {
@@ -70,7 +82,7 @@ function comparePayload(current: QueueCreatePayload, last: QueueCreatePayload | 
     return false;
   }
 
-  if (current.searchQuery !== last.searchQuery) {
+  if (typeof current.searchQuery !== typeof last.searchQuery) {
     return false;
   }
 
@@ -93,8 +105,6 @@ function comparePayload(current: QueueCreatePayload, last: QueueCreatePayload | 
   }
 
   return JSON.stringify(current.tags) === JSON.stringify(last.tags);
-
-
 }
 
 

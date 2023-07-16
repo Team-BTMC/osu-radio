@@ -1,5 +1,5 @@
 import { Component, createSignal, onCleanup, onMount } from 'solid-js';
-import { Song } from '../../../../@types';
+import { ResourceID, Song } from '../../../../@types';
 import { availableResource, getResourcePath } from '../../lib/tungsten/resource';
 import { averageBPM } from '../../lib/song';
 import defaultBackground from "../../assets/osu-default-background.jpg";
@@ -11,9 +11,14 @@ const setSourceEvent = "setSource";
 
 const observers = new Map<string, IntersectionObserver>();
 
+type SongItemProps = {
+  song: Song,
+  onSelect: (songResource: ResourceID) => Promise<void>,
+}
 
 
-const Item: Component<{ song: Song }> = props => {
+
+const Item: Component<SongItemProps> = props => {
   const [src, setSRC] = createSignal(defaultBackground);
 
   let item;
@@ -56,7 +61,7 @@ const Item: Component<{ song: Song }> = props => {
   });
 
   return (
-    <div class="item" ref={item} data-url={props.song.bg}>
+    <div class="item" onClick={() => props.onSelect(props.song.path)} ref={item} data-url={props.song.bg}>
       <div class="image" style={{ 'background-image': `url('${src().replaceAll("'", "\\'")}')` }}></div>
       <div class="column">
         <h3>[{Math.round(60_000 / averageBPM(props.song.bpm, props.song.duration * 1_000))} BPM] {props.song.title}</h3>

@@ -1,7 +1,7 @@
 import Search from '../search/Search';
 import Item from './Item';
 import { Component, createEffect, createSignal, onMount } from 'solid-js';
-import { Optional, SongsQueryPayload, Tag } from '../../../../@types';
+import { Optional, ResourceID, SongsQueryPayload, Tag } from '../../../../@types';
 import "../../assets/css/song-view.css";
 import { SearchQueryError } from '../../../../main/lib/search-parser/@search-types';
 import { none, some } from '../../lib/rust-like-utils-client/Optional';
@@ -62,6 +62,13 @@ const SongView: Component<SongViewProps> = props => {
     createEffect(searchSongs);
   });
 
+  const createQueue = async (songResource: ResourceID) => {
+    await window.api.request("queueCreate", {
+      startSong: songResource,
+      ...payload()
+    });
+  }
+
   return (
     <div class="song-view" data-item-group={namespace.create(true)}>
       <Search
@@ -78,7 +85,7 @@ const SongView: Component<SongViewProps> = props => {
         setResultCount={setCount}
         reset={listingReset}
         builder={s =>
-          <Item song={s}/>
+          <Item song={s} onSelect={createQueue}/>
         }
       />
     </div>

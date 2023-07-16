@@ -5,12 +5,12 @@ import { averageBPM } from './average-bpm';
 
 
 
-export default function order(o: string): Result<(a: Song, b: Song) => number, string > {
-  const [prop, mode] = o.split(":");
+export default function order(ordering: string): Result<(a: Song, b: Song) => number, string > {
+  const [prop, mode] = ordering.split(":");
   const sortDirection = mode === "asc" ? 1 : -1;
 
   if (prop === undefined || mode === undefined) {
-    return fail(`Bruh, this ordering '${o}' won't work... And you should know...`);
+    return fail(`Bruh, this ordering '${ordering}' won't work... And you should know...`);
   }
 
   switch (prop) {
