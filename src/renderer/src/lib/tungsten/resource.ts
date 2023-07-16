@@ -2,17 +2,14 @@ import { ResourceID } from '../../../../@types';
 
 
 
-export function getResourcePath(id: ResourceID | undefined): Promise<string> {
-  return new Promise<string>(resolve => {
-    window.api.request("resourceGet", id)
-      .then(result => {
-        if (result.isError) {
-          return;
-        }
+export async function getResourcePath(id: ResourceID | undefined): Promise<string> {
+  const result = await window.api.request("resourceGet", id);
 
-        resolve(new URL(result.value).href);
-      });
-  });
+  if (result.isError) {
+    return "";
+  }
+
+  return new URL(result.value).href;
 }
 
 
