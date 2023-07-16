@@ -163,7 +163,7 @@ export type QueueCreatePayload = {
   searchQuery?: SearchQuerySuccess,
   tags: Tag[],
   order: string,
-  startIndex: number,
+  startSong: ResourceID,
 }
 
 export type OsuSearchAbleProperties = "bpm" | "artist" | "creator" | "length" | "mode" | "title" | "diff";
@@ -200,5 +200,5 @@ export type ListenAPI = {
   loadingSetTitle: (title: string) => void,
   loadingUpdate: (update: LoadingSceneUpdate) => void,
   errorSetMessage: (msg: string) => void,
-  queueIndexMoved: (index: number, song: Song) => void,
+  queueIndexMoved: (song: Song) => void,
 }

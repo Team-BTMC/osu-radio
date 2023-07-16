@@ -13,15 +13,28 @@ let lastPayload: QueueCreatePayload | undefined;
 
 Router.respond("queueCreate", async (_evt, payload) => {
   if (comparePayload(payload, lastPayload)) {
-    index = payload.startIndex;
+    const newIndex = queue.findIndex(s => s.path === payload.startSong);
+
+    if (newIndex === -1 || newIndex === index) {
+      return;
+    }
+
+    index = newIndex;
     lastPayload = payload;
-    await Router.dispatch(mainWindow, "queueIndexMoved", index, queue[index]);
+    await Router.dispatch(mainWindow, "queueIndexMoved", queue[index]);
     return;
   }
 
   queue = Array.from(indexMapper(filter(getIndexes(payload.view), payload)));
-  index = payload.startIndex;
-  await Router.dispatch(mainWindow, "queueIndexMoved", index, queue[index]);
+  const songIndex = queue.findIndex(s => s.path === payload.startSong);
+
+  if (songIndex !== -1) {
+    index = songIndex;
+  } else {
+    index = 0;
+  }
+
+  await Router.dispatch(mainWindow, "queueIndexMoved", queue[index]);
 });
 
 function getIndexes(view: QueueView): SongIndex[] {
@@ -83,6 +96,8 @@ function comparePayload(current: QueueCreatePayload, last: QueueCreatePayload | 
 
 
 }
+
+
 
 Router.respond('queueCurrent', () => {
   return queue[index];

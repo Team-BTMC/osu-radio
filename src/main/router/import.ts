@@ -1,6 +1,6 @@
 import "./dir-router";
 import "./error-router";
-import "./queue";
+import "./queue-router";
 import "./resource-router";
 import "./songs-pool-router";
 import "./search-router";
