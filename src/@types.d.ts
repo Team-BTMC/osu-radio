@@ -199,5 +199,6 @@ export type ListenAPI = {
   changeScene: (scene: Scenes) => void,
   loadingSetTitle: (title: string) => void,
   loadingUpdate: (update: LoadingSceneUpdate) => void,
-  errorSetMessage: (msg: string) => void, //todo show alert()
+  errorSetMessage: (msg: string) => void,
+  queueIndexMoved: (index: number, song: Song) => void,
 }

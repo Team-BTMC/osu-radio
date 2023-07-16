@@ -12,7 +12,13 @@ import { collectTagsAndIndexSongs } from './lib/song';
 
 
 
+export let mainWindow: BrowserWindow;
+
+
+
 export async function main(window: BrowserWindow) {
+  mainWindow = window;
+
   const settings = Storage.getTable("settings");
   // settings.delete("osuSongsDir");
 

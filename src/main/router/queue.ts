@@ -3,6 +3,7 @@ import { QueueCreatePayload, QueueView, Song, SongIndex } from '../../@types';
 import { Storage } from '../lib/storage/Storage';
 import { filter } from '../lib/song/filter';
 import { indexMapper } from '../lib/song/indexMapper';
+import { mainWindow } from '../main';
 
 
 
@@ -10,15 +11,17 @@ let queue: Song[];
 let index = 0;
 let lastPayload: QueueCreatePayload | undefined;
 
-Router.respond("queueCreate", (_evt, payload) => {
+Router.respond("queueCreate", async (_evt, payload) => {
   if (comparePayload(payload, lastPayload)) {
     index = payload.startIndex;
     lastPayload = payload;
+    await Router.dispatch(mainWindow, "queueIndexMoved", index, queue[index]);
     return;
   }
 
   queue = Array.from(indexMapper(filter(getIndexes(payload.view), payload)));
   index = payload.startIndex;
+  await Router.dispatch(mainWindow, "queueIndexMoved", index, queue[index]);
 });
 
 function getIndexes(view: QueueView): SongIndex[] {
