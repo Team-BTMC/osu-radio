@@ -10,18 +10,21 @@ type ZeroToOne = number;
 
 
 const player = new Audio();
-player.volume = 0.3;
 
 
 
 const [media, setMedia] = createSignal<URL>();
 const [song, setSong] = createSignal<Song | undefined>(undefined, {
   equals: (prev, next) => {
-    return JSON.stringify(prev) !== JSON.stringify(next);
+    return JSON.stringify(prev) === JSON.stringify(next);
   }
 });
 const [duration, setDuration] = createSignal(0);
 const [timestamp, setTimestamp] = createSignal(0);
+
+const [volume, setVolume] = createSignal(0.3);
+player.volume = volume();
+
 const [bpm, setBPM] = createSignal<Optional<number>>(none(), {
   equals: (prev, next) => {
     if (prev.isNone && !next.isNone) {
@@ -41,7 +44,7 @@ const [bpm, setBPM] = createSignal<Optional<number>>(none(), {
 });
 const [isPlaying, setIsPlaying] = createSignal<boolean>(false);
 
-export { isPlaying, bpm, song, media, duration, timestamp }
+export { isPlaying, bpm, song, media, duration, timestamp, volume, setVolume }
 
 
 
@@ -79,8 +82,14 @@ export async function play(): Promise<void> {
     player.src = m.href;
   }
 
-  player.volume = 0.3;
+  player.volume = volume();
+  setIsPlaying(true);
   await player.play();
+}
+
+export function pause() {
+  setIsPlaying(false);
+  player.pause();
 }
 
 export async function next() {
@@ -123,24 +132,20 @@ export async function previous() {
 
 export async function togglePlay(force?: boolean): Promise<void> {
   if (force !== undefined) {
-    setIsPlaying(force);
-
     if (force === true) {
       await play();
       return;
     }
 
-    player.pause();
+    pause();
     return;
   }
 
   if (isPlaying() === true) {
-    setIsPlaying(!isPlaying());
-    player.pause();
+    pause();
     return;
   }
 
-  setIsPlaying(!isPlaying());
   await play();
 }
 
@@ -160,14 +165,17 @@ createEffect(() => {
 
 
 
-window.api.listen("queueIndexMoved", async (song) => {
-  const resource = await window.api.request("resourceGet", song.audio);
+window.api.listen("queueIndexMoved", async (s) => {
+  const resource = await window.api.request("resourceGet", s.audio);
 
   if (resource.isError) {
     return;
   }
 
   setMedia(new URL(resource.value));
+  setSong(s);
+  console.log(song());
+  await play();
 });
 
 
