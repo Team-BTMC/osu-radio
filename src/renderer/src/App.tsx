@@ -13,9 +13,6 @@ import ErrorScene from './components/scenes/ErrorScene';
 export default function App(): JSX.Element {
   const [scene, setScene] = createSignal<Scenes>("");
 
-  const listener = (s: Scenes) => {
-    setScene(s);
-  }
   const eventHandler = (event) => {
     console.log(event, event instanceof CustomEvent);
 
@@ -27,12 +24,12 @@ export default function App(): JSX.Element {
   };
 
   onMount(() => {
-    window.api.listen("changeScene", listener);
+    window.api.listen("changeScene", setScene);
     window.addEventListener("changeScene", eventHandler);
   });
 
   onCleanup(() => {
-    window.api.removeListener("changeScene", listener);
+    window.api.removeListener("changeScene", setScene);
     window.removeEventListener("changeScene", eventHandler);
   });
 
