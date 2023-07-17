@@ -7,8 +7,11 @@ import Fa from 'solid-fa';
 import {
   faBackwardStep,
   faForwardStep,
+  faGlobe,
+  faLocationDot,
   faPause,
-  faPlay, faVolumeHigh,
+  faPlay,
+  faVolumeHigh,
   faVolumeLow,
   faVolumeXmark
 } from '@fortawesome/free-solid-svg-icons';
@@ -38,10 +41,6 @@ const SongDetail: Component<SongDetailProps> = (_props) => {
     image.addEventListener("error", () => {
       image.src = defaultBackground;
     });
-  });
-
-  createEffect(() => {
-    console.log(song());
   });
 
   return (
@@ -88,13 +87,13 @@ const SongDetail: Component<SongDetailProps> = (_props) => {
             </button>
             <div class="menu">
               <div class="menu-wrapper">
-                <div class="selectors local">
-                  <span>Local</span>
+                <div class="selectors local" title={"Sets volume on current song"}>
+                  <Fa icon={faLocationDot} scale={globalIconScale}/>
                   <Bar fill={0.1} alignment="vertical"/>
                 </div>
 
-                <div class="selectors global">
-                  <span>Global</span>
+                <div class="selectors global" title={"Sets across the whole application"}>
+                  <Fa icon={faGlobe} scale={globalIconScale}/>
                   <Bar fill={volume()} alignment="vertical"/>
                 </div>
               </div>

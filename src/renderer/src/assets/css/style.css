@@ -140,17 +140,20 @@ button.icon {
 .controls .dropdown .menu-wrapper {
   width: calc(44px + 8px + 44px);
   justify-content: space-between;
+  gap: 20px;
 }
 
 .controls .dropdown .menu-wrapper .selectors {
   display: flex;
+  flex: 1;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 16px;
+  margin: 8px;
 }
 
-.controls .dropdown .menu-wrapper .selectors span {
-  font-size: 0.8em;
+.controls .dropdown .menu-wrapper .selectors svg:hover {
+  cursor: help;
 }
 
 .controls .dropdown .menu-wrapper .selectors .bar.vertical {
