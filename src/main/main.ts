@@ -16,6 +16,10 @@ export let mainWindow: BrowserWindow;
 
 
 
+export const DELAY_MS = 200;
+
+
+
 export async function main(window: BrowserWindow) {
   mainWindow = window;
 
