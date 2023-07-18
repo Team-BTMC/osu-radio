@@ -56,3 +56,7 @@ export default function App(): JSX.Element {
 
 
 export const globalIconScale = 1.32;
+
+
+
+export const DELAY_MS = 200;
