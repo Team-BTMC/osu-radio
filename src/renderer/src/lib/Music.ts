@@ -2,6 +2,8 @@ import { none, some } from "./rust-like-utils-client/Optional.js";
 import { AudioSource, Optional, Song } from '../../../@types';
 import { msToBPM } from './song';
 import { createEffect, createSignal } from 'solid-js';
+import { delay } from './delay';
+import { DELAY_MS } from '../App';
 
 
 
@@ -14,23 +16,54 @@ const player = new Audio();
 
 
 const [media, setMedia] = createSignal<URL>();
+
+
+
 const [song, setSong] = createSignal<Song | undefined>(undefined, {
   equals: (prev, next) => {
     return JSON.stringify(prev) === JSON.stringify(next);
   }
 });
+export { song }
 let _song = song();
+
+
+
 const [duration, setDuration] = createSignal(0);
+export { duration }
+
+
+
 const [timestamp, setTimestamp] = createSignal(0);
+export { timestamp }
+
+
 
 const [volume, setVolume] = createSignal<ZeroToOne>(0.3);
+export { volume, setVolume }
+window.api.request("settingsGet", "volume")
+  .then(v => {
+    if (v.isNone) {
+      return;
+    }
+
+    setVolume(v.value);
+  });
+
+
+
 const [localVolume, setLocalVolume] = createSignal<ZeroToOne>(0.5);
+export { localVolume, setLocalVolume }
+
+
 
 function calculateVolume(): number {
   const v = volume();
   return v + ((localVolume() - 0.5) * 2 * v);
 }
 player.volume = calculateVolume();
+
+
 
 const [bpm, setBPM] = createSignal<Optional<number>>(none(), {
   equals: (prev, next) => {
@@ -49,9 +82,12 @@ const [bpm, setBPM] = createSignal<Optional<number>>(none(), {
     return true;
   }
 });
-const [isPlaying, setIsPlaying] = createSignal<boolean>(false);
+export { bpm }
 
-export { isPlaying, bpm, song, media, duration, timestamp, volume, setVolume, localVolume, setLocalVolume }
+
+
+const [isPlaying, setIsPlaying] = createSignal<boolean>(false);
+export { isPlaying }
 
 
 
@@ -186,9 +222,23 @@ createEffect(async () => {
   setLocalVolume(audio.value.volume ?? 0.5);
 });
 
+
+
 createEffect(() => {
   player.volume = calculateVolume();
 });
+
+
+
+const [writeVolume, ] = delay(async (volume: number) => {
+  await window.api.request("settingsWrite", "volume", volume);
+}, DELAY_MS);
+createEffect(async () => {
+  const v = volume();
+  writeVolume(v);
+});
+
+
 
 createEffect(async () => {
   const lv = localVolume();

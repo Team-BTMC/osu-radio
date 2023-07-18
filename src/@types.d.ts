@@ -181,6 +181,8 @@ export type RequestAPI = {
   dirSubmit: (dir: string) => void,
   errorDismissed: () => void,
   parseSearch: (query: string) => SearchQuery,
+  settingsWrite: <K extends keyof Settings>(key: K, value: any) => void,
+  settingsGet: <K extends keyof Settings>(key: K) => Optional<any>,
 
   querySongsPoolInit: () => InfiniteScrollerInitResponse,
   querySongsPool: (request: InfiniteScrollerRequest, payload: SongsQueryPayload) => InfiniteScrollerResponse<Song>,
