@@ -133,6 +133,8 @@ const TagSelect: Component<TagSelectProps> = props => {
         <Gradient class={"tag-select-container"}>
           <SearchField value={tagSignal} setInput={setTagField}/>
 
+          <span class={"hint"}>Type the name of a tag into input above and press enter to add it. After it is added you can right-click it and change it to exclude songs with given tag.</span>
+
           <div class={"tags-container"}>
             <For each={tags()}>{(tag: Tag) =>
               <TagItem name={tag.name} isSpecial={tag.isSpecial === true} onRemove={onTagRemove} onChange={onTagChange}/>

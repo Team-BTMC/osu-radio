@@ -181,6 +181,10 @@ body {
   font-size: var(--font-size);
 }
 
+dialog {
+  user-select: none;
+}
+
 #root {
     width: 100vw;
     height: 100vh;

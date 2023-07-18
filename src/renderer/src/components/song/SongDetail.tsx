@@ -108,7 +108,7 @@ const SongDetail: Component<SongDetailProps> = (_props) => {
                   <Bar fill={localVolume()} alignment="vertical" setFill={setLocalVolume}/>
                 </div>
 
-                <div class="selectors global" title={"Sets across the whole application"}>
+                <div class="selectors global" title={"Sets volume across the whole application"}>
                   <Fa icon={faGlobe} scale={GLOBAL_ICON_SCALE}/>
                   <Bar fill={volume()} alignment="vertical" setFill={setVolume}/>
                 </div>

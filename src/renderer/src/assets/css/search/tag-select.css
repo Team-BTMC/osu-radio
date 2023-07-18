@@ -21,3 +21,7 @@
   flex-wrap: wrap;
   gap: 4px;
 }
+
+.tag-select .hint {
+  font-size: 0.8em;
+}
