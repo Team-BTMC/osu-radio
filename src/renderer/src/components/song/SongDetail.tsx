@@ -27,6 +27,7 @@ import {
   faVolumeXmark
 } from '@fortawesome/free-solid-svg-icons';
 import { GLOBAL_ICON_SCALE } from '../../App';
+import formatTime from '../../lib/time-formatter';
 
 
 
@@ -68,7 +69,8 @@ const SongDetail: Component<SongDetailProps> = (_props) => {
           setFill={seek}
         />
         <div class="time">
-          <span class="currently">{timestamp()}</span><span class="duration">{duration()}</span>
+          <span>{formatTime(timestamp() * 1_000)}</span>
+          <span>{formatTime(duration() * 1_000)}</span>
         </div>
       </div>
 
