@@ -3,7 +3,7 @@ import { ResourceID } from '../../../../@types';
 
 
 export async function getResourcePath(id: ResourceID | undefined): Promise<string> {
-  const result = await window.api.request("resourceGet", id);
+  const result = await window.api.request("resourceGetPath", id);
 
   if (result.isError) {
     return "";

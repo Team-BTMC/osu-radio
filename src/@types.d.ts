@@ -115,7 +115,7 @@ export type TableMap = {
   'system': System,
 }
 
-export type ResourceTables = /* "songs" | */ "audio" | "images";
+export type ResourceTables = "songs" | "audio" | "images";
 
 
 
@@ -171,7 +171,8 @@ export type OsuSearchAbleProperties = "bpm" | "artist" | "creator" | "length" | 
 
 
 export type RequestAPI = {
-  resourceGet: (id: any) => Result<string, string>,
+  resourceGet: (id: ResourceID, table: ResourceTables) => Optional<Song | AudioSource | ImageSource>,
+  resourceGetPath: (id: any) => Result<string, string>,
   queueCurrent: () => Song,
   queueNext: () => void,
   queuePrevious: () => void,
@@ -183,6 +184,8 @@ export type RequestAPI = {
 
   querySongsPoolInit: () => InfiniteScrollerInitResponse,
   querySongsPool: (request: InfiniteScrollerRequest, payload: SongsQueryPayload) => InfiniteScrollerResponse<Song>,
+
+  saveLocalVolume: (volume: number, song: ResourceID) => void,
 }
 
 
