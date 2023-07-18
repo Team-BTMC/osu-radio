@@ -1,17 +1,74 @@
-import { Component } from 'solid-js';
+import { Component, createEffect, createSignal, onMount } from 'solid-js';
 import { clamp } from '../lib/tungsten/math';
 import "../assets/css/bar.css";
 
 
 
-export type BarAlignment = "vertical" | "v" | "horizontal" | "h";
-const Bar: Component<{ alignment?: BarAlignment, fill: number }> = props => {
+type BarAlignment = "vertical" | "v" | "horizontal" | "h";
+
+function isVertical(alignment?: BarAlignment): boolean {
+  return alignment === "vertical" || alignment === "v";
+}
+
+type BarProps = {
+  alignment?: BarAlignment,
+  fill: number,
+  setFill?: (fill: number) => any
+}
+
+
+
+const Bar: Component<BarProps> = props => {
+  const [fill, setFill] = createSignal(props.fill);
+  let bar, handle;
+
+  onMount(() => {
+    createEffect(() => {
+      const f = fill();
+      bar.style.setProperty("--fill-per", `${clamp(0, 1, f) * 100}%`);
+
+      if (props.setFill !== undefined) {
+        props.setFill(f);
+      }
+    });
+  });
+
+  const calculateFill = (evt: PointerEvent) => {
+    const rect: DOMRect = bar.getBoundingClientRect();
+
+    if (isVertical(props.alignment)) {
+      setFill((-(evt.clientY - rect.top) / rect.height) + 1);
+      return;
+    }
+
+    setFill((evt.clientX - rect.left) / rect.width);
+  }
+
+  const onDown = (evt: PointerEvent) => {
+    handle.setPointerCapture(evt.pointerId);
+
+    handle.addEventListener("pointermove", calculateFill);
+    handle.addEventListener("pointerup", () => handle.removeEventListener("pointermove", calculateFill), { once: true });
+  }
+
   return (
     <div
-      class={'bar' + (props.alignment !== undefined ? ` ${props.alignment}` : "")}
-      style={{ "--fill-per": clamp(0, 1, props.fill) * 100 + "%" }}
+      ref={bar}
+      classList={{
+        "bar": true,
+        "vertical": props.alignment !== undefined,
+        "editable": props.setFill !== undefined
+      }}
+      style={{
+        "--fill-per": clamp(0, 1, props.fill) * 100 + "%"
+      }}
+      onPointerDown={calculateFill}
     >
-      <div class="filling"></div>
+      <div class="filling-container">
+        <div class="filling"></div>
+      </div>
+
+      <div ref={handle} class="handle" onPointerDown={onDown}></div>
     </div>
   );
 }
