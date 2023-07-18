@@ -1,5 +1,5 @@
 import { none, some } from "./rust-like-utils-client/Optional.js";
-import { Optional, Song } from '../../../@types';
+import { AudioSource, Optional, Song } from '../../../@types';
 import { msToBPM } from './song';
 import { createEffect, createSignal } from 'solid-js';
 
@@ -19,11 +19,18 @@ const [song, setSong] = createSignal<Song | undefined>(undefined, {
     return JSON.stringify(prev) === JSON.stringify(next);
   }
 });
+let _song = song();
 const [duration, setDuration] = createSignal(0);
 const [timestamp, setTimestamp] = createSignal(0);
 
-const [volume, setVolume] = createSignal(0.3);
-player.volume = volume();
+const [volume, setVolume] = createSignal<ZeroToOne>(0.3);
+const [localVolume, setLocalVolume] = createSignal<ZeroToOne>(0.5);
+
+function calculateVolume(): number {
+  const v = volume();
+  return v + ((localVolume() - 0.5) * 2 * v);
+}
+player.volume = calculateVolume();
 
 const [bpm, setBPM] = createSignal<Optional<number>>(none(), {
   equals: (prev, next) => {
@@ -44,13 +51,13 @@ const [bpm, setBPM] = createSignal<Optional<number>>(none(), {
 });
 const [isPlaying, setIsPlaying] = createSignal<boolean>(false);
 
-export { isPlaying, bpm, song, media, duration, timestamp, volume, setVolume }
+export { isPlaying, bpm, song, media, duration, timestamp, volume, setVolume, localVolume, setLocalVolume }
 
 
 
 async function getCurrent() {
   const song = await window.api.request("queueCurrent");
-  const resource = await window.api.request("resourceGet", song.audio);
+  const resource = await window.api.request("resourceGetPath", song.audio);
 
   if (resource.isError) {
     return;
@@ -82,7 +89,7 @@ export async function play(): Promise<void> {
     player.src = m.href;
   }
 
-  player.volume = volume();
+  player.volume = calculateVolume();
   setIsPlaying(true);
   await player.play();
 }
@@ -150,6 +157,10 @@ export async function togglePlay(force?: boolean): Promise<void> {
 }
 
 export function seek(range: ZeroToOne): void {
+  if (isNaN(player.duration)) {
+    return;
+  }
+
   player.currentTime = range * player.duration;
 
   setDuration(player.duration);
@@ -158,15 +169,47 @@ export function seek(range: ZeroToOne): void {
 
 
 
-createEffect(() => {
-  song();
+createEffect(async () => {
+  _song = song();
   setBPM(none());
+
+  if (_song === undefined) {
+    return;
+  }
+
+  const audio = await window.api.request("resourceGet", _song.audio, "audio") as Optional<AudioSource>;
+
+  if (audio.isNone) {
+    return;
+  }
+
+  setLocalVolume(audio.value.volume ?? 0.5);
+});
+
+createEffect(() => {
+  player.volume = calculateVolume();
+});
+
+createEffect(async () => {
+  const lv = localVolume();
+
+  if (_song === undefined || lv === 0.5) {
+    return;
+  }
+
+  const audio = await window.api.request("resourceGet", _song.audio, "audio") as Optional<AudioSource>;
+
+  if (!audio.isNone && audio.value.volume === lv) {
+    return;
+  }
+
+  await window.api.request("saveLocalVolume", lv, _song.path);
 });
 
 
 
 window.api.listen("queueIndexMoved", async (s) => {
-  const resource = await window.api.request("resourceGet", s.audio);
+  const resource = await window.api.request("resourceGetPath", s.audio);
 
   if (resource.isError) {
     return;
@@ -174,7 +217,6 @@ window.api.listen("queueIndexMoved", async (s) => {
 
   setMedia(new URL(resource.value));
   setSong(s);
-  console.log(song());
   await play();
 });
 

@@ -1,7 +1,18 @@
 import { Component, createEffect, createSignal, Match, onMount, Show, Switch } from 'solid-js';
 import Bar from '../Bar';
 import defaultBackground from "../../assets/osu-default-background.jpg";
-import { duration, isPlaying, next, previous, song, timestamp, togglePlay, volume } from '../../lib/Music';
+import {
+  duration,
+  isPlaying,
+  localVolume,
+  next,
+  previous, seek,
+  setLocalVolume, setVolume,
+  song,
+  timestamp,
+  togglePlay,
+  volume
+} from '../../lib/Music';
 import { getResourcePath } from '../../lib/tungsten/resource';
 import Fa from 'solid-fa';
 import {
@@ -52,7 +63,10 @@ const SongDetail: Component<SongDetailProps> = (_props) => {
       </div>
 
       <div class="seeker">
-        <Bar fill={timestamp() / (duration() !== 0 ? duration() : 1)}/>
+        <Bar
+          fill={timestamp() / (duration() !== 0 ? duration() : 1)}
+          setFill={seek}
+        />
         <div class="time">
           <span class="currently">{timestamp()}</span><span class="duration">{duration()}</span>
         </div>
@@ -89,12 +103,12 @@ const SongDetail: Component<SongDetailProps> = (_props) => {
               <div class="menu-wrapper">
                 <div class="selectors local" title={"Sets volume on current song"}>
                   <Fa icon={faLocationDot} scale={globalIconScale}/>
-                  <Bar fill={0.1} alignment="vertical"/>
+                  <Bar fill={localVolume()} alignment="vertical" setFill={setLocalVolume}/>
                 </div>
 
                 <div class="selectors global" title={"Sets across the whole application"}>
                   <Fa icon={faGlobe} scale={globalIconScale}/>
-                  <Bar fill={volume()} alignment="vertical"/>
+                  <Bar fill={volume()} alignment="vertical" setFill={setVolume}/>
                 </div>
               </div>
             </div>
