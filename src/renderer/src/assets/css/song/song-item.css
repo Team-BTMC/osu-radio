@@ -1,4 +1,4 @@
-.song-view .list .item {
+.song-view .list .song-item {
   min-height: 80px;
   width: 100%;
   display: grid;
@@ -11,13 +11,13 @@
   transition: background-color 250ms;
 }
 
-.song-view .list .item:hover {
+.song-view .list .song-item:hover {
   background-color: rgba(var(--color-fg), var(--level-0));
 
   transition: background-color 0ms;
 }
 
-.song-view .list .item .image {
+.song-view .list .song-item .image {
   height: 72px;
   margin: 4px;
   aspect-ratio: 1/1;
@@ -30,13 +30,13 @@
   transition: background-size 250ms linear;
 }
 
-.song-view .list .item:hover .image {
+.song-view .list .song-item:hover .image {
   background-size: 240px;
 
   transition: background-size 50ms linear;
 }
 
-.song-view .list .item .column {
+.song-view .list .song-item .column {
   display: flex;
   flex-direction: column;
   align-self: center;

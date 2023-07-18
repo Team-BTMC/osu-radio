@@ -3,7 +3,7 @@ import { ResourceID, Song } from '../../../../@types';
 import { availableResource, getResourcePath } from '../../lib/tungsten/resource';
 import { averageBPM, msToBPM } from '../../lib/song';
 import defaultBackground from "../../assets/osu-default-background.jpg";
-import "../../assets/css/item.css";
+import "../../assets/css/song/song-item.css";
 
 
 
@@ -61,7 +61,12 @@ const SongItem: Component<SongItemProps> = props => {
   });
 
   return (
-    <div class="item" onClick={() => props.onSelect(props.song.path)} ref={item} data-url={props.song.bg}>
+    <div
+      class="song-item"
+      onClick={() => props.onSelect(props.song.path)}
+      ref={item}
+      data-url={props.song.bg}
+    >
       <div class="image" style={{ 'background-image': `url('${src().replaceAll("'", "\\'")}')` }}></div>
       <div class="column">
         <h3>[{msToBPM(averageBPM(props.song.bpm, props.song.duration * 1_000))} BPM] {props.song.title}</h3>
