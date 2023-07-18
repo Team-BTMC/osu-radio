@@ -6,48 +6,8 @@ import SearchField from './SearchField';
 import Fa from 'solid-fa';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { GLOBAL_ICON_SCALE } from '../../App';
-import Select, { SelectOption } from '../Select';
 import TagSelect, { Tag } from './TagSelect';
-
-
-
-const orderOptions: SelectOption[] = [{
-  value: "title:asc",
-  text: "Title (A-Z)"
-}, {
-  value: "title:desc",
-  text: "Title (Z-A)"
-}, {
-  value: "artist:asc",
-  text: "Artist (A-Z)"
-}, {
-  value: "artist:desc",
-  text: "Artist (Z-A)"
-}, {
-  value: "creator:asc",
-  text: "Creator (A-Z)"
-}, {
-  value: "creator:desc",
-  text: "Creator (Z-A)"
-}, {
-  value: "bpm:asc",
-  text: "BPM (0-100)"
-}, {
-  value: "bpm:desc",
-  text: "BPM (100-0)"
-}, {
-  value: "duration:asc",
-  text: "Length (Short)"
-}, {
-  value: "duration:desc",
-  text: "Length (Long)"
-}, {
-  value: "dateAdded:asc",
-  text: "Date Added (new)"
-}, {
-  value: "dateAdded:desc",
-  text: "Date Added (old)"
-}];
+import OrderSelect from '../OrderSelect';
 
 
 
@@ -117,7 +77,7 @@ const Search: Component<SearchProps> = props => {
       <div class="results row">
         <button title="Save results as playlist">{props.count()} results</button>
         <div class="row">
-          <Select setValue={props.setOrder} options={orderOptions}/>
+          <OrderSelect setOrder={props.setOrder}/>
           <TagSelect tags={props.tags}/>
         </div>
       </div>
