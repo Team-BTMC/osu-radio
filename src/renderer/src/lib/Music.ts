@@ -3,7 +3,6 @@ import { AudioSource, Optional, Song } from '../../../@types';
 import { msToBPM } from './song';
 import { createEffect, createSignal } from 'solid-js';
 import { delay } from './delay';
-import { DELAY_MS } from '../App';
 
 
 
@@ -232,7 +231,7 @@ createEffect(() => {
 
 const [writeVolume, ] = delay(async (volume: number) => {
   await window.api.request("settingsWrite", "volume", volume);
-}, DELAY_MS);
+}, 200);
 createEffect(async () => {
   const v = volume();
   writeVolume(v);

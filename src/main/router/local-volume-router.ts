@@ -2,13 +2,12 @@ import { Router } from '../lib/route-pass/Router';
 import { Storage } from '../lib/storage/Storage';
 import { delay } from '../lib/delay-backend';
 import { AudioSource, ResourceID } from '../../@types';
-import { DELAY_MS } from '../main';
 
 
 
 const [writeAudioSource, ] = delay((audioID: ResourceID, audioSource: AudioSource) => {
   Storage.getTable("audio").write(audioID, audioSource);
-}, DELAY_MS);
+}, 200);
 
 Router.respond("saveLocalVolume", (_evt, localVolume, songID) => {
   const song = Storage.getTable("songs").get(songID);
