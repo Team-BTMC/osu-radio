@@ -75,7 +75,7 @@ const Search: Component<SearchProps> = props => {
       </div>
 
       <div class="results row">
-        <button title="Save results as playlist">{props.count()} results</button>
+        <button title="Save results as playlist">{props.count()} songs</button>
         <div class="row">
           <OrderSelect setOrder={props.setOrder}/>
           <TagSelect tags={props.tags}/>

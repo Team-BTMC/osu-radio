@@ -39,11 +39,11 @@ export default function order(ordering: string): Result<(a: Song, b: Song) => nu
         const bpmA = msToBPM(averageBPM(a.bpm, a.duration * 1_000));
         const bpmB = msToBPM(averageBPM(b.bpm, b.duration * 1_000));
 
-        if (Number.isFinite(bpmA)) {
+        if (!Number.isFinite(bpmA)) {
           return 1;
         }
 
-        if (Number.isFinite(bpmB)) {
+        if (!Number.isFinite(bpmB)) {
           return -1;
         }
 
