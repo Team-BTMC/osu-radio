@@ -5,7 +5,7 @@ import { SearchQueryError } from '../../../../main/lib/search-parser/@search-typ
 import SearchField from './SearchField';
 import Fa from 'solid-fa';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { globalIconScale } from '../../App';
+import { GLOBAL_ICON_SCALE } from '../../App';
 import Select, { SelectOption } from '../Select';
 import TagSelect, { Tag } from './TagSelect';
 
@@ -110,7 +110,7 @@ const Search: Component<SearchProps> = props => {
     <div class="search no-pd">
       <div>
         <SearchField value={props.query} setInput={setEditable}>
-          <Fa icon={faSearch} scale={globalIconScale}/>
+          <Fa icon={faSearch} scale={GLOBAL_ICON_SCALE}/>
         </SearchField>
       </div>
 

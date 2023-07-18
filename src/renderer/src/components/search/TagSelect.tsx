@@ -1,7 +1,7 @@
 import { Component, createEffect, createSignal, For, Signal } from 'solid-js';
 import Fa from 'solid-fa';
 import { faTags } from '@fortawesome/free-solid-svg-icons';
-import { globalIconScale } from '../../App';
+import { GLOBAL_ICON_SCALE } from '../../App';
 import SearchField from './SearchField';
 import TagItem from './TagItem';
 import "../../assets/css/search/tag-select.css";
@@ -127,7 +127,7 @@ const TagSelect: Component<TagSelectProps> = props => {
   return (
     <div class={"tags"}>
       <button onClick={openDialog}>
-        <Fa icon={faTags} scale={globalIconScale}/>
+        <Fa icon={faTags} scale={GLOBAL_ICON_SCALE}/>
       </button>
       <dialog ref={dialog} class={"tag-select"}>
         <Gradient class={"tag-select-container"}>

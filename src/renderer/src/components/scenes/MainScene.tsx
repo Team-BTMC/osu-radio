@@ -2,7 +2,7 @@ import SongView from '../song/SongView';
 import { createEffect, createSignal, onMount } from 'solid-js';
 import Fa from 'solid-fa';
 import { faGear, faHeadphonesSimple, faListUl, faMusic } from '@fortawesome/free-solid-svg-icons';
-import { globalIconScale } from '../../App';
+import { GLOBAL_ICON_SCALE } from '../../App';
 import SongDetail from '../song/SongDetail';
 
 
@@ -21,16 +21,16 @@ export default function MainScene() {
     <div id="main" class="scene">
       <nav>
         <button class="icon" onClick={() => setActive(0)}>
-          <Fa icon={faMusic} scale={globalIconScale}/>
+          <Fa icon={faMusic} scale={GLOBAL_ICON_SCALE}/>
         </button>
         <button class="icon" onClick={() => setActive(1)}>
-          <Fa icon={faHeadphonesSimple} scale={globalIconScale}/>
+          <Fa icon={faHeadphonesSimple} scale={GLOBAL_ICON_SCALE}/>
         </button>
         <button class="icon" onClick={() => setActive(2)}>
-          <Fa icon={faListUl} scale={globalIconScale}/>
+          <Fa icon={faListUl} scale={GLOBAL_ICON_SCALE}/>
         </button>
         <button class="icon" onClick={() => setActive(3)}>
-          <Fa icon={faGear} scale={globalIconScale}/>
+          <Fa icon={faGear} scale={GLOBAL_ICON_SCALE}/>
         </button>
       </nav>
 

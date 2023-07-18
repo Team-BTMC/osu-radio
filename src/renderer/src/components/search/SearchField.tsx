@@ -2,7 +2,7 @@ import { Component, onMount, Setter, Signal } from 'solid-js';
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import "../../assets/css/search/search-field.css";
 import Fa from 'solid-fa';
-import { globalIconScale } from '../../App';
+import { GLOBAL_ICON_SCALE } from '../../App';
 
 
 
@@ -56,7 +56,7 @@ const SearchField: Component<SearchTextBoxProps> = props => {
       {props.children}
       <div class="editable" ref={input} onInput={onInput} onPaste={onPaste} contenteditable={true} spellcheck={false}></div>
       <button class="icon" onClick={clear}>
-        <Fa icon={faXmark} scale={globalIconScale}/>
+        <Fa icon={faXmark} scale={GLOBAL_ICON_SCALE}/>
       </button>
     </div>
   );

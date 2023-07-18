@@ -26,7 +26,7 @@ import {
   faVolumeLow,
   faVolumeXmark
 } from '@fortawesome/free-solid-svg-icons';
-import { globalIconScale } from '../../App';
+import { GLOBAL_ICON_SCALE } from '../../App';
 
 
 
@@ -75,39 +75,39 @@ const SongDetail: Component<SongDetailProps> = (_props) => {
       <div class="controls">
         <div class="wrapper">
           <button class="icon" onClick={() => togglePlay()}>
-            <Show when={!isPlaying()} fallback={<Fa icon={faPause} scale={globalIconScale}/>}>
-              <Fa icon={faPlay} scale={globalIconScale}/>
+            <Show when={!isPlaying()} fallback={<Fa icon={faPause} scale={GLOBAL_ICON_SCALE}/>}>
+              <Fa icon={faPlay} scale={GLOBAL_ICON_SCALE}/>
             </Show>
           </button>
           <button class="icon" onClick={() => previous()}>
-            <Fa icon={faBackwardStep} scale={globalIconScale}/>
+            <Fa icon={faBackwardStep} scale={GLOBAL_ICON_SCALE}/>
           </button>
           <button class="icon" onClick={() => next()}>
-            <Fa icon={faForwardStep} scale={globalIconScale}/>
+            <Fa icon={faForwardStep} scale={GLOBAL_ICON_SCALE}/>
           </button>
           <div class="dropdown">
             <button class="icon">
               <Switch>
                 <Match when={volume() === 0}>
-                  <Fa icon={faVolumeXmark} scale={globalIconScale}/>
+                  <Fa icon={faVolumeXmark} scale={GLOBAL_ICON_SCALE}/>
                 </Match>
                 <Match when={volume() < 0.5}>
-                  <Fa icon={faVolumeLow} scale={globalIconScale}/>
+                  <Fa icon={faVolumeLow} scale={GLOBAL_ICON_SCALE}/>
                 </Match>
                 <Match when={volume() >= 0.5}>
-                  <Fa icon={faVolumeHigh} scale={globalIconScale}/>
+                  <Fa icon={faVolumeHigh} scale={GLOBAL_ICON_SCALE}/>
                 </Match>
               </Switch>
             </button>
             <div class="menu">
               <div class="menu-wrapper">
                 <div class="selectors local" title={"Sets volume on current song"}>
-                  <Fa icon={faLocationDot} scale={globalIconScale}/>
+                  <Fa icon={faLocationDot} scale={GLOBAL_ICON_SCALE}/>
                   <Bar fill={localVolume()} alignment="vertical" setFill={setLocalVolume}/>
                 </div>
 
                 <div class="selectors global" title={"Sets across the whole application"}>
-                  <Fa icon={faGlobe} scale={globalIconScale}/>
+                  <Fa icon={faGlobe} scale={GLOBAL_ICON_SCALE}/>
                   <Bar fill={volume()} alignment="vertical" setFill={setVolume}/>
                 </div>
               </div>
