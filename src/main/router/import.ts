@@ -4,6 +4,7 @@ import "./queue-router";
 import "./resource-router";
 import "./songs-pool-router";
 import "./search-router";
+import "./local-volume-router";
 
 
 
