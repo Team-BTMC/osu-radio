@@ -7,8 +7,9 @@
 
 
 :root {
-  --FIXED: 0;
-  --NORMAL_CONTENT: 1;
+  --fixed-layer: 0;
+  --normal-layer: 10;
+  --top-layer: 100;
   --border-radius: 4px;
 
   --circle-0: dodgerblue;
@@ -195,7 +196,7 @@ dialog {
 
 
 #main {
-  z-index: var(--NORMAL_CONTENT);
+  z-index: var(--normal-layer);
   overflow: hidden;
   display: grid;
   grid-template-columns: 64px 320px 1fr;

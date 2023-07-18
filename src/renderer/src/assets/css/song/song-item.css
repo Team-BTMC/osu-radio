@@ -1,9 +1,14 @@
 .song-view .list .song-item {
   min-height: 80px;
   width: 100%;
+}
+
+.song-item .song-item-container {
+  width: 100%;
+  height: 100%;
   display: grid;
-  gap: 4px;
   grid-template-columns: 80px 1fr;
+  gap: 4px;
   overflow: hidden;
   font-size: 0.85em;
   border-radius: var(--border-radius);
@@ -11,7 +16,7 @@
   transition: background-color 250ms;
 }
 
-.song-view .list .song-item:hover {
+.song-item .song-item-container:hover {
   background-color: rgba(var(--color-fg), var(--level-0));
 
   transition: background-color 0ms;

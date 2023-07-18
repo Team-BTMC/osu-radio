@@ -16,37 +16,3 @@
   padding: 0 16px 16vw 16px;
   overflow: auto;
 }
-
-.song-view .list .song-item {
-  min-height: 80px;
-  width: 100%;
-  display: grid;
-  gap: 4px;
-  grid-template-columns: 80px 1fr;
-  overflow: hidden;
-  font-size: 0.85em;
-  border-radius: var(--border-radius);
-
-  transition: background-color 250ms;
-}
-
-.song-view .list .song-item:hover {
-  background-color: rgba(var(--color-fg), var(--level-0));
-
-  transition: background-color 0ms;
-}
-
-.song-view .list .song-item img {
-  height: 80px;
-  padding: 4px;
-  border-radius: var(--border-radius);
-  aspect-ratio: 1/1;
-  place-self: center;
-  object-fit: cover;
-}
-
-.song-view .list .song-item .column {
-  display: flex;
-  flex-direction: column;
-  align-self: center;
-}

@@ -4,6 +4,7 @@ import { availableResource, getResourcePath } from '../../lib/tungsten/resource'
 import { averageBPM, msToBPM } from '../../lib/song';
 import defaultBackground from "../../assets/osu-default-background.jpg";
 import "../../assets/css/song/song-item.css";
+import SongContextMenu from './SongContextMenu';
 
 
 
@@ -20,12 +21,19 @@ type SongItemProps = {
 
 const SongItem: Component<SongItemProps> = props => {
   const [src, setSRC] = createSignal(defaultBackground);
+  const showSignal = createSignal(false);
+  const [coords, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
 
   let item;
   const setSource = evt => {
     setSRC(evt.detail);
     item.removeEventListener(setSourceEvent, setSource);
   };
+
+  const showMenu = (evt: MouseEvent) => {
+    setCoords([evt.clientX, evt.clientY]);
+    showSignal[1](true);
+  }
 
   onMount(() => {
     item.addEventListener(setSourceEvent, setSource);
@@ -64,14 +72,23 @@ const SongItem: Component<SongItemProps> = props => {
     <div
       class="song-item"
       onClick={() => props.onSelect(props.song.path)}
+      onContextMenu={showMenu}
       ref={item}
       data-url={props.song.bg}
     >
-      <div class="image" style={{ 'background-image': `url('${src().replaceAll("'", "\\'")}')` }}></div>
-      <div class="column">
-        <h3>[{msToBPM(averageBPM(props.song.bpm, props.song.duration * 1_000))} BPM] {props.song.title}</h3>
-        <span>{props.song.artist} // {props.song.creator}</span>
+      <div class={"song-item-container"}>
+        <div class="image" style={{ 'background-image': `url('${src().replaceAll("'", "\\'")}')` }}></div>
+        <div class="column">
+          <h3>[{msToBPM(averageBPM(props.song.bpm, props.song.duration * 1_000))} BPM] {props.song.title}</h3>
+          <span>{props.song.artist} // {props.song.creator}</span>
+        </div>
       </div>
+
+      <SongContextMenu show={showSignal} container={item} coords={coords}>
+        <div>Pog</div>
+        <div>Nice</div>
+        <div>Pretty good right</div>
+      </SongContextMenu>
     </div>
   );
 }
