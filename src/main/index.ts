@@ -3,14 +3,17 @@ import { join } from 'path';
 import { electronApp, is, optimizer } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
 import { main } from './main';
+import trackBounds, { getBounds, wasMaximized } from './lib/window/resizer';
 
 
 
 async function createWindow() {
+  const [width, height] = getBounds();
+
   const window = new BrowserWindow({
     title: "osu!radio",
-    width: 900,
-    height: 670,
+    width,
+    height,
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
@@ -20,6 +23,12 @@ async function createWindow() {
       webSecurity: false,
     }
   });
+
+  if (wasMaximized()) {
+    window.maximize();
+  }
+
+  trackBounds(window);
 
   window.on('ready-to-show', () => {
     window.show();

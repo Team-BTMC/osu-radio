@@ -96,12 +96,15 @@ export type SongIndex = {
 
 export type System = {
   indexes: SongIndex[],
-  allTags: { [key: string]: string[] }
+  allTags: { [key: string]: string[] },
 }
 
 export type Settings = {
   volume: number,
   osuSongsDir: string,
+  "window.width": number,
+  "window.height": number,
+  "window.isMaximized": boolean,
 }
 
 
