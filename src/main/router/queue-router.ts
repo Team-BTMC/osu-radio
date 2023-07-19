@@ -13,7 +13,7 @@ let queue: Song[];
 let index = 0;
 let lastPayload: QueueCreatePayload | undefined;
 
-Router.respond("queueCreate", async (_evt, payload) => {
+Router.respond("queue.create", async (_evt, payload) => {
   if (comparePayload(payload, lastPayload)) {
     const newIndex = queue.findIndex(s => s.path === payload.startSong);
 
@@ -23,7 +23,7 @@ Router.respond("queueCreate", async (_evt, payload) => {
 
     index = newIndex;
     lastPayload = payload;
-    await Router.dispatch(mainWindow, "queueIndexMoved", queue[index])
+    await Router.dispatch(mainWindow, "queue.songChanged", queue[index])
       .catch(errorIgnored);
     return;
   }
@@ -45,7 +45,7 @@ Router.respond("queueCreate", async (_evt, payload) => {
     index = 0;
   }
 
-  await Router.dispatch(mainWindow, "queueIndexMoved", queue[index])
+  await Router.dispatch(mainWindow, "queue.songChanged", queue[index])
     .catch(errorIgnored);
 });
 
@@ -109,17 +109,17 @@ function comparePayload(current: QueueCreatePayload, last: QueueCreatePayload | 
 
 
 
-Router.respond('queueCurrent', () => {
+Router.respond('queue.current', () => {
   return queue[index];
 });
 
-Router.respond('queuePrevious', () => {
+Router.respond('queue.previous', () => {
   if (--index < 0) {
     index = queue.length;
   }
 });
 
-Router.respond('queueNext', () => {
+Router.respond('queue.next', () => {
   if (++index === queue.length) {
    index = 0;
   }

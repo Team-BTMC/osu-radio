@@ -174,23 +174,28 @@ export type OsuSearchAbleProperties = "bpm" | "artist" | "creator" | "length" | 
 
 
 export type RequestAPI = {
-  resourceGet: (id: ResourceID, table: ResourceTables) => Optional<Song | AudioSource | ImageSource>,
-  resourceGetPath: (id: any) => Result<string, string>,
-  queueCurrent: () => Song,
-  queueNext: () => void,
-  queuePrevious: () => void,
-  queueCreate: (payload: QueueCreatePayload) => void,
-  dirSelect: () => Optional<string>,
-  dirSubmit: (dir: string) => void,
-  errorDismissed: () => void,
-  parseSearch: (query: string) => SearchQuery,
-  settingsWrite: <K extends keyof Settings>(key: K, value: any) => void,
-  settingsGet: <K extends keyof Settings>(key: K) => Optional<any>,
+  "resource.get": (id: ResourceID, table: ResourceTables) => Optional<Song | AudioSource | ImageSource>,
+  "resource.getPath": (id: any) => Result<string, string>,
 
-  querySongsPoolInit: () => InfiniteScrollerInitResponse,
-  querySongsPool: (request: InfiniteScrollerRequest, payload: SongsQueryPayload) => InfiniteScrollerResponse<Song>,
+  "queue.current": () => Song,
+  "queue.next": () => void,
+  "queue.previous": () => void,
+  "queue.create": (payload: QueueCreatePayload) => void,
 
-  saveLocalVolume: (volume: number, song: ResourceID) => void,
+  "dir.select": () => Optional<string>,
+  "dir.submit": (dir: string) => void,
+
+  "error.dismissed": () => void,
+
+  "parse.search": (query: string) => SearchQuery,
+
+  "settings.write": <K extends keyof Settings>(key: K, value: any) => void,
+  "settings.get": <K extends keyof Settings>(key: K) => Optional<any>,
+
+  "query.songsPool.init": () => InfiniteScrollerInitResponse,
+  "query.songsPool": (request: InfiniteScrollerRequest, payload: SongsQueryPayload) => InfiniteScrollerResponse<Song>,
+
+  "save.localVolume": (volume: number, song: ResourceID) => void,
 }
 
 
@@ -205,8 +210,10 @@ export type Scenes = "" | "loading" | "dir-select" | "main" | "error";
 
 export type ListenAPI = {
   changeScene: (scene: Scenes) => void,
-  loadingSetTitle: (title: string) => void,
-  loadingUpdate: (update: LoadingSceneUpdate) => void,
-  errorSetMessage: (msg: string) => void,
-  queueIndexMoved: (song: Song) => void,
+
+  "loadingScene.setTitle": (title: string) => void,
+  "loadingScene.update": (update: LoadingSceneUpdate) => void,
+
+  "error.setMessage": (msg: string) => void,
+  "queue.songChanged": (song: Song) => void,
 }

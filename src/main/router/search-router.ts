@@ -23,6 +23,6 @@ const parser = new SearchParser({
   }
 });
 
-Router.respond("parseSearch", (_evt, query) => {
+Router.respond("parse.search", (_evt, query) => {
   return parser.parse(query);
 });

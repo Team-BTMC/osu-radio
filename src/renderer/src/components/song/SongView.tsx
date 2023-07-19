@@ -41,7 +41,7 @@ const SongView: Component<SongViewProps> = props => {
   const searchSongs = async () => {
     const o = order();
     const t = tags();
-    const parsedQuery = await window.api.request("parseSearch", query());
+    const parsedQuery = await window.api.request("parse.search", query());
 
     if (parsedQuery.type === "error") {
       setSearchError(some(parsedQuery));
@@ -63,7 +63,7 @@ const SongView: Component<SongViewProps> = props => {
   });
 
   const createQueue = async (songResource: ResourceID) => {
-    await window.api.request("queueCreate", {
+    await window.api.request("queue.create", {
       startSong: songResource,
       ...payload()
     });
@@ -79,8 +79,8 @@ const SongView: Component<SongViewProps> = props => {
         error={searchError}/>
 
       <InfiniteScroller
-        apiKey={"querySongsPool"}
-        initAPIKey={"querySongsPoolInit"}
+        apiKey={"query.songsPool"}
+        initAPIKey={"query.songsPool.init"}
         apiData={payload()}
         setResultCount={setCount}
         reset={listingReset}

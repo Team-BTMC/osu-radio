@@ -4,7 +4,7 @@ import { fail, ok } from '../lib/rust-like-utils-backend/Result';
 
 
 
-Router.respond("resourceGetPath", (_evt, id) => {
+Router.respond("resource.getPath", (_evt, id) => {
   const osuDir = Storage.getTable("settings").get("osuSongsDir");
 
   if (osuDir.isNone) {
@@ -25,6 +25,6 @@ function encodeFile(uri: string): string {
 
 
 
-Router.respond("resourceGet", (_evt, id, table) => {
+Router.respond("resource.get", (_evt, id, table) => {
   return Storage.getTable(table).get(id);
 });

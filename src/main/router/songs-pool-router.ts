@@ -7,7 +7,7 @@ import { Storage } from '../lib/storage/Storage';
 
 
 
-Router.respond("querySongsPoolInit", () => {
+Router.respond("query.songsPool.init", () => {
   return {
     initialIndex: 0
   };
@@ -15,7 +15,7 @@ Router.respond("querySongsPoolInit", () => {
 
 const BUFFER_SIZE = 50;
 
-Router.respond("querySongsPool", (_evt, request, payload) => {
+Router.respond("query.songsPool", (_evt, request, payload) => {
   if (request.direction === "up") {
     return none();
   }
