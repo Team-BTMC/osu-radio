@@ -5,7 +5,6 @@ import { showError } from './router/error-router';
 import { dirSubmit } from './router/dir-router';
 import "./router/import";
 import { DirParseResult, OsuParser } from './lib/osu-file-parser/OsuParser';
-import Global from './lib/Global';
 import { orDefault } from './lib/rust-like-utils-backend/Optional';
 import { throttle } from './lib/throttle';
 import { collectTagsAndIndexSongs } from './lib/song';
@@ -33,8 +32,6 @@ export async function main(window: BrowserWindow) {
     await showError(window, `No songs found in folder: ${orDefault(settings.get("osuSongsDir"), "[No folder]")}. Please make sure this is the directory where you have all your songs saved.`);
     await configureOsuDir(window);
   }
-
-  Global.cache.set("songs", songsArray.sort((a, b) => (a.artist + a.title).localeCompare(b.artist + b.title)));
 
   await Router.dispatch(window, "changeScene", "main");
 }
