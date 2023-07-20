@@ -5,6 +5,7 @@ import { fail, ok } from '../rust-like-utils-backend/Result';
 import { OsuFile } from './OsuFile';
 import { access, getFiles, getSubDirs } from '../fs-promises';
 import fs from 'graceful-fs';
+import { assertNever } from '../tungsten/assertNever';
 
 
 
@@ -132,7 +133,7 @@ export class OsuParser {
     const props = new Map<string, string>();
     const bpm: number[][] = [];
 
-    for await (const line of fileLines) {
+    lines : for await (const line of fileLines) {
       const trimmed = line.trim();
 
       if (trimmed === '') {
@@ -141,53 +142,63 @@ export class OsuParser {
 
       if (trimmed[0] === '[' && trimmed[trimmed.length - 1] === ']') {
         state = trimmed.substring(1, trimmed.length - 1) as FileState;
+        continue;
+      }
 
-        if (state === 'HitObjects') {
+      switch (state) {
+        case 'HitObjects':
+          break lines;
+
+        case 'NextState':
+        case 'Editor':
+        case 'Difficulty':
+        case 'Colours':
+        case 'Initial':
+          continue;
+
+        case 'Events': {
+          const bg = bgFileNameRegex.exec(trimmed);
+          if (bg !== null) {
+            props.set("bgSrc", bg[1]);
+            state = 'NextState';
+          }
+
           break;
         }
 
-        continue;
-      }
+        case 'TimingPoints': {
+          const timingPoint = trimmed.split(',').map(x => Number(x));
 
-      if (state === 'Initial' || state === 'NextState' || state === 'Editor' || state === 'Difficulty' || state === 'Colours') {
-        continue;
-      }
+          if (timingPoint.length === 2) {
+            bpm.push(timingPoint);
+            continue;
+          }
 
-      if (state === 'Events') {
-        const bg = bgFileNameRegex.exec(trimmed);
-        if (bg !== null) {
-          props.set("bgSrc", bg[1]);
-          state = 'NextState';
+          if (timingPoint[timingPoint.length - 2] === 0) {
+            continue;
+          }
+
+          if (bpm.length !== 0 && bpm[bpm.length - 1][BPM] === timingPoint[BPM]) {
+            continue;
+          }
+
+          bpm.push([timingPoint[OFFSET], timingPoint[BPM]]);
+          break;
         }
 
-        continue;
-      }
+        case 'General':
+        case 'Metadata': {
+          const [prop, value] = this.#splitProp(trimmed);
+          if (prop === undefined) {
+            continue;
+          }
 
-      if (state === 'TimingPoints') {
-        const timingPoint = trimmed.split(',').map(x => Number(x));
-
-        if (timingPoint.length === 2) {
-          bpm.push(timingPoint);
-          continue;
+          props.set(prop, value ?? "");
+          break;
         }
 
-        if (timingPoint[timingPoint.length - 2] === 0) {
-          continue;
-        }
-
-        if (bpm.length !== 0 && bpm[bpm.length - 1][BPM] === timingPoint[BPM]) {
-          continue;
-        }
-
-        bpm.push([timingPoint[OFFSET], timingPoint[BPM]]);
+        default: assertNever(state);
       }
-
-      const [prop, value] = this.#splitProp(trimmed);
-      if (prop === undefined) {
-        continue;
-      }
-
-      props.set(prop, value ?? "");
     }
 
     stream.destroy();
