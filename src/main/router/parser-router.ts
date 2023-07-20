@@ -7,10 +7,12 @@ import {
   text,
   time
 } from '../lib/search-parser/validators';
+import { TemplateParser } from '../lib/template-parser/parser/TemplateParser';
+import templateIdentifiers from '../lib/template-parser/template-identifiers';
 
 
 
-const parser = new SearchParser({
+const searchParser = new SearchParser({
   tokenDelimiter: " ",
   relationSymbols: defaultRelationSymbols,
   propertyMap: {
@@ -24,5 +26,13 @@ const parser = new SearchParser({
 });
 
 Router.respond("parse.search", (_evt, query) => {
-  return parser.parse(query);
+  return searchParser.parse(query);
+});
+
+
+
+const templateParser = new TemplateParser(templateIdentifiers);
+
+Router.respond("parse.template", (_evt, template) => {
+  return templateParser.parse(template);
 });

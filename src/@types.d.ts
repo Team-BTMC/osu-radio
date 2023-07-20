@@ -4,6 +4,7 @@ import type {
 } from './renderer/src/components/InfiniteScroller';
 import type { SongViewProps } from './renderer/src/components/song/SongView';
 import type { SearchQuery, SearchQuerySuccess } from './main/lib/search-parser/@search-types';
+import { ConfigError, ConfigItem, ConfigSuccess } from './main/lib/template-parser/parser/TemplateParser';
 
 
 
@@ -105,6 +106,7 @@ export type Settings = {
   "window.width": number,
   "window.height": number,
   "window.isMaximized": boolean,
+  templateConfig: ConfigItem[],
 }
 
 
@@ -188,8 +190,10 @@ export type RequestAPI = {
   "error.dismissed": () => void,
 
   "parse.search": (query: string) => SearchQuery,
+  "parse.template": (template: string) => ConfigSuccess | ConfigError,
 
   "settings.write": <K extends keyof Settings>(key: K, value: any) => void,
+  "settings.write.templateConfig": (templateConfig: ConfigSuccess) => void,
   "settings.get": <K extends keyof Settings>(key: K) => Optional<any>,
 
   "query.songsPool.init": () => InfiniteScrollerInitResponse,

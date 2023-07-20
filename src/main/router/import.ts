@@ -3,7 +3,7 @@ import "./error-router";
 import "./queue-router";
 import "./resource-router";
 import "./songs-pool-router";
-import "./search-router";
+import "./parser-router";
 import "./local-volume-router";
 import "./settings-router";
 
