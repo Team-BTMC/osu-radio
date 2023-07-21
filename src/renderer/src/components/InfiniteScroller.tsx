@@ -26,8 +26,9 @@ type InfinityScrollerProps = {
   apiData?: any,
   builder: (props: any) => JSX.Element,
   reset?: ResetSignal,
-  autoload?: boolean
-  setResultCount?: Setter<number>
+  onSongsLoad?: () => any,
+  autoload?: boolean,
+  setResultCount?: Setter<number>,
 } & JSX.HTMLAttributes<HTMLDivElement>
 
 const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
@@ -140,6 +141,10 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
     if (init !== 0) {
       indexStart = init - 1;
       await loadStart();
+    }
+
+    if (props.onSongsLoad !== undefined) {
+      props.onSongsLoad();
     }
   }
 
