@@ -8,9 +8,15 @@ import { Storage } from '../lib/storage/Storage';
 
 
 Router.respond("query.songsPool.init", () => {
-  return {
+  const indexes = Storage.getTable("system").get("indexes");
+
+  if (indexes.isNone || indexes.value.length === 0) {
+    return none();
+  }
+
+  return some({
     initialIndex: 0
-  };
+  });
 });
 
 const BUFFER_SIZE = 50;

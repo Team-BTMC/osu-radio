@@ -1,4 +1,4 @@
-import { Component, createSignal, For, JSX, onCleanup, onMount, Setter, splitProps } from 'solid-js';
+import { Component, createSignal, For, JSX, onCleanup, onMount, Setter, Show, splitProps } from 'solid-js';
 import { OmitPropsWithoutReturnType, Optional, RequestAPI } from '../../../@types';
 import ResetSignal from '../lib/ResetSignal';
 
@@ -16,9 +16,9 @@ export type InfiniteScrollerResponse<T = any> = Optional<{
   items: T[]
 }>
 
-export type InfiniteScrollerInitResponse = {
+export type InfiniteScrollerInitResponse = Optional<{
   initialIndex: number
-}
+}>
 
 type InfinityScrollerProps = {
   apiKey: keyof OmitPropsWithoutReturnType<RequestAPI, InfiniteScrollerResponse>,
@@ -27,12 +27,28 @@ type InfinityScrollerProps = {
   builder: (props: any) => JSX.Element,
   reset?: ResetSignal,
   onSongsLoad?: () => any,
+  fallback?: JSX.Element,
   autoload?: boolean,
   setResultCount?: Setter<number>,
 } & JSX.HTMLAttributes<HTMLDivElement>
 
 const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
+  const [, rest] = splitProps(props, [
+    "apiKey",
+    "initAPIKey",
+    "apiData",
+    "builder",
+    "reset",
+    "onSongsLoad",
+    "fallback",
+    "autoload",
+    "setResultCount"
+  ]);
+
+
+
   const [elements, setElements] = createSignal<any[]>([]);
+  const [show, setShow] = createSignal(true);
   let container;
   let init: number;
 
@@ -133,7 +149,15 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
     observerEnd.disconnect();
     observerStart.disconnect();
 
-    init = (await window.api.request(props.initAPIKey)).initialIndex;
+    const opt = (await window.api.request(props.initAPIKey));
+    if (opt.isNone) {
+      setShow(false);
+      return;
+    }
+
+    setShow(true);
+
+    init = opt.value.initialIndex;
     indexEnd = init;
 
     await loadEnd();
@@ -164,13 +188,13 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
     }
   });
 
-  const [, rest] = splitProps(props, ["apiKey", "reset", "builder", "autoload"]);
-
   return (
     <div class={"list"} ref={container} {...rest}>
-      <For each={elements()}>{componentProps =>
-        props.builder(componentProps)
-      }</For>
+      <Show when={show() === true} fallback={props.fallback ?? <div>No items...</div>}>
+        <For each={elements()}>{componentProps =>
+          props.builder(componentProps)
+        }</For>
+      </Show>
     </div>
   );
 }

@@ -220,7 +220,7 @@ export type ListenAPI = {
   "loadingScene.update": (update: LoadingSceneUpdate) => void,
 
   "error.setMessage": (msg: string) => void,
-  "queue.songChanged": (song: Song) => void,
+  "queue.songChanged": (song: Song) => any,
   "queue.created": () => void,
 
   "songView.reset": () => void,

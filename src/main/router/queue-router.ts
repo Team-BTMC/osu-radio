@@ -139,16 +139,16 @@ Router.respond('queue.next', async () => {
 const BUFFER_SIZE = 10;
 
 Router.respond("query.queue.init", () => {
-  console.log(index, BUFFER_SIZE);
-  console.log("init", Math.floor(index / BUFFER_SIZE));
+  if (queue === undefined) {
+    return none();
+  }
 
-  return {
+  return some({
     initialIndex: Math.floor(index / BUFFER_SIZE)
-  };
+  });
 });
 
 Router.respond('query.queue', (_evt, request) => {
-  console.log("request.index", request.index);
   if (queue === undefined || request.index < 0 || request.index > Math.floor(queue.length / BUFFER_SIZE)) {
     return none();
   }
