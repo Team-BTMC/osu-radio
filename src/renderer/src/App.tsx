@@ -7,6 +7,7 @@ import NoScene from './components/scenes/NoScene';
 import LoadingScene from './components/scenes/LoadingScene';
 import { Scenes } from '../../@types';
 import ErrorScene from './components/scenes/ErrorScene';
+import { TokenNamespace } from './lib/tungsten/token';
 
 
 
@@ -56,3 +57,7 @@ export default function App(): JSX.Element {
 
 
 export const GLOBAL_ICON_SCALE = 1.32;
+
+
+
+export const namespace = new TokenNamespace();

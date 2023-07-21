@@ -1,5 +1,9 @@
 export default class ResetSignal {
-  private listeners: (() => any)[] = [];
+  private readonly listeners: (() => any)[];
+
+  constructor() {
+    this.listeners = [];
+  }
 
   onReset(listener: () => any): void {
     this.listeners.push(listener);

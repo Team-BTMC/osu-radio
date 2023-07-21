@@ -197,6 +197,8 @@ export type RequestAPI = {
 
   "query.songsPool.init": () => InfiniteScrollerInitResponse,
   "query.songsPool": (request: InfiniteScrollerRequest, payload: SongsQueryPayload) => InfiniteScrollerResponse<Song>,
+  "query.queue.init": () => InfiniteScrollerInitResponse,
+  "query.queue": (request: InfiniteScrollerRequest) => InfiniteScrollerResponse<Song>,
 
   "save.localVolume": (volume: number, song: ResourceID) => void,
 }
@@ -219,4 +221,7 @@ export type ListenAPI = {
 
   "error.setMessage": (msg: string) => void,
   "queue.songChanged": (song: Song) => void,
+  "queue.created": () => void,
+
+  "songView.reset": () => void,
 }

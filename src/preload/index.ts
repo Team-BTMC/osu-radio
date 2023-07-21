@@ -40,6 +40,8 @@ ipcRenderer.on("communication/renderer", async (_evt, packet: Packet<any>) => {
 
       responses.push(got);
     } catch (e) {
+      console.table(listeners[i]);
+      console.log(listeners[i].toString());
       console.error(e);
       console.log(packet);
     }

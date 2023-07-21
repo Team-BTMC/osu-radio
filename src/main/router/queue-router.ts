@@ -6,6 +6,7 @@ import { indexMapper } from '../lib/song/indexMapper';
 import { mainWindow } from '../main';
 import order from '../lib/song/order';
 import errorIgnored from '../lib/tungsten/errorIgnored';
+import { none, some } from '../lib/rust-like-utils-backend/Optional';
 
 
 
@@ -46,6 +47,8 @@ Router.respond("queue.create", async (_evt, payload) => {
   }
 
   await Router.dispatch(mainWindow, "queue.songChanged", queue[index])
+    .catch(errorIgnored);
+  await Router.dispatch(mainWindow, "queue.created")
     .catch(errorIgnored);
 });
 
@@ -113,14 +116,56 @@ Router.respond('queue.current', () => {
   return queue[index];
 });
 
-Router.respond('queue.previous', () => {
+Router.respond('queue.previous', async () => {
   if (--index < 0) {
     index = queue.length;
   }
+
+  await Router.dispatch(mainWindow, "queue.songChanged", queue[index])
+    .catch(errorIgnored);
 });
 
-Router.respond('queue.next', () => {
+Router.respond('queue.next', async () => {
   if (++index === queue.length) {
    index = 0;
   }
+
+  await Router.dispatch(mainWindow, "queue.songChanged", queue[index])
+    .catch(errorIgnored);
+});
+
+
+
+const BUFFER_SIZE = 10;
+
+Router.respond("query.queue.init", () => {
+  console.log(index, BUFFER_SIZE);
+  console.log("init", Math.floor(index / BUFFER_SIZE));
+
+  return {
+    initialIndex: Math.floor(index / BUFFER_SIZE)
+  };
+});
+
+Router.respond('query.queue', (_evt, request) => {
+  console.log("request.index", request.index);
+  if (queue === undefined || request.index < 0 || request.index > Math.floor(queue.length / BUFFER_SIZE)) {
+    return none();
+  }
+
+  const start = request.index * BUFFER_SIZE;
+
+  if (request.direction === "up") {
+    return some({
+      index: request.index - 1,
+      total: queue.length,
+      items: queue.slice(start, start + BUFFER_SIZE)
+    });
+  }
+
+  return some({
+    index: request.index + 1,
+    total: queue.length,
+    items: queue.slice(start, start + BUFFER_SIZE)
+  });
 });

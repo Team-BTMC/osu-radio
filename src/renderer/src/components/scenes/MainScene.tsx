@@ -4,6 +4,7 @@ import Fa from 'solid-fa';
 import { faGear, faHeadphonesSimple, faListUl, faMusic } from '@fortawesome/free-solid-svg-icons';
 import { GLOBAL_ICON_SCALE } from '../../App';
 import SongDetail from '../song/SongDetail';
+import QueueView from '../queue/QueueView';
 
 
 
@@ -36,7 +37,7 @@ export default function MainScene() {
 
       <div class="side-pane" ref={sidePane}>
         <SongView isAllSongs={true}/>
-        <div>Queue</div>
+        <QueueView/>
         <div>Playlists</div>
         <div>Settings</div>
       </div>

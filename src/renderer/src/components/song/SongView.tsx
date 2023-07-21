@@ -1,13 +1,13 @@
 import Search from '../search/Search';
 import SongItem from './SongItem';
-import { Component, createEffect, createSignal, onMount } from 'solid-js';
+import { Component, createEffect, createSignal, onCleanup, onMount } from 'solid-js';
 import { Optional, ResourceID, SongsQueryPayload, Tag } from '../../../../@types';
 import "../../assets/css/song/song-view.css";
 import { SearchQueryError } from '../../../../main/lib/search-parser/@search-types';
 import { none, some } from '../../lib/rust-like-utils-client/Optional';
 import InfiniteScroller from '../InfiniteScroller';
-import { TokenNamespace } from '../../lib/tungsten/token';
 import ResetSignal from '../../lib/ResetSignal';
+import { namespace } from '../../App';
 
 
 
@@ -16,8 +16,6 @@ export type SongViewProps = {
   isQueue?: boolean,
   playlist?: string,
 };
-
-const namespace = new TokenNamespace();
 
 const SongView: Component<SongViewProps> = props => {
   const querySignal = createSignal("");
@@ -60,6 +58,11 @@ const SongView: Component<SongViewProps> = props => {
 
   onMount(() => {
     createEffect(searchSongs);
+    window.api.listen("songView.reset", listingReset.reset.bind(listingReset));
+  });
+
+  onCleanup(() => {
+    window.api.removeListener("songView.reset", listingReset.reset.bind(listingReset));
   });
 
   const createQueue = async (songResource: ResourceID) => {
