@@ -193,7 +193,6 @@ export type RequestAPI = {
   "parse.template": (template: string) => ConfigSuccess | ConfigError,
 
   "settings.write": <K extends keyof Settings>(key: K, value: any) => void,
-  "settings.write.templateConfig": (templateConfig: ConfigSuccess) => void,
   "settings.get": <K extends keyof Settings>(key: K) => Optional<any>,
 
   "query.songsPool.init": () => InfiniteScrollerInitResponse,
