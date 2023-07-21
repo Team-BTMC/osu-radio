@@ -16,7 +16,8 @@
   transition: background-color 250ms;
 }
 
-.song-item .song-item-container:hover {
+.song-item .song-item-container:hover,
+.song-item.selected .song-item-container {
   background-color: rgba(var(--color-fg), var(--level-0));
 
   transition: background-color 0ms;
@@ -35,7 +36,8 @@
   transition: background-size 250ms linear;
 }
 
-.song-view .list .song-item:hover .image {
+.song-view .list .song-item:hover .image,
+.song-view .list .song-item.selected .image {
   background-size: 240px;
 
   transition: background-size 50ms linear;

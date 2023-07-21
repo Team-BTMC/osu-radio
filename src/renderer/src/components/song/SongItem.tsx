@@ -15,6 +15,7 @@ const observers = new Map<string, IntersectionObserver>();
 type SongItemProps = {
   song: Song,
   onSelect: (songResource: ResourceID) => void | Promise<void>,
+  selectable?: true,
 }
 
 
@@ -39,7 +40,6 @@ const SongItem: Component<SongItemProps> = props => {
     item.addEventListener(setSourceEvent, setSource);
 
     const group = (item as HTMLElement).closest("[data-item-group]")?.getAttribute("data-item-group") ?? "global-item-group";
-
     let observer = observers.get(group);
 
     if (observer === undefined) {
@@ -62,6 +62,10 @@ const SongItem: Component<SongItemProps> = props => {
     }
 
     observer.observe(item);
+
+    if (props.selectable === true) {
+      (item as HTMLElement).dataset.path = props.song.path;
+    }
   });
 
   onCleanup(() => {
