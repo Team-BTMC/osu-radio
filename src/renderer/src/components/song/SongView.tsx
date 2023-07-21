@@ -87,6 +87,7 @@ const SongView: Component<SongViewProps> = props => {
         apiData={payload()}
         setResultCount={setCount}
         reset={listingReset}
+        fallback={<div>No songs...</div>}
         builder={s =>
           <SongItem song={s} onSelect={createQueue}/>
         }
