@@ -113,7 +113,11 @@ function comparePayload(current: QueueCreatePayload, last: QueueCreatePayload | 
 
 
 Router.respond('queue.current', () => {
-  return queue[index];
+  if (queue[index] === undefined) {
+    return none();
+  }
+
+  return some(queue[index]);
 });
 
 Router.respond('queue.previous', async () => {
@@ -136,7 +140,7 @@ Router.respond('queue.next', async () => {
 
 
 
-const BUFFER_SIZE = 10;
+const BUFFER_SIZE = 50;
 
 Router.respond("query.queue.init", () => {
   if (queue === undefined) {

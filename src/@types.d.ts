@@ -179,7 +179,7 @@ export type RequestAPI = {
   "resource.get": (id: ResourceID, table: ResourceTables) => Optional<Song | AudioSource | ImageSource>,
   "resource.getPath": (id: any) => Result<string, string>,
 
-  "queue.current": () => Song,
+  "queue.current": () => Optional<Song>,
   "queue.next": () => void,
   "queue.previous": () => void,
   "queue.create": (payload: QueueCreatePayload) => void,
