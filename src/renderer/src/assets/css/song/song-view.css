@@ -9,6 +9,7 @@
 }
 
 .song-view .list {
+  position: relative; /* used for setting offsetParent for .song-item elements */
   display: flex;
   flex-direction: column;
   gap: 8px;
