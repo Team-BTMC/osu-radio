@@ -6,6 +6,7 @@ import ResetSignal from '../../lib/ResetSignal';
 import Fa from 'solid-fa';
 import { faShuffle } from '@fortawesome/free-solid-svg-icons';
 import { Song } from '../../../../@types';
+import scrollIfNeeded from '../../lib/tungsten/scroll-if-needed';
 
 
 
@@ -49,14 +50,13 @@ const QueueView = () => {
     }
 
     //todo some kind of check here would be nice
-    //todo do the optional scroll like on widget select in Nocoma
-    const list = element.value.closest(".list");
+    const list = element.closest(".list");
 
     if (list === null) {
       return;
     }
 
-    list.scrollTo(0, element.value.offsetTop);
+    scrollIfNeeded(element, list);
   };
 
   onMount(() => {

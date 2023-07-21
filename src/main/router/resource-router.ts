@@ -5,6 +5,10 @@ import { fail, ok } from '../lib/rust-like-utils-backend/Result';
 
 
 Router.respond("resource.getPath", (_evt, id) => {
+  if (id === undefined) {
+    return fail("Can not find resource for 'undefined'.");
+  }
+
   const osuDir = Storage.getTable("settings").get("osuSongsDir");
 
   if (osuDir.isNone) {
