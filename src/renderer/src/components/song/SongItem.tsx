@@ -14,7 +14,7 @@ const observers = new Map<string, IntersectionObserver>();
 
 type SongItemProps = {
   song: Song,
-  onSelect: (songResource: ResourceID) => Promise<void>,
+  onSelect: (songResource: ResourceID) => void | Promise<void>,
 }
 
 
