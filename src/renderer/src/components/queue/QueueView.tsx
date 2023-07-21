@@ -5,8 +5,7 @@ import { createSignal, onCleanup, onMount } from 'solid-js';
 import ResetSignal from '../../lib/ResetSignal';
 import Fa from 'solid-fa';
 import { faShuffle } from '@fortawesome/free-solid-svg-icons';
-import { Optional, Song } from '../../../../@types';
-import { none, some } from '../../lib/rust-like-utils-client/Optional';
+import { Song } from '../../../../@types';
 
 
 
@@ -21,27 +20,17 @@ const QueueView = () => {
     }
 
     const song = await window.api.request("queue.current");
-    const opt = changeSongHighlight(song);
 
-    if (opt.isNone) {
+    if (song.isNone) {
       return;
     }
 
-    const container = opt.value;
-
-    container.classList.add("selected");
-    const list = container.closest(".list");
-
-    if (list === null) {
-      return;
-    }
-
-    list.scrollTo(0, container.offsetTop);
+    changeSongHighlight(song.value);
   };
 
-  const changeSongHighlight = (song: Song): Optional<HTMLElement> => {
+  const changeSongHighlight = (song: Song): void => {
     if (view === undefined) {
-      return none();
+      return;
     }
 
     const selected = view.querySelector(".song-item.selected");
@@ -56,24 +45,28 @@ const QueueView = () => {
     element?.classList.add("selected");
 
     if (element === null) {
-      return none();
+      return;
     }
 
-    return some(element);
-  };
+    //todo some kind of check here would be nice
+    //todo do the optional scroll like on widget select in Nocoma
+    const list = element.value.closest(".list");
 
-  const changeSongListener = (song: Song) => {
-    changeSongHighlight(song);
+    if (list === null) {
+      return;
+    }
+
+    list.scrollTo(0, element.value.offsetTop);
   };
 
   onMount(() => {
     window.api.listen("queue.created", listingReset.reset.bind(listingReset));
-    window.api.listen("queue.songChanged", changeSongListener);
+    window.api.listen("queue.songChanged", changeSongHighlight);
   });
 
   onCleanup(() => {
     window.api.removeListener("queue.created", listingReset.reset.bind(listingReset));
-    window.api.removeListener("queue.songChanged", changeSongListener);
+    window.api.removeListener("queue.songChanged", changeSongHighlight);
   });
 
   return (
@@ -94,7 +87,7 @@ const QueueView = () => {
         initAPIKey={"query.queue.init"}
         setResultCount={setCount}
         reset={listingReset}
-        onSongsLoad={onSongsLoad}
+        onLoadItems={onSongsLoad}
         fallback={<div>No queue...</div>}
         builder={s =>
           <SongItem song={s} onSelect={async (...args) => console.log(...args)} selectable={true}/>

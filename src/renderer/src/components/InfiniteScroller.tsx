@@ -26,7 +26,8 @@ type InfinityScrollerProps = {
   apiData?: any,
   builder: (props: any) => JSX.Element,
   reset?: ResetSignal,
-  onSongsLoad?: () => any,
+  onLoadInitial?: () => any,
+  onLoadItems?: () => any,
   fallback?: JSX.Element,
   autoload?: boolean,
   setResultCount?: Setter<number>,
@@ -39,7 +40,7 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
     "apiData",
     "builder",
     "reset",
-    "onSongsLoad",
+    "onLoadInitial",
     "fallback",
     "autoload",
     "setResultCount"
@@ -72,6 +73,10 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
 
     if (props.setResultCount !== undefined) {
       props.setResultCount(response.value.total);
+    }
+
+    if (props.onLoadItems !== undefined) {
+      props.onLoadItems();
     }
 
     observerStart.observe(container.children[0]);
@@ -124,6 +129,10 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
       props.setResultCount(response.value.total);
     }
 
+    if (props.onLoadItems !== undefined) {
+      props.onLoadItems();
+    }
+
     observerEnd.observe(container.children[container.children.length - 1]);
   }
   const observerEnd = new IntersectionObserver(async entries => {
@@ -167,8 +176,8 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
       await loadStart();
     }
 
-    if (props.onSongsLoad !== undefined) {
-      props.onSongsLoad();
+    if (props.onLoadInitial !== undefined) {
+      props.onLoadInitial();
     }
   }
 
