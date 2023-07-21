@@ -40,8 +40,6 @@ ipcRenderer.on("communication/renderer", async (_evt, packet: Packet<any>) => {
 
       responses.push(got);
     } catch (e) {
-      console.table(listeners[i]);
-      console.log(listeners[i].toString());
       console.error(e);
       console.log(packet);
     }
@@ -49,7 +47,14 @@ ipcRenderer.on("communication/renderer", async (_evt, packet: Packet<any>) => {
 
   await Promise.all(promises);
   p.data = responses;
-  ipcRenderer.send("communication/main", p);
+
+  try {
+    ipcRenderer.send("communication/main", p);
+  } catch (e) {
+    console.log(e);
+    console.log("If it says something about not being able to clone object then you are sending non-standard JS object.");
+    console.log(responses);
+  }
 });
 
 const api = {
