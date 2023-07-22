@@ -77,7 +77,7 @@ const QueueView = () => {
     >
       <div>
         <span>Queue [listening to {count()} songs]</span>
-        <button>
+        <button onClick={() => window.api.request("queue.shuffle")}>
           <Fa icon={faShuffle} scale={GLOBAL_ICON_SCALE}/>
         </button>
       </div>

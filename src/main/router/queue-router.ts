@@ -7,6 +7,7 @@ import { mainWindow } from '../main';
 import order from '../lib/song/order';
 import errorIgnored from '../lib/tungsten/errorIgnored';
 import { none, some } from '../lib/rust-like-utils-backend/Optional';
+import { shuffle } from '../lib/tungsten/collections';
 
 
 
@@ -46,9 +47,9 @@ Router.respond("queue.create", async (_evt, payload) => {
     index = 0;
   }
 
-  await Router.dispatch(mainWindow, "queue.songChanged", queue[index])
-    .catch(errorIgnored);
   await Router.dispatch(mainWindow, "queue.created")
+    .catch(errorIgnored);
+  await Router.dispatch(mainWindow, "queue.songChanged", queue[index])
     .catch(errorIgnored);
 });
 
@@ -109,6 +110,39 @@ function comparePayload(current: QueueCreatePayload, last: QueueCreatePayload | 
 
   return JSON.stringify(current.tags) === JSON.stringify(last.tags);
 }
+
+
+
+Router.respond("queue.shuffle", async () => {
+  if (queue === undefined) {
+    return;
+  }
+
+  const current = queue[index].path;
+  shuffle(queue);
+
+  for (let i = 0; i < queue.length; i++) {
+    if (queue[i].path !== current) {
+      continue;
+    }
+
+    if (i === 0) {
+      break;
+    }
+
+    const t = queue[i];
+    queue[i] = queue[0];
+    queue[0] = t;
+    break;
+  }
+
+  index = 0;
+
+  await Router.dispatch(mainWindow, "queue.created")
+    .catch(errorIgnored);
+  await Router.dispatch(mainWindow, "queue.songChanged", queue[index])
+    .catch(errorIgnored);
+});
 
 
 

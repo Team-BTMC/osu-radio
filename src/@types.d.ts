@@ -183,6 +183,7 @@ export type RequestAPI = {
   "queue.next": () => void,
   "queue.previous": () => void,
   "queue.create": (payload: QueueCreatePayload) => void,
+  "queue.shuffle": () => void,
 
   "dir.select": () => Optional<string>,
   "dir.submit": (dir: string) => void,
