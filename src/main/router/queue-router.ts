@@ -149,8 +149,6 @@ Router.respond("queue.shuffle", async () => {
 Router.respond("queue.place", (_evt, what, before) => {
   const whatIndex = queue.findIndex(s => s.path === what);
 
-  console.log(before, whatIndex, index);
-
   if (whatIndex === -1) {
     return;
   }
@@ -186,8 +184,6 @@ Router.respond("queue.place", (_evt, what, before) => {
     index = beforeIndex + 1;
     return;
   }
-
-  console.log("what", whatIndex, "before", beforeIndex, "index", index);
 
   if (whatIndex > index && beforeIndex < index) {
     // moved song that was after currently playing song before currently playing
