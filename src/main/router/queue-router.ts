@@ -222,7 +222,7 @@ Router.respond('queue.current', () => {
 
 Router.respond('queue.previous', async () => {
   if (--index < 0) {
-    index = queue.length;
+    index = queue.length - 1;
   }
 
   await Router.dispatch(mainWindow, "queue.songChanged", queue[index])
