@@ -44,3 +44,11 @@ export function hash(str: string, bits = 64): string {
 
   return hash;
 }
+
+
+
+export type Vec2 = [number, number];
+
+export function vec2Length(a: Vec2, b: Vec2): number {
+  return Math.sqrt((b[0] - a[0]) ** 2 + (b[1] - a[1]) ** 2)
+}
