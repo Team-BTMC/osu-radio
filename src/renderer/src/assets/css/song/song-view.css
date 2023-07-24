@@ -17,3 +17,7 @@
   padding: 0 16px 16vw 16px;
   overflow: auto;
 }
+
+.list.drag-inside {
+  cursor: move;
+}
