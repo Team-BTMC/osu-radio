@@ -69,6 +69,12 @@ const QueueView = () => {
     window.api.removeListener("queue.songChanged", changeSongHighlight);
   });
 
+  const onDrop = (s: Song) => {
+    return async (before: Element | null) => {
+      await window.api.request("queue.place", s.path, (before as HTMLElement | null)?.dataset.path);
+    }
+  }
+
   return (
     <div
       ref={view}
@@ -94,7 +100,8 @@ const QueueView = () => {
             song={s}
             selectable={true}
             draggable={true}
-            onSelect={async () => console.log("clicked")}
+            onSelect={async () => await window.api.request("queue.play", s.path)}
+            onDrop={onDrop(s)}
           />
         }
       />

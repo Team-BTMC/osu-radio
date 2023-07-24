@@ -32,10 +32,6 @@ async function createWindow() {
 
   window.on('ready-to-show', () => {
     window.show();
-
-    if (is.dev) {
-      window.webContents.openDevTools();
-    }
   });
 
   // HMR for renderer base on electron-vite cli.

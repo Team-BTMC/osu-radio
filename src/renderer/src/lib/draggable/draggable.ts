@@ -8,7 +8,7 @@ import defaultHint from './defaultHint';
 
 export type DraggableOptions = {
   onClick: () => any,
-  onDrag: (beforeElement: Element | null) => any,
+  onDrop: (beforeElement: Element | null) => any,
   createHint?: () => HTMLElement,
   useOnlyAsOnClickBinder?: boolean,
 };
@@ -84,7 +84,7 @@ export default function draggable(el: HTMLElement, options: DraggableOptions) {
 
     timeout = window.setTimeout(() => {
       onClick = undefined;
-      onDrag = options.onDrag;
+      onDrag = options.onDrop;
       isDragging = true;
     }, 300);
   });

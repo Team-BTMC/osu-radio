@@ -16,9 +16,10 @@ const observers = new Map<string, IntersectionObserver>();
 
 type SongItemProps = {
   song: Song,
-  onSelect: (songResource: ResourceID) => void | Promise<void>,
   selectable?: true,
+  onSelect: (songResource: ResourceID) => any,
   draggable?: true,
+  onDrop?: (before: Element | null) => any,
 }
 
 
@@ -42,7 +43,7 @@ const SongItem: Component<SongItemProps> = props => {
   onMount(() => {
     draggable(item, {
       onClick: () => props.onSelect(props.song.path),
-      onDrag: () => console.log("Dragged"),
+      onDrop: props.onDrop ?? (() => {}),
       createHint: SongHint,
       useOnlyAsOnClickBinder: props.draggable !== true,
     });

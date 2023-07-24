@@ -90,9 +90,14 @@ export { isPlaying }
 
 
 
-async function getCurrent() {
+async function getCurrent(): Promise<{ song: Song, media: URL } | undefined> {
   const song = await window.api.request("queue.current");
-  const resource = await window.api.request("resource.getPath", song.audio);
+
+  if (song.isNone) {
+    return;
+  }
+
+  const resource = await window.api.request("resource.getPath", song.value.audio);
 
   if (resource.isError) {
     return;
@@ -101,7 +106,7 @@ async function getCurrent() {
   const media = new URL(resource.value);
 
   return {
-    song,
+    song: song.value,
     media
   };
 }
