@@ -5,6 +5,8 @@ import { averageBPM, msToBPM } from '../../lib/song';
 import defaultBackground from "../../assets/osu-default-background.jpg";
 import "../../assets/css/song/song-item.css";
 import SongContextMenu from './SongContextMenu';
+import draggable from '../../lib/draggable/draggable';
+import SongHint from './SongHint';
 
 
 
@@ -16,6 +18,7 @@ type SongItemProps = {
   song: Song,
   onSelect: (songResource: ResourceID) => void | Promise<void>,
   selectable?: true,
+  draggable?: true,
 }
 
 
@@ -37,6 +40,13 @@ const SongItem: Component<SongItemProps> = props => {
   }
 
   onMount(() => {
+    draggable(item, {
+      onClick: () => props.onSelect(props.song.path),
+      onDrag: () => console.log("Dragged"),
+      createHint: SongHint,
+      useOnlyAsOnClickBinder: props.draggable !== true,
+    });
+
     item.addEventListener(setSourceEvent, setSource);
 
     const group = (item as HTMLElement).closest("[data-item-group]")?.getAttribute("data-item-group") ?? "global-item-group";
@@ -75,7 +85,6 @@ const SongItem: Component<SongItemProps> = props => {
   return (
     <div
       class="song-item"
-      onClick={() => props.onSelect(props.song.path)}
       onContextMenu={showMenu}
       ref={item}
       data-url={props.song.bg}

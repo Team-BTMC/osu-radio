@@ -90,7 +90,12 @@ const QueueView = () => {
         onLoadItems={onSongsLoad}
         fallback={<div>No queue...</div>}
         builder={s =>
-          <SongItem song={s} onSelect={async (...args) => console.log(...args)} selectable={true}/>
+          <SongItem
+            song={s}
+            selectable={true}
+            draggable={true}
+            onSelect={async () => console.log("clicked")}
+          />
         }
       />
     </div>

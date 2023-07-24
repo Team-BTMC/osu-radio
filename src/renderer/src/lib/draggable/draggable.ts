@@ -1,18 +1,17 @@
 //todo redo from parent perspective... how did i not think of this... I'm quite stupid
 
-import { Accessor, onMount } from 'solid-js';
 import { Vec2, vec2Length } from '../tungsten/math';
 import scrollAnimation from './scrollAnimation';
 import defaultHint from './defaultHint';
 
 
 
-export type DraggableAccessor = Accessor<{
+export type DraggableOptions = {
   onClick: () => any,
   onDrag: (beforeElement: Element | null) => any,
   createHint?: () => HTMLElement,
   useOnlyAsOnClickBinder?: boolean,
-}>;
+};
 
 
 
@@ -48,9 +47,9 @@ export function getIsDragging(): boolean {
   return isDragging;
 }
 
-export default function draggable(el: HTMLElement, accessor: DraggableAccessor) {
-  if (accessor()?.useOnlyAsOnClickBinder === true) {
-    const onClick = accessor()?.onClick;
+export default function draggable(el: HTMLElement, options: DraggableOptions) {
+  if (options?.useOnlyAsOnClickBinder === true) {
+    const onClick = options.onClick;
 
     if (onClick === undefined) {
       return;
@@ -62,112 +61,112 @@ export default function draggable(el: HTMLElement, accessor: DraggableAccessor) 
 
 
 
-  onMount(() => {
-    el.addEventListener("mousedown", evt => {
-      if (evt.button !== 0) {
-        return;
-      }
-
-      onClick = accessor()?.onClick;
-      start = [
-        evt.clientX,
-        evt.clientY
-      ];
-
-      const rect = el.getBoundingClientRect();
-      element = el;
-
-      hint = (accessor()?.createHint ?? defaultHint)();
-      hint.dataset.dragHint = "YEP";
-
-      offset = [
-        evt.clientX - rect.left,
-        evt.clientY - rect.top,
-      ];
-
-      timeout = window.setTimeout(() => {
-        onClick = undefined;
-        onDrag = accessor()?.onDrag;
-        isDragging = true;
-      }, 300);
-    });
-
-    const parent = el.parentElement;
-
-    if (parent === null) {
+  el.addEventListener("mousedown", evt => {
+    if (evt.button !== 0) {
       return;
     }
 
-    el.addEventListener("mousemove", evt => {
-      if (!isDragging || hint === undefined) {
+    onClick = options.onClick;
+    start = [
+      evt.clientX,
+      evt.clientY
+    ];
+
+    const rect = el.getBoundingClientRect();
+    element = el;
+
+    hint = (options.createHint ?? defaultHint)();
+    hint.dataset.dragHint = "YEP";
+
+    offset = [
+      evt.clientX - rect.left,
+      evt.clientY - rect.top,
+    ];
+
+    timeout = window.setTimeout(() => {
+      onClick = undefined;
+      onDrag = options.onDrag;
+      isDragging = true;
+    }, 300);
+  });
+
+
+
+  const parent = el.parentElement;
+
+  if (parent === null) {
+    return;
+  }
+
+  el.addEventListener("mousemove", evt => {
+    if (!isDragging || hint === undefined) {
+      return;
+    }
+
+    const rect = el.getBoundingClientRect();
+    const half = rect.top + (rect.height / 2)
+
+    if (evt.clientY <= half) {
+      if (el.previousElementSibling !== null && (el.previousElementSibling as HTMLElement).dataset.dragHint === "YEP") {
         return;
       }
 
-      const rect = el.getBoundingClientRect();
-      const half = rect.top + (rect.height / 2)
+      parent.insertBefore(hint, el);
+      return;
+    }
 
-      if (evt.clientY <= half) {
-        if (el.previousElementSibling !== null && (el.previousElementSibling as HTMLElement).dataset.dragHint === "YEP") {
-          return;
+    if (el.nextElementSibling === null) {
+      parent.appendChild(hint);
+      return;
+    }
+
+    if ((el.nextElementSibling as HTMLElement).dataset.dragHint === "YEP") {
+      return;
+    }
+
+    parent.insertBefore(hint, el.nextElementSibling);
+  });
+
+
+
+  if (parent.dataset.onLeave === undefined) {
+    parent.dataset.onLeave = "is-set";
+
+    parent.addEventListener("pointerleave", () => {
+      if (!isDragging) {
+        return;
+      }
+
+      if (cancelScrollAnimation !== undefined) {
+        cancelScrollAnimation();
+      }
+
+      if (movementY === undefined) {
+        return;
+      }
+
+      const sign = Math.sign(movementY);
+      let max = Infinity * sign * -1;
+      for (let i = 0; i < velocity.length; i++) {
+        if (sign !== Math.sign(velocity[i])) {
+          continue;
         }
 
-        parent.insertBefore(hint, el);
-        return;
+        if (velocity[i] * sign > max * sign) {
+          max = velocity[i];
+        }
       }
 
-      if (el.nextElementSibling === null) {
-        parent.appendChild(hint);
-        return;
-      }
-
-      if ((el.nextElementSibling as HTMLElement).dataset.dragHint === "YEP") {
-        return;
-      }
-
-      parent.insertBefore(hint, el.nextElementSibling);
+      cancelScrollAnimation = scrollAnimation(parent, max);
     });
 
-
-
-    if (parent.dataset.onLeave === undefined) {
-      parent.dataset.onLeave = "is-set";
-
-      parent.addEventListener("pointerleave", () => {
-        if (!isDragging) {
-          return;
-        }
-
-        if (cancelScrollAnimation !== undefined) {
-          cancelScrollAnimation();
-        }
-
-        if (movementY === undefined) {
-          return;
-        }
-
-        const sign = Math.sign(movementY);
-        let max = Infinity * sign * -1;
-        for (let i = 0; i < velocity.length; i++) {
-          if (sign !== Math.sign(velocity[i])) {
-            continue;
-          }
-
-          if (velocity[i] * sign > max * sign) {
-            max = velocity[i];
-          }
-        }
-
-        cancelScrollAnimation = scrollAnimation(parent, max);
-      });
-
-      parent.addEventListener("mouseenter", () => {
-        if (cancelScrollAnimation !== undefined) {
-          cancelScrollAnimation();
-          cancelScrollAnimation = undefined;
-        }
-      });
-    }
-  });
+    parent.addEventListener("mouseenter", () => {
+      if (cancelScrollAnimation !== undefined) {
+        cancelScrollAnimation();
+        cancelScrollAnimation = undefined;
+      }
+    });
+  }
 }
 
 
@@ -204,9 +203,15 @@ window.addEventListener("pointermove", evt => {
   }
 
   if (element.dataset.position !== "fixed") {
+    element.dataset.width = getComputedStyle(element).width;
+    element.style.width = `${element.scrollWidth}px`;
+
     position = getComputedStyle(element).position;
     element.style.position = "fixed";
     element.dataset.position = "fixed";
+
+    element.style.zIndex = "var(--top-layer)";
+    element.style.pointerEvents = "none";
 
     if (hint !== undefined) {
       element.parentElement?.insertBefore(hint, element);
@@ -244,6 +249,12 @@ window.addEventListener("pointerup", () => {
   if (element !== undefined) {
     delete element.dataset.position;
     element.style.position = position ?? "static";
+    element.style.width = element.dataset.width ?? "unset";
+    element.style.zIndex = "var(--normal-layer)";
+    element.style.removeProperty("pointer-events");
+    element.style.removeProperty("top");
+    element.style.removeProperty("left");
+
 
     dispatchDrag();
 
