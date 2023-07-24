@@ -32,7 +32,6 @@ let onDrag: ((beforeElement: Element | null)=>any) | undefined = undefined;
 
 let element: HTMLElement | undefined = undefined;
 let hint: HTMLElement | undefined = undefined;
-let position: string | undefined = undefined;
 
 let movementY: number | undefined = undefined;
 let timeout: number | undefined = undefined;
@@ -202,16 +201,20 @@ window.addEventListener("pointermove", evt => {
     return;
   }
 
-  if (element.dataset.position !== "fixed") {
-    element.dataset.width = getComputedStyle(element).width;
+  if (element.dataset.dragged !== "YEP") {
+    element.dataset.dragged = "YEP";
+    const computed = getComputedStyle(element);
+
+    element.dataset.width = computed.width;
     element.style.width = `${element.scrollWidth}px`;
 
-    position = getComputedStyle(element).position;
+    element.dataset.position = computed.position;
     element.style.position = "fixed";
-    element.dataset.position = "fixed";
 
     element.style.zIndex = "var(--top-layer)";
     element.style.pointerEvents = "none";
+
+    element.parentElement?.classList.add("drag-inside");
 
     if (hint !== undefined) {
       element.parentElement?.insertBefore(hint, element);
@@ -247,14 +250,20 @@ window.addEventListener("pointerup", () => {
   }
 
   if (element !== undefined) {
+    delete element.dataset.dragged;
+
+    element.style.position = element.dataset.position ?? "static";
     delete element.dataset.position;
-    element.style.position = position ?? "static";
+
     element.style.width = element.dataset.width ?? "unset";
+    delete element.dataset.width;
+
     element.style.zIndex = "var(--normal-layer)";
     element.style.removeProperty("pointer-events");
     element.style.removeProperty("top");
     element.style.removeProperty("left");
 
+    element.parentElement?.classList.remove("drag-inside");
 
     dispatchDrag();
 
@@ -278,8 +287,6 @@ function cleanUp() {
 
   element = undefined;
   hint = undefined;
-
-  position = undefined;
 
   start = undefined;
   offset = undefined;
