@@ -1,21 +1,17 @@
-import { Component, createSignal, onCleanup, onMount } from 'solid-js';
+import { Component, createSignal, onMount } from 'solid-js';
 import { ResourceID, Song } from '../../../../@types';
-import { availableResource, getResourcePath } from '../../lib/tungsten/resource';
 import { averageBPM, msToBPM } from '../../lib/song';
-import defaultBackground from "../../assets/osu-default-background.jpg";
 import "../../assets/css/song/song-item.css";
 import SongContextMenu from './SongContextMenu';
 import draggable from '../../lib/draggable/draggable';
 import SongHint from './SongHint';
+import SongImage from './SongImage';
 
 
-
-const setSourceEvent = "setSource";
-
-const observers = new Map<string, IntersectionObserver>();
 
 type SongItemProps = {
   song: Song,
+  group: string,
   selectable?: true,
   onSelect: (songResource: ResourceID) => any,
   draggable?: true,
@@ -25,15 +21,11 @@ type SongItemProps = {
 
 
 const SongItem: Component<SongItemProps> = props => {
-  const [src, setSRC] = createSignal(defaultBackground);
   const showSignal = createSignal(false);
   const [coords, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
-
   let item;
-  const setSource = evt => {
-    setSRC(evt.detail);
-    item.removeEventListener(setSourceEvent, setSource);
-  };
+
+
 
   const showMenu = (evt: MouseEvent) => {
     setCoords([evt.clientX, evt.clientY]);
@@ -48,40 +40,12 @@ const SongItem: Component<SongItemProps> = props => {
       useOnlyAsOnClickBinder: props.draggable !== true,
     });
 
-    item.addEventListener(setSourceEvent, setSource);
-
-    const group = (item as HTMLElement).closest("[data-item-group]")?.getAttribute("data-item-group") ?? "global-item-group";
-    let observer = observers.get(group);
-
-    if (observer === undefined) {
-      observer = new IntersectionObserver(async entries => {
-        for (let i = 0; i < entries.length; i++) {
-          if (entries[i].isIntersecting === false) {
-            return;
-          }
-
-          const resource = await getResourcePath(String(entries[i].target.getAttribute("data-url")));
-
-          entries[i].target.dispatchEvent(new CustomEvent(setSourceEvent, {
-            detail: await availableResource(resource, defaultBackground)
-          }));
-
-          observer?.unobserve(entries[i].target);
-        }
-      }, { rootMargin: "50px" });
-      observers.set(group, observer);
-    }
-
-    observer.observe(item);
-
     if (props.selectable === true) {
       (item as HTMLElement).dataset.path = props.song.path;
     }
   });
 
-  onCleanup(() => {
-    item.removeEventListener(setSourceEvent, setSource);
-  });
+
 
   return (
     <div
@@ -91,7 +55,8 @@ const SongItem: Component<SongItemProps> = props => {
       data-url={props.song.bg}
     >
       <div class={"song-item-container"}>
-        <div class="image" style={{ 'background-image': `url('${src().replaceAll("'", "\\'")}')` }}></div>
+        <SongImage src={props.song.bg} group={props.group}/>
+
         <div class="column">
           <h3>[{msToBPM(averageBPM(props.song.bpm, props.song.duration * 1_000))} BPM] {props.song.title}</h3>
           <span>{props.song.artist} // {props.song.creator}</span>

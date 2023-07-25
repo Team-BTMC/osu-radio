@@ -72,8 +72,10 @@ const SongView: Component<SongViewProps> = props => {
     });
   }
 
+  const group = namespace.create(true);
+
   return (
-    <div class="song-view" data-item-group={namespace.create(true)}>
+    <div class="song-view">
       <Search
         query={querySignal}
         tags={tagsSignal}
@@ -89,7 +91,11 @@ const SongView: Component<SongViewProps> = props => {
         reset={resetListing}
         fallback={<div>No songs...</div>}
         builder={s =>
-          <SongItem song={s} onSelect={createQueue}/>
+          <SongItem
+            song={s}
+            group={group}
+            onSelect={createQueue}
+          />
         }
       />
     </div>

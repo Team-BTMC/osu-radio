@@ -1,0 +1,58 @@
+.song-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.song-detail .song {
+  padding: 16px;
+  width: max(232px, 25vw);
+  border-radius: var(--border-radius);
+  transition: background-color 250ms;
+}
+
+.song-detail .song:hover {
+  background-color: rgba(var(--color-fg), var(--level-0));
+
+  transition: background-color 0ms;
+}
+
+.song-detail .song h3 {
+  margin-top: 16px;
+}
+
+
+
+.song-detail .seeker {
+  width: calc(max(232px, 25vw) - 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.song-detail .seeker span {
+  font-size: 0.8em;
+}
+
+.song-detail .seeker .time {
+  display: flex;
+  justify-content: space-between;
+}
+
+
+
+.song-detail .controls {
+  max-width: max(200px, 25vw);
+}
+
+.song-detail .controls .wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.song-detail .controls button {
+  width: 44px;
+}

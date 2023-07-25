@@ -75,11 +75,12 @@ const QueueView = () => {
     }
   }
 
+  const group = namespace.create(true);
+
   return (
     <div
       ref={view}
       class="song-view"
-      data-item-group={namespace.create(true)}
     >
       <div>
         <span>Queue [listening to {count()} songs]</span>
@@ -98,6 +99,7 @@ const QueueView = () => {
         builder={s =>
           <SongItem
             song={s}
+            group={group}
             selectable={true}
             draggable={true}
             onSelect={async () => await window.api.request("queue.play", s.path)}

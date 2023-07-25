@@ -1,6 +1,5 @@
-import { Component, createEffect, createSignal, Match, onMount, Show, Switch } from 'solid-js';
+import { Component, createEffect, createSignal, Match, Show, Switch } from 'solid-js';
 import Bar from '../Bar';
-import defaultBackground from "../../assets/osu-default-background.jpg";
 import {
   duration,
   isPlaying,
@@ -13,7 +12,6 @@ import {
   togglePlay,
   volume
 } from '../../lib/Music';
-import { getResourcePath } from '../../lib/tungsten/resource';
 import Fa from 'solid-fa';
 import {
   faBackwardStep,
@@ -28,6 +26,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { GLOBAL_ICON_SCALE } from '../../App';
 import formatTime from '../../lib/time-formatter';
+import SongImage from './SongImage';
+import "../../assets/css/song/song-detail.css";
 
 
 
@@ -36,29 +36,16 @@ type SongDetailProps = {}
 
 
 const SongDetail: Component<SongDetailProps> = (_props) => {
-  const [src, setSrc] = createSignal(defaultBackground);
-  let image;
+  const [bg, setBg] = createSignal<string | undefined>();
 
-  createEffect(async () => {
-    const s = song();
-
-    if (s === undefined) {
-      return;
-    }
-
-    setSrc(await getResourcePath(s.bg));
-  });
-
-  onMount(() => {
-    image.addEventListener("error", () => {
-      image.src = defaultBackground;
-    });
+  createEffect(() => {
+    setBg(song()?.bg);
   });
 
   return (
-    <div class="container">
+    <div class="song-detail">
       <div class="song">
-        <img ref={image} src={src()} alt="art"/>
+        <SongImage src={bg} instantLoad={true}/>
         <h3>{song()?.title ?? "Title"}</h3>
         <span>{song()?.artist ?? "Artist"}</span>
       </div>
