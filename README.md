@@ -1,34 +1,20 @@
-# osu-radio-solidjs
+# status: Pre-Alpha
 
-An Electron application with Solid and TypeScript
+# osu-radio
 
-## Recommended IDE Setup
+Application to play your osu! songs. This is primarily personal projects so there could be "idk, works for me" and if it is not trivial fix I might not ever fix it. Also, if it breaks then... RIPBOZO
 
-- [VSCode](https://code.visualstudio.com/) + [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) + [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+![](https://cdn.7tv.app/emote/60dbea82e3e5887a4a95e1db/4x.webp)
 
-## Project Setup
+### Contribution
 
-### Install
+I only know how to push code from my local machine to this repository, so, you can forget about pull requests LOL. Definitely a skill issue.
 
-```bash
-$ npm install
+### Download
+
+LOL, it can barely play songs. You better wait a few months. But if you still want to give it a try, then git clone this repository and run:
+
 ```
-
-### Development
-
-```bash
-$ npm run dev
-```
-
-### Build
-
-```bash
-# For windows
-$ npm run build:win
-
-# For macOS
-$ npm run build:mac
-
-# For Linux
-$ npm run build:linux
+npm install
+npm run start
 ```
