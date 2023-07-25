@@ -1,6 +1,6 @@
 import { Component, createSignal, For, JSX, onCleanup, onMount, Setter, Show, splitProps } from 'solid-js';
 import { OmitPropsWithoutReturnType, Optional, RequestAPI } from '../../../@types';
-import ResetSignal from '../lib/ResetSignal';
+import Impulse from '../lib/Impulse';
 
 
 
@@ -25,7 +25,7 @@ type InfinityScrollerProps = {
   initAPIKey: keyof OmitPropsWithoutReturnType<RequestAPI, InfiniteScrollerInitResponse>,
   apiData?: any,
   builder: (props: any) => JSX.Element,
-  reset?: ResetSignal,
+  reset?: Impulse,
   onLoadInitial?: () => any,
   onLoadItems?: () => any,
   fallback?: JSX.Element,
@@ -187,13 +187,13 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
     }
 
     if (props.reset !== undefined) {
-      props.reset.onReset(reset);
+      props.reset.listen(reset);
     }
   });
 
   onCleanup(() => {
     if (props.reset !== undefined) {
-      props.reset.removeOnReset(reset);
+      props.reset.removeListener(reset);
     }
   });
 

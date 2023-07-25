@@ -2,17 +2,17 @@ import { GLOBAL_ICON_SCALE, namespace } from '../../App';
 import SongItem from '../song/SongItem';
 import InfiniteScroller from '../InfiniteScroller';
 import { createSignal, onCleanup, onMount } from 'solid-js';
-import ResetSignal from '../../lib/ResetSignal';
 import Fa from 'solid-fa';
 import { faShuffle } from '@fortawesome/free-solid-svg-icons';
 import { Song } from '../../../../@types';
 import scrollIfNeeded from '../../lib/tungsten/scroll-if-needed';
+import Impulse from '../../lib/Impulse';
 
 
 
 const QueueView = () => {
   const [count, setCount] = createSignal(0);
-  const listingReset = new ResetSignal();
+  const resetListing = new Impulse();
   let view;
 
   const onSongsLoad = async () => {
@@ -60,12 +60,12 @@ const QueueView = () => {
   };
 
   onMount(() => {
-    window.api.listen("queue.created", listingReset.reset.bind(listingReset));
+    window.api.listen("queue.created", resetListing.pulse.bind(resetListing));
     window.api.listen("queue.songChanged", changeSongHighlight);
   });
 
   onCleanup(() => {
-    window.api.removeListener("queue.created", listingReset.reset.bind(listingReset));
+    window.api.removeListener("queue.created", resetListing.pulse.bind(resetListing));
     window.api.removeListener("queue.songChanged", changeSongHighlight);
   });
 
@@ -92,7 +92,7 @@ const QueueView = () => {
         apiKey={"query.queue"}
         initAPIKey={"query.queue.init"}
         setResultCount={setCount}
-        reset={listingReset}
+        reset={resetListing}
         onLoadItems={onSongsLoad}
         fallback={<div>No queue...</div>}
         builder={s =>

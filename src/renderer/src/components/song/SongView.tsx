@@ -6,8 +6,8 @@ import "../../assets/css/song/song-view.css";
 import { SearchQueryError } from '../../../../main/lib/search-parser/@search-types';
 import { none, some } from '../../lib/rust-like-utils-client/Optional';
 import InfiniteScroller from '../InfiniteScroller';
-import ResetSignal from '../../lib/ResetSignal';
 import { namespace } from '../../App';
+import Impulse from '../../lib/Impulse';
 
 
 
@@ -34,7 +34,7 @@ const SongView: Component<SongViewProps> = props => {
   });
 
   const [searchError, setSearchError] = createSignal<Optional<SearchQueryError>>(none(), { equals: false });
-  const listingReset = new ResetSignal();
+  const resetListing = new Impulse();
 
   const searchSongs = async () => {
     const o = order();
@@ -53,16 +53,16 @@ const SongView: Component<SongViewProps> = props => {
       order: o,
       tags: t
     });
-    listingReset.reset();
+    resetListing.pulse();
   }
 
   onMount(() => {
     createEffect(searchSongs);
-    window.api.listen("songView.reset", listingReset.reset.bind(listingReset));
+    window.api.listen("songView.reset", resetListing.pulse.bind(resetListing));
   });
 
   onCleanup(() => {
-    window.api.removeListener("songView.reset", listingReset.reset.bind(listingReset));
+    window.api.removeListener("songView.reset", resetListing.pulse.bind(resetListing));
   });
 
   const createQueue = async (songResource: ResourceID) => {
@@ -86,7 +86,7 @@ const SongView: Component<SongViewProps> = props => {
         initAPIKey={"query.songsPool.init"}
         apiData={payload()}
         setResultCount={setCount}
-        reset={listingReset}
+        reset={resetListing}
         fallback={<div>No songs...</div>}
         builder={s =>
           <SongItem song={s} onSelect={createQueue}/>
