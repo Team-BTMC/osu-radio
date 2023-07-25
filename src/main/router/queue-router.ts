@@ -213,7 +213,7 @@ Router.respond("queue.play", async (_evt, song) => {
 
 
 Router.respond('queue.current', () => {
-  if (queue[index] === undefined) {
+  if (queue === undefined || queue[index] === undefined) {
     return none();
   }
 
@@ -221,6 +221,10 @@ Router.respond('queue.current', () => {
 });
 
 Router.respond('queue.previous', async () => {
+  if (queue === undefined) {
+    return;
+  }
+
   if (--index < 0) {
     index = queue.length - 1;
   }
@@ -230,6 +234,10 @@ Router.respond('queue.previous', async () => {
 });
 
 Router.respond('queue.next', async () => {
+  if (queue === undefined) {
+    return;
+  }
+
   if (++index === queue.length) {
    index = 0;
   }
