@@ -1,3 +1,7 @@
+import { Song } from '../../../@types';
+
+
+
 /**
  * @returns Time difference between beats in ms
  */
@@ -43,4 +47,34 @@ export function msToBPM(ms: number): number {
   }
 
   return Math.round(60_000 / ms);
+}
+
+
+
+export function createDefaultSong(): Song {
+  return {
+    dateAdded: "",
+    ctime: "",
+
+    path: "",
+    audio: "",
+    bg: "",
+    dir: "",
+
+    artist: "Artist",
+    title: "Title",
+    creator: "Creator",
+    mode: 0,
+    duration: 0,
+
+    bpm: [],
+    tags: [],
+    diffs: [],
+  };
+}
+
+
+
+export function isSongUndefined(song: Song | undefined): boolean {
+  return song === undefined || song.path === "";
 }

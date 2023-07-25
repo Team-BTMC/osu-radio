@@ -39,15 +39,15 @@ const SongDetail: Component<SongDetailProps> = (_props) => {
   const [bg, setBg] = createSignal<string | undefined>();
 
   createEffect(() => {
-    setBg(song()?.bg);
+    setBg(song.bg);
   });
 
   return (
     <div class="song-detail">
       <div class="song">
         <SongImage src={bg} instantLoad={true}/>
-        <h3>{song()?.title ?? "Title"}</h3>
-        <span>{song()?.artist ?? "Artist"}</span>
+        <h3>{song.title}</h3>
+        <span>{song.artist}</span>
       </div>
 
       <div class="seeker">

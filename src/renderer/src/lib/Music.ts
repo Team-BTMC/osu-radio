@@ -1,8 +1,9 @@
 import { none, some } from "./rust-like-utils-client/Optional.js";
 import { AudioSource, Optional, Song } from '../../../@types';
-import { msToBPM } from './song';
+import { createDefaultSong, isSongUndefined, msToBPM } from './song';
 import { createEffect, createSignal } from 'solid-js';
 import { delay } from './delay';
+import { createStore } from 'solid-js/store';
 
 
 
@@ -18,13 +19,8 @@ const [media, setMedia] = createSignal<URL>();
 
 
 
-const [song, setSong] = createSignal<Song | undefined>(undefined, {
-  equals: (prev, next) => {
-    return JSON.stringify(prev) === JSON.stringify(next);
-  }
-});
+const [song, setSong] = createStore<Song>(createDefaultSong());
 export { song }
-let _song = song();
 
 
 
@@ -210,14 +206,9 @@ export function seek(range: ZeroToOne): void {
 
 
 createEffect(async () => {
-  _song = song();
   setBPM(none());
 
-  if (_song === undefined) {
-    return;
-  }
-
-  const audio = await window.api.request("resource.get", _song.audio, "audio") as Optional<AudioSource>;
+  const audio = await window.api.request("resource.get", song.audio, "audio") as Optional<AudioSource>;
 
   if (audio.isNone) {
     return;
@@ -247,17 +238,17 @@ createEffect(async () => {
 createEffect(async () => {
   const lv = localVolume();
 
-  if (_song === undefined || lv === 0.5) {
+  if (isSongUndefined(song) || lv === 0.5) {
     return;
   }
 
-  const audio = await window.api.request("resource.get", _song.audio, "audio") as Optional<AudioSource>;
+  const audio = await window.api.request("resource.get", song.audio, "audio") as Optional<AudioSource>;
 
   if (!audio.isNone && audio.value.volume === lv) {
     return;
   }
 
-  await window.api.request("save.localVolume", lv, _song.path);
+  await window.api.request("save.localVolume", lv, song.path);
 });
 
 
@@ -287,13 +278,11 @@ player.addEventListener("timeupdate", () => {
   setTimestamp(player.currentTime);
   setDuration(player.duration);
 
-  const s = song();
-
-  if (s === undefined || s.bpm[0][OFFSET] / 1000 > player.currentTime) {
+  if (isSongUndefined(song) || song.bpm[0][OFFSET] / 1000 > player.currentTime) {
     return;
   }
 
-  const bpmOpt = currentBPM(player.currentTime, s.bpm);
+  const bpmOpt = currentBPM(player.currentTime, song.bpm);
   const current = bpm();
 
   if (!bpmOpt.isNone && !current.isNone && bpmOpt.value !== current.value) {

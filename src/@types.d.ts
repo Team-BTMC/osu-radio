@@ -64,7 +64,7 @@ export type Song = {
   bg?: ResourceID,
 
   dateAdded: string,
-  dir: string;
+  dir: string, //todo remove
 
   title: string,
   artist: string,
