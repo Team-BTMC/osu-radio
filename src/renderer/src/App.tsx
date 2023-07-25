@@ -9,6 +9,8 @@ import { Scenes } from '../../@types';
 import ErrorScene from './components/scenes/ErrorScene';
 import { TokenNamespace } from './lib/tungsten/token';
 
+import "./keyboard-registers/initialize";
+
 
 
 export default function App(): JSX.Element {

@@ -54,7 +54,15 @@ const SearchField: Component<SearchTextBoxProps> = props => {
   return (
     <div class="search-field button-like">
       {props.children}
-      <div class="editable" ref={input} onInput={onInput} onPaste={onPaste} contenteditable={true} spellcheck={false}></div>
+      <div
+        class="editable"
+        ref={input}
+        onInput={onInput}
+        onKeyDown={evt => evt.stopPropagation()}
+        onPaste={onPaste}
+        contenteditable={true}
+        spellcheck={false}
+      ></div>
       <button class="icon" onClick={clear}>
         <Fa icon={faXmark} scale={GLOBAL_ICON_SCALE}/>
       </button>
