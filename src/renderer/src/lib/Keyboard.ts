@@ -16,7 +16,7 @@ export class Keyboard {
   private static readonly registers: KeyboardRegister[] = [];
 
   private static initialized = false;
-  
+
   static init() {
     if (this.initialized) {
       return;
@@ -28,7 +28,7 @@ export class Keyboard {
       for (let i = 0; i < this.registers.length; i++) {
         const r = this.registers[i];
 
-        if (r.key !== evt.key) {
+        if (r.key.toLowerCase() !== evt.key.toLowerCase()) {
           continue;
         }
 
