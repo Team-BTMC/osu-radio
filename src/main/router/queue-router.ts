@@ -251,12 +251,13 @@ Router.respond('queue.next', async () => {
 const BUFFER_SIZE = 50;
 
 Router.respond("query.queue.init", () => {
-  if (queue === undefined) {
-    return none();
-  }
+  const count = queue !== undefined
+    ? queue.length
+    : 0;
 
   return some({
-    initialIndex: Math.floor(index / BUFFER_SIZE)
+    initialIndex: Math.floor(index / BUFFER_SIZE),
+    count
   });
 });
 

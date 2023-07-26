@@ -91,8 +91,8 @@ const QueueView = () => {
 
       <InfiniteScroller
         apiKey={"query.queue"}
-        initAPIKey={"query.queue.init"}
-        setResultCount={setCount}
+        apiInitKey={"query.queue.init"}
+        setCount={setCount}
         reset={resetListing}
         onLoadItems={onSongsLoad}
         fallback={<div>No queue...</div>}

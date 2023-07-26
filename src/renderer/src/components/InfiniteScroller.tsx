@@ -12,38 +12,47 @@ export type InfiniteScrollerRequest = {
 
 export type InfiniteScrollerResponse<T = any> = Optional<{
   index: number,
-  total: number,
   items: T[]
 }>
 
 export type InfiniteScrollerInitResponse = Optional<{
-  initialIndex: number
+  initialIndex: number,
+  count: number
 }>
+
+
 
 type InfinityScrollerProps = {
   apiKey: keyof OmitPropsWithoutReturnType<RequestAPI, InfiniteScrollerResponse>,
-  initAPIKey: keyof OmitPropsWithoutReturnType<RequestAPI, InfiniteScrollerInitResponse>,
   apiData?: any,
+
+  apiInitKey: keyof OmitPropsWithoutReturnType<RequestAPI, InfiniteScrollerInitResponse>,
+  apiInitData?: any,
+
   builder: (props: any) => JSX.Element,
   reset?: Impulse,
+
   onLoadInitial?: () => any,
   onLoadItems?: () => any,
   fallback?: JSX.Element,
   autoload?: boolean,
-  setResultCount?: Setter<number>,
+
+  setCount?: Setter<number>,
 } & JSX.HTMLAttributes<HTMLDivElement>
+
+
 
 const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
   const [, rest] = splitProps(props, [
     "apiKey",
-    "initAPIKey",
+    "apiInitKey",
     "apiData",
     "builder",
     "reset",
     "onLoadInitial",
     "fallback",
     "autoload",
-    "setResultCount"
+    "setCount"
   ]);
 
 
@@ -70,10 +79,6 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
 
     setElements((response.value.items as any[]).concat(elements()));
     indexStart = response.value.index;
-
-    if (props.setResultCount !== undefined) {
-      props.setResultCount(response.value.total);
-    }
 
     if (props.onLoadItems !== undefined) {
       props.onLoadItems();
@@ -125,10 +130,6 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
     setElements(elements().concat(response.value.items));
     indexEnd = response.value.index;
 
-    if (props.setResultCount !== undefined) {
-      props.setResultCount(response.value.total);
-    }
-
     if (props.onLoadItems !== undefined) {
       props.onLoadItems();
     }
@@ -158,9 +159,14 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
     observerEnd.disconnect();
     observerStart.disconnect();
 
-    const opt = (await window.api.request(props.initAPIKey));
-    if (opt.isNone) {
+    const opt = (await window.api.request(props.apiInitKey, props.apiInitData));
+    if (opt.isNone || opt.value.count === 0) {
       setShow(false);
+
+      if (props.setCount !== undefined) {
+        props.setCount(0);
+      }
+
       return;
     }
 
@@ -168,6 +174,10 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
 
     init = opt.value.initialIndex;
     indexEnd = init;
+
+    if (props.setCount !== undefined) {
+      props.setCount(opt.value.count);
+    }
 
     await loadEnd();
 

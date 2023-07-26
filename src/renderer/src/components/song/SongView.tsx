@@ -85,9 +85,10 @@ const SongView: Component<SongViewProps> = props => {
 
       <InfiniteScroller
         apiKey={"query.songsPool"}
-        initAPIKey={"query.songsPool.init"}
         apiData={payload()}
-        setResultCount={setCount}
+        apiInitKey={"query.songsPool.init"}
+        apiInitData={payload()}
+        setCount={setCount}
         reset={resetListing}
         fallback={<div>No songs...</div>}
         builder={s =>

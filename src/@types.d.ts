@@ -198,7 +198,7 @@ export type RequestAPI = {
   "settings.write": <K extends keyof Settings>(key: K, value: any) => void,
   "settings.get": <K extends keyof Settings>(key: K) => Optional<any>,
 
-  "query.songsPool.init": () => InfiniteScrollerInitResponse,
+  "query.songsPool.init": (payload: SongsQueryPayload) => InfiniteScrollerInitResponse,
   "query.songsPool": (request: InfiniteScrollerRequest, payload: SongsQueryPayload) => InfiniteScrollerResponse<Song>,
   "query.queue.init": () => InfiniteScrollerInitResponse,
   "query.queue": (request: InfiniteScrollerRequest) => InfiniteScrollerResponse<Song>,

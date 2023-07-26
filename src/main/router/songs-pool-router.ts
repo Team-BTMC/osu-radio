@@ -7,17 +7,22 @@ import { Storage } from '../lib/storage/Storage';
 
 
 
-Router.respond("query.songsPool.init", () => {
+Router.respond("query.songsPool.init", (_evt, payload) => {
   const indexes = Storage.getTable("system").get("indexes");
 
-  if (indexes.isNone || indexes.value.length === 0) {
+  if (indexes.isNone) {
     return none();
   }
 
+  const filtered = filter(indexes.value, payload);
+
   return some({
-    initialIndex: 0
+    initialIndex: 0,
+    count: filtered.length
   });
 });
+
+
 
 const BUFFER_SIZE = 50;
 
