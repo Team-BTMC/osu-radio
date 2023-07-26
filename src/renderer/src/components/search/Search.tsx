@@ -2,7 +2,7 @@ import { Accessor, Component, createEffect, createSignal, Setter, Signal } from 
 import "../../assets/css/search/search.css";
 import { Optional } from '../../../../@types';
 import { SearchQueryError } from '../../../../main/lib/search-parser/@search-types';
-import SearchField from './SearchField';
+import TextField from '../form/TextField';
 import Fa from 'solid-fa';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { GLOBAL_ICON_SCALE } from '../../App';
@@ -69,9 +69,9 @@ const Search: Component<SearchProps> = props => {
   return (
     <div class="search no-pd">
       <div>
-        <SearchField value={props.query} setInput={setEditable}>
+        <TextField value={props.query} setInput={setEditable}>
           <Fa icon={faSearch} scale={GLOBAL_ICON_SCALE}/>
-        </SearchField>
+        </TextField>
       </div>
 
       <div class="results row">

@@ -1,4 +1,4 @@
-.search-field {
+.text-field {
   width: 100%;
   padding: 8px;
   display: flex;
@@ -7,11 +7,11 @@
   overflow: hidden;
 }
 
-.search-field:hover {
+.text-field:hover {
   cursor: text !important;
 }
 
-.search-field:focus-within {
+.text-field:focus-within {
   outline-color: rgba(var(--color-fg), var(--level-2));
   outline-width: 2px;
 
@@ -20,12 +20,12 @@
 
 
 
-.search-field > svg {
+.text-field > svg {
   width: 20px;
   aspect-ratio: 1/1;
 }
 
-.search-field > button.icon {
+.text-field > button.icon {
   display: grid;
   place-items: center;
   margin-right: 4px;
@@ -33,21 +33,21 @@
   background-color: transparent;
 }
 
-.search-field > button.icon:hover {
+.text-field > button.icon:hover {
   background-color: transparent;
   cursor: pointer;
 }
 
-.search-field > button.icon:focus {
+.text-field > button.icon:focus {
   outline: unset;
 }
 
-.search-field .editable {
+.text-field .editable {
   flex: 1;
   overflow: hidden;
   white-space: nowrap;
 }
 
-.search-field .editable:focus {
+.text-field .editable:focus {
   outline: unset;
 }

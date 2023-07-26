@@ -2,7 +2,7 @@ import { Component, createEffect, createSignal, For, Signal } from 'solid-js';
 import Fa from 'solid-fa';
 import { faTags } from '@fortawesome/free-solid-svg-icons';
 import { GLOBAL_ICON_SCALE } from '../../App';
-import SearchField from './SearchField';
+import TextField from '../form/TextField';
 import TagItem from './TagItem';
 import "../../assets/css/search/tag-select.css";
 import Gradient from '../Gradient';
@@ -134,7 +134,7 @@ const TagSelect: Component<TagSelectProps> = props => {
       </button>
       <dialog ref={dialog} class={"tag-select"}>
         <Gradient class={"tag-select-container"}>
-          <SearchField value={tagSignal} setInput={setTagField}/>
+          <TextField value={tagSignal} setInput={setTagField}/>
 
           <span class={"hint"}>Type the name of a tag into input above and press enter to add it. After it is added you can right-click it and change it to exclude songs with given tag.</span>
 

@@ -1,19 +1,18 @@
-import { Component, onMount, Setter, Signal } from 'solid-js';
+import { Component, JSX, onMount, Setter, Signal } from 'solid-js';
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import "../../assets/css/search/search-field.css";
+import "../../assets/css/form/text-field.css";
 import Fa from 'solid-fa';
 import { GLOBAL_ICON_SCALE } from '../../App';
 
 
 
-type SearchTextBoxProps = {
+type TextFieldProps = {
   value: Signal<string>,
   setInput?: Setter<HTMLElement | undefined>,
-  children?: any
+  children?: JSX.Element
 }
 
-//todo rename to: TextField
-const SearchField: Component<SearchTextBoxProps> = props => {
+const TextField: Component<TextFieldProps> = props => {
   const [value, setValue] = props.value;
   let input;
 
@@ -52,7 +51,7 @@ const SearchField: Component<SearchTextBoxProps> = props => {
   };
 
   return (
-    <div class="search-field button-like">
+    <div class="text-field button-like">
       {props.children}
       <div
         class="editable"
@@ -72,4 +71,4 @@ const SearchField: Component<SearchTextBoxProps> = props => {
 
 
 
-export default SearchField;
+export default TextField;
