@@ -17,8 +17,11 @@ export type Tag = {
 
 
 type TagSelectProps = {
-  /** Must have { equals: false } */
-  tags: Signal<Tag[]>
+  /** Must have ```json
+   * { equals: false }
+   * ``` */
+  tags: Signal<Tag[]>,
+  disabled?: boolean,
 }
 
 
@@ -126,7 +129,7 @@ const TagSelect: Component<TagSelectProps> = props => {
 
   return (
     <div class={"tags"}>
-      <button onClick={openDialog}>
+      <button onClick={openDialog} disabled={props.disabled}>
         <Fa icon={faTags} scale={GLOBAL_ICON_SCALE}/>
       </button>
       <dialog ref={dialog} class={"tag-select"}>

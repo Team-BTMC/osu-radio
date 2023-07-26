@@ -41,7 +41,8 @@ const orderOptions: OrderOption[] = [{
 
 
 type OrderSelectProps = {
-  setOrder: Setter<string>
+  setOrder: Setter<string>,
+  disabled?: boolean
 }
 
 
@@ -82,8 +83,8 @@ const OrderSelect: Component<OrderSelectProps> = props => {
 
   return (
     <>
-      <Select setValue={setOption} options={orderOptions}/>
-      <button onClick={switchDirections}>
+      <Select setValue={setOption} options={orderOptions} disabled={props.disabled}/>
+      <button onClick={switchDirections} disabled={props.disabled}>
         <Show
           when={selected().type === "string"}
           fallback={

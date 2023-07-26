@@ -13,6 +13,7 @@ type SelectProps = {
   setValue: Setter<string>,
   options: SelectOption[],
   selected?: string,
+  disabled?: boolean,
 }
 
 const Select: Component<SelectProps> = props => {
@@ -23,7 +24,12 @@ const Select: Component<SelectProps> = props => {
   });
 
   return (
-    <select class={"button-like select"} ref={select} onchange={() => props.setValue(select.value)}>
+    <select
+      class={"button-like select"}
+      ref={select}
+      onchange={() => props.setValue(select.value)}
+      disabled={props.disabled}
+    >
       <For each={props.options}>{option =>
         <option value={option.value} selected={option.selected === true || option.value === props.selected}>{option.text}</option>
       }</For>

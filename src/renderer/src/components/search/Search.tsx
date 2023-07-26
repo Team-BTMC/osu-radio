@@ -75,10 +75,15 @@ const Search: Component<SearchProps> = props => {
       </div>
 
       <div class="results row">
-        <button title="Save results as playlist">{props.count()} songs</button>
+        <button
+          title={props.count() === 0
+            ? 'Can not save results as playlist'
+            : 'Save results as playlist'}
+          disabled={props.count() === 0}
+        >{props.count()} songs</button>
         <div class="row">
-          <OrderSelect setOrder={props.setOrder}/>
-          <TagSelect tags={props.tags}/>
+          <OrderSelect setOrder={props.setOrder} disabled={props.count() === 0}/>
+          <TagSelect tags={props.tags} disabled={props.count() === 0}/>
         </div>
       </div>
 
