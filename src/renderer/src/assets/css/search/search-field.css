@@ -8,7 +8,7 @@
 }
 
 .search-field:hover {
-  cursor: unset;
+  cursor: text !important;
 }
 
 .search-field:focus-within {
