@@ -128,7 +128,7 @@ button.icon {
   right: 0;
 }
 
-.dropdown:hover .menu {
+.dropdown:not([data-disabled]):hover .menu {
   display: block;
 }
 

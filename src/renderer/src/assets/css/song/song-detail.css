@@ -39,20 +39,3 @@
   display: flex;
   justify-content: space-between;
 }
-
-
-
-.song-detail .controls {
-  max-width: max(200px, 25vw);
-}
-
-.song-detail .controls .wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-}
-
-.song-detail .controls button {
-  width: 44px;
-}
