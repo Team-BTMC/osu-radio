@@ -7,6 +7,7 @@ import { faShuffle } from '@fortawesome/free-solid-svg-icons';
 import { Song } from '../../../../@types';
 import scrollIfNeeded from '../../lib/tungsten/scroll-if-needed';
 import Impulse from '../../lib/Impulse';
+import "../../assets/css/queue/queue-view.css";
 
 
 
@@ -82,9 +83,9 @@ const QueueView = () => {
       ref={view}
       class="song-view"
     >
-      <div>
+      <div class={"queue-controls"}>
         <span>Queue [listening to {count()} songs]</span>
-        <button onClick={() => window.api.request("queue.shuffle")}>
+        <button onClick={() => window.api.request("queue.shuffle")} disabled={count() === 0}>
           <Fa icon={faShuffle} scale={GLOBAL_ICON_SCALE}/>
         </button>
       </div>
