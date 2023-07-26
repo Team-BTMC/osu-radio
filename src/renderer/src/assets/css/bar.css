@@ -4,11 +4,19 @@
   min-height: 0.5em;
   min-width: 100%;
   position: relative;
+
+  transition: opacity 250ms;
 }
 
 .bar.vertical {
   min-height: 100%;
   min-width: 0.5em;
+}
+
+.bar[data-disabled] {
+  opacity: 0.7;
+
+  transition: opacity 250ms;
 }
 
 

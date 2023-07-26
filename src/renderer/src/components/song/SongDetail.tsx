@@ -10,6 +10,7 @@ import formatTime from '../../lib/time-formatter';
 import SongImage from './SongImage';
 import "../../assets/css/song/song-detail.css";
 import SongControls from './SongControls';
+import { isSongUndefined } from '../../lib/song';
 
 
 
@@ -36,6 +37,7 @@ const SongDetail: Component<SongDetailProps> = (_props) => {
         <Bar
           fill={timestamp() / (duration() !== 0 ? duration() : 1)}
           setFill={seek}
+          disabled={isSongUndefined(song)}
         />
         <div class="time">
           <span>{formatTime(timestamp() * 1_000)}</span>

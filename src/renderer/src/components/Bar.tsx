@@ -13,7 +13,8 @@ function isVertical(alignment?: BarAlignment): boolean {
 type BarProps = {
   alignment?: BarAlignment,
   fill: number,
-  setFill?: (fill: number) => any
+  setFill?: (fill: number) => any,
+  disabled?: boolean,
 }
 
 
@@ -34,6 +35,10 @@ const Bar: Component<BarProps> = props => {
   });
 
   const calculateFill = (evt: PointerEvent) => {
+    if (props.disabled === true) {
+      return;
+    }
+
     const rect: DOMRect = bar.getBoundingClientRect();
 
     if (isVertical(props.alignment)) {
@@ -45,6 +50,10 @@ const Bar: Component<BarProps> = props => {
   }
 
   const onDown = (evt: PointerEvent) => {
+    if (props.disabled === true) {
+      return;
+    }
+
     handle.setPointerCapture(evt.pointerId);
 
     handle.addEventListener("pointermove", calculateFill);
@@ -63,6 +72,7 @@ const Bar: Component<BarProps> = props => {
         "--fill-per": clamp(0, 1, props.fill) * 100 + "%"
       }}
       onPointerDown={calculateFill}
+      data-disabled={props.disabled}
     >
       <div class="filling-container">
         <div class="filling"></div>
