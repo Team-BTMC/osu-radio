@@ -44,6 +44,16 @@ export class Keyboard {
           continue;
         }
 
+        const rModCount = r.modifiers !== undefined
+          ? r.modifiers.length
+          : 0;
+
+        const evtModCount = Number(evt.altKey) + Number(evt.shiftKey) + Number(evt.ctrlKey);
+
+        if (rModCount !== evtModCount) {
+          continue;
+        }
+
         r.onPress();
 
         if (r.preventDefault) {
