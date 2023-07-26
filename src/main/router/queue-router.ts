@@ -146,7 +146,7 @@ Router.respond("queue.shuffle", async () => {
 
 
 
-Router.respond("queue.place", (_evt, what, before) => {
+Router.respond("queue.place", (_evt, what, after) => {
   const whatIndex = queue.findIndex(s => s.path === what);
 
   if (whatIndex === -1) {
@@ -156,7 +156,7 @@ Router.respond("queue.place", (_evt, what, before) => {
   const s = queue[whatIndex];
   queue.splice(whatIndex, 1);
 
-  if (before === undefined) {
+  if (after === undefined) {
     queue.unshift(s);
 
     if (whatIndex === index) {
@@ -171,26 +171,26 @@ Router.respond("queue.place", (_evt, what, before) => {
     return;
   }
 
-  const beforeIndex = queue.findIndex(s => s.path === before);
+  const afterIndex = queue.findIndex(s => s.path === after);
 
-  if (beforeIndex === -1) {
+  if (afterIndex === -1) {
     queue.splice(whatIndex, 0, s);
     return;
   }
 
-  queue.splice(beforeIndex + 1, 0, s);
+  queue.splice(afterIndex + 1, 0, s);
 
   if (whatIndex === index) {
-    index = beforeIndex + 1;
+    index = afterIndex + 1;
     return;
   }
 
-  if (whatIndex > index && beforeIndex < index) {
+  if (whatIndex > index && afterIndex < index) {
     // moved song that was after currently playing song before currently playing
     index++;
   }
 
-  if (whatIndex < index && beforeIndex + 1 >= index) {
+  if (whatIndex < index && afterIndex + 1 >= index) {
     // moved song that was before currently playing song after currently playing
     index--;
   }

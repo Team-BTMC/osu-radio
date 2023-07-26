@@ -183,7 +183,7 @@ export type RequestAPI = {
   "queue.next": () => void,
   "queue.previous": () => void,
   "queue.play": (song: ResourceID) => void,
-  "queue.place": (what: ResourceID, before: ResourceID | undefined) => void,
+  "queue.place": (what: ResourceID, after: ResourceID | undefined) => void,
   "queue.create": (payload: QueueCreatePayload) => void,
   "queue.shuffle": () => void,
 
