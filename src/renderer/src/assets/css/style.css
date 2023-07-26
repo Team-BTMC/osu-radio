@@ -88,7 +88,12 @@ button, .button-like {
   border-radius: var(--border-radius);
   outline: 0 solid rgba(var(--color-fg), 0);
 
-  transition: background-color 250ms, outline-color 250ms;
+  transition: background-color 250ms, outline-color 250ms, opacity 250ms;
+}
+
+button[disabled], .button-like[disabled], .button-like[data-disabled] {
+  opacity: 0.64;
+  transition: opacity 250ms;
 }
 
 button:focus, .button-like:focus {
@@ -98,7 +103,7 @@ button:focus, .button-like:focus {
   transition: outline-color-color 0ms;
 }
 
-button:hover, .button-like:hover {
+button:not([disabled]):hover, .button-like:not([disabled], [data-disabled]):hover {
   background-color: rgba(var(--color-fg), var(--level-1));
   cursor: pointer;
 
