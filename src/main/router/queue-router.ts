@@ -258,6 +258,38 @@ Router.respond("queue::playNext", async (_evt, song) => {
 
 
 
+Router.respond("queue::removeSong", async (_evt, what) => {
+  if (what === undefined) {
+    return;
+  }
+
+  console.log(index);
+
+  const whatIndex = queue.findIndex(s => s.path === what);
+
+  if (whatIndex === -1) {
+    return;
+  }
+
+  if (whatIndex < index) {
+    index--;
+  }
+
+  console.log(what, whatIndex, index);
+
+  queue.splice(whatIndex, 1);
+
+  await Router.dispatch(mainWindow, 'queue::created')
+    .catch(errorIgnored);
+
+  if (whatIndex === index) {
+    await Router.dispatch(mainWindow, 'queue::songChanged', queue[index])
+      .catch(errorIgnored);
+  }
+});
+
+
+
 Router.respond('queue::current', () => {
   if (queue === undefined || queue[index] === undefined) {
     return none();
@@ -304,8 +336,6 @@ Router.respond("query::queue::init", () => {
   const count = queue !== undefined
     ? queue.length
     : 0;
-
-  console.log(`queue init [${index}]`);
 
   return some({
     initialIndex: Math.floor(index / BUFFER_SIZE),

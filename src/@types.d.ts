@@ -186,6 +186,7 @@ export type RequestAPI = {
   "queue::play": (song: ResourceID) => void,
   "queue::playNext": (song: ResourceID) => void,
   "queue::place": (what: ResourceID, after: ResourceID | undefined) => void,
+  "queue::removeSong": (song: ResourceID | undefined) => void,
   "queue::create": (payload: QueueCreatePayload) => void,
   "queue::shuffle": () => void,
 
