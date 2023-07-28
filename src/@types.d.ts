@@ -179,10 +179,12 @@ export type RequestAPI = {
   "resource.get": (id: ResourceID, table: ResourceTables) => Optional<Song | AudioSource | ImageSource>,
   "resource.getPath": (id: any) => Result<string, string>,
 
+  "queue.exists": () => boolean,
   "queue.current": () => Optional<Song>,
   "queue.next": () => void,
   "queue.previous": () => void,
   "queue.play": (song: ResourceID) => void,
+  "queue.playNext": (song: ResourceID) => void,
   "queue.place": (what: ResourceID, after: ResourceID | undefined) => void,
   "queue.create": (payload: QueueCreatePayload) => void,
   "queue.shuffle": () => void,
@@ -225,6 +227,7 @@ export type ListenAPI = {
   "error.setMessage": (msg: string) => void,
   "queue.songChanged": (song: Song) => void,
   "queue.created": () => void,
+  "queue.destroyed": () => void,
 
   "songView.reset": () => void,
 }
