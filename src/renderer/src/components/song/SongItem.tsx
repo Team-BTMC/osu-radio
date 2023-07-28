@@ -2,7 +2,7 @@ import { Component, createSignal, onMount } from 'solid-js';
 import { ResourceID, Song } from '../../../../@types';
 import { averageBPM, msToBPM } from '../../lib/song';
 import "../../assets/css/song/song-item.css";
-import SongContextMenu from './context-menu/SongContextMenu';
+import SongContextMenu, { ignoreClickInContextMenu } from './context-menu/SongContextMenu';
 import draggable from '../../lib/draggable/draggable';
 import SongHint from './SongHint';
 import SongImage from './SongImage';
@@ -40,7 +40,7 @@ const SongItem: Component<SongItemProps> = props => {
 
   onMount(() => {
     draggable(item, {
-      onClick: () => props.onSelect(props.song.path),
+      onClick: ignoreClickInContextMenu(() => props.onSelect(props.song.path)),
       onDrop: props.onDrop ?? (() => {}),
       createHint: SongHint,
       useOnlyAsOnClickBinder: props.draggable !== true,

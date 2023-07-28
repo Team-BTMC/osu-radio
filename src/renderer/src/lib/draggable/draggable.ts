@@ -7,7 +7,7 @@ import defaultHint from './defaultHint';
 
 
 export type DraggableOptions = {
-  onClick: (event?: MouseEvent) => any,
+  onClick: (event: MouseEvent) => any,
   onDrop: (beforeElement: Element | null) => any,
   createHint?: () => HTMLElement,
   useOnlyAsOnClickBinder?: boolean,
@@ -27,8 +27,9 @@ const MAX_VELOCITY_SIZE = 20;
 let isDragging = false;
 const velocity: number[] = [];
 
-let onClick: (()=>any) | undefined = undefined;
-let onDrag: ((beforeElement: Element | null)=>any) | undefined = undefined;
+let clickEvent: MouseEvent | undefined = undefined;
+let onClick: ((event: MouseEvent) => any) | undefined = undefined;
+let onDrag: ((beforeElement: Element | null) => any) | undefined = undefined;
 
 let element: HTMLElement | undefined = undefined;
 let hint: HTMLElement | undefined = undefined;
@@ -38,7 +39,7 @@ let timeout: number | undefined = undefined;
 let offset: Vec2 | undefined = undefined;
 let start: Vec2 | undefined = undefined;
 
-let cancelScrollAnimation: (()=>void) | undefined = undefined;
+let cancelScrollAnimation: (() => void) | undefined = undefined;
 
 
 
@@ -66,6 +67,7 @@ export default function draggable(el: HTMLElement, options: DraggableOptions) {
     }
 
     onClick = options.onClick;
+    clickEvent = evt;
     start = [
       evt.clientX,
       evt.clientY
@@ -237,8 +239,8 @@ window.addEventListener("pointerup", () => {
   clearTimeout(timeout);
 
   if (!isDragging) {
-    if (onClick !== undefined) {
-      onClick();
+    if (onClick !== undefined && clickEvent !== undefined) {
+      onClick(clickEvent);
     }
 
     cleanUp();

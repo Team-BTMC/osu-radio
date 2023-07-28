@@ -8,6 +8,7 @@ import { Song } from '../../../../@types';
 import scrollIfNeeded from '../../lib/tungsten/scroll-if-needed';
 import Impulse from '../../lib/Impulse';
 import "../../assets/css/queue/queue-view.css";
+import SongContextMenuItem from '../song/context-menu/SongContextMenuItem';
 
 
 
@@ -50,7 +51,6 @@ const QueueView = () => {
       return;
     }
 
-    //todo some kind of check here would be nice
     const list = element.closest(".list");
 
     if (list === null) {
@@ -103,9 +103,11 @@ const QueueView = () => {
             group={group}
             selectable={true}
             draggable={true}
-            onSelect={async () => await window.api.request("queue::play", s.path)}
+            onSelect={() => window.api.request('queue::play', s.path)}
             onDrop={onDrop(s)}
-          />
+          >
+            <SongContextMenuItem onClick={() => window.api.request("queue::removeSong", s.path)}>Remove from queue</SongContextMenuItem>
+          </SongItem>
         }
       />
     </div>
