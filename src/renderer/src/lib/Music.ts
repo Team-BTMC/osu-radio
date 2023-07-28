@@ -110,6 +110,7 @@ async function getCurrent(): Promise<{ song: Song, media: URL } | undefined> {
 export async function play(): Promise<void> {
   if (media() === undefined) {
     const current = await getCurrent();
+
     if (current === undefined) {
       console.error("Cannot play current song");
       return;
@@ -126,8 +127,11 @@ export async function play(): Promise<void> {
   }
 
   player.volume = calculateVolume();
+
+  await player.play()
+    .catch(reason => console.error(reason));
+
   setIsPlaying(true);
-  await player.play();
 }
 
 export function pause() {
