@@ -55,22 +55,13 @@ const SongContextMenu: Component<SongContextMenuProps> = props => {
       calculatePosition();
       window.addEventListener("click", () => setShow(false), { once: true });
       window.addEventListener("contextmenu", windowContextMenu);
-
-      if (menu.dataset.handler === "YEP") {
-        return;
-      }
-
-      menu.dataset.handler = "YEP";
-      menu.addEventListener("click", evt => {
-        evt.stopPropagation();
-        setShow(false);
-      });
     });
   });
 
   onCleanup(() => {
     window.removeEventListener("click", () => setShow(false));
     window.removeEventListener("contextmenu", windowContextMenu);
+    menu?.removeEventListener("click", evt => evt.stopPropagation());
   });
 
 
@@ -91,3 +82,24 @@ const SongContextMenu: Component<SongContextMenuProps> = props => {
 
 
 export default SongContextMenu;
+
+
+
+export function ignoreClickInContextMenu(fn: (evt: MouseEvent) => any): (evt: MouseEvent) => void {
+  return (evt: MouseEvent) => {
+    const t = evt.target;
+
+    if (!(t instanceof HTMLElement)) {
+      fn(evt);
+      return;
+    }
+
+    const menu = t.closest(".song-menu");
+
+    if (menu !== null) {
+      return;
+    }
+
+    fn(evt);
+  };
+}
