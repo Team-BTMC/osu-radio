@@ -12,7 +12,9 @@ function createPacketPreload<T>(channel: string, token: string, data: T, type: P
 
 const apiListeners = new Map<string, APIListener<any>[]>();
 
-ipcRenderer.on("communication/renderer", async (_evt, packet: Packet<any>) => {
+
+
+ipcRenderer.on("communication/renderer", (_evt, packet: Packet<any>) => {
   const p = createPacketPreload(packet.channel, packet.token, undefined as any);
   const listeners = apiListeners.get(packet.channel);
 
@@ -45,16 +47,22 @@ ipcRenderer.on("communication/renderer", async (_evt, packet: Packet<any>) => {
     }
   }
 
-  await Promise.all(promises);
-  p.data = responses;
+  Promise.all(promises)
+    .then(() => {
+      p.data = responses;
 
-  try {
-    ipcRenderer.send("communication/main", p);
-  } catch (e) {
-    console.log(e);
-    console.log("If it says something about not being able to clone object then you are sending non-standard JS object.");
-    console.log(responses);
-  }
+      try {
+        ipcRenderer.send("communication/main", p);
+      } catch (e) {
+        console.log(e);
+        console.log("If it says something about not being able to clone object then you are sending non-standard JS object.");
+        console.log(responses);
+      }
+    })
+    .catch(e => {
+      console.log(e);
+      console.log(promises);
+    });
 });
 
 const api = {
