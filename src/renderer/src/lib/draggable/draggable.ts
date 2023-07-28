@@ -7,7 +7,7 @@ import defaultHint from './defaultHint';
 
 
 export type DraggableOptions = {
-  onClick: () => any,
+  onClick: (event?: MouseEvent) => any,
   onDrop: (beforeElement: Element | null) => any,
   createHint?: () => HTMLElement,
   useOnlyAsOnClickBinder?: boolean,
