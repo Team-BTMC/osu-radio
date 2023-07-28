@@ -51,10 +51,10 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
     const dir = await dirSubmit();
 
     await Router.dispatch(mainWindow, "changeScene", "loading");
-    await Router.dispatch(mainWindow, "loadingScene.setTitle", "Importing songs from osu! Songs directory");
+    await Router.dispatch(mainWindow, "loadingScene::setTitle", "Importing songs from osu! Songs directory");
 
     const [update, cancelUpdate] = throttle(async (i: number, total: number, file: string) => {
-      await Router.dispatch(mainWindow, "loadingScene.update", {
+      await Router.dispatch(mainWindow, "loadingScene::update", {
         current: i,
         max: total,
         hint: file,
@@ -78,7 +78,7 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
     break;
   } while(true);
 
-  await Router.dispatch(mainWindow, "loadingScene.update", {
+  await Router.dispatch(mainWindow, "loadingScene::update", {
     max: tables.value[SONGS].size,
     current: tables.value[SONGS].size,
     hint: `Imported total of ${tables.value[SONGS].size} songs`
@@ -90,10 +90,10 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
   Storage.setTable("images", Object.fromEntries(tables.value[IMAGES]));
 
   const total = Object.values(songs).length;
-  await Router.dispatch(mainWindow, "loadingScene.setTitle", "Indexing songs");
+  await Router.dispatch(mainWindow, "loadingScene::setTitle", "Indexing songs");
 
   const [update, cancelUpdate] = throttle(async (i: number, song: string) => {
-    await Router.dispatch(mainWindow, "loadingScene.update", {
+    await Router.dispatch(mainWindow, "loadingScene::update", {
       current: i,
       hint: song,
       max: total
@@ -109,7 +109,7 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
   system.write("allTags", Object.fromEntries(tags));
   system.writeBack();
 
-  await Router.dispatch(mainWindow, "loadingScene.update", {
+  await Router.dispatch(mainWindow, "loadingScene::update", {
     current: total,
     hint: "Indexed " + total + " songs",
     max: total

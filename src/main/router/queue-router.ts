@@ -12,10 +12,19 @@ import { shuffle } from '../lib/tungsten/collections';
 
 
 let queue: Song[];
+
+
+
+Router.respond("queue::exists", () => {
+  return queue !== undefined;
+});
+
+
+
 let index = 0;
 let lastPayload: QueueCreatePayload | undefined;
 
-Router.respond("queue.create", async (_evt, payload) => {
+Router.respond("queue::create", async (_evt, payload) => {
   if (comparePayload(payload, lastPayload)) {
     const newIndex = queue.findIndex(s => s.path === payload.startSong);
 
@@ -25,7 +34,7 @@ Router.respond("queue.create", async (_evt, payload) => {
 
     index = newIndex;
     lastPayload = payload;
-    await Router.dispatch(mainWindow, "queue.songChanged", queue[index])
+    await Router.dispatch(mainWindow, "queue::songChanged", queue[index])
       .catch(errorIgnored);
     return;
   }
@@ -47,9 +56,9 @@ Router.respond("queue.create", async (_evt, payload) => {
     index = 0;
   }
 
-  await Router.dispatch(mainWindow, "queue.created")
+  await Router.dispatch(mainWindow, "queue::created")
     .catch(errorIgnored);
-  await Router.dispatch(mainWindow, "queue.songChanged", queue[index])
+  await Router.dispatch(mainWindow, "queue::songChanged", queue[index])
     .catch(errorIgnored);
 });
 
@@ -113,7 +122,7 @@ function comparePayload(current: QueueCreatePayload, last: QueueCreatePayload | 
 
 
 
-Router.respond("queue.shuffle", async () => {
+Router.respond("queue::shuffle", async () => {
   if (queue === undefined) {
     return;
   }
@@ -138,15 +147,15 @@ Router.respond("queue.shuffle", async () => {
 
   index = 0;
 
-  await Router.dispatch(mainWindow, "queue.created")
+  await Router.dispatch(mainWindow, "queue::created")
     .catch(errorIgnored);
-  await Router.dispatch(mainWindow, "queue.songChanged", queue[index])
+  await Router.dispatch(mainWindow, "queue::songChanged", queue[index])
     .catch(errorIgnored);
 });
 
 
 
-Router.respond("queue.place", (_evt, what, after) => {
+Router.respond("queue::place", (_evt, what, after) => {
   const whatIndex = queue.findIndex(s => s.path === what);
 
   if (whatIndex === -1) {
@@ -198,7 +207,7 @@ Router.respond("queue.place", (_evt, what, after) => {
 
 
 
-Router.respond("queue.play", async (_evt, song) => {
+Router.respond("queue::play", async (_evt, song) => {
   const newIndex = queue.findIndex(s => s.path === song);
 
   if (newIndex === -1 || newIndex === index) {
@@ -206,13 +215,44 @@ Router.respond("queue.play", async (_evt, song) => {
   }
 
   index = newIndex;
-  await Router.dispatch(mainWindow, "queue.songChanged", queue[index])
+  await Router.dispatch(mainWindow, "queue::songChanged", queue[index])
     .catch(errorIgnored);
 });
 
 
 
-Router.respond('queue.current', () => {
+Router.respond("queue::playNext", async (_evt, song) => {
+  const songIndex = queue.findIndex(s => s.path === song);
+
+  console.log(`queue play next [${index}]`);
+
+  if (songIndex === -1 || songIndex === index) {
+    const s = Storage.getTable("songs").get(song);
+
+    if (s.isNone) {
+      return
+    }
+
+    queue.splice(index + 1, 0, s.value);
+  } else {
+    const s = queue[songIndex];
+    queue.splice(songIndex, 1);
+    queue.splice(index + 1, 0, s);
+
+    if (songIndex < index) {
+      index--;
+    }
+  }
+
+  console.log(`queue play next [${index}]`);
+
+  await Router.dispatch(mainWindow, 'queue::created')
+    .catch(errorIgnored);
+});
+
+
+
+Router.respond('queue::current', () => {
   if (queue === undefined || queue[index] === undefined) {
     return none();
   }
@@ -220,7 +260,7 @@ Router.respond('queue.current', () => {
   return some(queue[index]);
 });
 
-Router.respond('queue.previous', async () => {
+Router.respond('queue::previous', async () => {
   if (queue === undefined) {
     return;
   }
@@ -229,11 +269,11 @@ Router.respond('queue.previous', async () => {
     index = queue.length - 1;
   }
 
-  await Router.dispatch(mainWindow, "queue.songChanged", queue[index])
+  await Router.dispatch(mainWindow, "queue::songChanged", queue[index])
     .catch(errorIgnored);
 });
 
-Router.respond('queue.next', async () => {
+Router.respond('queue::next', async () => {
   if (queue === undefined) {
     return;
   }
@@ -242,7 +282,7 @@ Router.respond('queue.next', async () => {
    index = 0;
   }
 
-  await Router.dispatch(mainWindow, "queue.songChanged", queue[index])
+  await Router.dispatch(mainWindow, "queue::songChanged", queue[index])
     .catch(errorIgnored);
 });
 
@@ -250,10 +290,12 @@ Router.respond('queue.next', async () => {
 
 const BUFFER_SIZE = 50;
 
-Router.respond("query.queue.init", () => {
+Router.respond("query::queue::init", () => {
   const count = queue !== undefined
     ? queue.length
     : 0;
+
+  console.log(`queue init [${index}]`);
 
   return some({
     initialIndex: Math.floor(index / BUFFER_SIZE),
@@ -261,7 +303,7 @@ Router.respond("query.queue.init", () => {
   });
 });
 
-Router.respond('query.queue', (_evt, request) => {
+Router.respond('query::queue', (_evt, request) => {
   if (queue === undefined || request.index < 0 || request.index > Math.floor(queue.length / BUFFER_SIZE)) {
     return none();
   }

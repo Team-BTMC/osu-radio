@@ -25,13 +25,13 @@ export default function LoadingScene() {
   }
 
   onMount(() => {
-    window.api.listen("loadingScene.setTitle", setTitle);
-    window.api.listen("loadingScene.update", update);
+    window.api.listen("loadingScene::setTitle", setTitle);
+    window.api.listen("loadingScene::update", update);
   });
 
   onCleanup(() => {
-    window.api.removeListener("loadingScene.setTitle", setTitle);
-    window.api.removeListener("loadingScene.update", update);
+    window.api.removeListener("loadingScene::setTitle", setTitle);
+    window.api.removeListener("loadingScene::update", update);
   });
 
   return (

@@ -9,7 +9,7 @@ const [writeAudioSource, ] = delay((audioID: ResourceID, audioSource: AudioSourc
   Storage.getTable("audio").write(audioID, audioSource);
 }, 200);
 
-Router.respond("save.localVolume", (_evt, localVolume, songID) => {
+Router.respond("save::localVolume", (_evt, localVolume, songID) => {
   const song = Storage.getTable("songs").get(songID);
 
   if (song.isNone) {

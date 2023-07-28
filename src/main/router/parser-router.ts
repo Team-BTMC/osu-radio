@@ -25,7 +25,7 @@ const searchParser = new SearchParser({
   }
 });
 
-Router.respond("parse.search", (_evt, query) => {
+Router.respond("parse::search", (_evt, query) => {
   return searchParser.parse(query);
 });
 
@@ -33,6 +33,6 @@ Router.respond("parse.search", (_evt, query) => {
 
 const templateParser = new TemplateParser(templateIdentifiers);
 
-Router.respond("parse.template", (_evt, template) => {
+Router.respond("parse::template", (_evt, template) => {
   return templateParser.parse(template);
 });

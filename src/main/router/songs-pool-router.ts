@@ -7,7 +7,7 @@ import { Storage } from '../lib/storage/Storage';
 
 
 
-Router.respond("query.songsPool.init", (_evt, payload) => {
+Router.respond("query::songsPool::init", (_evt, payload) => {
   const indexes = Storage.getTable("system").get("indexes");
 
   if (indexes.isNone) {
@@ -26,7 +26,7 @@ Router.respond("query.songsPool.init", (_evt, payload) => {
 
 const BUFFER_SIZE = 50;
 
-Router.respond("query.songsPool", (_evt, request, payload) => {
+Router.respond("query::songsPool", (_evt, request, payload) => {
   if (request.direction === "up") {
     return none();
   }

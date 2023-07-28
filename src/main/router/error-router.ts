@@ -10,7 +10,7 @@ let waitList: (()=>void)[] = [];
 
 // const namespace = new TokenNamespace();
 
-Router.respond("error.dismissed", () => {
+Router.respond("error::dismissed", () => {
   for (let i = 0; i < waitList.length; i++) {
     waitList[i]();
   }
@@ -20,7 +20,7 @@ Router.respond("error.dismissed", () => {
 
 export async function showError(window: BrowserWindow, msg: string): Promise<void> {
   await Router.dispatch(window, "changeScene", "error");
-  await Router.dispatch(window, "error.setMessage", msg);
+  await Router.dispatch(window, "error::setMessage", msg);
 
   return new Promise(resolve => {
     waitList.push(resolve);

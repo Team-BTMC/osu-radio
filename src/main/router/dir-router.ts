@@ -6,7 +6,7 @@ import { dialog } from 'electron';
 
 let waitList: ((dir: string) => void)[] = [];
 
-Router.respond("dir.select", () => {
+Router.respond("dir::select", () => {
   const path = dialog.showOpenDialogSync({
     title: "Select your osu! Songs folder",
     properties: ["openDirectory"]
@@ -19,7 +19,7 @@ Router.respond("dir.select", () => {
   return some(path[0]);
 });
 
-Router.respond("dir.submit", (_evt, dir) => {
+Router.respond("dir::submit", (_evt, dir) => {
   for (let i = 0; i < waitList.length; i++) {
     waitList[i](dir);
   }

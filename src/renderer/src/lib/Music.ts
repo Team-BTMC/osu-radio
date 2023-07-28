@@ -36,7 +36,7 @@ export { timestamp }
 
 const [volume, setVolume] = createSignal<ZeroToOne>(0.3);
 export { volume, setVolume }
-window.api.request("settings.get", "volume")
+window.api.request("settings::get", "volume")
   .then(v => {
     if (v.isNone) {
       return;
@@ -87,13 +87,13 @@ export { isPlaying }
 
 
 async function getCurrent(): Promise<{ song: Song, media: URL } | undefined> {
-  const song = await window.api.request("queue.current");
+  const song = await window.api.request("queue::current");
 
   if (song.isNone) {
     return;
   }
 
-  const resource = await window.api.request("resource.getPath", song.value.audio);
+  const resource = await window.api.request("resource::getPath", song.value.audio);
 
   if (resource.isError) {
     return;
@@ -136,7 +136,7 @@ export function pause() {
 }
 
 export async function next() {
-  await window.api.request("queue.next");
+  await window.api.request("queue::next");
 
   const current = await getCurrent();
   if (current === undefined) {
@@ -155,7 +155,7 @@ export async function next() {
 }
 
 export async function previous() {
-  await window.api.request("queue.previous");
+  await window.api.request("queue::previous");
 
   const current = await getCurrent();
   if (current === undefined) {
@@ -208,7 +208,7 @@ export function seek(range: ZeroToOne): void {
 createEffect(async () => {
   setBPM(none());
 
-  const audio = await window.api.request("resource.get", song.audio, "audio") as Optional<AudioSource>;
+  const audio = await window.api.request("resource::get", song.audio, "audio") as Optional<AudioSource>;
 
   if (audio.isNone) {
     return;
@@ -226,7 +226,7 @@ createEffect(() => {
 
 
 const [writeVolume, ] = delay(async (volume: number) => {
-  await window.api.request("settings.write", "volume", volume);
+  await window.api.request("settings::write", "volume", volume);
 }, 200);
 createEffect(async () => {
   const v = volume();
@@ -242,19 +242,19 @@ createEffect(async () => {
     return;
   }
 
-  const audio = await window.api.request("resource.get", song.audio, "audio") as Optional<AudioSource>;
+  const audio = await window.api.request("resource::get", song.audio, "audio") as Optional<AudioSource>;
 
   if (!audio.isNone && audio.value.volume === lv) {
     return;
   }
 
-  await window.api.request("save.localVolume", lv, song.path);
+  await window.api.request("save::localVolume", lv, song.path);
 });
 
 
 
-window.api.listen("queue.songChanged", async (s) => {
-  const resource = await window.api.request("resource.getPath", s.audio);
+window.api.listen("queue::songChanged", async (s) => {
+  const resource = await window.api.request("resource::getPath", s.audio);
 
   if (resource.isError) {
     return;

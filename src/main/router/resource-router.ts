@@ -4,7 +4,7 @@ import { fail, ok } from '../lib/rust-like-utils-backend/Result';
 
 
 
-Router.respond("resource.getPath", (_evt, id) => {
+Router.respond("resource::getPath", (_evt, id) => {
   if (id === undefined) {
     return fail("Can not find resource for 'undefined'.");
   }
@@ -29,6 +29,6 @@ function encodeFile(uri: string): string {
 
 
 
-Router.respond("resource.get", (_evt, id, table) => {
+Router.respond("resource::get", (_evt, id, table) => {
   return Storage.getTable(table).get(id);
 });

@@ -21,7 +21,7 @@ const QueueView = () => {
       return;
     }
 
-    const song = await window.api.request("queue.current");
+    const song = await window.api.request("queue::current");
 
     if (song.isNone) {
       return;
@@ -61,18 +61,18 @@ const QueueView = () => {
   };
 
   onMount(() => {
-    window.api.listen("queue.created", resetListing.pulse.bind(resetListing));
-    window.api.listen("queue.songChanged", changeSongHighlight);
+    window.api.listen("queue::created", resetListing.pulse.bind(resetListing));
+    window.api.listen("queue::songChanged", changeSongHighlight);
   });
 
   onCleanup(() => {
-    window.api.removeListener("queue.created", resetListing.pulse.bind(resetListing));
-    window.api.removeListener("queue.songChanged", changeSongHighlight);
+    window.api.removeListener("queue::created", resetListing.pulse.bind(resetListing));
+    window.api.removeListener("queue::songChanged", changeSongHighlight);
   });
 
   const onDrop = (s: Song) => {
     return async (before: Element | null) => {
-      await window.api.request("queue.place", s.path, (before as HTMLElement | null)?.dataset.path);
+      await window.api.request("queue::place", s.path, (before as HTMLElement | null)?.dataset.path);
     }
   }
 
@@ -85,14 +85,14 @@ const QueueView = () => {
     >
       <div class={"queue-controls"}>
         <span>Queue [listening to {count()} songs]</span>
-        <button onClick={() => window.api.request("queue.shuffle")} disabled={count() === 0}>
+        <button onClick={() => window.api.request("queue::shuffle")} disabled={count() === 0}>
           <Fa icon={faShuffle} scale={GLOBAL_ICON_SCALE}/>
         </button>
       </div>
 
       <InfiniteScroller
-        apiKey={"query.queue"}
-        apiInitKey={"query.queue.init"}
+        apiKey={"query::queue"}
+        apiInitKey={"query::queue::init"}
         setCount={setCount}
         reset={resetListing}
         onLoadItems={onSongsLoad}
@@ -103,7 +103,7 @@ const QueueView = () => {
             group={group}
             selectable={true}
             draggable={true}
-            onSelect={async () => await window.api.request("queue.play", s.path)}
+            onSelect={async () => await window.api.request("queue::play", s.path)}
             onDrop={onDrop(s)}
           />
         }
