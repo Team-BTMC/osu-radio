@@ -17,8 +17,20 @@ const SongContextMenu: Component<SongContextMenuProps> = props => {
   const [show, setShow] = props.show;
   let menu;
 
-  const windowClick = (evt: Event) => {
-    if ((props.container as HTMLElement).contains(evt.target as Node)) {
+
+
+  const windowContextMenu = (evt: MouseEvent) => {
+    const t = evt.target;
+
+    if (!(t instanceof HTMLElement)) {
+      return;
+    }
+
+    const targetItem = t.closest(".song-item");
+    const menuParent = menu?.closest(".song-item");
+
+    if (targetItem === menuParent) {
+      evt.stopPropagation();
       return;
     }
 
@@ -34,24 +46,38 @@ const SongContextMenu: Component<SongContextMenuProps> = props => {
   onMount(() => {
     createEffect(() => {
       const s = show();
-      calculatePosition();
 
-      if (s === true) {
-        window.addEventListener("pointerdown", windowClick);
+      if (s === false) {
+        window.removeEventListener("contextmenu", windowContextMenu);
         return;
       }
 
-      window.removeEventListener("pointerdown", windowClick);
+      calculatePosition();
+      window.addEventListener("click", () => setShow(false), { once: true });
+      window.addEventListener("contextmenu", windowContextMenu);
+
+      if (menu.dataset.handler === "YEP") {
+        return;
+      }
+
+      menu.dataset.handler = "YEP";
+      menu.addEventListener("click", evt => {
+        evt.stopPropagation();
+        setShow(false);
+      });
     });
   });
 
   onCleanup(() => {
-    window.removeEventListener("pointerdown", windowClick);
+    window.removeEventListener("click", () => setShow(false));
+    window.removeEventListener("contextmenu", windowContextMenu);
   });
+
+
 
   return (
     <Show when={show()}>
-      <div class={"song-menu"} ref={menu} onClick={evt => evt.stopPropagation()}>
+      <div class={"song-menu"} ref={menu}>
         <Gradient class={"song-menu-container"}>
           <For each={props.children}>{child =>
             child
