@@ -8,6 +8,7 @@ import { none, some } from '../../lib/rust-like-utils-client/Optional';
 import InfiniteScroller from '../InfiniteScroller';
 import { namespace } from '../../App';
 import Impulse from '../../lib/Impulse';
+import SongPlayNext from './SongPlayNext';
 
 
 
@@ -39,7 +40,7 @@ const SongView: Component<SongViewProps> = props => {
   const searchSongs = async () => {
     const o = order();
     const t = tags();
-    const parsedQuery = await window.api.request("parse.search", query());
+    const parsedQuery = await window.api.request("parse::search", query());
 
     if (parsedQuery.type === "error") {
       setSearchError(some(parsedQuery));
@@ -58,15 +59,17 @@ const SongView: Component<SongViewProps> = props => {
 
   onMount(() => {
     createEffect(searchSongs);
-    window.api.listen("songView.reset", resetListing.pulse.bind(resetListing));
+    window.api.listen("songView::reset", resetListing.pulse.bind(resetListing));
   });
 
   onCleanup(() => {
-    window.api.removeListener("songView.reset", resetListing.pulse.bind(resetListing));
+    window.api.removeListener("songView::reset", resetListing.pulse.bind(resetListing));
   });
 
   const createQueue = async (songResource: ResourceID) => {
-    await window.api.request("queue.create", {
+    console.log("create queue");
+
+    await window.api.request("queue::create", {
       startSong: songResource,
       ...payload()
     });
@@ -84,9 +87,9 @@ const SongView: Component<SongViewProps> = props => {
         error={searchError}/>
 
       <InfiniteScroller
-        apiKey={"query.songsPool"}
+        apiKey={"query::songsPool"}
         apiData={payload()}
-        apiInitKey={"query.songsPool.init"}
+        apiInitKey={"query::songsPool::init"}
         apiInitData={payload()}
         setCount={setCount}
         reset={resetListing}
@@ -96,7 +99,10 @@ const SongView: Component<SongViewProps> = props => {
             song={s}
             group={group}
             onSelect={createQueue}
-          />
+          >
+            <SongPlayNext path={s.path}/>
+            <div>Add to playlist</div>
+          </SongItem>
         }
       />
     </div>

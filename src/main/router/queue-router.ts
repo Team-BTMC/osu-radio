@@ -24,6 +24,8 @@ Router.respond("queue::exists", () => {
 let index = 0;
 let lastPayload: QueueCreatePayload | undefined;
 
+
+
 Router.respond("queue::create", async (_evt, payload) => {
   if (comparePayload(payload, lastPayload)) {
     const newIndex = queue.findIndex(s => s.path === payload.startSong);
@@ -222,11 +224,17 @@ Router.respond("queue::play", async (_evt, song) => {
 
 
 Router.respond("queue::playNext", async (_evt, song) => {
+  if (queue === undefined) {
+    return;
+  }
+
   const songIndex = queue.findIndex(s => s.path === song);
 
-  console.log(`queue play next [${index}]`);
+  if (songIndex === index) {
+    return;
+  }
 
-  if (songIndex === -1 || songIndex === index) {
+  if (songIndex === -1) {
     const s = Storage.getTable("songs").get(song);
 
     if (s.isNone) {
@@ -244,8 +252,6 @@ Router.respond("queue::playNext", async (_evt, song) => {
     }
   }
 
-  console.log(`queue play next [${index}]`);
-
   await Router.dispatch(mainWindow, 'queue::created')
     .catch(errorIgnored);
 });
@@ -260,6 +266,8 @@ Router.respond('queue::current', () => {
   return some(queue[index]);
 });
 
+
+
 Router.respond('queue::previous', async () => {
   if (queue === undefined) {
     return;
@@ -272,6 +280,8 @@ Router.respond('queue::previous', async () => {
   await Router.dispatch(mainWindow, "queue::songChanged", queue[index])
     .catch(errorIgnored);
 });
+
+
 
 Router.respond('queue::next', async () => {
   if (queue === undefined) {
