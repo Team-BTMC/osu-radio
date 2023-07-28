@@ -17,6 +17,20 @@
 .song-menu-container {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 16px;
+  gap: 4px;
+  padding: 4px;
+}
+
+.song-menu-container > * {
+  padding: 8px;
+  border-radius: var(--border-radius);
+  background-color: rgba(var(--color-fg), 0);
+
+  transition: background-color 250ms;
+}
+
+.song-menu-container > *:hover {
+  background-color: rgba(var(--color-fg), var(--level-0));
+
+  transition: background-color 50ms;
 }
