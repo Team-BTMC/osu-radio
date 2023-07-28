@@ -8,7 +8,7 @@ import { none, some } from '../../lib/rust-like-utils-client/Optional';
 import InfiniteScroller from '../InfiniteScroller';
 import { namespace } from '../../App';
 import Impulse from '../../lib/Impulse';
-import SongPlayNext from './SongPlayNext';
+import PlayNext from './context-menu/items/PlayNext';
 
 
 
@@ -100,8 +100,8 @@ const SongView: Component<SongViewProps> = props => {
             group={group}
             onSelect={createQueue}
           >
-            <SongPlayNext path={s.path}/>
-            <div>Add to playlist</div>
+            <PlayNext path={s.path}/>
+            <button>Add to playlist</button>
           </SongItem>
         }
       />

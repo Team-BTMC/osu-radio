@@ -21,16 +21,12 @@
   padding: 4px;
 }
 
-.song-menu-container > * {
+.song-menu-container > button {
   padding: 8px;
-  border-radius: var(--border-radius);
   background-color: rgba(var(--color-fg), 0);
-
-  transition: background-color 250ms;
+  text-align: left;
 }
 
-.song-menu-container > *:hover {
+.song-menu-container > button:hover {
   background-color: rgba(var(--color-fg), var(--level-0));
-
-  transition: background-color 50ms;
 }

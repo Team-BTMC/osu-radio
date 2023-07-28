@@ -1,5 +1,6 @@
 import { Component, createSignal, Show } from 'solid-js';
-import { Song } from '../../../../@types';
+import { Song } from '../../../../../../@types';
+import SongContextMenuItem from '../SongContextMenuItem';
 
 
 
@@ -9,13 +10,8 @@ type SongPlayNextProps = {
 
 
 
-const SongPlayNext: Component<SongPlayNextProps> = props => {
+const PlayNext: Component<SongPlayNextProps> = props => {
   const [show, setShow] = createSignal(false);
-  const divAccessor = (div: HTMLElement) => {
-    div.addEventListener("click", async () => {
-      await window.api.request('queue::playNext', props.path);
-    });
-  }
 
 
 
@@ -31,11 +27,13 @@ const SongPlayNext: Component<SongPlayNextProps> = props => {
 
   return (
     <Show when={show()}>
-      <div ref={divAccessor}>Play Next</div>
+      <SongContextMenuItem
+        onClick={() => window.api.request('queue::playNext', props.path)}
+      >Play Next</SongContextMenuItem>
     </Show>
   );
 };
 
 
 
-export default SongPlayNext;
+export default PlayNext;

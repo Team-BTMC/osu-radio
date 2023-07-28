@@ -2,7 +2,7 @@ import { Component, createSignal, onMount } from 'solid-js';
 import { ResourceID, Song } from '../../../../@types';
 import { averageBPM, msToBPM } from '../../lib/song';
 import "../../assets/css/song/song-item.css";
-import SongContextMenu from './SongContextMenu';
+import SongContextMenu from './context-menu/SongContextMenu';
 import draggable from '../../lib/draggable/draggable';
 import SongHint from './SongHint';
 import SongImage from './SongImage';
