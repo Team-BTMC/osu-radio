@@ -16,6 +16,7 @@ type SongItemProps = {
   onSelect: (songResource: ResourceID) => any,
   draggable?: true,
   onDrop?: (before: Element | null) => any,
+  children?: any,
 }
 
 
@@ -28,6 +29,11 @@ const SongItem: Component<SongItemProps> = props => {
 
 
   const showMenu = (evt: MouseEvent) => {
+    if (props.children === undefined) {
+      showSignal[1](false);
+      return;
+    }
+
     setCoords([evt.clientX, evt.clientY]);
     showSignal[1](true);
   }
@@ -45,7 +51,9 @@ const SongItem: Component<SongItemProps> = props => {
     }
   });
 
-
+  const children: any[] = !(props.children instanceof Array)
+    ? [props.children]
+    : props.children;
 
   return (
     <div
@@ -64,9 +72,7 @@ const SongItem: Component<SongItemProps> = props => {
       </div>
 
       <SongContextMenu show={showSignal} container={item} coords={coords}>
-        <div>Pog</div>
-        <div>Nice</div>
-        <div>Pretty good right</div>
+        {...children}
       </SongContextMenu>
     </div>
   );
