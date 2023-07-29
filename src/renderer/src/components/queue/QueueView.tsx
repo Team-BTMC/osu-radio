@@ -9,12 +9,17 @@ import scrollIfNeeded from '../../lib/tungsten/scroll-if-needed';
 import Impulse from '../../lib/Impulse';
 import "../../assets/css/queue/queue-view.css";
 import SongContextMenuItem from '../song/context-menu/SongContextMenuItem';
+import formatTime from '../../lib/time-formatter';
+import { orDefault } from '../../lib/rust-like-utils-client/Optional';
 
 
 
 const QueueView = () => {
   const [count, setCount] = createSignal(0);
+  const [remaining, setRemaining] = createSignal(formatTime(0));
+  const [total, setTotal] = createSignal(formatTime(0));
   const resetListing = new Impulse();
+  const group = namespace.create(true);
   let view;
 
   const onSongsLoad = async () => {
@@ -29,6 +34,12 @@ const QueueView = () => {
     }
 
     changeSongHighlight(song.value);
+  };
+
+  const onDrop = (s: Song) => {
+    return async (before: Element | null) => {
+      await window.api.request("queue::place", s.path, (before as HTMLElement | null)?.dataset.path);
+    }
   };
 
   const changeSongHighlight = (song: Song): void => {
@@ -60,6 +71,8 @@ const QueueView = () => {
     scrollIfNeeded(element, list);
   };
 
+
+
   onMount(() => {
     window.api.listen("queue::created", resetListing.pulse.bind(resetListing));
     window.api.listen("queue::songChanged", changeSongHighlight);
@@ -70,13 +83,19 @@ const QueueView = () => {
     window.api.removeListener("queue::songChanged", changeSongHighlight);
   });
 
-  const onDrop = (s: Song) => {
-    return async (before: Element | null) => {
-      await window.api.request("queue::place", s.path, (before as HTMLElement | null)?.dataset.path);
-    }
-  }
 
-  const group = namespace.create(true);
+
+  window.api.listen("queue::created", async () => {
+    const t = await window.api.request("queue::duration");
+    setTotal(formatTime(orDefault(t, 0) * 1000));
+  });
+
+  window.api.listen("queue::songChanged", async () => {
+    const r = await window.api.request("queue::remainingDuration");
+    setRemaining(formatTime(orDefault(r, 0) * 1000));
+  });
+
+
 
   return (
     <div
@@ -84,7 +103,10 @@ const QueueView = () => {
       class="song-view"
     >
       <div class={"queue-controls"}>
-        <span>Queue [listening to {count()} songs]</span>
+        <div class={"time"}>
+          <span title={"Remaining playback time"}>Remaining {remaining()}</span>
+          <span title={"Total playback time"}>Total {total()}</span>
+        </div>
         <button onClick={() => window.api.request("queue::shuffle")} disabled={count() === 0}>
           <Fa icon={faShuffle} scale={GLOBAL_ICON_SCALE}/>
         </button>

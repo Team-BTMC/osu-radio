@@ -1,5 +1,5 @@
 import { Router } from '../lib/route-pass/Router';
-import { QueueCreatePayload, QueueView, Song, SongIndex } from '../../@types';
+import { Optional, QueueCreatePayload, QueueView, Result, Song, SongIndex } from '../../@types';
 import { Storage } from '../lib/storage/Storage';
 import { filter } from '../lib/song/filter';
 import { indexMapper } from '../lib/song/indexMapper';
@@ -8,6 +8,7 @@ import order from '../lib/song/order';
 import errorIgnored from '../lib/tungsten/errorIgnored';
 import { none, some } from '../lib/rust-like-utils-backend/Optional';
 import { shuffle } from '../lib/tungsten/collections';
+import { fail, ok } from '../lib/rust-like-utils-backend/Result';
 
 
 
@@ -120,6 +121,43 @@ function comparePayload(current: QueueCreatePayload, last: QueueCreatePayload | 
   }
 
   return JSON.stringify(current.tags) === JSON.stringify(last.tags);
+}
+
+
+
+Router.respond("queue::duration", (): Optional<number> => {
+  const d = duration();
+
+  if (d.isError) {
+    return none();
+  }
+
+  return some(d.value);
+});
+
+Router.respond("queue::remainingDuration", (): Optional<number> => {
+  const d = duration(index);
+
+  if (d.isError) {
+    return none();
+  }
+
+  return some(d.value);
+});
+
+function duration(startIndex = 0): Result<number, string> {
+  if (queue === undefined) {
+    return fail("Queue is not defined.");
+  }
+
+  let sum = 0;
+
+  for (let i = startIndex; i < queue.length; i++) {
+    const s = queue[i];
+    sum += s.duration;
+  }
+
+  return ok(sum);
 }
 
 
