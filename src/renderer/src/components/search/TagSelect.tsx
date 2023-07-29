@@ -133,7 +133,7 @@ const TagSelect: Component<TagSelectProps> = props => {
         <Fa icon={faTags} scale={GLOBAL_ICON_SCALE}/>
       </button>
       <dialog ref={dialog} class={"tag-select"}>
-        <Gradient class={"tag-select-container"}>
+        <Gradient classTop={"tag-select-container"}>
           <TextField value={tagSignal} setInput={setTagField}/>
 
           <span class={"hint"}>Type the name of a tag into input above and press enter to add it. After it is added you can right-click it and change it to exclude songs with given tag.</span>

@@ -1,4 +1,5 @@
 import { LoadingSceneUpdate, Scenes, Song } from './@types';
+import { NoticeType } from './renderer/src/components/notice/Notice';
 
 
 
@@ -14,4 +15,6 @@ export type ListenAPI = {
   "queue::destroyed": () => void,
 
   "songView::reset": () => void,
+
+  notify: (notice: NoticeType) => void;
 }

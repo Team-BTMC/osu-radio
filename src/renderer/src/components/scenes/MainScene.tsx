@@ -5,6 +5,7 @@ import { faGear, faHeadphonesSimple, faListUl, faMusic } from '@fortawesome/free
 import { GLOBAL_ICON_SCALE } from '../../App';
 import SongDetail from '../song/SongDetail';
 import QueueView from '../queue/QueueView';
+import NoticeContainer from '../notice/NoticeContainer';
 
 
 
@@ -45,6 +46,8 @@ export default function MainScene() {
       <main class="center">
         <SongDetail/>
       </main>
+
+      <NoticeContainer/>
     </div>
   );
 }

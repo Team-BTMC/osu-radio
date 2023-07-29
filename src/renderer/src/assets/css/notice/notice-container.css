@@ -1,0 +1,15 @@
+.notice-container-wrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: clamp(250px, 400px, 33vw);
+  overflow: auto;
+  max-height: 100vh;
+}
+
+.notice-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 16px 16px 32px;
+}

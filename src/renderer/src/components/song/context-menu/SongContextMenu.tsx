@@ -69,7 +69,7 @@ const SongContextMenu: Component<SongContextMenuProps> = props => {
   return (
     <Show when={show()}>
       <div class={"song-menu"} ref={menu}>
-        <Gradient class={"song-menu-container"}>
+        <Gradient classTop={"song-menu-container"}>
           <For each={props.children}>{child =>
             child
           }</For>

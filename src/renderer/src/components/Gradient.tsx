@@ -1,5 +1,6 @@
 import { Component, createEffect, createSignal, onCleanup, onMount } from 'solid-js';
 import "../assets/css/gradient.css";
+import Impulse from '../lib/Impulse';
 
 
 
@@ -13,19 +14,21 @@ export const [gradientColors, setGradientColors] = createSignal<GradientColors>(
   bottom: "crimson"
 });
 
+type GradientProps = {
+  classTop?: string,
+  classBottom?: string,
+  update?: Impulse
+  children,
+}
 
 
-const Gradient: Component<{ class?: string, children }> = (props) => {
-  createEffect(() => {
-    const colors = gradientColors();
 
-    document.documentElement.style.setProperty('--circle-0', colors.top);
-    document.documentElement.style.setProperty('--circle-1', colors.bottom);
-  });
-
+const Gradient: Component<GradientProps> = (props) => {
   let bottomLayer;
 
-  const onResize = () => {
+
+
+  const calculateBackground = () => {
     const rect: DOMRect = bottomLayer.getBoundingClientRect();
 
     bottomLayer.style.setProperty("--left", `${Math.round(-rect.left)}px`);
@@ -38,19 +41,34 @@ const Gradient: Component<{ class?: string, children }> = (props) => {
     bottomLayer.style.setProperty("--height", `${Math.round(window.innerHeight * 1.25)}px`);
   }
 
+  if (props.update !== undefined) {
+    props.update.listen(calculateBackground);
+  }
+
+
+
   onMount(() => {
-    onResize();
-    window.addEventListener("resize", onResize);
+    calculateBackground();
+    window.addEventListener("resize", calculateBackground);
   });
 
   onCleanup(() => {
-    window.removeEventListener("resize", onResize);
+    window.removeEventListener("resize", calculateBackground);
   });
 
+  createEffect(() => {
+    const colors = gradientColors();
+
+    document.documentElement.style.setProperty('--circle-0', colors.top);
+    document.documentElement.style.setProperty('--circle-1', colors.bottom);
+  });
+
+
+
   return (
-    <div ref={bottomLayer} class={"bottom-layer"}>
+    <div ref={bottomLayer} class={`bottom-layer ${props.classBottom ?? ""}`}>
       <div class={`gradient-layer`}>
-        <div class={`top-layer ${props.class ?? ""}`}>
+        <div class={`top-layer ${props.classTop ?? ""}`}>
           {props.children}
         </div>
       </div>
