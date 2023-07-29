@@ -50,7 +50,6 @@ export class OsuFile {
     builder.set("dateAdded", config.mtime.toISOString());
 
     const dir = path.dirname(this.path);
-    builder.set("dir", path.basename(dir));
 
     const songPath = path.resolve(path.join(dir, audioSrc));
     if (!await access(songPath, fs.constants.R_OK)) {

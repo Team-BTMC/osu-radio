@@ -80,11 +80,6 @@ function getIndexes(view: QueueView): SongIndex[] {
     return indexes.value;
   }
 
-  if (view.isQueue) {
-    //todo maybe just forward pointer? This should not happen
-    return [];
-  }
-
   if (view.playlist) {
     //todo get playlist
     return [];
