@@ -9,8 +9,17 @@ import NoticeContainer from '../notice/NoticeContainer';
 
 
 
+const [active, setActive] = createSignal(0);
+
+export { active }
+export const ACTIVE_ALL_SONGS = 0;
+export const ACTIVE_QUEUE = 1;
+export const ACTIVE_PLAYLISTS = 2;
+export const ACTIVE_SETTINGS = 3;
+
+
+
 export default function MainScene() {
-  const [active, setActive] = createSignal(0);
   let sidePane;
 
   onMount(() => {
