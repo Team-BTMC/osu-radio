@@ -9,8 +9,8 @@ export type Token = string;
 
 const globalTokens: Set<Token> = new Set();
 
-export function generateToken(forceFirstLetter = false, length = 8, set: Set<string> = undefined): Token {
-    let id;
+export function generateToken(forceFirstLetter = false, length = 8, set?: Set<string>): Token {
+    let id = "";
     const MAX_RETRIES = 10_000;
     let retry = 0;
 
@@ -35,7 +35,7 @@ export function generateToken(forceFirstLetter = false, length = 8, set: Set<str
     return id;
 }
 
-export function freeToken(token: Token, set: Set<Token> = undefined): void {
+export function freeToken(token: Token, set?: Set<Token>): void {
     (set ?? globalTokens).delete(token);
 }
 
@@ -46,7 +46,7 @@ export class TokenNamespace {
         this.set = new Set();
     }
 
-    create(forceFirstLetter: boolean = false, length: number = 8): Token {
+    create(forceFirstLetter = false, length = 8): Token {
         return generateToken(forceFirstLetter, length, this.set);
     }
 
