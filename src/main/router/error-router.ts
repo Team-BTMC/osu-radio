@@ -1,14 +1,9 @@
 import { Router } from '../lib/route-pass/Router';
 import { BrowserWindow } from 'electron';
-// import { TokenNamespace } from '../lib/tungsten/token';
 
 
 
 let waitList: (()=>void)[] = [];
-
-//todo Add IDs to request => during multiple
-
-// const namespace = new TokenNamespace();
 
 Router.respond("error::dismissed", () => {
   for (let i = 0; i < waitList.length; i++) {
