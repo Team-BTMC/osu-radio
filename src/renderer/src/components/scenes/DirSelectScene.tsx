@@ -7,7 +7,7 @@ export default function DirSelectScene() {
   const [dir, setDir] = createSignal("")
 
   const selectDir = async () => {
-    const opt = await window.api.request("dirSelect");
+    const opt = await window.api.request("dir::select");
     if (opt.isNone) {
       return;
     }
@@ -16,7 +16,7 @@ export default function DirSelectScene() {
   }
 
   const submitDir = async () => {
-    await window.api.request("dirSubmit", dir());
+    await window.api.request("dir::submit", dir());
   }
 
   return (

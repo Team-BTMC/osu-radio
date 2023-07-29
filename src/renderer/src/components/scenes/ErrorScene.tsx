@@ -7,15 +7,15 @@ export default function ErrorScene() {
   const [msg, setMsg] = createSignal("");
 
   onMount(() => {
-    window.api.listen("errorSetMessage", setMsg);
+    window.api.listen("error::setMessage", setMsg);
   });
 
   onCleanup(() => {
-    window.api.removeListener("errorSetMessage", setMsg);
+    window.api.removeListener("error::setMessage", setMsg);
   });
 
   const dismissed = () => {
-    window.api.request("errorDismissed");
+    window.api.request("error::dismissed");
   }
 
   return (
