@@ -1,6 +1,7 @@
 import { Component, createSignal, For, JSX, onCleanup, onMount, Setter, Show, splitProps } from 'solid-js';
-import { OmitPropsWithoutReturnType, Optional, RequestAPI } from '../../../@types';
+import { OmitPropsWithoutReturnType, Optional } from '../../../@types';
 import Impulse from '../lib/Impulse';
+import { RequestAPI } from '../../../RequestAPI';
 
 
 

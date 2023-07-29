@@ -1,6 +1,7 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import type { RequestAPI, APIListener, Packet, PacketType } from '../@types';
-import { ListenAPI } from '../@types';
+import type { APIListener, Packet, PacketType } from '../@types';
+import { RequestAPI } from '../RequestAPI';
+import { ListenAPI } from '../ListenAPI';
 
 
 

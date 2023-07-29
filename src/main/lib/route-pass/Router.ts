@@ -1,8 +1,10 @@
-import type { RequestAPI, APIFunction, Packet, ListenAPI } from '../../../@types';
+import type { APIFunction, Packet } from '../../../@types';
 import { BrowserWindow, ipcMain } from 'electron';
 import { TokenNamespace } from '../tungsten/token';
 import { assertNever } from '../tungsten/assertNever';
 import { cratePacket } from './Packet';
+import { RequestAPI } from '../../../RequestAPI';
+import { ListenAPI } from '../../../ListenAPI';
 
 
 
