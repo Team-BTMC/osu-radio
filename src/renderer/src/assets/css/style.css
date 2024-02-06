@@ -78,6 +78,10 @@
   flex-direction: column;
 }
 
+.hint:hover {
+  cursor: help;
+}
+
 
 
 button, .button-like {
@@ -128,7 +132,7 @@ button.icon {
   right: 0;
 }
 
-.dropdown:not([data-disabled]):hover .menu {
+.dropdown:not([data-disabled="true"]):hover .menu {
   display: block;
 }
 
@@ -156,10 +160,6 @@ button.icon {
   align-items: center;
   gap: 16px;
   margin: 8px;
-}
-
-.controls .dropdown .menu-wrapper .selectors svg:hover {
-  cursor: help;
 }
 
 .controls .dropdown .menu-wrapper .selectors .bar.vertical {

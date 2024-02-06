@@ -31,16 +31,16 @@ export default function MainScene() {
   return (
     <div id="main" class="scene">
       <nav>
-        <button class="icon" onClick={() => setActive(0)}>
+        <button class="icon hint" onClick={() => setActive(0)} title={"All songs"}>
           <Fa icon={faMusic} scale={GLOBAL_ICON_SCALE}/>
         </button>
-        <button class="icon" onClick={() => setActive(1)}>
+        <button class="icon hint" onClick={() => setActive(1)} title={"Current queue"}>
           <Fa icon={faHeadphonesSimple} scale={GLOBAL_ICON_SCALE}/>
         </button>
-        <button class="icon" onClick={() => setActive(2)}>
+        <button class="icon hint" onClick={() => setActive(2)} title={"Playlists"}>
           <Fa icon={faListUl} scale={GLOBAL_ICON_SCALE}/>
         </button>
-        <button class="icon" onClick={() => setActive(3)}>
+        <button class="icon hint" onClick={() => setActive(3)} title={"Settings"}>
           <Fa icon={faGear} scale={GLOBAL_ICON_SCALE}/>
         </button>
       </nav>

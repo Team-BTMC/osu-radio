@@ -129,7 +129,7 @@ const TagSelect: Component<TagSelectProps> = props => {
 
   return (
     <div class={"tags"}>
-      <button onClick={openDialog} disabled={props.disabled}>
+      <button onClick={openDialog} disabled={props.disabled} title={"Add/Remove tags for searching"}>
         <Fa icon={faTags} scale={GLOBAL_ICON_SCALE}/>
       </button>
       <dialog ref={dialog} class={"tag-select"}>

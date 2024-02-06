@@ -25,7 +25,12 @@ const TextField: Component<TextFieldProps> = props => {
   });
 
   const onInput = () => {
-    setValue(input.textContent.replaceAll(String.fromCharCode(160), String.fromCharCode(32)) ?? "");
+    setValue(
+      String(input.textContent).replaceAll(
+        String.fromCharCode(160), // non-breaking space
+        String.fromCharCode(32) // breaking space
+      ) ?? ""
+    );
   };
 
   const onPaste = evt => {
@@ -62,7 +67,7 @@ const TextField: Component<TextFieldProps> = props => {
         contenteditable={true}
         spellcheck={false}
       ></div>
-      <button class="icon" onClick={clear}>
+      <button class="icon hint" onClick={clear} title={"Clear text input"}>
         <Fa icon={faXmark} scale={GLOBAL_ICON_SCALE}/>
       </button>
     </div>

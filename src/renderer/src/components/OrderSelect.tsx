@@ -84,7 +84,7 @@ const OrderSelect: Component<OrderSelectProps> = props => {
   return (
     <>
       <Select setValue={setOption} options={orderOptions} disabled={props.disabled}/>
-      <button onClick={switchDirections} disabled={props.disabled}>
+      <button class={"hint"} onClick={switchDirections} disabled={props.disabled} title={direction() === "asc" ? "Ascending" : "Descending"}>
         <Show
           when={selected().type === "string"}
           fallback={

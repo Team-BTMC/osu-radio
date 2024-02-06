@@ -40,7 +40,6 @@ export default function LoadingScene() {
 
       <div class="container">
         <Bar fill={current() / max()}/>
-        {/*<span class="label">{current()}/{max()}</span>*/}
       </div>
 
       <span class="hint">{hint()}</span>
