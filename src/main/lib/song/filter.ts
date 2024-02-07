@@ -22,12 +22,12 @@ export function filter(indexes: SongIndex[], query: SongsQueryPayload): SongInde
     }
 
     for (let i = 0; i < diffs.length; i++) {
-      verifyDiff(s.diffs, diffs[i]);
+      if (!verifyDiff(s.diffs, diffs[i])) {
+        return false;
+      }
     }
 
-    const passed = tagsFilter(s.tags ?? [], query.tags);
-
-    if (!passed) {
+    if (!tagsFilter(s.tags ?? [], query.tags)) {
       return false;
     }
 
