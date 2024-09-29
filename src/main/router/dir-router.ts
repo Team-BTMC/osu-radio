@@ -1,6 +1,7 @@
 import { Router } from '../lib/route-pass/Router';
 import { none, some } from '../lib/rust-like-utils-backend/Optional';
 import { dialog } from 'electron';
+import path from "path";
 
 
 
@@ -17,6 +18,14 @@ Router.respond("dir::select", () => {
   }
 
   return some(path[0]);
+});
+
+Router.respond("dir::autoGetOsuSongsDir", () => {
+  if (process.env.LOCALAPPDATA === undefined) {
+    return none();
+  }
+
+  return some(path.join(process.env.LOCALAPPDATA, "osu!", "Songs"));
 });
 
 Router.respond("dir::submit", (_evt, dir) => {

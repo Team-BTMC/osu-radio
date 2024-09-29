@@ -36,6 +36,7 @@ export type RequestAPI = {
   "queue::shuffle": () => void,
 
   "dir::select": () => Optional<string>,
+  "dir::autoGetOsuSongsDir": () => Optional<string>,
   "dir::submit": (dir: string) => void,
 
   "error::dismissed": () => void,
