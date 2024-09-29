@@ -12,7 +12,10 @@ const settingDropdown: Component<SettingDropdownProps> = props => {
 
   const changeOption = (e: Event) => {
     const option = (e.target as HTMLSelectElement).value;
-    props.options.get(option)?.(); // this ?. magic should work
+    const functionToCall = props.options.get(option);
+    if (functionToCall !== undefined) {
+      functionToCall();
+    }
   }
 
   return (

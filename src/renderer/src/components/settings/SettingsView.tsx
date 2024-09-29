@@ -14,7 +14,7 @@ const settingsView = () => {
     navigator.mediaDevices.enumerateDevices().then(r => {
       for (const device of r) {
         if (device.kind === "audiooutput") {
-          audioMap.set(device.label, ()=>{changeAudioDevice(device.deviceId)});
+          audioMap.set(device.label, () => changeAudioDevice(device.deviceId));
         }
       }
       setAudioDevices(audioMap);

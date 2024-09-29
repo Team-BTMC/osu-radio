@@ -150,7 +150,11 @@ export function pause() {
 
 export async function changeAudioDevice(deviceId: string) {
   await window.api.request("settings::write", "audioDeviceId", deviceId);
-  (player as any).setSinkId(deviceId); // unsafe, but works
+  if ("setSinkId" in player && typeof player.setSinkId === "function") {
+    player.setSinkId(deviceId);
+  } else {
+    console.error("Changing audio devices is not supported in your enviornment.");
+  }
 }
 
 export async function next() {
