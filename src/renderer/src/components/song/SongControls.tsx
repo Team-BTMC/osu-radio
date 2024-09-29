@@ -55,13 +55,13 @@ const SongControls: Component<SongControlsProps> = () => {
   return (
     <div class="controls">
       <div class="wrapper">
+        <button class="icon hint" onClick={() => previous()} disabled={disable()} title={'Play previous'}>
+          <Fa icon={faBackwardStep} scale={GLOBAL_ICON_SCALE}/>
+        </button>
         <button class="icon hint" onClick={() => togglePlay()} disabled={disable()} title={playHint()}>
           <Show when={!isPlaying()} fallback={<Fa icon={faPause} scale={GLOBAL_ICON_SCALE}/>}>
             <Fa icon={faPlay} scale={GLOBAL_ICON_SCALE}/>
           </Show>
-        </button>
-        <button class="icon hint" onClick={() => previous()} disabled={disable()} title={'Play previous'}>
-          <Fa icon={faBackwardStep} scale={GLOBAL_ICON_SCALE}/>
         </button>
         <button class="icon hint" onClick={() => next()} disabled={disable()} title={'Play next'}>
           <Fa icon={faForwardStep} scale={GLOBAL_ICON_SCALE}/>
