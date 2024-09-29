@@ -45,6 +45,15 @@ window.api.request("settings::get", "volume")
     setVolume(v.value);
   });
 
+window.api.request("settings::get", "audioDeviceId")
+  .then(v => {
+    if (v.isNone) {
+      return;
+    }
+
+    changeAudioDevice(v.value);
+  });
+
 
 
 const [localVolume, setLocalVolume] = createSignal<ZeroToOne>(0.5);
@@ -137,6 +146,11 @@ export async function play(): Promise<void> {
 export function pause() {
   setIsPlaying(false);
   player.pause();
+}
+
+export async function changeAudioDevice(deviceId: string) {
+  await window.api.request("settings::write", "audioDeviceId", deviceId);
+  (player as any).setSinkId(deviceId); // unsafe, but works
 }
 
 export async function next() {

@@ -29,14 +29,10 @@ const Bar: Component<BarProps> = props => {
       bar.style.setProperty("--fill-per", `${clamp(0, 1, f) * 100}%`);
 
       if (props.setFill !== undefined) {
-        props.setFill(clampFill(f));
+        props.setFill(clamp(0, 1, f));
       }
     });
   });
-
-  const clampFill = (fill: number) => {
-    return clamp(0, 1, fill);
-  }
 
   const calculateFill = (evt: PointerEvent) => {
     if (props.disabled === true) {
@@ -46,11 +42,11 @@ const Bar: Component<BarProps> = props => {
     const rect: DOMRect = bar.getBoundingClientRect();
 
     if (isVertical(props.alignment)) {
-      setFill(clampFill((-(evt.clientY - rect.top) / rect.height) + 1));
+      setFill(clamp(0, 1, (-(evt.clientY - rect.top) / rect.height) + 1));
       return;
     }
 
-    setFill(clampFill((evt.clientX - rect.left) / rect.width));
+    setFill(clamp(0, 1, (evt.clientX - rect.left) / rect.width));
   }
 
   const onDown = (evt: PointerEvent) => {
