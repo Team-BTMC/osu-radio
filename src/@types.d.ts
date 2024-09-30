@@ -61,6 +61,7 @@ export type Song = {
   audio: ResourceID,
   bg?: ResourceID,
 
+  osuFile: string,
   dateAdded: string,
 
   title: string,

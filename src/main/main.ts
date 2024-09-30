@@ -51,7 +51,7 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
     const dir = await dirSubmit();
 
     await Router.dispatch(mainWindow, "changeScene", "loading");
-    await Router.dispatch(mainWindow, "loadingScene::setTitle", "Importing songs from osu! Songs directory");
+    await Router.dispatch(mainWindow, "loadingScene::setTitle", "Importing songs from osu!");
 
     const [update, cancelUpdate] = throttle(async (i: number, total: number, file: string) => {
       await Router.dispatch(mainWindow, "loadingScene::update", {
@@ -61,7 +61,7 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
       });
     }, 25);
 
-    tables = await OsuParser.parseDir(dir, update);
+    tables = await OsuParser.parseDb(dir, update);
     cancelUpdate();
 
     if (tables.isError) {
