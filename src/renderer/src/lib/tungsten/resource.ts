@@ -9,7 +9,7 @@ export async function getResourcePath(id: ResourceID | undefined): Promise<strin
     return "";
   }
 
-  return result.value
+  return new URL(result.value).href;
 }
 
 

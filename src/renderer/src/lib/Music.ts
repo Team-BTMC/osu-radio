@@ -15,7 +15,7 @@ const player = new Audio();
 
 
 
-const [media, setMedia] = createSignal<string>();
+const [media, setMedia] = createSignal<URL>();
 
 
 
@@ -86,7 +86,7 @@ export { isPlaying }
 
 
 
-async function getCurrent(): Promise<{ song: Song, media: string } | undefined> {
+async function getCurrent(): Promise<{ song: Song, media: URL } | undefined> {
   const song = await window.api.request("queue::current");
 
   if (song.isNone) {
@@ -99,9 +99,11 @@ async function getCurrent(): Promise<{ song: Song, media: string } | undefined> 
     return;
   }
 
+  const media = new URL(resource.value);
+
   return {
     song: song.value,
-    media: resource.value
+    media
   };
 }
 
@@ -120,8 +122,8 @@ export async function play(): Promise<void> {
 
   const m = media();
 
-  if (m !== undefined && player.src !== m) {
-    player.src = m;
+  if (m !== undefined && player.src !== m.href) {
+    player.src = m.href;
   }
 
   player.volume = calculateVolume();
@@ -146,7 +148,7 @@ export async function next() {
     return;
   }
 
-  player.src = current.media;
+  player.src = current.media.href;
   setMedia(current.media);
 
   if (isPlaying() === true) {
@@ -165,7 +167,7 @@ export async function previous() {
     return;
   }
 
-  player.src = current.media;
+  player.src = current.media.href;
   setMedia(current.media);
 
   if (isPlaying() === true) {
@@ -227,7 +229,7 @@ createEffect(() => {
 
 
 
-const [writeVolume,] = delay(async (volume: number) => {
+const [writeVolume, ] = delay(async (volume: number) => {
   await window.api.request("settings::write", "volume", volume);
 }, 200);
 createEffect(async () => {
@@ -262,7 +264,7 @@ window.api.listen("queue::songChanged", async (s) => {
     return;
   }
 
-  setMedia(resource.value);
+  setMedia(new URL(resource.value));
   setSong(s);
   await play();
 });
@@ -270,7 +272,7 @@ window.api.listen("queue::songChanged", async (s) => {
 
 
 player.addEventListener("ended", async () => {
-  await next();
+    await next();
 });
 
 const OFFSET = 0;
@@ -305,5 +307,5 @@ function currentBPM(offset: number, changes: number[][]): Optional<number> {
         }
     }
 
-  return some(msToBPM(changes[changes.length - 1][BPM]));
+    return some(msToBPM(changes[changes.length - 1][BPM]));
 }
