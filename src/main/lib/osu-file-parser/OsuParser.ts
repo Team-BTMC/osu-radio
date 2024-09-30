@@ -1,68 +1,64 @@
-import { AudioSource, ImageSource, ResourceID, Result, Song } from '../../../@types';
-import readline from 'readline';
-import path from 'path';
-import { fail, ok } from '../rust-like-utils-backend/Result';
-import { OsuFile } from './OsuFile';
-import { access, getFiles, getSubDirs } from '../fs-promises';
-import fs from 'graceful-fs';
-import { assertNever } from '../tungsten/assertNever';
-
-
+import fs from "graceful-fs";
+import os from "os";
+import readline from "readline";
+import { AudioSource, ImageSource, ResourceID, Result, Song } from "../../../@types";
+import { access } from "../fs-promises";
+import { fail, ok } from "../rust-like-utils-backend/Result";
+import { assertNever } from "../tungsten/assertNever";
+import { OsuFile } from "./OsuFile";
 
 const bgFileNameRegex = /.*"(?<!Video.*)(.*)".*/;
 const beatmapSetIDRegex = /([0-9]+) .*/;
 
-
-
-type FileState = 'Initial'
-  | 'NextState'
-  | 'General'
-  | 'Editor'
-  | 'Metadata'
-  | 'Difficulty'
-  | 'Events'
-  | 'TimingPoints'
-  | 'Colours'
-  | 'HitObjects';
+type FileState =
+  | "Initial"
+  | "NextState"
+  | "General"
+  | "Editor"
+  | "Metadata"
+  | "Difficulty"
+  | "Events"
+  | "TimingPoints"
+  | "Colours"
+  | "HitObjects";
 
 const OFFSET = 0;
 const BPM = 1;
 
-
-
 type Table<T> = Map<ResourceID, T>;
 
-export type DirParseResult = Promise<Result<[Table<Song>, Table<AudioSource>, Table<ImageSource>], string>>
-
+export type DirParseResult = Promise<
+  Result<[Table<Song>, Table<AudioSource>, Table<ImageSource>], string>
+>;
 
 // Overriding Buffer prototype because I'm lazy.
 // Should probably get moved to another file, or make a wrapper instead.
 
-Buffer.prototype.read_bytes = function(n) {
+Buffer.prototype.read_bytes = function (n) {
   let out = this.slice(this.pos, this.pos + n);
   this.pos += n;
   return out;
-}
+};
 
-Buffer.prototype.read_string = function() {
+Buffer.prototype.read_string = function () {
   let empty_check = this.read_u8();
-  if(empty_check == 0) return '';
+  if (empty_check == 0) return "";
 
   let len = this.read_uleb128();
-  return this.read_bytes(len).toString('utf-8');
-}
+  return this.read_bytes(len).toString("utf-8");
+};
 
-Buffer.prototype.read_hash = function() {
+Buffer.prototype.read_hash = function () {
   let empty_check = this.read_u8();
-  if(empty_check == 0) return '00000000000000000000000000000000';
+  if (empty_check == 0) return "00000000000000000000000000000000";
 
   let len = this.read_uleb128();
-  if(len > 32) len = 32;
+  if (len > 32) len = 32;
 
-  return this.read_bytes(len).toString('utf-8');
-}
+  return this.read_bytes(len).toString("utf-8");
+};
 
-Buffer.prototype.read_uleb128 = function() {
+Buffer.prototype.read_uleb128 = function () {
   let result = 0;
   let shift = 0;
   let byte = 0;
@@ -71,51 +67,75 @@ Buffer.prototype.read_uleb128 = function() {
     byte = this.read_u8();
     result |= (byte & 0x7f) << shift;
     shift += 7;
-  } while(byte & 0x80);
+  } while (byte & 0x80);
 
   return result;
-}
+};
 
-Buffer.prototype.read_f64 = function() {
+Buffer.prototype.read_f64 = function () {
   let bytes = this.read_bytes(8);
   return bytes.readDoubleLE(0);
-}
+};
 
-Buffer.prototype.read_f32 = function() {
+Buffer.prototype.read_f32 = function () {
   let bytes = this.read_bytes(4);
   return bytes.readFloatLE(0);
-}
+};
 
-Buffer.prototype.read_u64 = function() {
+Buffer.prototype.read_u64 = function () {
   let low = this.read_u32();
   let high = this.read_u32();
-  return high << 32 | low;
-}
+  return (high << 32) | low;
+};
 
-Buffer.prototype.read_u32 = function() {
+Buffer.prototype.read_u32 = function () {
   let bytes = this.read_bytes(4);
   return bytes.readUInt32LE(0);
-}
+};
 
-Buffer.prototype.read_u16 = function() {
+Buffer.prototype.read_u16 = function () {
   let bytes = this.read_bytes(2);
   return bytes.readUInt16LE(0);
-}
+};
 
-Buffer.prototype.read_u8 = function() {
-  return this.read_bytes(1)[0] & 0xFF;
-}
-
+Buffer.prototype.read_u8 = function () {
+  return this.read_bytes(1)[0] & 0xff;
+};
 
 export class OsuParser {
-  static async parseDb(dbpath: string, update?: (i: number, total: number, file: string) => any): DirParseResult {
+  static async parseDb(
+    dbpath: string,
+    update?: (i: number, total: number, file: string) => any
+  ): DirParseResult {
     let db;
+    let songsFolderPath = dbpath + "/Songs";
+
     try {
       // NOTE: This isn't readFile from fs-promises.ts.
       //       We want to read binary data here, not utf-8 encoded data!
-      db = await fs.promises.readFile(dbpath + '/osu!.db');
+      db = await fs.promises.readFile(dbpath + "/osu!.db");
     } catch (err) {
-      return fail('Failed to read osu!.db.');
+      return fail("Failed to read osu!.db.");
+    }
+
+    // Scan for cfg file to check for a custom songs folder path
+    try {
+      const username = os.userInfo().username;
+      const cfgFile = await fs.promises.readFile(`${dbpath}/osu!.${username}.cfg`, "utf-8");
+      const lines = cfgFile.split("\n");
+      console.log("cfg file found");
+
+      for (const line of lines) {
+        if (line.includes("BeatmapDirectory")) {
+          const customPath = line.split("=")[1].trim();
+          if (customPath !== "Songs") {
+            songsFolderPath = customPath;
+            console.log(`Custom songs folder path found: ${songsFolderPath}`);
+          }
+        }
+      }
+    } catch (err) {
+      console.error(`Either no cfg file was found or there was an error reading it: ${err}`);
     }
 
     const songTable = new Map<ResourceID, Song>();
@@ -129,9 +149,9 @@ export class OsuParser {
     db.pos = 0;
 
     let db_version = db.read_u32();
-    console.debug('db version:', db_version);
-    if(db_version < 20170222) {
-      return fail('osu!.db is too old, please update the game.');
+    console.debug("db version:", db_version);
+    if (db_version < 20170222) {
+      return fail("osu!.db is too old, please update the game.");
     }
 
     db.read_u32(); // folder count
@@ -139,14 +159,14 @@ export class OsuParser {
     db.read_u64(); // timestamp
 
     let player_name = db.read_string().trim();
-    console.debug('player name:', player_name);
+    console.debug("player name:", player_name);
 
     let nb_beatmaps = db.read_u32();
-    console.debug('nb beatmaps:', nb_beatmaps);
+    console.debug("nb beatmaps:", nb_beatmaps);
 
-    let last_audio_filepath = '';
-    for(let i = 0; i < nb_beatmaps; i++) {
-      if(db_version < 20191107) {
+    let last_audio_filepath = "";
+    for (let i = 0; i < nb_beatmaps; i++) {
+      if (db_version < 20191107) {
         // https://osu.ppy.sh/home/changelog/stable40/20191107.2
         db.read_u32();
       }
@@ -176,7 +196,7 @@ export class OsuParser {
       // tms_a = (tms - 621355968000000000) / 10000000
       // tms_b = (tms - 504911232000000000)
       let last_modification_time = db.read_u64();
-      song.dateAdded = (new Date(last_modification_time)).toISOString();
+      song.dateAdded = new Date(last_modification_time).toISOString();
 
       db.read_f32(); // AR
       db.read_f32(); // CS
@@ -186,7 +206,7 @@ export class OsuParser {
 
       // std
       let nb_star_ratings = db.read_u32();
-      for(let s = 0; s < nb_star_ratings; s++) {
+      for (let s = 0; s < nb_star_ratings; s++) {
         db.read_u8();
         db.read_u32(); // mod flags
         db.read_u8();
@@ -195,7 +215,7 @@ export class OsuParser {
 
       // taiko
       nb_star_ratings = db.read_u32();
-      for(let s = 0; s < nb_star_ratings; s++) {
+      for (let s = 0; s < nb_star_ratings; s++) {
         db.read_u8();
         db.read_u32(); // mod flags
         db.read_u8();
@@ -204,7 +224,7 @@ export class OsuParser {
 
       // ctb
       nb_star_ratings = db.read_u32();
-      for(let s = 0; s < nb_star_ratings; s++) {
+      for (let s = 0; s < nb_star_ratings; s++) {
         db.read_u8();
         db.read_u32(); // mod flags
         db.read_u8();
@@ -213,7 +233,7 @@ export class OsuParser {
 
       // mania
       nb_star_ratings = db.read_u32();
-      for(let s = 0; s < nb_star_ratings; s++) {
+      for (let s = 0; s < nb_star_ratings; s++) {
         db.read_u8();
         db.read_u32(); // mod flags
         db.read_u8();
@@ -226,12 +246,12 @@ export class OsuParser {
 
       let nb_timing_points = db.read_u32();
       song.bpm = [];
-      for(let t = 0; t < nb_timing_points; t++) {
+      for (let t = 0; t < nb_timing_points; t++) {
         let ms_per_beat = db.read_f64();
         let offset = db.read_f64();
         let timing_change = !!db.read_u8();
 
-        if(ms_per_beat > 0) {
+        if (ms_per_beat > 0) {
           let bpm = Math.min(60000.0 / ms_per_beat, 9001.0);
           song.bpm.push([offset, bpm]);
         }
@@ -269,18 +289,20 @@ export class OsuParser {
       db.read_u32(); // last edit time
       db.read_u8(); // mania scroll speed
 
-      song.osuFile = dbpath + '/' + folder + '/' + osu_filename;
-      song.audio = dbpath + '/' + folder + '/' + audio_filename;
-      if(song.audio != last_audio_filepath) {
+      song.osuFile = songsFolderPath + "/" + folder + "/" + osu_filename;
+      song.audio = songsFolderPath + "/" + folder + "/" + audio_filename;
+      console.log(song.osuFile);
+      console.log(song.audio);
+      if (song.audio != last_audio_filepath) {
         songTable.set(song.audio, song);
         audioTable.set(song.audio, {
           songID: song.audio,
           path: song.audio,
-          ctime: last_modification_time,
+          ctime: last_modification_time
         });
       }
 
-      if(update) {
+      if (update) {
         update(i + 1, nb_beatmaps, song.title);
       }
     }
@@ -289,7 +311,7 @@ export class OsuParser {
   }
 
   static async parseFile(file: string): Promise<Result<OsuFile, string>> {
-    if (!await access(file, fs.constants.R_OK)) {
+    if (!(await access(file, fs.constants.R_OK))) {
       return fail("File does not exists.");
     }
 
@@ -299,45 +321,45 @@ export class OsuParser {
       crlfDelay: Infinity
     });
 
-    let state: FileState = 'Initial';
+    let state: FileState = "Initial";
     const props = new Map<string, string>();
     const bpm: number[][] = [];
 
-    lines : for await (const line of fileLines) {
+    lines: for await (const line of fileLines) {
       const trimmed = line.trim();
 
-      if (trimmed === '') {
+      if (trimmed === "") {
         continue;
       }
 
-      if (trimmed[0] === '[' && trimmed[trimmed.length - 1] === ']') {
+      if (trimmed[0] === "[" && trimmed[trimmed.length - 1] === "]") {
         state = trimmed.substring(1, trimmed.length - 1) as FileState;
         continue;
       }
 
       switch (state) {
-        case 'HitObjects':
+        case "HitObjects":
           break lines;
 
-        case 'NextState':
-        case 'Editor':
-        case 'Difficulty':
-        case 'Colours':
-        case 'Initial':
+        case "NextState":
+        case "Editor":
+        case "Difficulty":
+        case "Colours":
+        case "Initial":
           continue;
 
-        case 'Events': {
+        case "Events": {
           const bg = bgFileNameRegex.exec(trimmed);
           if (bg !== null) {
             props.set("bgSrc", bg[1]);
-            state = 'NextState';
+            state = "NextState";
           }
 
           break;
         }
 
-        case 'TimingPoints': {
-          const timingPoint = trimmed.split(',').map(x => Number(x));
+        case "TimingPoints": {
+          const timingPoint = trimmed.split(",").map((x) => Number(x));
 
           if (timingPoint.length === 2) {
             bpm.push(timingPoint);
@@ -356,8 +378,8 @@ export class OsuParser {
           break;
         }
 
-        case 'General':
-        case 'Metadata': {
+        case "General":
+        case "Metadata": {
           const [prop, value] = this.#splitProp(trimmed);
           if (prop === undefined) {
             continue;
@@ -367,7 +389,8 @@ export class OsuParser {
           break;
         }
 
-        default: assertNever(state);
+        default:
+          assertNever(state);
       }
     }
 
@@ -375,9 +398,7 @@ export class OsuParser {
     fileLines.close();
 
     const result = beatmapSetIDRegex.exec(file);
-    const beatmapSetID = result !== null
-      ? Number(result[1])
-      : 0;
+    const beatmapSetID = result !== null ? Number(result[1]) : 0;
 
     return ok(new OsuFile(file, props, bpm, beatmapSetID));
   }
