@@ -9,7 +9,7 @@ export class State<T extends {}> {
     return this;
   }
 
-  get<K extends keyof T>(key: K): T[K] | undefined {
+  get<K extends keyof T>(key: K): T[keyof T] | undefined {
     return this.schema.get(key);
   }
 }

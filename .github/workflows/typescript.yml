@@ -19,4 +19,6 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Run TypeScript compiler
-        run: npm exec tsc -- --noEmit
+        run: npm run typecheck
+      - name: Run Eslint checks
+        run: npm run lint

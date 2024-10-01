@@ -59,7 +59,6 @@ export function createDefaultSong(): Song {
     path: "",
     audio: "",
     bg: "",
-    dir: "",
 
     artist: "Artist",
     title: "Title",

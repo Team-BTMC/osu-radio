@@ -2,23 +2,13 @@ import { Accessor, Component, createSignal } from 'solid-js';
 import Fa from 'solid-fa';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { GLOBAL_ICON_SCALE } from '../../App';
-import { Optional } from '../../../../@types';
+import { NoticeType, Optional } from '../../../../@types';
 import { none, orDefault, some } from '../../lib/rust-like-utils-client/Optional';
 import { hideNotice } from './NoticeContainer';
 import "../../assets/css/notice/notice.css";
 import Gradient from '../Gradient';
 import Impulse from '../../lib/Impulse';
 
-
-
-export type NoticeType = {
-  id?: string,
-  class: "notice" | "warning" | "error",
-  title: string,
-  content: string,
-  timeoutMS?: number,
-  active?: boolean,
-}
 
 type NoticeProps = {
   notice: NoticeType,
