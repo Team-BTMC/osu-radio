@@ -26,6 +26,7 @@ npm run start
 # THE VISION
 
 Technologies:
+
 - Electron
 - Solid js
 - Typescript
@@ -35,8 +36,9 @@ Staying on Electron because it's fine-ish for the time being. The UI will stay w
 Alpha release (features/issues)
 
 My ideas (some are present):
+
 - Desktop (only); Windows; supporting Linux/Mac is not the priority right now
-- osu! stable release only; supporting osu! lazer is not priority right now 
+- osu! stable release only; supporting osu! lazer is not priority right now
 - Better initial importing of beat maps (faster, using less memory)
 - Proper code documentation
 - Play songs randomly ✅
@@ -52,6 +54,7 @@ My ideas (some are present):
 - Background colors (red and blue) should reflect beat map background
 
 Community ideas:
+
 - Change to Torus font to match osu!
 - Remove global/local volume for normalization of volume
 - Stream widget (?)
