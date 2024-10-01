@@ -32,7 +32,7 @@ Router.respond("resource::getMediaSessionImage", async (_evt, bgPath) => {
     return none();
   }
   const mimeType = `image/${path.extname(pathToBg).slice(1)}`;
-  const buffer = await sharp(pathToBg).resize(400, 400).toBuffer();
+  const buffer = await sharp(pathToBg).resize(512, 512).toBuffer();
 
   return some(`data:${mimeType};base64,${buffer.toString("base64")}`);
 });
