@@ -29,6 +29,7 @@ let lastPayload: QueueCreatePayload | undefined;
 
 Router.respond("queue::create", async (_evt, payload) => {
   if (comparePayload(payload, lastPayload)) {
+    // Payload is practically same. Find start song and play queue from there
     const newIndex = queue.findIndex(s => s.path === payload.startSong);
 
     if (newIndex === -1 || newIndex === index) {
@@ -43,14 +44,22 @@ Router.respond("queue::create", async (_evt, payload) => {
   }
 
   lastPayload = payload;
+  /**
+   * Create list of {@link SongIndex} from current {@link QueueView}. This list is filtered via payload
+   * specifications. Afterward it is mapped back to {@link Song} object
+   */
   queue = Array.from(indexMapper(filter(getIndexes(payload.view), payload)));
 
+  /**
+   * Create ordering function from order literal {@link QueueCreatePayload}
+   */
   const ordering = order(payload.order);
 
   if (!ordering.isError) {
     queue.sort(ordering.value);
   }
 
+  // Set playing index
   const songIndex = queue.findIndex(s => s.path === payload.startSong);
 
   if (songIndex !== -1) {
@@ -158,6 +167,7 @@ function duration(startIndex = 0): Result<number, string> {
 
 
 Router.respond("queue::shuffle", async () => {
+  // Shuffle whole queue except currently playing song. Its position will be first in shuffled queue
   if (queue === undefined) {
     return;
   }
@@ -191,6 +201,7 @@ Router.respond("queue::shuffle", async () => {
 
 
 Router.respond("queue::place", (_evt, what, after) => {
+  // Find index of subject
   const whatIndex = queue.findIndex(s => s.path === what);
 
   if (whatIndex === -1) {
@@ -201,14 +212,17 @@ Router.respond("queue::place", (_evt, what, after) => {
   queue.splice(whatIndex, 1);
 
   if (after === undefined) {
+    // After is referring to the head of the queue. Place subject at the very start
     queue.unshift(s);
 
     if (whatIndex === index) {
+      // Update currently playing index
       index = 0;
       return;
     }
 
     if (whatIndex > index) {
+      // Subject was moved before currently playing thus currently playing must be increased
       index++;
     }
 
@@ -218,6 +232,7 @@ Router.respond("queue::place", (_evt, what, after) => {
   const afterIndex = queue.findIndex(s => s.path === after);
 
   if (afterIndex === -1) {
+    // After index was not found... put subject back
     queue.splice(whatIndex, 0, s);
     return;
   }
@@ -225,17 +240,18 @@ Router.respond("queue::place", (_evt, what, after) => {
   queue.splice(afterIndex + 1, 0, s);
 
   if (whatIndex === index) {
+    // Subject was currently playing before move operation. Update currently playing index
     index = afterIndex + 1;
     return;
   }
 
   if (whatIndex > index && afterIndex < index) {
-    // moved song that was after currently playing song before currently playing
+    // Moved subject that was after currently playing before currently playing -> increment
     index++;
   }
 
   if (whatIndex < index && afterIndex + 1 >= index) {
-    // moved song that was before currently playing song after currently playing
+    // Moved subject that was before currently playing after currently playing -> decrement
     index--;
   }
 });
@@ -243,6 +259,7 @@ Router.respond("queue::place", (_evt, what, after) => {
 
 
 Router.respond("queue::play", async (_evt, song) => {
+  // Point currently playing index to given song
   const newIndex = queue.findIndex(s => s.path === song);
 
   if (newIndex === -1 || newIndex === index) {
@@ -276,6 +293,7 @@ Router.respond("queue::playNext", async (_evt, song) => {
 
     queue.splice(index + 1, 0, s.value);
   } else {
+    // Song is in queue. Move it after currently playing
     const s = queue[songIndex];
     queue.splice(songIndex, 1);
     queue.splice(index + 1, 0, s);
@@ -296,8 +314,6 @@ Router.respond("queue::removeSong", async (_evt, what) => {
     return;
   }
 
-  console.log(index);
-
   const whatIndex = queue.findIndex(s => s.path === what);
 
   if (whatIndex === -1) {
@@ -307,8 +323,6 @@ Router.respond("queue::removeSong", async (_evt, what) => {
   if (whatIndex < index) {
     index--;
   }
-
-  console.log(what, whatIndex, index);
 
   queue.splice(whatIndex, 1);
 
@@ -377,6 +391,11 @@ Router.respond("query::queue::init", () => {
 });
 
 Router.respond('query::queue', (_evt, request) => {
+  // Queue view may be rendered only around currently playing. When user scrolls up and there is content that could be
+  // loaded and prepended the request.direction is "up". If user scrolls down the request.direction is "down". For given
+  // request create new page of size BUFFER_SIZE and send it to client to. This way user will load the whole list
+  // incrementally, and it will reduce initial load lag
+
   if (queue === undefined || request.index < 0 || request.index > Math.floor(queue.length / BUFFER_SIZE)) {
     return none();
   }

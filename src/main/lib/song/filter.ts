@@ -8,10 +8,13 @@ export function filter(indexes: SongIndex[], query: SongsQueryPayload): SongInde
     return indexes;
   }
 
+  // Unnamed may be valid words (DragonForce, Freedom, Dive) or parts of difficulty name ([Endless, [YEP])
+  // All words are treated as parts of title
   const [title, diffs] = parseUnnamed(query.searchQuery.unnamed);
 
   return indexes.filter(s => {
     if (query.searchQuery === undefined) {
+      // Default pass
       return true;
     }
 
@@ -58,6 +61,8 @@ export function filter(indexes: SongIndex[], query: SongsQueryPayload): SongInde
   });
 }
 
+
+
 function parseUnnamed(unnamed: string[]): [string, string[]] {
   let titleBuffer = "";
   const diffsBuffer: string[] = [];
@@ -80,6 +85,18 @@ function parseUnnamed(unnamed: string[]): [string, string[]] {
   return [titleBuffer, diffsBuffer];
 }
 
+
+
+/**
+ * Pattern may be spelled incorrectly but still satisfy the filtering. The letters must be in correct order to pass
+ *
+ * Example:
+ *
+ * `pattern = sin` and `str = string` is valid because `SIN` is in `StrINg`
+ *
+ * @param pattern
+ * @param str
+ */
 function compare(pattern: string, str: string) {
   pattern = pattern.toLowerCase().replaceAll("_", ""); // underscores are ignored
 
@@ -195,6 +212,7 @@ function tagsFilter(indexTags: string[], tags: Tag[]): boolean {
   for (let i = 0; i < tags.length; i++) {
     const includesTag = indexTags.includes(tags[i].name);
 
+    // isSpecial is wrong name for the variable and should be renamed... It means isExcluded
     if (tags[i].isSpecial === true) {
       if (includesTag) {
         return false;

@@ -15,6 +15,7 @@ Router.respond("resource::getPath", (_evt, id) => {
     return fail("Could not provide absolute path because osu! Songs folder is undefined.");
   }
 
+  // todo User may have spaces in osuDir if they are not using default path. Ensure that the whole path is valid URL
   return ok(osuDir.value + "/" + encodeFile(id));
 });
 
