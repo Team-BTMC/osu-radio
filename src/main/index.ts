@@ -35,13 +35,14 @@ async function createWindow() {
   });
 
   // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
+  // Load the remote URL for hot reloading or the local html file for production.
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     await window.loadURL(process.env['ELECTRON_RENDERER_URL']);
   } else {
     await window.loadFile(join(__dirname, '../renderer/index.html'));
   }
 
+  // Launch main app logic
   await main(window)
     .catch(error => {
       if (error === null || error === undefined) {

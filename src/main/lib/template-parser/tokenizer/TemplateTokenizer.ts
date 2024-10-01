@@ -1,3 +1,8 @@
+// Template follows tokenizer-parser architecture
+// String is converted to tokens and parser validates grammar of token sequence. From this sequence a
+// "list of instructions" is created. Using the "list of instructions" together with data source will produce a dynamic
+// string templating. Similar architecture is used to interpret search queries
+
 export const Tokens = {
   Illegal: "ILLEGAL",
   EOF: "EOF",

@@ -3,7 +3,9 @@ import { Storage } from './lib/storage/Storage';
 import { Router } from './lib/route-pass/Router';
 import { showError } from './router/error-router';
 import { dirSubmit } from './router/dir-router';
+
 import "./router/import";
+
 import { DirParseResult, OsuParser } from './lib/osu-file-parser/OsuParser';
 import { orDefault } from './lib/rust-like-utils-backend/Optional';
 import { throttle } from './lib/throttle';
@@ -19,9 +21,12 @@ export async function main(window: BrowserWindow) {
   mainWindow = window;
 
   const settings = Storage.getTable("settings");
-  // settings.delete("osuSongsDir");
 
-  if (settings.get("osuSongsDir").isNone) {
+  // Deleting osuSongsDir will force initial beatmap import
+  // settings.delete("osuSongsDir");
+  const osuSongsDir = settings.get("osuSongsDir");
+
+  if (osuSongsDir.isNone) {
     await configureOsuDir(window);
   } else {
     //todo check for updates in song files
@@ -42,6 +47,9 @@ const SONGS = 0;
 const AUDIO = 1;
 const IMAGES = 2;
 
+// Update client progress bar 50 times a second
+const UPDATE_DELAY_MS = 1_000 / 50;
+
 async function configureOsuDir(mainWindow: BrowserWindow) {
   let tables: Awaited<DirParseResult>;
   const settings = Storage.getTable("settings");
@@ -53,62 +61,77 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
     await Router.dispatch(mainWindow, "changeScene", "loading");
     await Router.dispatch(mainWindow, "loadingScene::setTitle", "Importing songs from osu! Songs directory");
 
+    // Wrap client update function to update only every UPDATE_DELAY_MS
     const [update, cancelUpdate] = throttle(async (i: number, total: number, file: string) => {
       await Router.dispatch(mainWindow, "loadingScene::update", {
         current: i,
         max: total,
         hint: file,
       });
-    }, 25);
+    }, UPDATE_DELAY_MS);
 
     tables = await OsuParser.parseDir(dir, update);
+    // Cancel ongoing throttled update, so it does not look bad when it finishes and afterward the update overwrites
+    // finished state
     cancelUpdate();
 
     if (tables.isError) {
       await showError(mainWindow, tables.error);
+      // Try again
       continue;
     }
 
     if (tables.value[SONGS].size === 0) {
-      await showError(mainWindow, `No songs found in folder: ${orDefault(settings.get("osuSongsDir"), "[No folder]")}. Please make sure this is the directory where you have all your songs saved.`);
+      await showError(mainWindow, `No songs found in folder: ${dir}. Please make sure this is the directory where you have all your songs saved.`);
+      // Try again
       continue;
     }
 
+    // All went smoothly. Save osu directory and continue with import procedure
     settings.write("osuSongsDir", dir);
     break;
   } while(true);
 
+  // Show finished state
   await Router.dispatch(mainWindow, "loadingScene::update", {
     max: tables.value[SONGS].size,
     current: tables.value[SONGS].size,
     hint: `Imported total of ${tables.value[SONGS].size} songs`
   });
 
+  // Save created tables
   const songs = Object.fromEntries(tables.value[SONGS]);
   Storage.setTable("songs", songs);
   Storage.setTable("audio", Object.fromEntries(tables.value[AUDIO]));
   Storage.setTable("images", Object.fromEntries(tables.value[IMAGES]));
 
+  // Start indexing songs
   const total = Object.values(songs).length;
   await Router.dispatch(mainWindow, "loadingScene::setTitle", "Indexing songs");
 
+  // Wrap client update function to update only every UPDATE_DELAY_MS
   const [update, cancelUpdate] = throttle(async (i: number, song: string) => {
     await Router.dispatch(mainWindow, "loadingScene::update", {
       current: i,
       hint: song,
       max: total
     });
-  }, 25);
+  }, UPDATE_DELAY_MS);
 
   const [indexes, tags] = collectTagsAndIndexSongs(songs, update);
+  // Cancel ongoing throttled update, so it does not look bad when it finishes and afterward the update overwrites
+  // finished state
   cancelUpdate();
 
   const system = Storage.getTable("system");
+
+  // Write batch of updates to system table
   system.hold();
   system.write("indexes", indexes);
   system.write("allTags", Object.fromEntries(tags));
   system.writeBack();
 
+  // Display finished state
   await Router.dispatch(mainWindow, "loadingScene::update", {
     current: total,
     hint: "Indexed " + total + " songs",

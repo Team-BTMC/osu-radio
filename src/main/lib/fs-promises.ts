@@ -12,7 +12,7 @@ export function access(path, mode: number | undefined = undefined): Promise<bool
 
 
 
-export function getSubDirs(dirPath): Promise<string[]> {
+export function getSubDirs(dirPath: string): Promise<string[]> {
   return new Promise((resolve, reject) => {
     fs.opendir(dirPath, { encoding: "utf8" }, async (err, dir) => {
       if (err !== null) {
@@ -35,7 +35,7 @@ export function getSubDirs(dirPath): Promise<string[]> {
 
 
 
-export function getFiles(dirPath, ext?): Promise<string[]> {
+export function getFiles(dirPath: string, ext?: string): Promise<string[]> {
   return new Promise((resolve, reject) => {
     fs.opendir(dirPath, { encoding: "utf8" }, async (err, dir) => {
       if (err !== null) {
@@ -63,7 +63,7 @@ export function getFiles(dirPath, ext?): Promise<string[]> {
 
 
 
-export function stat(path): Promise<fs.Stats> {
+export function stat(path: string): Promise<fs.Stats> {
   return new Promise((resolve, reject) => {
     fs.stat(path, (err, stats) => {
       if (err !== null) {
