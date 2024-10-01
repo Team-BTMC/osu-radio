@@ -10,6 +10,7 @@ export function averageBPM(bpm: number[][], durationMS: number): number {
     return bpm[0][1];
   }
 
+  // Calculate bpm that is used for the longest duration and return it
   const lookup = new Map<number, [number, number]>();
   let highestEntry: [number, number] = [-Infinity, NaN];
 
