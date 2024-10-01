@@ -54,4 +54,6 @@ export type RequestAPI = {
   "query::queue": (request: InfiniteScrollerRequest) => InfiniteScrollerResponse<Song>,
 
   "save::localVolume": (volume: number, song: ResourceID) => void,
+
+  "dev::storeLocation": () => string,
 }
