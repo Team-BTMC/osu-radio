@@ -1,4 +1,4 @@
-name: TypeScript Compile Check
+name: Static Analysis
 on:
   push:
     branches:
@@ -20,5 +20,5 @@ jobs:
         run: npm install
       - name: Run TypeScript compiler
         run: npm run typecheck
-      - name: Run Eslint checks
-        run: npm run lint
+      - name: Run Eslint check
+        run: npm run lint:check
