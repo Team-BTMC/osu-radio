@@ -30,6 +30,8 @@ window.api.request("settings::get", "volume").then((v) => {
   setVolume(v.value);
 });
 
+let bgPath;
+
 const [localVolume, setLocalVolume] = createSignal<ZeroToOne>(0.5);
 export { localVolume, setLocalVolume };
 
@@ -130,48 +132,33 @@ export async function next() {
   }
 
   setSong(current.song);
-  await setMediaSessionMetadata();
-  setMediaSessionPosition();
+  await setMediaSession(current.song);
 }
 
 export async function setMediaSession(song: Song) {
-  const bgPath = await window.api.request("resource::getMediaSessionImage", song.bg!);
+  bgPath = await window.api.request("resource::getMediaSessionImage", song.bg!);
   if (bgPath.isNone) {
     return;
   }
 
   if ("mediaSession" in navigator) {
-    await setMediaSessionMetadata();
+    if (
+      navigator.mediaSession.metadata?.artist !== song.artist &&
+      navigator.mediaSession.metadata?.title !== song.title &&
+      navigator.mediaSession.metadata?.artwork[0].src !== bgPath
+    ) {
+      setMediaSessionMetadata();
+    }
     setMediaSessionPosition();
 
-    const actionHandlers = [
-      [
-        "play",
-        () => {
-          togglePlay();
-        }
-      ],
-      [
-        "pause",
-        () => {
-          pause();
-        }
-      ],
-      [
-        "previoustrack",
-        () => {
-          previous();
-        }
-      ],
-      [
-        "nexttrack",
-        () => {
-          next();
-        }
-      ]
-    ];
+    const actionHandlers = {
+      play: togglePlay,
+      pause: pause,
+      previoustrack: previous,
+      nexttrack: next
+    };
 
-    for (const [action, handler] of actionHandlers) {
+    for (const [action, handler] of Object.entries(actionHandlers)) {
       try {
         navigator.mediaSession.setActionHandler(
           action as MediaSessionAction,
@@ -185,40 +172,19 @@ export async function setMediaSession(song: Song) {
 }
 
 async function setMediaSessionMetadata() {
-  if ("metadata" in navigator.mediaSession) {
-    const bgPath = await window.api.request("resource::getMediaSessionImage", song.bg!);
-    if (bgPath.isNone) {
-      return;
-    }
-
-    if (navigator.mediaSession.metadata !== null) {
-      navigator.mediaSession.metadata.title = song.title;
-      navigator.mediaSession.metadata.artist = song.artist;
-      navigator.mediaSession.metadata.artwork = [
-        // just apply every size and pray that an image shows correctly Pepega
-        { src: bgPath.value, sizes: "96x96", type: "image/png" },
-        { src: bgPath.value, sizes: "128x128", type: "image/png" },
-        { src: bgPath.value, sizes: "192x192", type: "image/png" },
-        { src: bgPath.value, sizes: "256x256", type: "image/png" },
-        { src: bgPath.value, sizes: "384x384", type: "image/png" },
-        { src: bgPath.value, sizes: "512x512", type: "image/png" }
-      ];
-    } else {
-      navigator.mediaSession.metadata = new MediaMetadata({
-        title: song.title,
-        artist: song.artist,
-        artwork: [
-          // just apply every size and pray that an image shows correctly Pepega
-          { src: bgPath.value, sizes: "96x96", type: "image/png" },
-          { src: bgPath.value, sizes: "128x128", type: "image/png" },
-          { src: bgPath.value, sizes: "192x192", type: "image/png" },
-          { src: bgPath.value, sizes: "256x256", type: "image/png" },
-          { src: bgPath.value, sizes: "384x384", type: "image/png" },
-          { src: bgPath.value, sizes: "512x512", type: "image/png" }
-        ]
-      });
-    }
-  }
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: song.title,
+    artist: song.artist,
+    artwork: [
+      // just apply every size and pray that an image shows correctly Pepega
+      { src: bgPath.value, sizes: "96x96", type: "image/png" },
+      { src: bgPath.value, sizes: "128x128", type: "image/png" },
+      { src: bgPath.value, sizes: "192x192", type: "image/png" },
+      { src: bgPath.value, sizes: "256x256", type: "image/png" },
+      { src: bgPath.value, sizes: "384x384", type: "image/png" },
+      { src: bgPath.value, sizes: "512x512", type: "image/png" }
+    ]
+  });
 }
 
 function setMediaSessionPosition() {
@@ -248,8 +214,7 @@ export async function previous() {
   }
 
   setSong(current.song);
-  await setMediaSessionMetadata();
-  setMediaSessionPosition();
+  await setMediaSession(current.song);
 }
 
 export async function togglePlay(force?: boolean): Promise<void> {
