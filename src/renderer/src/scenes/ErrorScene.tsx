@@ -1,7 +1,5 @@
-import { createSignal, onCleanup, onMount } from 'solid-js';
-import "../../assets/css/scenes/error.css";
-
-
+import { createSignal, onCleanup, onMount } from "solid-js";
+import "../assets/css/scenes/error.css";
 
 export default function ErrorScene() {
   const [msg, setMsg] = createSignal("");
@@ -16,7 +14,7 @@ export default function ErrorScene() {
 
   const dismissed = () => {
     window.api.request("error::dismissed");
-  }
+  };
 
   return (
     <div id="error" class="scene center col">

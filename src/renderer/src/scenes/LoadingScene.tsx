@@ -1,10 +1,8 @@
-import "../../assets/css/scenes/loading.css";
-import Bar from '../Bar';
-import { createSignal, onCleanup, onMount } from 'solid-js';
-import { LoadingSceneUpdate } from '../../../../@types';
-import { clamp } from '../../lib/tungsten/math';
-
-
+import Bar from "../components/bar/Bar";
+import { createSignal, onCleanup, onMount } from "solid-js";
+import { LoadingSceneUpdate } from "../../../@types";
+import { clamp } from "../lib/tungsten/math";
+import "../assets/css/scenes/loading.css";
 
 export default function LoadingScene() {
   const [title, setTitle] = createSignal("");
@@ -22,7 +20,7 @@ export default function LoadingScene() {
     if (u.hint !== undefined) {
       setHint(u.hint ?? "");
     }
-  }
+  };
 
   onMount(() => {
     window.api.listen("loadingScene::setTitle", setTitle);
@@ -39,7 +37,7 @@ export default function LoadingScene() {
       <h3 class="title">{title()}</h3>
 
       <div class="container">
-        <Bar fill={current() / max()}/>
+        <Bar fill={current() / max()} />
       </div>
 
       <span class="hint">{hint()}</span>

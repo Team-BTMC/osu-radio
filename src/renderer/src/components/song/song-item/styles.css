@@ -1,0 +1,73 @@
+.song-item {
+  position: relative;
+  isolation: isolate;
+  user-select: none;
+
+  &[data-active="true"] {
+    .song-item__container {
+      background: linear-gradient(to right, rgba(0, 0, 0, 0.52) 24%, rgba(0, 0, 0, 0.16));
+      outline: 1px solid #79d9d9;
+    }
+
+    .song-image {
+      opacity: 1;
+    }
+  }
+
+  .song-item__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    min-height: 90px;
+    padding: 12px 20px;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.92) 24%, rgba(0, 0, 0, 0.16));
+    overflow: hidden;
+    border-radius: 6px;
+
+    .song-item__title {
+      font-size: 22px;
+      text-shadow: rgba(0, 0, 0, 0.62) 0px 1px 3px;
+    }
+
+    .song-item__artist {
+      font-size: 16px;
+    }
+  }
+
+  /* Todo update */
+  .song-image {
+    position: absolute;
+    left: 0px;
+    right: 0px;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center 34%;
+    z-index: -1;
+    border-radius: var(--rounded);
+    opacity: 0.82;
+  }
+
+  &:hover {
+    &::after {
+      background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0.08),
+        rgba(255, 255, 255, 0.06),
+        rgba(255, 255, 255, 0.08)
+      );
+    }
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--rounded);
+  }
+}

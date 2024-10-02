@@ -1,8 +1,8 @@
-import { createSignal } from 'solid-js';
-import '../../assets/css/scenes/dir-select.css';
+import { createSignal } from "solid-js";
+import "../assets/css/scenes/dir-select.css";
 
 export default function DirSelectScene() {
-  const [dir, setDir] = createSignal("")
+  const [dir, setDir] = createSignal("");
 
   const selectDir = async () => {
     const opt = await window.api.request("dir::select");
@@ -11,7 +11,7 @@ export default function DirSelectScene() {
     }
 
     setDir(opt.value);
-  }
+  };
 
   const autodetectDir = async () => {
     const autoGetDir = await window.api.request("dir::autoGetOsuSongsDir");
@@ -20,11 +20,11 @@ export default function DirSelectScene() {
     }
 
     setDir(autoGetDir.value);
-  }
+  };
 
   const submitDir = async () => {
     await window.api.request("dir::submit", dir());
-  }
+  };
 
   return (
     <div id="dir-select" class="scene">

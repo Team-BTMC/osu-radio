@@ -1,0 +1,20 @@
+.dropdown-trigger {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 12px;
+  border: 1px solid var(--separator);
+  border-radius: 999px;
+
+  .dropdown-trigger__icon {
+    color: var(--text-600);
+  }
+
+  .dropdown-trigger__text {
+    font-size: 16px;
+  }
+
+  &:is(:hover, :focus) {
+    background: var(--hover-background);
+  }
+}

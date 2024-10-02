@@ -1,8 +1,7 @@
-import { Component, createEffect, createSignal, onMount } from 'solid-js';
-import { clamp } from '../lib/tungsten/math';
-import "../assets/css/bar.css";
+import { Component, createEffect, createSignal, onMount } from "solid-js";
+import { clamp } from "../../lib/tungsten/math";
 
-
+import "./styles.css";
 
 type BarAlignment = "vertical" | "v" | "horizontal" | "h";
 
@@ -11,22 +10,21 @@ function isVertical(alignment?: BarAlignment): boolean {
 }
 
 type BarProps = {
-  alignment?: BarAlignment,
-  fill: number,
-  setFill?: (fill: number) => any,
-  disabled?: boolean,
-}
+  alignment?: BarAlignment;
+  fill: number;
+  setFill?: (fill: number) => any;
+  disabled?: boolean;
+};
 
-
-
-const Bar: Component<BarProps> = props => {
+const Bar: Component<BarProps> = (props) => {
   const [fill, setFill] = createSignal(props.fill);
-  let bar, handle;
+  let bar: HTMLDivElement | undefined;
+  let handle: HTMLDivElement | undefined;
 
   onMount(() => {
     createEffect(() => {
       const f = fill();
-      bar.style.setProperty("--fill-per", `${clamp(0, 1, f) * 100}%`);
+      bar?.style.setProperty("--fill-per", `${clamp(0, 1, f) * 100}%`);
 
       if (props.setFill !== undefined) {
         props.setFill(f);
@@ -39,34 +37,41 @@ const Bar: Component<BarProps> = props => {
       return;
     }
 
-    const rect: DOMRect = bar.getBoundingClientRect();
+    const rect = bar?.getBoundingClientRect();
+    if (!rect) {
+      return;
+    }
 
     if (isVertical(props.alignment)) {
-      setFill((-(evt.clientY - rect.top) / rect.height) + 1);
+      setFill(-(evt.clientY - rect.top) / rect.height + 1);
       return;
     }
 
     setFill((evt.clientX - rect.left) / rect.width);
-  }
+  };
 
   const onDown = (evt: PointerEvent) => {
     if (props.disabled === true) {
       return;
     }
 
-    handle.setPointerCapture(evt.pointerId);
+    handle?.setPointerCapture(evt.pointerId);
 
-    handle.addEventListener("pointermove", calculateFill);
-    handle.addEventListener("pointerup", () => handle.removeEventListener("pointermove", calculateFill), { once: true });
-  }
+    handle?.addEventListener("pointermove", calculateFill);
+    handle?.addEventListener(
+      "pointerup",
+      () => handle.removeEventListener("pointermove", calculateFill),
+      { once: true }
+    );
+  };
 
   return (
     <div
       ref={bar}
+      class="bar"
       classList={{
-        "bar": true,
-        "vertical": props.alignment !== undefined,
-        "editable": props.setFill !== undefined
+        vertical: props.alignment !== undefined,
+        editable: props.setFill !== undefined
       }}
       style={{
         "--fill-per": clamp(0, 1, props.fill) * 100 + "%"
@@ -75,12 +80,12 @@ const Bar: Component<BarProps> = props => {
       data-disabled={props.disabled}
     >
       <div class="filling-container">
-        <div class="filling"></div>
+        <div class="filling" />
       </div>
 
       <div ref={handle} class="handle" onPointerDown={onDown}></div>
     </div>
   );
-}
+};
 
-export default Bar
+export default Bar;
