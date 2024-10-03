@@ -30,6 +30,7 @@
     "fastest-levenshtein": "^1.0.16",
     "get-audio-duration": "^4.0.1",
     "graceful-fs": "^4.2.11",
+    "sharp": "^0.33.5",
     "solid-fa": "^0.2.0"
   },
   "devDependencies": {

@@ -19,6 +19,7 @@ import type {
 export type RequestAPI = {
   "resource::get": (id: ResourceID, table: ResourceTables) => Optional<Song | AudioSource | ImageSource>,
   "resource::getPath": (id: any) => Result<string, string>,
+  "resource::getMediaSessionImage": (bgPath: string) => Optional<string>,
 
   "queue::exists": () => boolean,
   "queue::current": () => Optional<Song>,
