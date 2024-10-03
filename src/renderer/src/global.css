@@ -43,13 +43,14 @@
   --on-background: #ffffff;
   --contrast-background: #000000;
   --separator: #27272a;
-  --hover-background: rgba(255, 255, 255, 0.092);
+  --hover-background: radial-gradient(rgba(255, 255, 255, 0.072), rgba(255, 255, 255, 0.092));
 
   --text-50: rgba(255, 255, 255, 0.1);
   --text-900: rgba(255, 255, 255, 0.92);
   --text-800: rgba(255, 255, 255, 0.82);
   --text-700: rgba(255, 255, 255, 0.72);
   --text-600: rgba(255, 255, 255, 0.62);
+  --text-500: rgba(255, 255, 255, 0.52);
   --text-400: rgba(255, 255, 255, 0.42);
   --text-300: rgba(255, 255, 255, 0.32);
 
