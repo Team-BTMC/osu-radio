@@ -4,12 +4,15 @@ import Fa from "solid-fa";
 import { faList } from "@fortawesome/free-solid-svg-icons";
 import SongDetail from "../../components/song/song-detail/SongDetail";
 import SongImage from "@renderer/components/song/SongImage";
-import { mainActiveTab, setMainActiveTab, Tab, TABS } from "@renderer/lib/state/main-tabs";
+import { mainActiveTab, setMainActiveTab, Tab, TABS } from "./main.utils";
 import IconButton from "@renderer/components/icon-button/IconButton";
 import SongQueue from "@renderer/components/song/song-queue/SongQueue";
-import { songQueueModalOpen, toggleSongQueueModalOpen } from "@renderer/lib/state/queue";
-import { song } from "@renderer/lib/state/song";
 import Settings from "@renderer/components/settings/Settings";
+import { song } from "@renderer/components/song/song.utils";
+import {
+  songQueueModalOpen,
+  toggleSongQueueModalOpen
+} from "@renderer/components/song/song-queue/song-queue.utils";
 import "./styles.css";
 
 const MainScene: Component = () => {

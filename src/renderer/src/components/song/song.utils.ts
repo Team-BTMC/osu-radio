@@ -1,21 +1,56 @@
-import { none, some } from "./rust-like-utils-client/Optional.js";
-import { AudioSource, Optional, Song } from "../../../@types";
-import { isSongUndefined, msToBPM } from "./song";
+import { delay } from "@renderer/lib/delay";
+import { none, some } from "@renderer/lib/rust-like-utils-client/Optional";
+import { isSongUndefined, msToBPM } from "@renderer/lib/song";
 import { createEffect, createSignal } from "solid-js";
-import { delay } from "./delay";
-import {
-  setVolume,
-  localVolume,
-  media,
-  setDuration,
-  setLocalVolume,
-  setMedia,
-  setSong,
-  setTimestamp,
-  song,
-  volume,
-  VolumeRange
-} from "./state/song.js";
+import { AudioSource, Optional, Song } from "src/@types";
+
+/** Range from 0 to 1. */
+export type ZeroToOne = number;
+
+const DEFAULT_SONG: Song = {
+  dateAdded: "",
+  ctime: "",
+  path: "",
+  audio: "",
+  bg: "",
+
+  artist: "Artist",
+  title: "Title",
+  creator: "Creator",
+  mode: 0,
+  duration: 0,
+
+  bpm: [],
+  tags: [],
+  diffs: []
+};
+
+// ------------
+// State
+// ------------
+const [media, setMedia] = createSignal<URL>();
+export { media, setMedia };
+
+const [song, setSong] = createSignal<Song>(DEFAULT_SONG);
+export { song, setSong };
+
+const [duration, setDuration] = createSignal(0);
+export { duration, setDuration };
+
+const [timestamp, setTimestamp] = createSignal(0);
+export { timestamp, setTimestamp };
+
+const [volume, setVolume] = createSignal<ZeroToOne>(0.3);
+export { volume, setVolume };
+
+const [localVolume, _setLocalVolume] = createSignal<ZeroToOne>(0.5);
+/** Sets ans saves the local volume. */
+const setLocalVolume = (newLocalVolume: ZeroToOne) => {
+  _setLocalVolume(newLocalVolume);
+  saveLocalVoulme(newLocalVolume, song());
+};
+export { localVolume, setLocalVolume };
+// -----
 
 const player = new Audio();
 
@@ -164,7 +199,7 @@ export async function togglePlay(force?: boolean): Promise<void> {
   await play();
 }
 
-export function seek(range: VolumeRange): void {
+export function seek(range: ZeroToOne): void {
   if (isNaN(player.duration)) {
     return;
   }
@@ -201,26 +236,6 @@ const [writeVolume] = delay(async (volume: number) => {
 createEffect(async () => {
   const v = volume();
   writeVolume(v);
-});
-
-createEffect(async () => {
-  const lv = localVolume();
-
-  if (isSongUndefined(song()) || lv === 0.5) {
-    return;
-  }
-
-  const audio = (await window.api.request(
-    "resource::get",
-    song().audio,
-    "audio"
-  )) as Optional<AudioSource>;
-
-  if (!audio.isNone && audio.value.volume === lv) {
-    return;
-  }
-
-  await window.api.request("save::localVolume", lv, song().path);
 });
 
 window.api.listen("queue::songChanged", async (s) => {
@@ -271,3 +286,21 @@ function currentBPM(offset: number, changes: number[][]): Optional<number> {
 
   return some(msToBPM(changes[changes.length - 1][BPM]));
 }
+
+export const saveLocalVoulme = async (localVolume: ZeroToOne, song: Song) => {
+  if (isSongUndefined(song) || localVolume === 0.5) {
+    return;
+  }
+
+  const audio = (await window.api.request(
+    "resource::get",
+    song.audio,
+    "audio"
+  )) as Optional<AudioSource>;
+
+  if (!audio.isNone && audio.value.volume === localVolume) {
+    return;
+  }
+
+  await window.api.request("save::localVolume", localVolume, song.path);
+};

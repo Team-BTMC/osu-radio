@@ -1,5 +1,13 @@
 import { Component, createEffect, createSignal, Match, Show, Switch } from "solid-js";
-import { isPlaying, next, previous, togglePlay } from "../../../lib/Music";
+import {
+  isPlaying,
+  next,
+  previous,
+  togglePlay,
+  localVolume,
+  setLocalVolume,
+  song
+} from "../../../components/song/song.utils";
 import { isSongUndefined } from "../../../lib/song";
 import Fa from "solid-fa";
 import {
@@ -17,7 +25,6 @@ import {
 import { GLOBAL_ICON_SCALE } from "../../../App";
 import Bar from "../../bar/Bar";
 import IconButton from "@renderer/components/icon-button/IconButton";
-import { localVolume, setLocalVolume, song } from "@renderer/lib/state/song";
 
 type SongControlsProps = {};
 

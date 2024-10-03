@@ -8,7 +8,7 @@ import {
 import Fa from "solid-fa";
 import { Component, JSX, Match, mergeProps, Switch } from "solid-js";
 import Bar from "../bar/Bar";
-import { setVolume, volume } from "@renderer/lib/state/song";
+import { setVolume, volume } from "@renderer/components/song/song.utils";
 import "./styles.css";
 
 const Settings: Component = () => {

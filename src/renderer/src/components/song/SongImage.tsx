@@ -1,4 +1,4 @@
-import { Component, createEffect, createSignal, JSX, onCleanup, onMount } from "solid-js";
+import { Accessor, Component, createEffect, createSignal, JSX, onCleanup, onMount } from "solid-js";
 import defaultBackground from "../../assets/osu-default-background.jpg";
 import { availableResource, getResourcePath } from "../../lib/tungsten/resource";
 
@@ -8,14 +8,14 @@ const GLOBAL_GROUP = "global-group";
 const observers = new Map<string, IntersectionObserver>();
 
 type SongImageProps = {
-  src: string | undefined;
+  src: string | undefined | Accessor<string | undefined>;
   group?: string;
   instantLoad?: boolean;
 } & JSX.IntrinsicElements["div"];
 
 const SongImage: Component<SongImageProps> = (props) => {
   const [src, setSrc] = createSignal(defaultBackground);
-  let image;
+  let image!: HTMLDivElement;
 
   const setSource = (evt) => {
     setSrc(evt.detail);
@@ -23,12 +23,10 @@ const SongImage: Component<SongImageProps> = (props) => {
   };
 
   createEffect(async () => {
-    const b = props.src;
-
+    const b = typeof props.src === "function" ? props.src() : props.src;
     if (props.instantLoad) {
       const resource = await getResourcePath(b);
-      const aba = await availableResource(resource, defaultBackground);
-      setSrc(aba);
+      setSrc(await availableResource(resource, defaultBackground));
 
       return;
     }

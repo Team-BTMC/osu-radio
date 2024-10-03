@@ -8,7 +8,7 @@ import InfiniteScroller from "../../InfiniteScroller";
 import { namespace } from "../../../App";
 import Impulse from "../../../lib/Impulse";
 import PlayNext from "../context-menu/items/PlayNext";
-import { songsSearch } from "@renderer/lib/state/song-list";
+import { songsSearch } from "./song-list.utils";
 import "./styles.css";
 
 export type SongViewProps = {
