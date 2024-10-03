@@ -65,11 +65,11 @@ const SongControls: Component<SongControlsProps> = () => {
         <IconButton
           onClick={() => window.api.request("queue::shuffle")}
           disabled={disable()}
-          title={"Play previous"}
+          title="Shuffle"
         >
           <Fa icon={faRandom} scale={GLOBAL_ICON_SCALE} />
         </IconButton>
-        <IconButton onClick={() => previous()} disabled={disable()} title={"Play previous"}>
+        <IconButton onClick={() => previous()} disabled={disable()} title="Play previous">
           <Fa icon={faBackwardStep} scale={GLOBAL_ICON_SCALE} />
         </IconButton>
 
@@ -84,11 +84,11 @@ const SongControls: Component<SongControlsProps> = () => {
           </Show>
         </button>
 
-        <IconButton onClick={() => next()} disabled={disable()} title={"Play next"}>
+        <IconButton onClick={() => next()} disabled={disable()} title="Play next">
           <Fa icon={faForwardStep} scale={GLOBAL_ICON_SCALE} />
         </IconButton>
 
-        <IconButton onClick={() => previous()} disabled={disable()} title={"Play previous"}>
+        <IconButton onClick={() => previous()} disabled={disable()} title="Repeat">
           <Fa icon={faRepeat} scale={GLOBAL_ICON_SCALE} />
         </IconButton>
       </div>
