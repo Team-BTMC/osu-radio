@@ -26,14 +26,16 @@
   .song-detail__texts {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
 
     .song-detail__title {
       font-size: 28px;
+      font-weight: 800;
     }
 
     .song-detail__artist {
-      font-size: 20px;
+      font-size: 16px;
+      color: var(--text-700);
     }
   }
 
@@ -45,7 +47,7 @@
     }
 
     .song-detail__time {
-      padding-top: 6px;
+      padding-top: 8px;
       display: flex;
       justify-content: space-between;
       font-size: 12px;
@@ -62,7 +64,7 @@
       .song-controls__middle {
         display: flex;
         align-items: center;
-        gap: 32px;
+        gap: 28px;
       }
 
       .song-controls__toggle-play {

@@ -95,7 +95,7 @@ const SongControls: Component<SongControlsProps> = () => {
 
       {/* Right part */}
       <div class="song-controls__right-part">
-        <IconButton class="add-list">
+        <IconButton>
           <Fa icon={faAdd} scale={GLOBAL_ICON_SCALE} />
         </IconButton>
       </div>

@@ -1,17 +1,19 @@
 .dropdown-trigger {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 6px 12px;
+  gap: 10px;
+  padding: 5px 14px 5px 12px;
   border: 1px solid var(--separator);
   border-radius: 999px;
 
   .dropdown-trigger__icon {
-    color: var(--text-600);
+    color: var(--text-400);
+    font-size: 14px;
   }
 
   .dropdown-trigger__text {
-    font-size: 16px;
+    font-size: 14px;
+    line-height: 18px;
   }
 
   &:is(:hover, :focus) {

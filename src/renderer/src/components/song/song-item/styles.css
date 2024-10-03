@@ -28,10 +28,12 @@
     .song-item__title {
       font-size: 22px;
       text-shadow: rgba(0, 0, 0, 0.62) 0px 1px 3px;
+      font-weight: 800;
     }
 
     .song-item__artist {
       font-size: 16px;
+      color: var(--text-800);
     }
   }
 
@@ -44,7 +46,7 @@
     height: 100%;
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center 34%;
+    background-position: center;
     z-index: -1;
     border-radius: var(--rounded);
     opacity: 0.82;
@@ -52,12 +54,7 @@
 
   &:hover {
     &::after {
-      background: linear-gradient(
-        to right,
-        rgba(255, 255, 255, 0.08),
-        rgba(255, 255, 255, 0.06),
-        rgba(255, 255, 255, 0.08)
-      );
+      background: var(--hover-background);
     }
   }
 

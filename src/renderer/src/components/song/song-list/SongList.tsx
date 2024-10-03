@@ -36,8 +36,6 @@ const SongList: Component<SongViewProps> = (props) => {
   const resetListing = new Impulse();
 
   const searchSongs = async () => {
-    console.log("changed");
-
     const o = order();
     const t = tags();
     const parsedQuery = await window.api.request("parse::search", songsSearch());
