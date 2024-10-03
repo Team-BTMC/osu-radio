@@ -1,4 +1,5 @@
 import fs from "graceful-fs";
+import os from "os";
 import readline from "readline";
 import { AudioSource, ImageSource, ResourceID, Result, Song } from "../../../@types";
 import { access } from "../fs-promises";
@@ -107,12 +108,34 @@ export class OsuParser {
     update?: (i: number, total: number, file: string) => any
   ): DirParseResult {
     let db;
+    let songsFolderPath = dbpath + "/Songs";
+
     try {
       // NOTE: This isn't readFile from fs-promises.ts.
       //       We want to read binary data here, not utf-8 encoded data!
       db = await fs.promises.readFile(dbpath + "/osu!.db");
     } catch (err) {
       return fail("Failed to read osu!.db.");
+    }
+
+    // Scan for cfg file to check for a custom songs folder path
+    try {
+      const username = os.userInfo().username;
+      const cfgFile = await fs.promises.readFile(`${dbpath}/osu!.${username}.cfg`, "utf-8");
+      const lines = cfgFile.split("\n");
+      console.log("cfg file found");
+
+      for (const line of lines) {
+        if (line.includes("BeatmapDirectory")) {
+          const customPath = line.split("=")[1].trim();
+          if (customPath !== "Songs") {
+            songsFolderPath = customPath;
+            console.log(`Custom songs folder path found: ${songsFolderPath}`);
+          }
+        }
+      }
+    } catch (err) {
+      console.error(`Either no cfg file was found or there was an error reading it: ${err}`);
     }
 
     const songTable = new Map<ResourceID, Song>();
@@ -141,7 +164,7 @@ export class OsuParser {
     const nb_beatmaps = db.read_u32();
     console.debug("nb beatmaps:", nb_beatmaps);
 
-    const last_audio_filepath = "";
+    let last_audio_filepath = "";
     for (let i = 0; i < nb_beatmaps; i++) {
       if (db_version < 20191107) {
         // https://osu.ppy.sh/home/changelog/stable40/20191107.2
@@ -279,8 +302,12 @@ export class OsuParser {
       db.read_u32(); // last edit time
       db.read_u8(); // mania scroll speed
 
-      song.osuFile = dbpath + "/" + folder + "/" + osu_filename;
-      song.audio = dbpath + "/" + folder + "/" + audio_filename;
+      song.osuFile = songsFolderPath + "/" + folder + "/" + osu_filename;
+      const audioFilePath = songsFolderPath + "/" + folder + "/" + audio_filename;
+      song.audio = audioFilePath;
+
+      song.path = songsFolderPath + "/" + folder;
+
       if (song.audio != last_audio_filepath) {
         songTable.set(song.audio, song);
         audioTable.set(song.audio, {
@@ -289,6 +316,8 @@ export class OsuParser {
           ctime: last_modification_time
         });
       }
+
+      last_audio_filepath = audioFilePath;
 
       if (update) {
         update(i + 1, nb_beatmaps, song.title);

@@ -1,9 +1,7 @@
-import { Router } from "../lib/route-pass/Router";
-import { none, some } from "../lib/rust-like-utils-backend/Optional";
 import { dialog } from "electron";
 import path from "path";
-
-
+import { Router } from "../lib/route-pass/Router";
+import { none, some } from "../lib/rust-like-utils-backend/Optional";
 
 Router.respond("dir::select", () => {
   const path = dialog.showOpenDialogSync({
@@ -18,24 +16,20 @@ Router.respond("dir::select", () => {
   return some(path[0]);
 });
 
-
-
 Router.respond("dir::autoGetOsuSongsDir", () => {
   if (process.platform === "win32") {
     if (process.env.LOCALAPPDATA === undefined) {
       return none();
     }
-    return some(path.join(process.env.LOCALAPPDATA, "osu!", "Songs"));
+    return some(path.join(process.env.LOCALAPPDATA, "osu!"));
   } else if (process.platform === "linux") {
     if (process.env.XDG_DATA_HOME === undefined) {
       return none();
     }
-    return some(path.join(process.env.XDG_DATA_HOME, "osu-wine", "osu!", "Songs"));
+    return some(path.join(process.env.XDG_DATA_HOME, "osu-wine", "osu!"));
   }
   return none();
 });
-
-
 
 let pendingDirRequests: ((dir: string) => void)[] = [];
 
@@ -47,8 +41,6 @@ Router.respond("dir::submit", (_evt, dir) => {
 
   pendingDirRequests = [];
 });
-
-
 
 /**
  * Await submitted directory from client. This function works on suspending promise's resolve function in array of

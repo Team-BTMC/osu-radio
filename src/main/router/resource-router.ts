@@ -1,8 +1,6 @@
-import { Router } from '../lib/route-pass/Router';
-import { Storage } from '../lib/storage/Storage';
-import { fail, ok } from '../lib/rust-like-utils-backend/Result';
-
-
+import { Router } from "../lib/route-pass/Router";
+import { fail, ok } from "../lib/rust-like-utils-backend/Result";
+import { Storage } from "../lib/storage/Storage";
 
 Router.respond("resource::getPath", (_evt, id) => {
   if (id === undefined) {
@@ -16,19 +14,15 @@ Router.respond("resource::getPath", (_evt, id) => {
   }
 
   // todo User may have spaces in osuDir if they are not using default path. Ensure that the whole path is valid URL
-  return ok(osuDir.value + "/" + encodeFile(id));
+  return ok(encodeFile(id));
 });
-
-
 
 function encodeFile(uri: string): string {
   return uri
     .split(/[\/\\]/)
-    .map(s => encodeURIComponent(s))
+    .map((s) => encodeURIComponent(s))
     .join("/");
 }
-
-
 
 Router.respond("resource::get", (_evt, id, table) => {
   return Storage.getTable(table).get(id);
