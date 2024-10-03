@@ -39,13 +39,11 @@ const Nav: Component = () => {
         {({ label, ...rest }) => <NavItem {...rest}>{label}</NavItem>}
       </For>
 
-      <IconButton
-        class="nav__queue"
-        data-active={songQueueModalOpen()}
-        onClick={toggleSongQueueModalOpen}
-      >
-        <Fa icon={faList} class="nav__queue-icon" />
-      </IconButton>
+      <div class="nav__queue">
+        <IconButton data-active={songQueueModalOpen()} onClick={toggleSongQueueModalOpen}>
+          <Fa icon={faList} class="nav__queue-icon" />
+        </IconButton>
+      </div>
     </nav>
   );
 };
