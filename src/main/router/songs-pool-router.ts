@@ -27,6 +27,8 @@ Router.respond("query::songsPool::init", (_evt, payload) => {
 const BUFFER_SIZE = 50;
 
 Router.respond("query::songsPool", (_evt, request, payload) => {
+  // Similar as for queue list pagination. Song pool is simpler that the direction may only be down
+
   if (request.direction === "up") {
     return none();
   }

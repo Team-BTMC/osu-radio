@@ -10,6 +10,7 @@ export default function order(ordering: string): Result<(a: Song, b: Song) => nu
   const sortDirection = mode === "asc" ? 1 : -1;
 
   if (prop === undefined || mode === undefined) {
+    // idk why this is here tbh...
     return fail(`Bruh, this ordering '${ordering}' won't work... And you should know...`);
   }
 

@@ -26,6 +26,12 @@ export function flatRNG(from: number, to: number): number {
 
 
 const CHARSET = "0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM-_";
+
+/**
+ * Hash string and convert it to custom Base64 encoding
+ * @param str
+ * @param bits
+ */
 export function hash(str: string, bits = 64): string {
   let n = 0n;
   const mask = BigInt("0b" + ("1".repeat(bits)));
