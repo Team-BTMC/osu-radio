@@ -1,6 +1,6 @@
 import { Component, createSignal, onMount } from "solid-js";
 import { ResourceID, Song } from "../../../../../@types";
-import SongContextMenu, { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
+import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import draggable from "../../../lib/draggable/draggable";
 import { song as selectedSong } from "../../../lib/state/song";
 import SongHint from "../SongHint";
@@ -26,7 +26,7 @@ const SongItem: Component<SongItemProps> = ({
   selectable
 }) => {
   const showSignal = createSignal(false);
-  const [coords, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
+  const [_coords, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
   let item;
 
   const showMenu = (evt: MouseEvent) => {
@@ -66,10 +66,6 @@ const SongItem: Component<SongItemProps> = ({
         <h3 class="song-item__title">{song.title}</h3>
         <p class="song-item__artist">{song.artist}</p>
       </div>
-
-      <SongContextMenu show={showSignal} container={item} coords={coords}>
-        {...children}
-      </SongContextMenu>
     </div>
   );
 };
