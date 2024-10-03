@@ -1,8 +1,8 @@
-import type { SongViewProps } from './renderer/src/components/song/SongView';
+import { ListenAPI } from './ListenAPI';
 import type { SearchQuerySuccess } from './main/lib/search-parser/@search-types';
 import { ConfigItem } from './main/lib/template-parser/parser/TemplateParser';
+import type { SongViewProps } from './renderer/src/components/song/SongView';
 import { RequestAPI } from './RequestAPI';
-import { ListenAPI } from './ListenAPI';
 
 
 
@@ -57,6 +57,7 @@ export type Song = {
   audio: ResourceID,
   bg?: ResourceID,
 
+  osuFile: string,
   dateAdded: string,
 
   title: string,
