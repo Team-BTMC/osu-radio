@@ -1,0 +1,14 @@
+.icon-buton {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  margin: -8px;
+  border-radius: 50%;
+
+  &:is(:hover, :focus) {
+    background: var(--hover-background);
+  }
+}

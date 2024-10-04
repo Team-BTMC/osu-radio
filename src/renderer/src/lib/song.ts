@@ -1,6 +1,4 @@
-import { Song } from '../../../@types';
-
-
+import { Song } from "../../../@types";
 
 /**
  * @returns Time difference between beats in ms
@@ -18,9 +16,7 @@ export function averageBPM(bpm: number[][], durationMS: number): number {
   let highestEntry: [number, number] = [-Infinity, NaN];
 
   for (let i = 0; i < bpm.length; i++) {
-    const end = i + 1 === bpm.length
-      ? durationMS
-      : bpm[i + 1][0];
+    const end = i + 1 === bpm.length ? durationMS : bpm[i + 1][0];
 
     let entry = lookup.get(bpm[i][1]);
 
@@ -39,8 +35,6 @@ export function averageBPM(bpm: number[][], durationMS: number): number {
   return highestEntry[1];
 }
 
-
-
 export function msToBPM(ms: number): number {
   if (ms === 0 || 60_000 / ms > 10_000) {
     return Infinity;
@@ -48,32 +42,6 @@ export function msToBPM(ms: number): number {
 
   return Math.round(60_000 / ms);
 }
-
-
-
-export function createDefaultSong(): Song {
-  return {
-    dateAdded: "",
-    ctime: "",
-
-    path: "",
-    audio: "",
-    bg: "",
-    dir: "",
-
-    artist: "Artist",
-    title: "Title",
-    creator: "Creator",
-    mode: 0,
-    duration: 0,
-
-    bpm: [],
-    tags: [],
-    diffs: [],
-  };
-}
-
-
 
 export function isSongUndefined(song: Song | undefined): boolean {
   return song === undefined || song.path === "";

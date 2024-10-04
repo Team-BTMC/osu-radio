@@ -1,0 +1,26 @@
+.song-queue {
+  .song-queue_header {
+    display: flex;
+    padding: 32px 0px 4px;
+    position: sticky;
+    top: 0px;
+    z-index: 3;
+    background-color: rgba(0, 0, 0, 0.94);
+    padding-inline: 20px;
+    backdrop-filter: blur(8px);
+
+    .song-queue_title {
+      font-size: 16px;
+      line-height: 24px;
+    }
+  }
+
+  .list {
+    padding-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-inline: 20px;
+    padding-bottom: 32px;
+  }
+}
