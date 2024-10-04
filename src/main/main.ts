@@ -37,8 +37,6 @@ export async function main(window: BrowserWindow) {
     await showError(window, `No songs found in folder: ${orDefault(settings.get("osuSongsDir"), "[No folder]")}. Please make sure this is the directory where you have all your songs saved.`);
     await configureOsuDir(window);
   }
-
-  await Router.dispatch(window, "changeScene", "main");
 }
 
 
