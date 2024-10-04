@@ -39,8 +39,6 @@ export async function main(window: BrowserWindow) {
     );
     await configureOsuDir(window);
   }
-
-  await Router.dispatch(window, "changeScene", "main");
 }
 
 const SONGS = 0;

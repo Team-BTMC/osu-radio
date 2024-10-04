@@ -1,9 +1,9 @@
 import { For, onMount } from 'solid-js';
 import "../../assets/css/notice/notice-container.css";
 import { createStore } from 'solid-js/store';
-import Notice, { NoticeType } from './Notice';
+import Notice from './Notice';
 import { TokenNamespace } from '../../lib/tungsten/token';
-import { Result } from '../../../../@types';
+import { NoticeType, Result } from '../../../../@types';
 import { fail, ok } from '../../lib/rust-like-utils-client/Result';
 import Impulse from '../../lib/Impulse';
 

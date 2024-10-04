@@ -1,4 +1,4 @@
-name: TypeScript Compile Check
+name: Static Analysis
 on:
   push:
     branches:
@@ -7,7 +7,7 @@ on:
     branches:
       - master
 jobs:
-  build:
+  Typing-and-Linting:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -19,4 +19,6 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Run TypeScript compiler
-        run: npm exec tsc -- --noEmit
+        run: npm run typecheck
+      - name: Run Eslint check
+        run: npm run lint:check
