@@ -1,8 +1,8 @@
-import { createSignal } from 'solid-js';
-import '../../assets/css/scenes/dir-select.css';
+import { createSignal } from "solid-js";
+import "../../assets/css/scenes/dir-select.css";
 
 export default function DirSelectScene() {
-  const [dir, setDir] = createSignal("")
+  const [dir, setDir] = createSignal("");
 
   const selectDir = async () => {
     const opt = await window.api.request("dir::select");
@@ -11,25 +11,25 @@ export default function DirSelectScene() {
     }
 
     setDir(opt.value);
-  }
+  };
 
   const autodetectDir = async () => {
-    const autoGetDir = await window.api.request("dir::autoGetOsuSongsDir");
+    const autoGetDir = await window.api.request("dir::autoGetOsuDir");
     if (autoGetDir.isNone) {
       return;
     }
 
     setDir(autoGetDir.value);
-  }
+  };
 
   const submitDir = async () => {
     await window.api.request("dir::submit", dir());
-  }
+  };
 
   return (
     <div id="dir-select" class="scene">
       <div class="column">
-        <h2>Your osu! Songs folder:</h2>
+        <h2>Your osu! folder:</h2>
         <code classList={{ empty: dir() === "" }}>
           {dir() === "" ? "[No folder selected]" : dir()}
         </code>

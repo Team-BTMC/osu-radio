@@ -5,7 +5,7 @@ import { none, some } from "../lib/rust-like-utils-backend/Optional";
 
 Router.respond("dir::select", () => {
   const path = dialog.showOpenDialogSync({
-    title: "Select your osu! Songs folder",
+    title: "Select your osu! folder",
     properties: ["openDirectory"]
   });
 
@@ -16,7 +16,7 @@ Router.respond("dir::select", () => {
   return some(path[0]);
 });
 
-Router.respond("dir::autoGetOsuSongsDir", () => {
+Router.respond("dir::autoGetOsuDir", () => {
   if (process.platform === "win32") {
     if (process.env.LOCALAPPDATA === undefined) {
       return none();
