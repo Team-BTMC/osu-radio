@@ -1,8 +1,8 @@
+import { setMediaSession } from "@renderer/lib/Music";
 import { Component, createSignal, onMount } from "solid-js";
 import { ResourceID, Song } from "../../../../@types";
 import "../../assets/css/song/song-item.css";
 import draggable from "../../lib/draggable/draggable";
-import { averageBPM, msToBPM } from "../../lib/song";
 import SongContextMenu, { ignoreClickInContextMenu } from "./context-menu/SongContextMenu";
 import SongHint from "./SongHint";
 import SongImage from "./SongImage";
@@ -48,8 +48,15 @@ const SongItem: Component<SongItemProps> = (props) => {
   const children: any[] = !(props.children instanceof Array) ? [props.children] : props.children;
 
   return (
-    <div class="song-item" onContextMenu={showMenu} ref={item} data-url={props.song.bg}>
+    <div
+      class="song-item"
+      onContextMenu={showMenu}
+      ref={item}
+      data-url={props.song.bg}
+      onClick={() => setMediaSession(props.song)}
+    >
       <div class={"song-item-container"}>
+        <SongImage src={props.song.bg} group={props.group} />
         <SongImage src={props.song.bg} group={props.group} />
 
         <div class="column">

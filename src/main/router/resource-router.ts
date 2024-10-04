@@ -1,4 +1,8 @@
+import path from "path";
+import sharp from "sharp";
+import defaultBackground from "../../renderer/src/assets/osu-default-background-small.jpg";
 import { Router } from "../lib/route-pass/Router";
+import { none, some } from "../lib/rust-like-utils-backend/Optional";
 import { fail, ok } from "../lib/rust-like-utils-backend/Result";
 import { Storage } from "../lib/storage/Storage";
 
@@ -15,6 +19,23 @@ Router.respond("resource::getPath", (_evt, id) => {
 
   // todo User may have spaces in osuDir if they are not using default path. Ensure that the whole path is valid URL
   return ok(encodeFile(id));
+});
+
+Router.respond("resource::getMediaSessionImage", async (_evt, bgPath) => {
+  if (bgPath === undefined) {
+    return some(defaultBackground);
+  }
+  const settings = Storage.getTable("settings");
+  const songsDir = settings.get("osuSongsDir");
+  if (songsDir.isNone) {
+    return none();
+  }
+
+  const pathToBg = path.join(songsDir.value, bgPath);
+  const mimeType = `image/${path.extname(pathToBg).slice(1)}`;
+  const buffer = await sharp(pathToBg).resize(512, 512).toBuffer();
+
+  return some(`data:${mimeType};base64,${buffer.toString("base64")}`);
 });
 
 function encodeFile(uri: string): string {
