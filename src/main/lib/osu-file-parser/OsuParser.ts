@@ -302,11 +302,18 @@ export class OsuParser {
       db.read_u32(); // last edit time
       db.read_u8(); // mania scroll speed
 
-      song.osuFile = songsFolderPath + "/" + folder + "/" + osu_filename;
       const audioFilePath = songsFolderPath + "/" + folder + "/" + audio_filename;
+      const osuFilePath = songsFolderPath + "/" + folder + "/" + osu_filename;
+      song.osuFile = osuFilePath;
       song.audio = audioFilePath;
-
       song.path = songsFolderPath + "/" + folder;
+
+      // Read .osu to get bg source
+      const osuFile = await this.parseFile(osuFilePath);
+
+      // @ts-expect-error language server doesn't see .value prop
+      const bgSrc = osuFile.value.props.get("bgSrc");
+      song.bg = songsFolderPath + "/" + folder + "/" + bgSrc;
 
       if (song.audio != last_audio_filepath) {
         songTable.set(song.audio, song);

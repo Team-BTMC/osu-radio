@@ -1,4 +1,5 @@
 import { setMediaSession } from "@renderer/lib/Music";
+import { averageBPM, msToBPM } from "@renderer/lib/song";
 import { Component, createSignal, onMount } from "solid-js";
 import { ResourceID, Song } from "../../../../@types";
 import "../../assets/css/song/song-item.css";
@@ -56,7 +57,6 @@ const SongItem: Component<SongItemProps> = (props) => {
       onClick={() => setMediaSession(props.song)}
     >
       <div class={"song-item-container"}>
-        <SongImage src={props.song.bg} group={props.group} />
         <SongImage src={props.song.bg} group={props.group} />
 
         <div class="column">
