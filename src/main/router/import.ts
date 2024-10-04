@@ -1,3 +1,6 @@
+// This file serves as router initializer only. Reason being that main.ts had massive wall of import statements. Now
+// it is just single file
+
 import "./dir-router";
 import "./error-router";
 import "./queue-router";
@@ -6,37 +9,4 @@ import "./songs-pool-router";
 import "./parser-router";
 import "./local-volume-router";
 import "./settings-router";
-
-
-
-// Router.respond("bidirectionalInit", () => {
-//   return {
-//     initialIndex: 1
-//   }
-// });
-//
-// const BUFFER_SIZE = 10;
-//
-// Router.respond("bidirectional", (_evt, request) => {
-//   if (request.index < 0 || request.index === 20) {
-//     return none();
-//   }
-//
-//   if (request.direction === "up") {
-//     return some({
-//       index: request.index - 1,
-//       total: 200,
-//         items: new Array(BUFFER_SIZE)
-//           .fill(request.index * BUFFER_SIZE)
-//           .map((n, i) => n + i)
-//     });
-//   }
-//
-//   return some({
-//     index: request.index + 1,
-//     total: 200,
-//     items: new Array(BUFFER_SIZE)
-//       .fill(request.index * BUFFER_SIZE)
-//       .map((n, i) => n + i)
-//   });
-// });
+import "./dev-router";

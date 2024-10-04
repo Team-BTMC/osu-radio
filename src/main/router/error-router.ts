@@ -3,21 +3,31 @@ import { BrowserWindow } from 'electron';
 
 
 
-let waitList: (()=>void)[] = [];
+let pending: (()=>void)[] = [];
 
 Router.respond("error::dismissed", () => {
-  for (let i = 0; i < waitList.length; i++) {
-    waitList[i]();
+  // Error has been dismissed. Resolve all pending errors
+  for (let i = 0; i < pending.length; i++) {
+    pending[i]();
   }
 
-  waitList = [];
+  pending = [];
 });
 
+
+
+/**
+ * Requests change of scenes to error scene and displays error message. Returned promise is resolved when user dismisses
+ * the error.
+ *
+ * @param window
+ * @param msg
+ */
 export async function showError(window: BrowserWindow, msg: string): Promise<void> {
   await Router.dispatch(window, "changeScene", "error");
   await Router.dispatch(window, "error::setMessage", msg);
 
   return new Promise(resolve => {
-    waitList.push(resolve);
+    pending.push(resolve);
   });
 }

@@ -1,13 +1,11 @@
 import type { SearchQuery } from './main/lib/search-parser/@search-types';
 import type { ConfigError, ConfigSuccess } from './main/lib/template-parser/parser/TemplateParser';
 import type {
-  InfiniteScrollerInitResponse,
-  InfiniteScrollerRequest,
-  InfiniteScrollerResponse
-} from './renderer/src/components/InfiniteScroller';
-import type {
   AudioSource,
   ImageSource,
+  InfiniteScrollerInitResponse,
+  InfiniteScrollerRequest,
+  InfiniteScrollerResponse,
   Optional,
   QueueCreatePayload,
   ResourceID,
@@ -21,6 +19,7 @@ import type {
 export type RequestAPI = {
   "resource::get": (id: ResourceID, table: ResourceTables) => Optional<Song | AudioSource | ImageSource>,
   "resource::getPath": (id: any) => Result<string, string>,
+  "resource::getMediaSessionImage": (bgPath: string) => Optional<string>,
 
   "queue::exists": () => boolean,
   "queue::current": () => Optional<Song>,
@@ -36,6 +35,7 @@ export type RequestAPI = {
   "queue::shuffle": () => void,
 
   "dir::select": () => Optional<string>,
+  "dir::autoGetOsuSongsDir": () => Optional<string>,
   "dir::submit": (dir: string) => void,
 
   "error::dismissed": () => void,
@@ -52,4 +52,6 @@ export type RequestAPI = {
   "query::queue": (request: InfiniteScrollerRequest) => InfiniteScrollerResponse<Song>,
 
   "save::localVolume": (volume: number, song: ResourceID) => void,
+
+  "dev::storeLocation": () => string,
 }

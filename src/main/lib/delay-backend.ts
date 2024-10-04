@@ -4,6 +4,12 @@ export type DelayCancel = () => void;
 
 
 
+/**
+ * Provided `fn` is wrapped and calling returned wrapped function will cause that all calls to that function will be
+ * delayed. If function is called while it is being delayed the delay timer will reset and start over
+ * @param fn
+ * @param ms
+ */
 export function delay<F extends (...args: any[]) => any>(fn: F, ms: number): [DelayedFunction<F>, DelayCancel] {
   let timeout: NodeJS.Timeout | undefined = undefined;
 

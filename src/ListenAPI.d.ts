@@ -1,5 +1,4 @@
-import { LoadingSceneUpdate, Scenes, Song } from './@types';
-import { NoticeType } from './renderer/src/components/notice/Notice';
+import { LoadingSceneUpdate, NoticeType, Scenes, Song } from './@types';
 
 
 

@@ -1,8 +1,6 @@
 import { createSignal } from 'solid-js';
 import '../../assets/css/scenes/dir-select.css';
 
-
-
 export default function DirSelectScene() {
   const [dir, setDir] = createSignal("")
 
@@ -13,6 +11,15 @@ export default function DirSelectScene() {
     }
 
     setDir(opt.value);
+  }
+
+  const autodetectDir = async () => {
+    const autoGetDir = await window.api.request("dir::autoGetOsuSongsDir");
+    if (autoGetDir.isNone) {
+      return;
+    }
+
+    setDir(autoGetDir.value);
   }
 
   const submitDir = async () => {
@@ -27,6 +34,7 @@ export default function DirSelectScene() {
           {dir() === "" ? "[No folder selected]" : dir()}
         </code>
         <div class="row">
+          <button onClick={autodetectDir}>Autodetect folder</button>
           <button onClick={selectDir}>Select folder</button>
           <button onClick={submitDir}>Submit</button>
         </div>

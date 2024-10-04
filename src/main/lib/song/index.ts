@@ -17,7 +17,19 @@ function createSongIndex(id: string, song: Song): SongIndex {
   };
 }
 
+
+
 export type IndexCallback = (i: number, song: string) => void;
+
+
+
+/**
+ * For each song create song search index and creates relation between tag and song IDs. Returns array of song search
+ * indexes and map where key is tag and value is array of song IDs
+ * @param songs
+ * @param fn
+ * @see {SongIndex}
+ */
 export function collectTagsAndIndexSongs(songs: { [id: string]: Song }, fn?: IndexCallback): [SongIndex[], Map<string, string[]>] {
   const indexes: SongIndex[] = [];
   const tags = new Map<string, string[]>();
@@ -28,6 +40,7 @@ export function collectTagsAndIndexSongs(songs: { [id: string]: Song }, fn?: Ind
     const song = songs[id];
 
     if (fn !== undefined) {
+      // Update client progress bar
       fn(i, song.artist + " - " + song.title);
     }
 
@@ -37,6 +50,7 @@ export function collectTagsAndIndexSongs(songs: { [id: string]: Song }, fn?: Ind
       continue;
     }
 
+    // Assign to each tag current song ID
     for (let i = 0; i < song.tags.length; i++) {
       const key = song.tags[i].toLowerCase();
       const entry = tags.get(key);

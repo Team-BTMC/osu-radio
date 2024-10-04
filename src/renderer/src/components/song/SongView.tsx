@@ -1,7 +1,7 @@
 import Search from '../search/Search';
 import SongItem from './SongItem';
 import { Component, createEffect, createSignal, onCleanup, onMount } from 'solid-js';
-import { Optional, ResourceID, SongsQueryPayload, Tag } from '../../../../@types';
+import { Optional, ResourceID, SongsQueryPayload, SongViewProps, Tag } from '../../../../@types';
 import "../../assets/css/song/song-view.css";
 import { SearchQueryError } from '../../../../main/lib/search-parser/@search-types';
 import { none, some } from '../../lib/rust-like-utils-client/Optional';
@@ -11,12 +11,6 @@ import Impulse from '../../lib/Impulse';
 import PlayNext from './context-menu/items/PlayNext';
 
 
-
-export type SongViewProps = {
-  isAllSongs?: boolean,
-  isQueue?: boolean,
-  playlist?: string,
-};
 
 const SongView: Component<SongViewProps> = props => {
   const querySignal = createSignal("");

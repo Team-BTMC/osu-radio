@@ -4,6 +4,7 @@ import { electronApp, is, optimizer } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
 import { main } from './main';
 import trackBounds, { getBounds, wasMaximized } from './lib/window/resizer';
+import { Router } from './lib/route-pass/Router';
 
 
 
@@ -30,18 +31,20 @@ async function createWindow() {
 
   trackBounds(window);
 
-  window.on('ready-to-show', () => {
+  window.on('ready-to-show', async () => {
     window.show();
+    await Router.dispatch(window, "changeScene", "main");
   });
 
   // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
+  // Load the remote URL for hot reloading or the local html file for production.
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     await window.loadURL(process.env['ELECTRON_RENDERER_URL']);
   } else {
     await window.loadFile(join(__dirname, '../renderer/index.html'));
   }
 
+  // Launch main app logic
   await main(window)
     .catch(error => {
       if (error === null || error === undefined) {

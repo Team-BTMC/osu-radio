@@ -6,6 +6,7 @@ import SongContextMenu, { ignoreClickInContextMenu } from './context-menu/SongCo
 import draggable from '../../lib/draggable/draggable';
 import SongHint from './SongHint';
 import SongImage from './SongImage';
+import { setMediaSession } from '@renderer/lib/Music';
 
 
 
@@ -18,8 +19,6 @@ type SongItemProps = {
   onDrop?: (before: Element | null) => any,
   children?: any,
 }
-
-
 
 const SongItem: Component<SongItemProps> = props => {
   const showSignal = createSignal(false);
@@ -61,9 +60,11 @@ const SongItem: Component<SongItemProps> = props => {
       onContextMenu={showMenu}
       ref={item}
       data-url={props.song.bg}
+      onClick={() => setMediaSession(props.song)}
     >
       <div class={"song-item-container"}>
         <SongImage src={props.song.bg} group={props.group}/>
+        
 
         <div class="column">
           <h3>[{msToBPM(averageBPM(props.song.bpm, props.song.duration * 1_000))} BPM] {props.song.title}</h3>
