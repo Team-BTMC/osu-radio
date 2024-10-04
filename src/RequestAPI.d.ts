@@ -1,13 +1,11 @@
 import type { SearchQuery } from './main/lib/search-parser/@search-types';
 import type { ConfigError, ConfigSuccess } from './main/lib/template-parser/parser/TemplateParser';
 import type {
-  InfiniteScrollerInitResponse,
-  InfiniteScrollerRequest,
-  InfiniteScrollerResponse
-} from './renderer/src/components/InfiniteScroller';
-import type {
   AudioSource,
   ImageSource,
+  InfiniteScrollerInitResponse,
+  InfiniteScrollerRequest,
+  InfiniteScrollerResponse,
   Optional,
   QueueCreatePayload,
   ResourceID,
