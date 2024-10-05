@@ -103,17 +103,17 @@ Buffer.prototype.read_u8 = function () {
 };
 
 export class OsuParser {
-  static async parseDb(
-    dbpath: string,
+  static async parseDatabase(
+    databasePath: string,
     update?: (i: number, total: number, file: string) => any
   ): DirParseResult {
     let db;
-    let songsFolderPath = dbpath + "/Songs";
+    let songsFolderPath = databasePath + "/Songs";
 
     try {
       // NOTE: This isn't readFile from fs-promises.ts.
       //       We want to read binary data here, not utf-8 encoded data!
-      db = await fs.promises.readFile(dbpath + "/osu!.db");
+      db = await fs.promises.readFile(databasePath + "/osu!.db");
     } catch (err) {
       return fail("Failed to read osu!.db.");
     }
@@ -121,7 +121,7 @@ export class OsuParser {
     // Scan for cfg file to check for a custom songs folder path
     try {
       const username = os.userInfo().username;
-      const cfgFile = await fs.promises.readFile(`${dbpath}/osu!.${username}.cfg`, "utf-8");
+      const cfgFile = await fs.promises.readFile(`${databasePath}/osu!.${username}.cfg`, "utf-8");
       const lines = cfgFile.split("\n");
       console.log("cfg file found");
 
@@ -149,7 +149,6 @@ export class OsuParser {
     db.pos = 0;
 
     const db_version = db.read_u32();
-    console.debug("db version:", db_version);
     if (db_version < 20170222) {
       return fail("osu!.db is too old, please update the game.");
     }
@@ -158,11 +157,9 @@ export class OsuParser {
     db.read_u8();
     db.read_u64(); // timestamp
 
-    const player_name = db.read_string().trim();
-    console.debug("player name:", player_name);
+    db.read_string().trim(); // player name
 
     const nb_beatmaps = db.read_u32();
-    console.debug("nb beatmaps:", nb_beatmaps);
 
     let last_audio_filepath = "";
     for (let i = 0; i < nb_beatmaps; i++) {
@@ -263,7 +260,7 @@ export class OsuParser {
         for (let t = 0; t < nb_timing_points; t++) {
           const ms_per_beat = db.read_f64();
           const offset = db.read_f64();
-          const timing_change = !!db.read_u8();
+          db.read_u8(); // timing change
 
           if (ms_per_beat > 0) {
             const bpm = Math.min(60000.0 / ms_per_beat, 9001.0);
@@ -308,6 +305,13 @@ export class OsuParser {
         song.osuFile = osuFilePath;
         song.audio = audioFilePath;
         song.path = songsFolderPath + "/" + folder;
+
+        // Check if the song has already been processed, and add the diff name to the existing song if so
+        const existingSong = songTable.get(audioFilePath);
+        if (existingSong) {
+          existingSong.diffs.push(song.diffs[0]);
+          continue;
+        }
 
         // Read .osu to get bg source
         const osuFile = await this.parseFile(osuFilePath);
