@@ -68,7 +68,7 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
       });
     }, UPDATE_DELAY_MS);
 
-    tables = await OsuParser.parseDb(dir, update);
+    tables = await OsuParser.parseDatabase(dir, update);
     // Cancel ongoing throttled update, so it does not look bad when it finishes and afterward the update overwrites
     // finished state
     cancelUpdate();
