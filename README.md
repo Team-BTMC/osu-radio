@@ -1,4 +1,4 @@
-# Current version: Pre-Alpha
+# Current status: Pre-Alpha
 
 Roadmap | Alpha Features & Issues: https://github.com/orgs/Team-BTMC/projects/2
 <br>
@@ -15,21 +15,27 @@ It's an application that play your ${\textsf{\color{#f462a3}osu!}}$ songs!
 > [!NOTE]
 > To use `git` and `npm`, you need to have [git](https://git-scm.com/) & [node.js](https://nodejs.org/en) installed
 
-`1` | Open the terminal in the directory you want to download osu!radio in. Then do the following command,
+`1` | Open the terminal in the directory you want to download osu!radio in. Then do the 2 following command,
 ```
 git clone https://github.com/Team-BTMC/osu-radio.git
+```
+```
+cd osu-radio
 ```
 
 `2` | Next, install the necessary files to run osu!radio,
 ```
-npm install
+npm ci
 ```
 
-`3` | To start it up, run this command,
+`A` | For a ${\textsf{\color{#00e658}production}}$ startup, 
 ```
 npm run start
 ```
-
+`B` | For a ${\textsf{\color{#de291f}hot}}$ reloading launch, 
+```
+npm run dev
+```
 > [!WARNING]
 > If you're planning on reinstalling it, be sure to go to `%appdata%` (`Win + R`, then type that in) and remove the folder `osu-radio-solidjs`
 
