@@ -166,168 +166,172 @@ export class OsuParser {
 
     let last_audio_filepath = "";
     for (let i = 0; i < nb_beatmaps; i++) {
-      if (db_version < 20191107) {
-        // https://osu.ppy.sh/home/changelog/stable40/20191107.2
-        db.read_u32();
-      }
-
-      const song: Song = {
-        audio: "",
-        osuFile: "",
-        path: "",
-        ctime: "",
-        dateAdded: "",
-        title: "",
-        artist: "",
-        creator: "",
-        bpm: [],
-        duration: 0,
-        diffs: []
-      };
-
-      song.artist = db.read_string().trim();
-      song.artistUnicode = db.read_string().trim();
-      song.title = db.read_string().trim();
-      song.titleUnicode = db.read_string().trim();
-      song.creator = db.read_string().trim();
-
-      // NOTE: I'm being lazy here, and only loading the first diff for a given audio file.
-      //       This is wrong, especially if diffs of a set aren't right next to each other in the db.
-      const diff_name = db.read_string();
-      song.diffs = [diff_name];
-
-      const audio_filename = db.read_string();
-
-      db.read_hash(); // .osu file md5
-      const osu_filename = db.read_string().trim();
-      db.read_u8(); // ranking status
-      db.read_u16(); // nb circles
-      db.read_u16(); // nb sliders
-      db.read_u16(); // nb spinners
-
-      // TODO: This probably is incorrect. See alternatives:
-      // tms_a = (tms - 621355968000000000) / 10000000
-      // tms_b = (tms - 504911232000000000)
-      const last_modification_time = db.read_u64();
-      song.dateAdded = new Date(last_modification_time).toISOString();
-
-      db.read_f32(); // AR
-      db.read_f32(); // CS
-      db.read_f32(); // HP
-      db.read_f32(); // OD
-      db.read_f64(); // slider multiplier
-
-      // std
-      let nb_star_ratings = db.read_u32();
-      for (let s = 0; s < nb_star_ratings; s++) {
-        db.read_u8();
-        db.read_u32(); // mod flags
-        db.read_u8();
-        db.read_f64(); // star rating
-      }
-
-      // taiko
-      nb_star_ratings = db.read_u32();
-      for (let s = 0; s < nb_star_ratings; s++) {
-        db.read_u8();
-        db.read_u32(); // mod flags
-        db.read_u8();
-        db.read_f64(); // star rating
-      }
-
-      // ctb
-      nb_star_ratings = db.read_u32();
-      for (let s = 0; s < nb_star_ratings; s++) {
-        db.read_u8();
-        db.read_u32(); // mod flags
-        db.read_u8();
-        db.read_f64(); // star rating
-      }
-
-      // mania
-      nb_star_ratings = db.read_u32();
-      for (let s = 0; s < nb_star_ratings; s++) {
-        db.read_u8();
-        db.read_u32(); // mod flags
-        db.read_u8();
-        db.read_f64(); // star rating
-      }
-
-      db.read_u32(); // drain time
-      song.duration = db.read_u32() / 1000.0;
-      db.read_u32(); // preview time
-
-      const nb_timing_points = db.read_u32();
-      song.bpm = [];
-      for (let t = 0; t < nb_timing_points; t++) {
-        const ms_per_beat = db.read_f64();
-        const offset = db.read_f64();
-        const timing_change = !!db.read_u8();
-
-        if (ms_per_beat > 0) {
-          const bpm = Math.min(60000.0 / ms_per_beat, 9001.0);
-          song.bpm.push([offset, bpm]);
+      try {
+        if (db_version < 20191107) {
+          // https://osu.ppy.sh/home/changelog/stable40/20191107.2
+          db.read_u32();
         }
-      }
 
-      db.read_u32(); // beatmap id (actually i32)
-      song.beatmapSetID = db.read_u32(); // beatmapset id (actually i32)
-      db.read_u32();
+        const song: Song = {
+          audio: "",
+          osuFile: "",
+          path: "",
+          ctime: "",
+          dateAdded: "",
+          title: "",
+          artist: "",
+          creator: "",
+          bpm: [],
+          duration: 0,
+          diffs: []
+        };
 
-      db.read_u8(); // std grade
-      db.read_u8(); // taiko grade
-      db.read_u8(); // ctb grade
-      db.read_u8(); // mania grade
+        song.artist = db.read_string().trim();
+        song.artistUnicode = db.read_string().trim();
+        song.title = db.read_string().trim();
+        song.titleUnicode = db.read_string().trim();
+        song.creator = db.read_string().trim();
 
-      db.read_u16(); // local offset
-      db.read_f32(); // stack leniency
-      song.mode = db.read_u8();
+        // NOTE: I'm being lazy here, and only loading the first diff for a given audio file.
+        //       This is wrong, especially if diffs of a set aren't right next to each other in the db.
+        const diff_name = db.read_string();
+        song.diffs = [diff_name];
 
-      db.read_string(); // song source
-      song.tags = db.read_string();
+        const audio_filename = db.read_string();
 
-      db.read_u16(); // online offset
-      db.read_string(); // song title font
-      db.read_u8(); // unplayed
-      db.read_u64(); // last time played
-      db.read_u8(); // osz2
+        db.read_hash(); // .osu file md5
+        const osu_filename = db.read_string().trim();
+        db.read_u8(); // ranking status
+        db.read_u16(); // nb circles
+        db.read_u16(); // nb sliders
+        db.read_u16(); // nb spinners
 
-      const folder = db.read_string().trim();
-      db.read_u64(); // last online check
-      db.read_u8(); // ignore beatmap sounds
-      db.read_u8(); // ignore beatmap skin
-      db.read_u8(); // disable storyboard
-      db.read_u8(); // disable video
-      db.read_u8(); // visual override
-      db.read_u32(); // last edit time
-      db.read_u8(); // mania scroll speed
+        // TODO: This probably is incorrect. See alternatives:
+        // tms_a = (tms - 621355968000000000) / 10000000
+        // tms_b = (tms - 504911232000000000)
+        const last_modification_time = db.read_u64();
+        song.dateAdded = new Date(last_modification_time).toISOString();
 
-      const audioFilePath = songsFolderPath + "/" + folder + "/" + audio_filename;
-      const osuFilePath = songsFolderPath + "/" + folder + "/" + osu_filename;
-      song.osuFile = osuFilePath;
-      song.audio = audioFilePath;
-      song.path = songsFolderPath + "/" + folder;
+        db.read_f32(); // AR
+        db.read_f32(); // CS
+        db.read_f32(); // HP
+        db.read_f32(); // OD
+        db.read_f64(); // slider multiplier
 
-      // Read .osu to get bg source
-      const osuFile = await this.parseFile(osuFilePath);
+        // std
+        let nb_star_ratings = db.read_u32();
+        for (let s = 0; s < nb_star_ratings; s++) {
+          db.read_u8();
+          db.read_u32(); // mod flags
+          db.read_u8();
+          db.read_f64(); // star rating
+        }
 
-      // @ts-expect-error language server doesn't see .value prop
-      const bgSrc = osuFile.value.props.get("bgSrc");
-      song.bg = songsFolderPath + "/" + folder + "/" + bgSrc;
+        // taiko
+        nb_star_ratings = db.read_u32();
+        for (let s = 0; s < nb_star_ratings; s++) {
+          db.read_u8();
+          db.read_u32(); // mod flags
+          db.read_u8();
+          db.read_f64(); // star rating
+        }
 
-      if (song.audio != last_audio_filepath) {
-        songTable.set(song.audio, song);
-        audioTable.set(song.audio, {
-          songID: song.audio,
-          path: song.audio,
-          ctime: last_modification_time
-        });
-      }
+        // ctb
+        nb_star_ratings = db.read_u32();
+        for (let s = 0; s < nb_star_ratings; s++) {
+          db.read_u8();
+          db.read_u32(); // mod flags
+          db.read_u8();
+          db.read_f64(); // star rating
+        }
 
-      last_audio_filepath = audioFilePath;
+        // mania
+        nb_star_ratings = db.read_u32();
+        for (let s = 0; s < nb_star_ratings; s++) {
+          db.read_u8();
+          db.read_u32(); // mod flags
+          db.read_u8();
+          db.read_f64(); // star rating
+        }
 
-      if (update) {
-        update(i + 1, nb_beatmaps, song.title);
+        db.read_u32(); // drain time
+        song.duration = db.read_u32() / 1000.0;
+        db.read_u32(); // preview time
+
+        const nb_timing_points = db.read_u32();
+        song.bpm = [];
+        for (let t = 0; t < nb_timing_points; t++) {
+          const ms_per_beat = db.read_f64();
+          const offset = db.read_f64();
+          const timing_change = !!db.read_u8();
+
+          if (ms_per_beat > 0) {
+            const bpm = Math.min(60000.0 / ms_per_beat, 9001.0);
+            song.bpm.push([offset, bpm]);
+          }
+        }
+
+        db.read_u32(); // beatmap id (actually i32)
+        song.beatmapSetID = db.read_u32(); // beatmapset id (actually i32)
+        db.read_u32();
+
+        db.read_u8(); // std grade
+        db.read_u8(); // taiko grade
+        db.read_u8(); // ctb grade
+        db.read_u8(); // mania grade
+
+        db.read_u16(); // local offset
+        db.read_f32(); // stack leniency
+        song.mode = db.read_u8();
+
+        db.read_string(); // song source
+        song.tags = db.read_string();
+
+        db.read_u16(); // online offset
+        db.read_string(); // song title font
+        db.read_u8(); // unplayed
+        db.read_u64(); // last time played
+        db.read_u8(); // osz2
+
+        const folder = db.read_string().trim();
+        db.read_u64(); // last online check
+        db.read_u8(); // ignore beatmap sounds
+        db.read_u8(); // ignore beatmap skin
+        db.read_u8(); // disable storyboard
+        db.read_u8(); // disable video
+        db.read_u8(); // visual override
+        db.read_u32(); // last edit time
+        db.read_u8(); // mania scroll speed
+
+        const audioFilePath = songsFolderPath + "/" + folder + "/" + audio_filename;
+        const osuFilePath = songsFolderPath + "/" + folder + "/" + osu_filename;
+        song.osuFile = osuFilePath;
+        song.audio = audioFilePath;
+        song.path = songsFolderPath + "/" + folder;
+
+        // Read .osu to get bg source
+        const osuFile = await this.parseFile(osuFilePath);
+
+        // @ts-expect-error language server doesn't see .value prop
+        const bgSrc = osuFile.value.props.get("bgSrc");
+        song.bg = songsFolderPath + "/" + folder + "/" + bgSrc;
+
+        if (song.audio != last_audio_filepath) {
+          songTable.set(song.audio, song);
+          audioTable.set(song.audio, {
+            songID: song.audio,
+            path: song.audio,
+            ctime: last_modification_time
+          });
+        }
+
+        last_audio_filepath = audioFilePath;
+
+        if (update) {
+          update(i + 1, nb_beatmaps, song.title);
+        }
+      } catch (err) {
+        console.log(`There was an error processing a beatmap: ${console.log(err)}`);
       }
     }
 

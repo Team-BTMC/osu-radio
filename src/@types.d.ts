@@ -1,7 +1,7 @@
 import type { SearchQuerySuccess } from "./main/lib/search-parser/@search-types";
 import { ConfigItem } from "./main/lib/template-parser/parser/TemplateParser";
-import type { SongViewProps } from "./renderer/src/components/song/SongView";
 import { RequestAPI } from "./RequestAPI";
+import { ListenAPI } from "./ListenAPI";
 
 declare global {
   interface Window {
@@ -59,8 +59,8 @@ export type ImageSource = {
 export type Song = {
   audio: ResourceID;
   bg?: ResourceID;
-
   osuFile: string;
+
   dateAdded: string;
 
   title: string;
@@ -202,3 +202,34 @@ export type LoadingSceneUpdate = {
 };
 
 export type Scenes = "" | "loading" | "dir-select" | "main" | "error";
+
+export type SongViewProps = {
+  isAllSongs?: boolean;
+  isQueue?: boolean;
+  playlist?: string;
+};
+
+export type NoticeType = {
+  id?: string;
+  class: "notice" | "warning" | "error";
+  title: string;
+  content: string;
+  timeoutMS?: number;
+  active?: boolean;
+};
+
+export type InfiniteScrollerRequest = {
+  index: number;
+  init: number;
+  direction: "up" | "down";
+};
+
+export type InfiniteScrollerResponse<T = any> = Optional<{
+  index: number;
+  items: T[];
+}>;
+
+export type InfiniteScrollerInitResponse = Optional<{
+  initialIndex: number;
+  count: number;
+}>;
