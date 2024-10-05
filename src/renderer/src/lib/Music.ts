@@ -151,7 +151,7 @@ export async function setMediaSession(song: Song) {
     setMediaSessionPosition();
 
     const actionHandlers = {
-      play: togglePlay,
+      play: () => togglePlay(),
       pause: pause,
       previoustrack: previous,
       nexttrack: next
