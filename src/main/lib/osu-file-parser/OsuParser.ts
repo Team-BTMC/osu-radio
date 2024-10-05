@@ -217,39 +217,19 @@ export class OsuParser {
 
         // std
         let nb_star_ratings = db.read_u32();
-        for (let s = 0; s < nb_star_ratings; s++) {
-          db.read_u8();
-          db.read_u32(); // mod flags
-          db.read_u8();
-          db.read_f64(); // star rating
-        }
+        db.pos += nb_star_ratings * (1 + 4 + 1 + 8); // skipping star ratings
 
         // taiko
         nb_star_ratings = db.read_u32();
-        for (let s = 0; s < nb_star_ratings; s++) {
-          db.read_u8();
-          db.read_u32(); // mod flags
-          db.read_u8();
-          db.read_f64(); // star rating
-        }
+        db.pos += nb_star_ratings * (1 + 4 + 1 + 8); // skipping star ratings
 
         // ctb
         nb_star_ratings = db.read_u32();
-        for (let s = 0; s < nb_star_ratings; s++) {
-          db.read_u8();
-          db.read_u32(); // mod flags
-          db.read_u8();
-          db.read_f64(); // star rating
-        }
+        db.pos += nb_star_ratings * (1 + 4 + 1 + 8); // skipping star ratings
 
         // mania
         nb_star_ratings = db.read_u32();
-        for (let s = 0; s < nb_star_ratings; s++) {
-          db.read_u8();
-          db.read_u32(); // mod flags
-          db.read_u8();
-          db.read_f64(); // star rating
-        }
+        db.pos += nb_star_ratings * (1 + 4 + 1 + 8); // skipping star ratings
 
         db.read_u32(); // drain time
         song.duration = db.read_u32() / 1000.0;
