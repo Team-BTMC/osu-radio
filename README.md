@@ -30,6 +30,9 @@ npm install
 npm run start
 ```
 
+> [!WARNING]
+> If you're planning on reinstalling it, be sure to go to `%appdata%` (`Win + R`, then type that in) and remove the folder `osu-radio-solidjs`
+
 ### Contribution
 > [!CAUTION]
 > Leaving this part to Siro / Vivi to change :pepestare:
