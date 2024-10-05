@@ -13,12 +13,12 @@ const Button: Component<Props> = (props) => {
   };
 
   const mergedProps = mergeProps(defaultProps, props);
-  const { children, ...restProps } = mergedProps;
+  const { children, variant: _, size: __, ...restProps } = mergedProps;
 
   return (
     <button
-      class={`button ${mergedProps.variant} ${mergedProps.size} ${mergedProps.class ?? ""}`}
       {...restProps}
+      class={`button ${mergedProps.variant} ${mergedProps.size} ${mergedProps.class ?? ""}`}
     >
       {children}
     </button>

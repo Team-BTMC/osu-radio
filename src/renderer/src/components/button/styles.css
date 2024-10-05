@@ -1,6 +1,6 @@
 .button {
   border: none;
-  border-radius: 8px;
+  border-radius: var(--rounded);
   cursor: pointer;
   transition: background 0.2s ease-in-out;
 

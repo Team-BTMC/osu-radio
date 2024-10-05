@@ -43,19 +43,24 @@ export default function DirSelectScene() {
         <div class="select__select-folder-container">
           <div class="select__select-folder-input-container">
             <label class="select__select-folder-label">Your osu! Songs folder</label>
-            <button onClick={selectDir} class="select__select-folder-input">
+            <div onClick={selectDir} class="select__select-folder-input">
               {dir() === "" ? "[No folder selected]" : dir()}
-            </button>
-          </div>
-          <div class="select__select-folder-actions">
-            <Button variant="secondary" onClick={selectDir}>
-              Select folder
-            </Button>
+
+              <Button
+                variant="secondary"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  selectDir();
+                }}
+              >
+                Select folder
+              </Button>
+            </div>
+            <p class="select__select-folder-hint">You can always change this in settings.</p>
           </div>
         </div>
 
         <div class="select__bottom-part">
-          <p class="select__bottom-part-warning">You can always change this in settings.</p>
           <Button size="large" onClick={submitDir}>
             <span>Submit</span>
           </Button>

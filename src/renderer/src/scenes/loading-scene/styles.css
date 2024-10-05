@@ -6,6 +6,9 @@
   align-items: center;
   justify-content: center;
   padding: 32px;
+  background-image: url("../../assets/dir-select-bg.png");
+  background-size: cover;
+  background-repeat: no-repeat;
 
   .loading-scene__title {
     padding-bottom: 40px;
