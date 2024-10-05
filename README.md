@@ -19,25 +19,20 @@ It's an application that play your ${\textsf{\color{#f462a3}osu!}}$ songs!
 ```
 git clone https://github.com/Team-BTMC/osu-radio.git
 ```
-> This command will create a copy of the github repositories in that directory
 
-`2` | Then move into that directory with the following command,
-```
-cd .\osu-radio\
-```
-
-`3` | Next, do the following command to install the necessary files to run osu!radio
+`2` | Next, install the necessary files to run osu!radio,
 ```
 npm install
 ```
 
-`4` | To start it up, simply fun the following command inside that osu!radio directory
+`3` | To start it up, run this command,
 ```
 npm run start
 ```
 
 ### Contribution
-You can create a fork of the [main repositories](https://github.com/Team-BTMC/osu-radio) and do PR from there
+> [!CAUTION]
+> Leaving this part to Siro / Vivi to change :pepestare:
 
 # The Vision
 
@@ -46,9 +41,11 @@ Technologies:
 - ${\textsf{\color{#4c84c5}Solid JS}}$
 - ${\textsf{\color{#3178c6}Typescript}}$
 
-Staying on Electron because it's fine-ish for the time being.
+Main dicussion is in the [BTMC TALENT SERVER](https://discord.gg/mefjfMjV), #prj-osu-radio
 <br>
-The UI will stay web-based for ease of use & cost of being web-based :) I'd like to keep the UI the way it is.
+We'll be staying on Electron for the time being. As for UI, it will stay web-based for ease of use & cost of being web-based :)
 <br>
-If you want to make a change, feel free to suggest the change in PR or Discord DMs / tag me ( ${\textsf{\color{#f9c74f}@Dudu}}$ ) in [BTMC TALENT SERVER](https://discord.gg/mefjfMjV).
+For anything codes related (Discussion, PR, Suggestions), contact ${\textsf{\color{#f8961e}@CaptSiro}}$
+<br>
+For anything designs related (UI / UX, Ideas, Suggestions), contact ${\textsf{\color{#f9c74f}@Dudu}}$ 
 ###### Animations are subject to change (the very few osu!radio has).
