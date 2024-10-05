@@ -18,7 +18,6 @@ const settingsView = () => {
         }
       }
       setAudioDevices(audioMap);
-      console.log(audioDevices());
     });
   }
 
