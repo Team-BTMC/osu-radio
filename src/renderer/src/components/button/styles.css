@@ -6,10 +6,11 @@
 
   /* Variants */
   &.primary {
-    background: var(--button-primary-color);
+    background: var(--button-primary-background-color);
+    color: var(--button-primary-color);
 
     &:hover {
-      background: var(--button-primary-color-hover);
+      background: var(--button-primary-background-color-hover);
     }
   }
 
