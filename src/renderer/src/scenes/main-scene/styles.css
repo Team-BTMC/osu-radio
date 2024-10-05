@@ -1,10 +1,10 @@
-.default-layout {
+.main-scene {
   height: 100vh;
   overflow: none;
   display: flex;
   flex-direction: column;
 
-  .default-layout__bg-image {
+  .main-scene__bg-image {
     position: absolute;
     top: 0;
     left: 0;
@@ -22,7 +22,7 @@
     }
   }
 
-  .default-layout__main {
+  .main-scene__main {
     position: relative;
     height: calc(100vh - 52px);
     display: flex;
@@ -36,7 +36,7 @@
       border-right: 1px solid var(--separator);
     }
 
-    .default-layout__song-detail {
+    .main-scene__song-detail {
       flex: 1;
       display: flex;
       align-items: center;

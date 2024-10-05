@@ -1,0 +1,68 @@
+.dir-select {
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 32px;
+
+  .dir-select__title {
+    text-align: center;
+    font-size: 24px;
+    padding-top: 50px;
+    color: var(--text-900);
+  }
+
+  .dir-select__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 48px;
+    width: 100%;
+    max-width: 860px;
+    height: 100%;
+    max-height: 720px;
+    padding: 32px;
+    border-radius: var(--rounded);
+    background-color: rgba(var(--background-rgb), 0.72);
+    border: 1px solid var(--separator);
+    overflow-y: auto;
+
+    .select__select-folder-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      .select__select-folder-input-container {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+
+        .select__select-folder-label {
+          font-size: 14px;
+          font-weight: bold;
+          color: var(--text-800);
+        }
+
+        .select__select-folder-input {
+          background-color: var(--input-background);
+          padding: 10px 16px;
+          border-radius: 8px;
+        }
+      }
+
+      .select__select-folder-actions {
+        display: flex;
+        gap: 8px;
+      }
+    }
+
+    .select__bottom-part {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+
+      .select__bottom-part-warning {
+        color: var(--text-500);
+      }
+    }
+  }
+}

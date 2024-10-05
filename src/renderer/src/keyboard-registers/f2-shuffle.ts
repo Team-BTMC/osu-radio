@@ -1,6 +1,6 @@
 import { Keyboard } from "../lib/Keyboard";
 import { addNotice } from "../components/notice/NoticeContainer";
-import { mainActiveTab, TABS } from "@renderer/scenes/main/main.utils";
+import { mainActiveTab, TABS } from "@renderer/scenes/main-scene/main.utils";
 
 Keyboard.register({
   key: "F2",

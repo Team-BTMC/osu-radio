@@ -54,6 +54,14 @@
   --text-400: rgba(255, 255, 255, 0.42);
   --text-300: rgba(255, 255, 255, 0.32);
 
+  --button-primary-color: rgba(0, 0, 0, 1);
+  --button-primary-color-hover: rgba(0, 0, 0, 0.62);
+
+  --button-secondary-color: #ffffff1f;
+  --button-secondary-color-hover: #ffffff3a;
+
+  --input-background: #292929;
+
   /* Border */
   --rounded-sm: 4px;
   --rounded: 8px;
