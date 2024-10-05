@@ -8,7 +8,7 @@ type SettingDropdownProps = {
   disabled: false,
 }
 
-const settingDropdown: Component<SettingDropdownProps> = props => {
+const SettingDropdown: Component<SettingDropdownProps> = props => {
 
   const changeOption = (e: Event) => {
     const option = (e.target as HTMLSelectElement).value;
@@ -34,4 +34,4 @@ const settingDropdown: Component<SettingDropdownProps> = props => {
     </div>
   );
 }
-export default settingDropdown
+export default SettingDropdown

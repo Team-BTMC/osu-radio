@@ -4,7 +4,7 @@ import "../../assets/css/settings/settings-item.css";
 import { createEffect, createSignal, onMount } from 'solid-js';
 import { changeAudioDevice} from '../../lib/Music';
 
-const settingsView = () => {
+const SettingsView = () => {
   let view;
 
   const [audioDevices, setAudioDevices] = createSignal(new Map<string, ()=>any>());
@@ -39,4 +39,4 @@ const settingsView = () => {
     </div>
   )
 }
-export default settingsView;
+export default SettingsView;
