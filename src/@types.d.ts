@@ -104,6 +104,7 @@ export type System = {
 // Settings table definition
 export type Settings = {
   volume: number,
+  audioDeviceId: string,
   osuSongsDir: string,
   "window.width": number,
   "window.height": number,

@@ -6,6 +6,7 @@ import { GLOBAL_ICON_SCALE } from '../../App';
 import SongDetail from '../song/SongDetail';
 import QueueView from '../queue/QueueView';
 import NoticeContainer from '../notice/NoticeContainer';
+import SettingsView from '../settings/SettingsView';
 
 
 
@@ -49,7 +50,7 @@ export default function MainScene() {
         <SongView isAllSongs={true}/>
         <QueueView/>
         <div>Playlists</div>
-        <div>Settings</div>
+        <SettingsView/>
       </div>
 
       <main class="center">
