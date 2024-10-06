@@ -4,8 +4,6 @@ Roadmap | Alpha Features & Issues: https://github.com/orgs/Team-BTMC/projects/2
 <br>
 Main Figma Design: [https://www.figma.com/design/tNBJr7TlEsoWsWdAewqoUg](https://www.figma.com/design/tNBJr7TlEsoWsWdAewqoUg/osu!-radio?node-id=0-1&t=aIuThZAj00HcSjM5-1)
 
-[//]: # (You can remove the ${\textsf{\color{#f462a3}osu!}}$ if you just want it to be osu!radio instead. That color can only work if there are spaces on both side)
-
 # What is osu!radio
 It's an application that plays your ${\textsf{\color{#f462a3}osu!}}$ songs!
 
