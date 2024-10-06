@@ -34,96 +34,106 @@ export type DirParseResult = Promise<
 // Overriding Buffer prototype because I'm lazy.
 // Should probably get moved to another file, or make a wrapper instead.
 
-Buffer.prototype.read_bytes = function (n) {
-  const out = this.slice(this.pos, this.pos + n);
-  this.pos += n;
-  return out;
-};
+class BufferReader {
+  buffer: any;
+  pos: number;
+  constructor(buffer) {
+    this.buffer = buffer;
+    this.pos = 0;
+  }
 
-Buffer.prototype.read_string = function () {
-  const empty_check = this.read_u8();
-  if (empty_check == 0) return "";
+  readBytes(n) {
+    const out = this.buffer.slice(this.pos, this.pos + n);
+    this.pos += n;
+    return out;
+  }
 
-  const len = this.read_uleb128();
-  return this.read_bytes(len).toString("utf-8");
-};
+  readString() {
+    const emptyCheck = this.readByte();
+    if (emptyCheck === 0) return "";
 
-Buffer.prototype.read_hash = function () {
-  const empty_check = this.read_u8();
-  if (empty_check == 0) return "00000000000000000000000000000000";
+    const len = this.readUleb128();
+    return this.readBytes(len).toString("utf-8");
+  }
 
-  let len = this.read_uleb128();
-  if (len > 32) len = 32;
+  readHash() {
+    const emptyCheck = this.readByte();
+    if (emptyCheck === 0) return "00000000000000000000000000000000";
 
-  return this.read_bytes(len).toString("utf-8");
-};
+    let len = this.readUleb128();
+    if (len > 32) len = 32;
 
-Buffer.prototype.read_uleb128 = function () {
-  let result = 0;
-  let shift = 0;
-  let byte = 0;
+    return this.readBytes(len).toString("utf-8");
+  }
 
-  do {
-    byte = this.read_u8();
-    result |= (byte & 0x7f) << shift;
-    shift += 7;
-  } while (byte & 0x80);
+  readUleb128() {
+    let result = 0;
+    let shift = 0;
+    let byte = 0;
 
-  return result;
-};
+    do {
+      byte = this.readByte();
+      result |= (byte & 0x7f) << shift;
+      shift += 7;
+    } while (byte & 0x80);
 
-Buffer.prototype.read_f64 = function () {
-  const bytes = this.read_bytes(8);
-  return bytes.readDoubleLE(0);
-};
+    return result;
+  }
 
-Buffer.prototype.read_f32 = function () {
-  const bytes = this.read_bytes(4);
-  return bytes.readFloatLE(0);
-};
+  readDouble() {
+    const bytes = this.readBytes(8);
+    return bytes.readDoubleLE(0);
+  }
 
-Buffer.prototype.read_u64 = function () {
-  const low = this.read_u32();
-  const high = this.read_u32();
-  return (high << 32) | low;
-};
+  readFloat() {
+    const bytes = this.readBytes(4);
+    return bytes.readFloatLE(0);
+  }
 
-Buffer.prototype.read_u32 = function () {
-  const bytes = this.read_bytes(4);
-  return bytes.readUInt32LE(0);
-};
+  readLong() {
+    const low = this.readInt();
+    const high = this.readInt();
+    return (high << 32) | low;
+  }
 
-Buffer.prototype.read_u16 = function () {
-  const bytes = this.read_bytes(2);
-  return bytes.readUInt16LE(0);
-};
+  readInt() {
+    const bytes = this.readBytes(4);
+    return bytes.readUInt32LE(0);
+  }
 
-Buffer.prototype.read_u8 = function () {
-  return this.read_bytes(1)[0] & 0xff;
-};
+  readShort() {
+    const bytes = this.readBytes(2);
+    return bytes.readUInt16LE(0);
+  }
+
+  readByte() {
+    return this.readBytes(1)[0] & 0xff;
+  }
+}
 
 export class OsuParser {
   static async parseDatabase(
     databasePath: string,
     update?: (i: number, total: number, file: string) => any
   ): DirParseResult {
-    let db;
+    let dbBuffer;
     let songsFolderPath = databasePath + "/Songs";
 
     try {
       // NOTE: This isn't readFile from fs-promises.ts.
       //       We want to read binary data here, not utf-8 encoded data!
-      db = await fs.promises.readFile(databasePath + "/osu!.db");
+      dbBuffer = await fs.promises.readFile(databasePath + "/osu!.db");
     } catch (err) {
       return fail("Failed to read osu!.db.");
     }
+
+    const db = new BufferReader(dbBuffer); // Use BufferReader here
 
     // Scan for cfg file to check for a custom songs folder path
     try {
       const username = os.userInfo().username;
       const cfgFile = await fs.promises.readFile(`${databasePath}/osu!.${username}.cfg`, "utf-8");
       const lines = cfgFile.split("\n");
-      console.log("cfg file found");
 
       for (const line of lines) {
         if (line.includes("BeatmapDirectory")) {
@@ -145,28 +155,25 @@ export class OsuParser {
     //       You should parse those dynamically when needed.
     const imageTable = new Map<ResourceID, ImageSource>();
 
-    // HACK: Used by prototype overrides above
-    db.pos = 0;
-
-    const db_version = db.read_u32();
+    const db_version = db.readInt();
     if (db_version < 20170222) {
       return fail("osu!.db is too old, please update the game.");
     }
 
-    db.read_u32(); // folder count
-    db.read_u8();
-    db.read_u64(); // timestamp
+    db.readInt(); // folder count
+    db.readByte();
+    db.readLong(); // timestamp
 
-    db.read_string().trim(); // player name
+    db.readString().trim(); // player name
 
-    const nb_beatmaps = db.read_u32();
+    const nb_beatmaps = db.readInt();
 
     let last_audio_filepath = "";
     for (let i = 0; i < nb_beatmaps; i++) {
       try {
         if (db_version < 20191107) {
           // https://osu.ppy.sh/home/changelog/stable40/20191107.2
-          db.read_u32();
+          db.readInt();
         }
 
         const song: Song = {
@@ -183,64 +190,61 @@ export class OsuParser {
           diffs: []
         };
 
-        song.artist = db.read_string().trim();
-        song.artistUnicode = db.read_string().trim();
-        song.title = db.read_string().trim();
-        song.titleUnicode = db.read_string().trim();
-        song.creator = db.read_string().trim();
+        song.artist = db.readString().trim();
+        song.artistUnicode = db.readString().trim();
+        song.title = db.readString().trim();
+        song.titleUnicode = db.readString().trim();
+        song.creator = db.readString().trim();
 
         // NOTE: I'm being lazy here, and only loading the first diff for a given audio file.
         //       This is wrong, especially if diffs of a set aren't right next to each other in the db.
-        const diff_name = db.read_string();
+        const diff_name = db.readString();
         song.diffs = [diff_name];
 
-        const audio_filename = db.read_string();
+        const audio_filename = db.readString();
 
-        db.read_hash(); // .osu file md5
-        const osu_filename = db.read_string().trim();
-        db.read_u8(); // ranking status
-        db.read_u16(); // nb circles
-        db.read_u16(); // nb sliders
-        db.read_u16(); // nb spinners
+        db.readHash(); // .osu file md5
+        const osu_filename = db.readString().trim();
+        db.readByte(); // ranking status
+        db.readShort(); // nb circles
+        db.readShort(); // nb sliders
+        db.readShort(); // nb spinners
 
-        // TODO: This probably is incorrect. See alternatives:
-        // tms_a = (tms - 621355968000000000) / 10000000
-        // tms_b = (tms - 504911232000000000)
-        const last_modification_time = db.read_u64();
+        const last_modification_time = db.readLong();
         song.dateAdded = new Date(last_modification_time).toISOString();
 
-        db.read_f32(); // AR
-        db.read_f32(); // CS
-        db.read_f32(); // HP
-        db.read_f32(); // OD
-        db.read_f64(); // slider multiplier
+        db.readFloat(); // AR
+        db.readFloat(); // CS
+        db.readFloat(); // HP
+        db.readFloat(); // OD
+        db.readDouble(); // slider multiplier
 
         // std
-        let nb_star_ratings = db.read_u32();
+        let nb_star_ratings = db.readInt();
         db.pos += nb_star_ratings * (1 + 4 + 1 + 8); // skipping star ratings
 
         // taiko
-        nb_star_ratings = db.read_u32();
+        nb_star_ratings = db.readInt();
         db.pos += nb_star_ratings * (1 + 4 + 1 + 8); // skipping star ratings
 
         // ctb
-        nb_star_ratings = db.read_u32();
+        nb_star_ratings = db.readInt();
         db.pos += nb_star_ratings * (1 + 4 + 1 + 8); // skipping star ratings
 
         // mania
-        nb_star_ratings = db.read_u32();
+        nb_star_ratings = db.readInt();
         db.pos += nb_star_ratings * (1 + 4 + 1 + 8); // skipping star ratings
 
-        db.read_u32(); // drain time
-        song.duration = db.read_u32() / 1000.0;
-        db.read_u32(); // preview time
+        db.readInt(); // drain time
+        song.duration = db.readInt() / 1000.0;
+        db.readInt(); // preview time
 
-        const nb_timing_points = db.read_u32();
+        const nb_timing_points = db.readInt();
         song.bpm = [];
         for (let t = 0; t < nb_timing_points; t++) {
-          const ms_per_beat = db.read_f64();
-          const offset = db.read_f64();
-          db.read_u8(); // timing change
+          const ms_per_beat = db.readDouble();
+          const offset = db.readDouble();
+          db.readByte(); // timing change
 
           if (ms_per_beat > 0) {
             const bpm = Math.min(60000.0 / ms_per_beat, 9001.0);
@@ -248,37 +252,37 @@ export class OsuParser {
           }
         }
 
-        db.read_u32(); // beatmap id (actually i32)
-        song.beatmapSetID = db.read_u32(); // beatmapset id (actually i32)
-        db.read_u32();
+        db.readInt(); // beatmap id (actually i32)
+        song.beatmapSetID = db.readInt(); // beatmapset id (actually i32)
+        db.readInt();
 
-        db.read_u8(); // std grade
-        db.read_u8(); // taiko grade
-        db.read_u8(); // ctb grade
-        db.read_u8(); // mania grade
+        db.readByte(); // std grade
+        db.readByte(); // taiko grade
+        db.readByte(); // ctb grade
+        db.readByte(); // mania grade
 
-        db.read_u16(); // local offset
-        db.read_f32(); // stack leniency
-        song.mode = db.read_u8();
+        db.readShort(); // local offset
+        db.readFloat(); // stack leniency
+        song.mode = db.readByte();
 
-        db.read_string(); // song source
-        song.tags = db.read_string();
+        db.readString(); // song source
+        song.tags = db.readString();
 
-        db.read_u16(); // online offset
-        db.read_string(); // song title font
-        db.read_u8(); // unplayed
-        db.read_u64(); // last time played
-        db.read_u8(); // osz2
+        db.readShort(); // online offset
+        db.readString(); // song title font
+        db.readByte(); // unplayed
+        db.readLong(); // last time played
+        db.readByte(); // osz2
 
-        const folder = db.read_string().trim();
-        db.read_u64(); // last online check
-        db.read_u8(); // ignore beatmap sounds
-        db.read_u8(); // ignore beatmap skin
-        db.read_u8(); // disable storyboard
-        db.read_u8(); // disable video
-        db.read_u8(); // visual override
-        db.read_u32(); // last edit time
-        db.read_u8(); // mania scroll speed
+        const folder = db.readString().trim();
+        db.readLong(); // last online check
+        db.readByte(); // ignore beatmap sounds
+        db.readByte(); // ignore beatmap skin
+        db.readByte(); // disable storyboard
+        db.readByte(); // disable video
+        db.readByte(); // visual override
+        db.readInt(); // last edit time
+        db.readByte(); // mania scroll speed
 
         const audioFilePath = songsFolderPath + "/" + folder + "/" + audio_filename;
         const osuFilePath = songsFolderPath + "/" + folder + "/" + osu_filename;
@@ -305,7 +309,7 @@ export class OsuParser {
           audioTable.set(song.audio, {
             songID: song.audio,
             path: song.audio,
-            ctime: last_modification_time
+            ctime: String(last_modification_time)
           });
         }
 
