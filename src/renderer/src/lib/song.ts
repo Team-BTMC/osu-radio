@@ -55,6 +55,7 @@ export function createDefaultSong(): Song {
   return {
     dateAdded: "",
     ctime: "",
+    osuFile: "",
 
     path: "",
     audio: "",
