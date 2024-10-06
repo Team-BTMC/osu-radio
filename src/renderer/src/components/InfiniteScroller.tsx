@@ -190,11 +190,10 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
 
   return (
     <div class={"list"} ref={container} {...rest}>
-      <Show when={show() === true} fallback={props.fallback ?? <div>No items...</div>} children={(
-        <For each={elements()} children={componentProps =>
+      <Show when={show() === true} fallback={props.fallback ?? <div>No items...</div>}>
+        <For each={elements()}>{componentProps =>
           props.builder(componentProps)
-        }></For>
-      )}>
+        }</For>
       </Show>
     </div>
   );
