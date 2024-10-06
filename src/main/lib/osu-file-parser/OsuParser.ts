@@ -240,12 +240,12 @@ export class OsuParser {
         const nb_timing_points = db.readInt();
         song.bpm = [];
         for (let t = 0; t < nb_timing_points; t++) {
-          const ms_per_beat = db.readDouble();
+          const bpm = db.readDouble();
           const offset = db.readDouble();
           db.readByte(); // timing change
 
-          if (ms_per_beat > 0) {
-            const bpm = Math.min(60000.0 / ms_per_beat, 9001.0);
+          if (bpm > 0) {
+            console.log(`${song.title} bpm: ${bpm}`);
             song.bpm.push([offset, bpm]);
           }
         }
