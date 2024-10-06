@@ -31,9 +31,8 @@ Router.respond("resource::getMediaSessionImage", async (_evt, bgPath) => {
     return none();
   }
 
-  const pathToBg = path.join(songsDir.value, bgPath);
-  const mimeType = `image/${path.extname(pathToBg).slice(1)}`;
-  const buffer = await sharp(pathToBg).resize(512, 512).toBuffer();
+  const mimeType = `image/${path.extname(bgPath).slice(1)}`;
+  const buffer = await sharp(bgPath).resize(512, 512).toBuffer();
 
   return some(`data:${mimeType};base64,${buffer.toString("base64")}`);
 });
@@ -41,7 +40,7 @@ Router.respond("resource::getMediaSessionImage", async (_evt, bgPath) => {
 function encodeFile(uri: string): string {
   return uri
     .split(/[\/\\]/)
-    .map((s) => encodeURIComponent(s))
+    .map((s, i) => i !== 0 ? encodeURIComponent(s): s)
     .join("/");
 }
 
