@@ -1,35 +1,67 @@
-# status: Pre-Alpha
+# Current status: Pre-Alpha
 
-# osu-radio
+Roadmap | Alpha Features & Issues: https://github.com/orgs/Team-BTMC/projects/2
+<br>
+Main Figma Design: [https://www.figma.com/design/tNBJr7TlEsoWsWdAewqoUg](https://www.figma.com/design/tNBJr7TlEsoWsWdAewqoUg/osu!-radio?node-id=0-1&t=aIuThZAj00HcSjM5-1)
 
-Application to play your osu! songs.
+[//]: # (You can remove the ${\textsf{\color{#f462a3}osu!}}$ if you just want it be osu!radio instead. That color can only work if there's spaces on both side)
 
-![image](https://github.com/user-attachments/assets/0cdfd7a0-3e08-4c5b-bb11-423c74176c74)
+# What is osu!radio
+It's an application that play your ${\textsf{\color{#f462a3}osu!}}$ songs!
 
-This is primarily a personal project so there could be "idk, works for me" and if it is not a trivial fix I might not ever fix it. Also, if it breaks then... RIPBOZO
+![Song Tab](https://github.com/user-attachments/assets/da67b906-1429-4cc1-9087-76026e94b98a "The screen show a UI with all the buttons (Play, Pause, Forward and Rewind, as well as a Seek bar, with 4 songs on the left")
 
-![](https://cdn.7tv.app/emote/60dbea82e3e5887a4a95e1db/4x.webp)
+### Download Guide
+> [!NOTE]
+> To use `git` and `npm`, you need to have [git](https://git-scm.com/) & [node.js](https://nodejs.org/en) installed
 
-### Contribution
-
-I only know how to push code from my local machine to this repository, so, you can forget about pull requests LOL. Definitely a skill issue.
-
-### Download
-
-LOL, it can barely play songs. You better wait a few months. But if you still want to give it a try, then git clone this repository and run:
-
+`1` | Open the terminal in the directory you want to download osu!radio in. Then do the 2 following command,
 ```
-npm install
+git clone https://github.com/Team-BTMC/osu-radio.git
+```
+```
+cd osu-radio
+```
+
+`2` | Next, install the necessary files to run osu!radio,
+```
+npm ci
+```
+
+`A` | For a production (User) startup, 
+```
 npm run start
 ```
+`B` | For a hot reloading (Dev) launch, 
+```
+npm run dev
+```
+> [!WARNING]
+> If you're planning on reinstalling it, be sure to go to `%appdata%` (`Win + R`, then type that in) and remove the folder `osu-radio-solidjs`
 
-# THE VISION
+### Contribution
+> [!TIP]
+> To get started, it's highly recommended to make a [fork](https://github.com/Team-BTMC/osu-radio/fork) of this repository
+
+If you're new to contributing, consider checking out [How to Contribute to an Open Source](https://opensource.guide/how-to-contribute/). It's the best and most simplest guide to understand what contributing really is
+
+If you're more interested in the coding side of things, be sure to read [Good Manners of a PR & Best Practices](https://medium.com/deliveryherotechhub/good-manners-of-a-pull-request-some-best-practices-cb2de3c3aea1), as well as [How to write a perfect PR](https://github.blog/developer-skills/github/how-to-write-the-perfect-pull-request/) 
+
+If you're more interested in contributing as a designer, check out the [Figma](https://www.figma.com/design/tNBJr7TlEsoWsWdAewqoUg/osu!-radio?node-id=0-1&t=aIuThZAj00HcSjM5-1) page
+
+Remember! Contribution come in all shape and size.
+# The Vision
 
 Technologies:
 - Electron
-- Solid js
-- Typescript
+- Solid JS
+- TypeScript
 
-Staying on Electron because it's fine-ish for the time being. The UI will stay web-based for ease of use for the cost of being web-based :) I would like to keep the UI the way it is. Personally, I think the UI looks good. If you dont like or want to make a change, feel free to suggest the change in PR or Discord DMs or tag me in BTMC TALENT SERVER. Animations are subject to change (the very few osu!radio has).
-
-Alpha release (features/issues) found here: https://github.com/orgs/Team-BTMC/projects/2
+Main dicussion is in the [BTMC TALENT SERVER](https://discord.gg/mefjfMjV), #prj-osu-radio
+<br>
+We'll be staying on Electron for the time being. As for UI, it will stay web-based for ease of use & cost of being web-based :)
+<br>
+For anything **codes** related (Discussion, PR, Suggestions), contact **@CaptSiro**
+<br>
+For anything **designs** related (UI / UX, Ideas, Suggestions), contact **@Dudu**
+###### Animations are subject to change (the very few osu!radio has).
