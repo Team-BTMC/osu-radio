@@ -1,0 +1,23 @@
+.settings-view {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.settings-view > :not(.no-pd) {
+  padding: 16px;
+}
+
+.settings-view .list {
+  position: relative; /* used for setting offsetParent for .settings-item elements */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 0 16px 16vw 16px;
+  overflow: auto;
+}
+
+.list.drag-inside {
+  cursor: move;
+}

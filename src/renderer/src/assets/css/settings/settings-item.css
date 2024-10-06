@@ -1,0 +1,31 @@
+.settings-view .list .settings-item {
+  min-height: 40px;
+  width: 100%;
+}
+
+.settings-item .settings-item-container {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 4px;
+  overflow: hidden;
+  font-size: 1em;
+  border-radius: var(--border-radius);
+
+  transition: background-color 250ms;
+}
+
+.list:not(.drag-inside) .settings-item .settings-item-container:hover,
+.settings-item.selected .settings-item-container,
+[data-dragged] .settings-item-container {
+  background-color: rgba(var(--color-fg), var(--level-0));
+
+  transition: background-color 0ms;
+}
+
+.settings-view .list .settings-item .column {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}

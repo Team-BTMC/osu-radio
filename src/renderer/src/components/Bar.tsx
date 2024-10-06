@@ -29,7 +29,7 @@ const Bar: Component<BarProps> = props => {
       bar.style.setProperty("--fill-per", `${clamp(0, 1, f) * 100}%`);
 
       if (props.setFill !== undefined) {
-        props.setFill(f);
+        props.setFill(clamp(0, 1, f));
       }
     });
   });
@@ -42,11 +42,11 @@ const Bar: Component<BarProps> = props => {
     const rect: DOMRect = bar.getBoundingClientRect();
 
     if (isVertical(props.alignment)) {
-      setFill((-(evt.clientY - rect.top) / rect.height) + 1);
+      setFill(clamp(0, 1, (-(evt.clientY - rect.top) / rect.height) + 1));
       return;
     }
 
-    setFill((evt.clientX - rect.left) / rect.width);
+    setFill(clamp(0, 1, (evt.clientX - rect.left) / rect.width));
   }
 
   const onDown = (evt: PointerEvent) => {

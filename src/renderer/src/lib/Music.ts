@@ -26,8 +26,15 @@ window.api.request("settings::get", "volume").then((v) => {
   if (v.isNone) {
     return;
   }
-
   setVolume(v.value);
+});
+
+window.api.request("settings::get", "audioDeviceId").then((v) => {
+  if (v.isNone) {
+    return;
+  }
+
+  changeAudioDevice(v.value);
 });
 
 let bgPath;
@@ -112,6 +119,15 @@ export async function play(): Promise<void> {
 export function pause() {
   setIsPlaying(false);
   player.pause();
+}
+
+export async function changeAudioDevice(deviceId: string) {
+  await window.api.request("settings::write", "audioDeviceId", deviceId);
+  if ("setSinkId" in player && typeof player.setSinkId === "function") {
+    player.setSinkId(deviceId);
+  } else {
+    console.error("Changing audio devices is not supported in your enviornment.");
+  }
 }
 
 export async function next() {
