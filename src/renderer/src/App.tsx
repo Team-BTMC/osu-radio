@@ -1,13 +1,12 @@
 import type { JSX } from "solid-js";
 import { createSignal, Match, onCleanup, onMount, Switch } from "solid-js";
-import MainScene from "./scenes/main/MainScene";
-import DirSelectScene from "./scenes/DirSelectScene";
+import MainScene from "./scenes/main-scene/MainScene";
 import NoScene from "./scenes/NoScene";
-import LoadingScene from "./scenes/LoadingScene";
+import LoadingScene from "./scenes/loading-scene/LoadingScene";
 import { Scenes } from "../../@types";
 import ErrorScene from "./scenes/ErrorScene";
 import { TokenNamespace } from "./lib/tungsten/token";
-
+import DirSelectScene from "./scenes/dir-select-scene/DirSelectScene";
 import "./keyboard-registers/initialize";
 
 export default function App(): JSX.Element {

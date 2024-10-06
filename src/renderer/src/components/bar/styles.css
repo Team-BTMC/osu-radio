@@ -33,7 +33,7 @@
 }
 
 .bar .filling {
-  background-color: black;
+  background-color: var(--text-900);
 }
 
 .bar:not(.editable) .filling {
@@ -54,7 +54,7 @@
   width: 12px;
   aspect-ratio: 1/1;
   border-radius: 50%;
-  background-color: black;
+  background-color: var(--text-900);
   position: absolute;
 }
 

@@ -15,18 +15,18 @@ import "./styles.css";
 
 const MainScene: Component = () => {
   return (
-    <div class="default-layout">
+    <div class="main-scene">
       <Nav />
-      <main class="default-layout__main">
+      <main class="main-scene__main">
         <TabContent />
-        <div class="default-layout__song-detail">
+        <div class="main-scene__song-detail">
           <SongDetail />
         </div>
 
         <QueueModal />
       </main>
 
-      <div class="default-layout__bg-image">
+      <div class="main-scene__bg-image">
         <SongImage src={song().bg} instantLoad={true} />
       </div>
     </div>
