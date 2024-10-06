@@ -109,6 +109,7 @@ export type System = {
 export type Settings = {
   volume: number;
   osuSongsDir: string;
+  audioDeviceId: string;
   "window.width": number;
   "window.height": number;
   "window.isMaximized": boolean;
