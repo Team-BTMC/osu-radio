@@ -1,7 +1,4 @@
 import { Accessor, Component, createSignal } from 'solid-js';
-import Fa from 'solid-fa';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import { GLOBAL_ICON_SCALE } from '../../App';
 import { Optional } from '../../../../@types';
 import { none, orDefault, some } from '../../lib/rust-like-utils-client/Optional';
 import { hideNotice } from './NoticeContainer';
@@ -64,7 +61,7 @@ const Notice: Component<NoticeProps> = props => {
             <div class="head">
               <h3>{props.notice.title}</h3>
               <button onClick={removeNotice}>
-                <Fa icon={faXmark} scale={GLOBAL_ICON_SCALE}/>
+                <i class='ri-close-line' />
               </button>
             </div>
 

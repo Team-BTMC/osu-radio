@@ -34,3 +34,13 @@
     padding-top: 16px;
   }
 }
+
+.song-list-search-order-by {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  .song-list-search-order-by__icon {
+    font-size: 20px;
+  }
+}

@@ -9,20 +9,6 @@ import {
   song
 } from "../../../components/song/song.utils";
 import { isSongUndefined } from "../../../lib/song";
-import Fa from "solid-fa";
-import {
-  faBackwardStep,
-  faForwardStep,
-  faPause,
-  faPlay,
-  faVolumeHigh,
-  faVolumeLow,
-  faVolumeXmark,
-  faAdd,
-  faRandom,
-  faRepeat
-} from "@fortawesome/free-solid-svg-icons";
-import { GLOBAL_ICON_SCALE } from "../../../App";
 import Bar from "../../bar/Bar";
 import IconButton from "@renderer/components/icon-button/IconButton";
 
@@ -52,13 +38,13 @@ const SongControls: Component<SongControlsProps> = () => {
         <IconButton>
           <Switch>
             <Match when={localVolume() === 0}>
-              <Fa icon={faVolumeXmark} scale={GLOBAL_ICON_SCALE} />
+              <i class="ri-volume-mute-fill" />
             </Match>
             <Match when={localVolume() < 0.5}>
-              <Fa icon={faVolumeLow} scale={GLOBAL_ICON_SCALE} />
+              <i class="ri-volume-down-fill" />
             </Match>
             <Match when={localVolume() >= 0.5}>
-              <Fa icon={faVolumeHigh} scale={GLOBAL_ICON_SCALE} />
+              <i class="ri-volume-up-fill" />
             </Match>
           </Switch>
         </IconButton>
@@ -74,10 +60,10 @@ const SongControls: Component<SongControlsProps> = () => {
           disabled={disable()}
           title="Shuffle"
         >
-          <Fa icon={faRandom} scale={GLOBAL_ICON_SCALE} />
+          <i class="ri-shuffle-fill" />
         </IconButton>
         <IconButton onClick={() => previous()} disabled={disable()} title="Play previous">
-          <Fa icon={faBackwardStep} scale={GLOBAL_ICON_SCALE} />
+          <i class="ri-skip-back-mini-fill" />
         </IconButton>
 
         <button
@@ -86,24 +72,30 @@ const SongControls: Component<SongControlsProps> = () => {
           disabled={disable()}
           title={playHint()}
         >
-          <Show when={!isPlaying()} fallback={<Fa icon={faPause} scale={GLOBAL_ICON_SCALE} />}>
-            <Fa icon={faPlay} scale={GLOBAL_ICON_SCALE} />
+          <Show when={!isPlaying()} fallback={<i class="ri-pause-fill" />}>
+            <i class="ri-play-fill" />
           </Show>
         </button>
 
         <IconButton onClick={() => next()} disabled={disable()} title="Play next">
-          <Fa icon={faForwardStep} scale={GLOBAL_ICON_SCALE} />
+          <i class="ri-skip-forward-mini-fill"></i>
         </IconButton>
 
-        <IconButton onClick={() => previous()} disabled={disable()} title="Repeat">
-          <Fa icon={faRepeat} scale={GLOBAL_ICON_SCALE} />
+        <IconButton
+          onClick={() => {
+            // TODO - implement repeat
+          }}
+          disabled={disable()}
+          title="Repeat"
+        >
+          <i class="ri-repeat-2-fill" />
         </IconButton>
       </div>
 
       {/* Right part */}
       <div class="song-controls__right-part">
         <IconButton>
-          <Fa icon={faAdd} scale={GLOBAL_ICON_SCALE} />
+          <i class="ri-add-fill" />
         </IconButton>
       </div>
     </div>

@@ -1,7 +1,7 @@
 .bar {
   --fill-per: 0%;
 
-  min-height: 8px;
+  min-height: 4px;
   min-width: 100%;
   position: relative;
 
@@ -10,7 +10,7 @@
 
 .bar.vertical {
   min-height: 100%;
-  min-width: 8px;
+  min-width: 4px;
 }
 
 .bar[data-disabled] {
@@ -41,17 +41,17 @@
 }
 
 .bar:not(.vertical) .filling {
-  min-height: 8px;
+  min-height: 4px;
   width: var(--fill-per);
 }
 
 .bar.vertical .filling {
-  min-width: 8px;
+  min-width: 4px;
   height: var(--fill-per);
 }
 
 .bar.editable .handle {
-  width: 1em;
+  width: 12px;
   aspect-ratio: 1/1;
   border-radius: 50%;
   background-color: black;

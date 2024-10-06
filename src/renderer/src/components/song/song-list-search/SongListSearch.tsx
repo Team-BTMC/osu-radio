@@ -1,13 +1,10 @@
 import { Accessor, Component, Setter, Signal } from "solid-js";
 import { Optional } from "../../../../../@types";
 import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-types";
-import Fa from "solid-fa";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { GLOBAL_ICON_SCALE } from "../../../App";
 import { Tag } from "../../search/TagSelect";
-import DropdownTrigger from "@renderer/components/dropdown-trigger/DropdownTrigger";
 import { setSongsSearch } from "../song-list/song-list.utils";
 import "./styles.css";
+import SongListSearchOrderBy from "./SongListSearchOrderBy";
 
 export type SearchProps = {
   tags: Signal<Tag[]>;
@@ -78,14 +75,12 @@ const SongListSearch: Component<SearchProps> = (props) => {
           }}
         />
         <label class="song-list-search__icon-container" for="search_input">
-          <Fa icon={faSearch} scale={GLOBAL_ICON_SCALE} />
+          <i class="ri-search-2-line" />
         </label>
       </div>
 
       <div class="song-list-search__filters">
-        <DropdownTrigger>Title</DropdownTrigger>
-        <DropdownTrigger>All musics</DropdownTrigger>
-        <DropdownTrigger>Tags</DropdownTrigger>
+        <SongListSearchOrderBy setOrder={props.setOrder} />
       </div>
 
       {/* <div class="results row">

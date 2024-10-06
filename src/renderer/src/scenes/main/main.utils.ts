@@ -1,22 +1,21 @@
-import { faCog, faMusic, IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { createSignal } from "solid-js";
 
 export type Tab = {
   label: string;
   value: string;
-  icon: IconDefinition;
+  icon: string;
 };
 
 export const TABS = {
   SONGS: {
     label: "Songs",
     value: "songs",
-    icon: faMusic
+    icon: "ri-music-fill"
   },
   SETTINGS: {
     label: "Settings",
     value: "settings",
-    icon: faCog
+    icon: "ri-settings-4-fill"
   }
 } satisfies Record<string, Tab>;
 

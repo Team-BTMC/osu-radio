@@ -1,7 +1,5 @@
 import SongList from "../../components/song/song-list/SongList";
 import { Component, For, JSXElement, Match, Show, Switch } from "solid-js";
-import Fa from "solid-fa";
-import { faList } from "@fortawesome/free-solid-svg-icons";
 import SongDetail from "../../components/song/song-detail/SongDetail";
 import SongImage from "@renderer/components/song/SongImage";
 import { mainActiveTab, setMainActiveTab, Tab, TABS } from "./main.utils";
@@ -44,7 +42,7 @@ const Nav: Component = () => {
 
       <div class="nav__queue">
         <IconButton data-active={songQueueModalOpen()} onClick={toggleSongQueueModalOpen}>
-          <Fa icon={faList} class="nav__queue-icon" />
+          <i class="ri-stack-fill nav__queue-icon" />
         </IconButton>
       </div>
     </nav>
@@ -61,7 +59,7 @@ const NavItem: Component<NavItemProps> = ({ children, value, icon }) => {
       data-selected={mainActiveTab() === value}
       onclick={() => setMainActiveTab(value)}
     >
-      <Fa class="nav-item__icon" icon={icon} />
+      <i class={`nav-item__icon ${icon}`} />
       <span class="nav-item__text">{children}</span>
     </button>
   );
