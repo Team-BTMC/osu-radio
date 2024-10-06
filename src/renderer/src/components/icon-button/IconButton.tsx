@@ -3,7 +3,7 @@ import "./styles.css";
 
 type Props = JSX.IntrinsicElements["button"];
 const IconButton: Component<Props> = (props) => {
-  return <button {...mergeProps({ class: "icon-buton" }, props)} />;
+  return <button {...mergeProps({ class: "icon-button" }, props)} />;
 };
 
 export default IconButton;

@@ -95,7 +95,13 @@ const SongControls: Component<SongControlsProps> = () => {
           <Fa icon={faForwardStep} scale={GLOBAL_ICON_SCALE} />
         </IconButton>
 
-        <IconButton onClick={() => previous()} disabled={disable()} title="Repeat">
+        <IconButton
+          onClick={() => {
+            // TODO - implement repeat
+          }}
+          disabled={disable()}
+          title="Repeat"
+        >
           <Fa icon={faRepeat} scale={GLOBAL_ICON_SCALE} />
         </IconButton>
       </div>

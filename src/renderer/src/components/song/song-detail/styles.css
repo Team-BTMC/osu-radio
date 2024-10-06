@@ -73,9 +73,9 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background: black;
+        background: var(--text-900);
         border-radius: 50%;
-        color: var(--on-background);
+        color: var(--background);
       }
 
       .song-controls__left-part {

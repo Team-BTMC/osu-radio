@@ -1,0 +1,83 @@
+.dir-select {
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 32px;
+  background-image: url("../../assets/dir-select-bg.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  .dir-select__title {
+    text-align: center;
+    font-size: 24px;
+    padding-top: 50px;
+    color: var(--text-900);
+  }
+
+  .dir-select__container {
+    box-shadow: -19px 414px 166px rgba(0, 0, 0, 0.01), -10px 233px 140px rgba(0, 0, 0, 0.05),
+      -5px 103px 104px rgba(0, 0, 0, 0.09), -1px 26px 57px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 48px;
+    width: 100%;
+    max-width: 860px;
+    height: 100%;
+    max-height: 720px;
+    padding: 32px;
+    border-radius: var(--rounded-lg);
+    background-color: rgba(var(--background-rgb), 0.72);
+    border: 1px solid var(--separator);
+    overflow-y: auto;
+
+    .select__select-folder-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      .select__select-folder-input-container {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+
+        .select__select-folder-label {
+          font-size: 14px;
+          font-weight: bold;
+          color: var(--text-800);
+        }
+
+        .select__select-folder-input {
+          display: flex;
+          justify-content: space-between;
+          align-items: baseline;
+          background-color: var(--input-background);
+          padding: 4px 4px 4px 16px;
+          border-radius: var(--rounded);
+          border: 1px solid rgba(255, 255, 255, 0.06);
+
+          .select__select-folder-input-button {
+            border-radius: 4px;
+          }
+        }
+
+        .select__select-folder-hint {
+          color: var(--text-500);
+          font-size: 14px;
+          padding-top: 4px;
+        }
+      }
+
+      .select__select-folder-actions {
+        display: flex;
+        gap: 8px;
+      }
+    }
+
+    .select__bottom-part {
+      display: flex;
+      justify-content: end;
+      align-items: end;
+    }
+  }
+}

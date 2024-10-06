@@ -1,0 +1,26 @@
+.loading-scene {
+  height: 100vh;
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  background-image: url("../../assets/dir-select-bg.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  .loading-scene__title {
+    padding-bottom: 40px;
+  }
+
+  .loading-scene__bar {
+    height: 12px;
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .loading-scene__hint {
+    color: var(--text-500);
+  }
+}
