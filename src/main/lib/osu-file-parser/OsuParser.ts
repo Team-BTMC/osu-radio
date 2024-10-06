@@ -196,8 +196,6 @@ export class OsuParser {
         song.titleUnicode = db.readString().trim();
         song.creator = db.readString().trim();
 
-        // NOTE: I'm being lazy here, and only loading the first diff for a given audio file.
-        //       This is wrong, especially if diffs of a set aren't right next to each other in the db.
         const diff_name = db.readString();
         song.diffs = [diff_name];
 
