@@ -30,7 +30,7 @@ const ListRoot: ParentComponent<Props> = (props) => {
   return <ListContext.Provider value={value}>{props.children}</ListContext.Provider>;
 };
 
-export function useList() {
+export function useList(): Context {
   const state = useContext(ListContext);
   if (!state) {
     throw new Error("useList needs to be used inisde of the `ListContext` component.");

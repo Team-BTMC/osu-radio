@@ -81,7 +81,7 @@ export const PopoverRoot: ParentComponent<Props> = (props) => {
   return <PopoverContext.Provider value={state}>{props.children}</PopoverContext.Provider>;
 };
 
-export function usePopover() {
+export function usePopover(): Context {
   const state = useContext(PopoverContext);
   if (!state) {
     throw new Error("usePopover needs to be used inisde of the `Popover` component.");
