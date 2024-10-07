@@ -5,6 +5,7 @@ import { Router } from "../lib/route-pass/Router";
 import { none, some } from "../lib/rust-like-utils-backend/Optional";
 import { fail, ok } from "../lib/rust-like-utils-backend/Result";
 import { Storage } from "../lib/storage/Storage";
+import { pathToFileURL } from "url";
 
 Router.respond("resource::getPath", (_evt, id) => {
   if (id === undefined) {
@@ -18,7 +19,7 @@ Router.respond("resource::getPath", (_evt, id) => {
   }
 
   // todo User may have spaces in osuDir if they are not using default path. Ensure that the whole path is valid URL
-  return ok(encodeFile(id));
+  return ok(pathToFileURL(id).href);
 });
 
 Router.respond("resource::getMediaSessionImage", async (_evt, bgPath) => {
@@ -36,13 +37,6 @@ Router.respond("resource::getMediaSessionImage", async (_evt, bgPath) => {
 
   return some(`data:${mimeType};base64,${buffer.toString("base64")}`);
 });
-
-function encodeFile(uri: string): string {
-  return uri
-    .split(/[\/\\]/)
-    .map((s, i) => i !== 0 ? encodeURIComponent(s): s)
-    .join("/");
-}
 
 Router.respond("resource::get", (_evt, id, table) => {
   return Storage.getTable(table).get(id);
