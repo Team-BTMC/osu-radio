@@ -9,7 +9,7 @@ type ZeroToOne = number;
 
 const player = new Audio();
 
-const [media, setMedia] = createSignal<URL>();
+const [media, setMedia] = createSignal<string>();
 
 const [song, setSong] = createStore<Song>(createDefaultSong());
 export { song };
@@ -70,7 +70,7 @@ export { bpm };
 const [isPlaying, setIsPlaying] = createSignal<boolean>(false);
 export { isPlaying };
 
-async function getCurrent(): Promise<{ song: Song; media: URL } | undefined> {
+async function getCurrent(): Promise<{ song: Song; media: string } | undefined> {
   const song = await window.api.request("queue::current");
 
   if (song.isNone) {
@@ -82,11 +82,9 @@ async function getCurrent(): Promise<{ song: Song; media: URL } | undefined> {
   if (resource.isError) {
     return;
   }
-  const media = new URL(resource.value);
-
   return {
     song: song.value,
-    media
+    media: resource.value
   };
 }
 
@@ -105,8 +103,8 @@ export async function play(): Promise<void> {
 
   const m = media();
 
-  if (m !== undefined && player.src !== m.href) {
-    player.src = m.href;
+  if (m !== undefined && player.src !== m) {
+    player.src = m;
   }
 
   player.volume = calculateVolume();
@@ -139,7 +137,7 @@ export async function next() {
     return;
   }
 
-  player.src = current.media.href;
+  player.src = current.media;
   setMedia(current.media);
 
   if (isPlaying() === true) {
@@ -221,7 +219,7 @@ export async function previous() {
     return;
   }
 
-  player.src = current.media.href;
+  player.src = current.media;
   setMedia(current.media);
 
   if (isPlaying() === true) {
@@ -316,7 +314,7 @@ window.api.listen("queue::songChanged", async (s) => {
   if (resource.isError) {
     return;
   }
-  setMedia(new URL(`file://${decodeURIComponent(resource.value)}`));
+  setMedia(resource.value);
   setSong(s);
   await play();
 });

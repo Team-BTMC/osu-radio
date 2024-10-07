@@ -1,6 +1,4 @@
-import { ResourceID } from '../../../../@types';
-
-
+import { ResourceID } from "../../../../@types";
 
 export async function getResourcePath(id: ResourceID | undefined): Promise<string> {
   const result = await window.api.request("resource::getPath", id);
@@ -9,10 +7,8 @@ export async function getResourcePath(id: ResourceID | undefined): Promise<strin
     return "";
   }
 
-  return new URL(result.value).href;
+  return result.value;
 }
-
-
 
 const seen = new Map<string, boolean>();
 
@@ -25,7 +21,7 @@ export function availableResource(resource: string, fallback: string): Promise<s
 
   const img = document.createElement("img");
 
-  const p = new Promise<string>(resolve => {
+  const p = new Promise<string>((resolve) => {
     img.addEventListener("load", () => {
       seen.set(resource, true);
       resolve(resource);
