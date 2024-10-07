@@ -37,7 +37,11 @@ npm run start
 npm run dev
 ```
 > [!WARNING]
-> If you're planning on reinstalling it, be sure to go to `%appdata%` (`Win + R`, then type that in) and remove the folder `osu-radio-solidjs`
+> If you're planning on reinstalling it
+>
+> Windows: Be sure to go to `%appdata%` (`Win + R`, then type that in) and remove the folder `osu-radio-solidjs`
+> 
+> Linux: Be sure to go to `~/.config/` and delete `osu-radio` directory
 
 ### Contribution
 > [!TIP]
