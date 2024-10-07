@@ -245,7 +245,6 @@ export class OsuParser {
           db.readByte(); // timing change
 
           if (bpm > 0) {
-            console.log(`${song.title} bpm: ${bpm}`);
             song.bpm.push([offset, bpm]);
           }
         }
