@@ -1,9 +1,9 @@
-import { none, some } from "./rust-like-utils-client/Optional.js";
-import { AudioSource, Optional, Song } from "../../../@types";
-import { createDefaultSong, isSongUndefined, msToBPM } from "./song";
 import { createEffect, createSignal } from "solid-js";
-import { delay } from "./delay";
 import { createStore } from "solid-js/store";
+import { AudioSource, Optional, Song } from "../../../@types";
+import { delay } from "./delay";
+import { none, some } from "./rust-like-utils-client/Optional.js";
+import { createDefaultSong, isSongUndefined, msToBPM } from "./song";
 
 type ZeroToOne = number;
 
@@ -21,8 +21,7 @@ const [timestamp, setTimestamp] = createSignal(0);
 export { timestamp };
 
 const [volume, setVolume] = createSignal<ZeroToOne>(0.3);
-export { volume, setVolume };
-
+export { setVolume, volume };
 window.api.request("settings::get", "volume").then((v) => {
   if (v.isNone) {
     return;
@@ -30,14 +29,13 @@ window.api.request("settings::get", "volume").then((v) => {
   setVolume(v.value);
 });
 
-window.api.request("settings::get", "audioDeviceId").then(v => {
-    if (v.isNone) {
-      return;
-    }
+window.api.request("settings::get", "audioDeviceId").then((v) => {
+  if (v.isNone) {
+    return;
+  }
 
-    changeAudioDevice(v.value);
+  changeAudioDevice(v.value);
 });
-
 
 let bgPath;
 
@@ -84,7 +82,6 @@ async function getCurrent(): Promise<{ song: Song; media: URL } | undefined> {
   if (resource.isError) {
     return;
   }
-
   const media = new URL(resource.value);
 
   return {
@@ -170,7 +167,7 @@ export async function setMediaSession(song: Song) {
     setMediaSessionPosition();
 
     const actionHandlers = {
-      play: togglePlay,
+      play: () => togglePlay(),
       pause: pause,
       previoustrack: previous,
       nexttrack: next
@@ -319,8 +316,7 @@ window.api.listen("queue::songChanged", async (s) => {
   if (resource.isError) {
     return;
   }
-
-  setMedia(new URL(resource.value));
+  setMedia(new URL(`file://${decodeURIComponent(resource.value)}`));
   setSong(s);
   await play();
 });

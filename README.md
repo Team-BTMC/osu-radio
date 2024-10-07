@@ -26,16 +26,21 @@ cd osu-radio
 npm install
 ```
 
-`A` | For a production (User) startup, 
-```sh
+`A` | For a production (User) startup,
+```
 npm run start
 ```
-`B` | For a hot reloading (Dev) launch, 
-```sh
+`B` | For a hot reloading (Dev) launch,
+```
 npm run dev
 ```
+
 > [!WARNING]
-> If you're planning on reinstalling it, be sure to go to `%appdata%` (`Win + R`, then type that in) and remove the folder `osu-radio-solidjs`
+> If you're planning on reinstalling it
+>
+> Windows: Be sure to go to `%appdata%` (`Win + R`, then type that in) and remove the folder `osu-radio-solidjs`
+>
+> Linux: Be sure to go to `~/.config/` and delete `osu-radio` directory
 
 ### Contribution
 > [!TIP]
@@ -43,7 +48,7 @@ npm run dev
 
 If you're new to contributing, consider checking out [How to Contribute to an Open Source](https://opensource.guide/how-to-contribute/). It's the best and simplest guide to understand what contributing really is
 
-If you're more interested in the coding side of things, be sure to read [Good Manners of a PR & Best Practices](https://medium.com/deliveryherotechhub/good-manners-of-a-pull-request-some-best-practices-cb2de3c3aea1), as well as [How to write a perfect PR](https://github.blog/developer-skills/github/how-to-write-the-perfect-pull-request/) 
+If you're more interested in the coding side of things, be sure to read [Good Manners of a PR & Best Practices](https://medium.com/deliveryherotechhub/good-manners-of-a-pull-request-some-best-practices-cb2de3c3aea1), as well as [How to write a perfect PR](https://github.blog/developer-skills/github/how-to-write-the-perfect-pull-request/)
 
 If you're more interested in contributing as a designer, check out the [Figma](https://www.figma.com/design/tNBJr7TlEsoWsWdAewqoUg/osu!-radio?node-id=0-1&t=aIuThZAj00HcSjM5-1)
 
@@ -61,5 +66,6 @@ We'll be staying on Electron for the time being. As for UI, it will stay web-bas
 <br>
 For anything **code** related (Discussion, PR, Suggestions), contact **@CaptSiro**
 <br>
+
 For anything **design** related (UI / UX, Ideas, Suggestions), contact **@Dudu**
 ###### Animations are subject to change (the very few osu!radio has).

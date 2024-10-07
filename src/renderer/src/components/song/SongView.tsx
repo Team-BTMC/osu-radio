@@ -1,22 +1,26 @@
-import Search from '../search/Search';
-import SongItem from './SongItem';
-import { Component, createEffect, createSignal, onCleanup, onMount } from 'solid-js';
-import { Optional, ResourceID, SongsQueryPayload, SongViewProps, Tag } from '../../../../@types';
+import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
+import { Optional, ResourceID, SongsQueryPayload, Tag } from "../../../../@types";
+import { SearchQueryError } from "../../../../main/lib/search-parser/@search-types";
+import { namespace } from "../../App";
 import "../../assets/css/song/song-view.css";
-import { SearchQueryError } from '../../../../main/lib/search-parser/@search-types';
-import { none, some } from '../../lib/rust-like-utils-client/Optional';
-import InfiniteScroller from '../InfiniteScroller';
-import { namespace } from '../../App';
-import Impulse from '../../lib/Impulse';
-import PlayNext from './context-menu/items/PlayNext';
+import Impulse from "../../lib/Impulse";
+import { none, some } from "../../lib/rust-like-utils-client/Optional";
+import InfiniteScroller from "../InfiniteScroller";
+import Search from "../search/Search";
+import PlayNext from "./context-menu/items/PlayNext";
+import SongItem from "./SongItem";
 
+export type SongViewProps = {
+  isAllSongs?: boolean;
+  isQueue?: boolean;
+  playlist?: string;
+};
 
-
-const SongView: Component<SongViewProps> = props => {
+const SongView: Component<SongViewProps> = (props) => {
   const querySignal = createSignal("");
   const [query] = querySignal;
 
-  const tagsSignal = createSignal<Tag[]>([], { equals:false });
+  const tagsSignal = createSignal<Tag[]>([], { equals: false });
   const [tags] = tagsSignal;
 
   const [order, setOrder] = createSignal("title:asc");
@@ -28,7 +32,9 @@ const SongView: Component<SongViewProps> = props => {
     tags: tags()
   });
 
-  const [searchError, setSearchError] = createSignal<Optional<SearchQueryError>>(none(), { equals: false });
+  const [searchError, setSearchError] = createSignal<Optional<SearchQueryError>>(none(), {
+    equals: false
+  });
   const resetListing = new Impulse();
 
   const searchSongs = async () => {
@@ -49,7 +55,7 @@ const SongView: Component<SongViewProps> = props => {
       tags: t
     });
     resetListing.pulse();
-  }
+  };
 
   onMount(() => {
     createEffect(searchSongs);
@@ -67,7 +73,7 @@ const SongView: Component<SongViewProps> = props => {
       startSong: songResource,
       ...payload()
     });
-  }
+  };
 
   const group = namespace.create(true);
 
@@ -78,7 +84,8 @@ const SongView: Component<SongViewProps> = props => {
         tags={tagsSignal}
         setOrder={setOrder}
         count={count}
-        error={searchError}/>
+        error={searchError}
+      />
 
       <InfiniteScroller
         apiKey={"query::songsPool"}
@@ -88,19 +95,15 @@ const SongView: Component<SongViewProps> = props => {
         setCount={setCount}
         reset={resetListing}
         fallback={<div>No songs...</div>}
-        builder={s =>
-          <SongItem
-            song={s}
-            group={group}
-            onSelect={createQueue}
-          >
-            <PlayNext path={s.path}/>
+        builder={(s) => (
+          <SongItem song={s} group={group} onSelect={createQueue}>
+            <PlayNext path={s.path} />
             <button>Add to playlist</button>
           </SongItem>
-        }
+        )}
       />
     </div>
   );
-}
+};
 
 export default SongView;
