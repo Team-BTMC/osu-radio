@@ -1,6 +1,9 @@
 import type {
   AudioSource,
   ImageSource,
+  InfiniteScrollerInitResponse,
+  InfiniteScrollerRequest,
+  InfiniteScrollerResponse,
   Optional,
   QueueCreatePayload,
   ResourceID,
@@ -12,11 +15,6 @@ import type {
 } from "./@types";
 import type { SearchQuery } from "./main/lib/search-parser/@search-types";
 import type { ConfigError, ConfigSuccess } from "./main/lib/template-parser/parser/TemplateParser";
-import type {
-  InfiniteScrollerInitResponse,
-  InfiniteScrollerRequest,
-  InfiniteScrollerResponse
-} from "./@types";
 
 export type RequestAPI = {
   "resource::get": (
