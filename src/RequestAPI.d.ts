@@ -16,7 +16,7 @@ import type {
   InfiniteScrollerInitResponse,
   InfiniteScrollerRequest,
   InfiniteScrollerResponse
-} from "./renderer/src/components/InfiniteScroller";
+} from "./@types";
 
 export type RequestAPI = {
   "resource::get": (
