@@ -7,8 +7,8 @@ import { fail, ok } from "../lib/rust-like-utils-backend/Result";
 import { Storage } from "../lib/storage/Storage";
 import { pathToFileURL } from "url";
 
-Router.respond("resource::getPath", (_evt, id) => {
-  if (id === undefined) {
+Router.respond("resource::getPath", (_evt, path) => {
+  if (path === undefined) {
     return fail("Can not find resource for 'undefined'.");
   }
 
@@ -19,7 +19,7 @@ Router.respond("resource::getPath", (_evt, id) => {
   }
 
   // todo User may have spaces in osuDir if they are not using default path. Ensure that the whole path is valid URL
-  return ok(pathToFileURL(id).href);
+  return ok(pathToFileURL(path).href);
 });
 
 Router.respond("resource::getMediaSessionImage", async (_evt, bgPath) => {
