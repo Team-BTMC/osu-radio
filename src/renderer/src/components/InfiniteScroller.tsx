@@ -1,27 +1,40 @@
-import { Component, createSignal, For, JSX, onCleanup, onMount, Setter, Show, splitProps } from 'solid-js';
-import { InfiniteScrollerInitResponse, InfiniteScrollerRequest, InfiniteScrollerResponse, OmitPropsWithoutReturnType } from '../../../@types';
-import Impulse from '../lib/Impulse';
-import { RequestAPI } from '../../../RequestAPI';
+import {
+  Component,
+  createSignal,
+  For,
+  JSX,
+  onCleanup,
+  onMount,
+  Setter,
+  Show,
+  splitProps
+} from "solid-js";
+import {
+  InfiniteScrollerInitResponse,
+  InfiniteScrollerRequest,
+  InfiniteScrollerResponse,
+  OmitPropsWithoutReturnType
+} from "../../../@types";
+import Impulse from "../lib/Impulse";
+import { RequestAPI } from "../../../RequestAPI";
 
 type InfinityScrollerProps = {
-  apiKey: keyof OmitPropsWithoutReturnType<RequestAPI, InfiniteScrollerResponse>,
-  apiData?: any,
+  apiKey: keyof OmitPropsWithoutReturnType<RequestAPI, InfiniteScrollerResponse>;
+  apiData?: any;
 
-  apiInitKey: keyof OmitPropsWithoutReturnType<RequestAPI, InfiniteScrollerInitResponse>,
-  apiInitData?: any,
+  apiInitKey: keyof OmitPropsWithoutReturnType<RequestAPI, InfiniteScrollerInitResponse>;
+  apiInitData?: any;
 
-  builder: (props: any) => JSX.Element,
-  reset?: Impulse,
+  builder: (props: any) => JSX.Element;
+  reset?: Impulse;
 
-  onLoadInitial?: () => any,
-  onLoadItems?: () => any,
-  fallback?: JSX.Element,
-  autoload?: boolean,
+  onLoadInitial?: () => any;
+  onLoadItems?: () => any;
+  fallback?: JSX.Element;
+  autoload?: boolean;
 
-  setCount?: Setter<number>,
-} & JSX.HTMLAttributes<HTMLDivElement>
-
-
+  setCount?: Setter<number>;
+} & JSX.HTMLAttributes<HTMLDivElement>;
 
 const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
   const [, rest] = splitProps(props, [
@@ -36,21 +49,17 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
     "setCount"
   ]);
 
-
-
   const [elements, setElements] = createSignal<any[]>([]);
   const [show, setShow] = createSignal(true);
   let container;
   let init: number;
-
-
 
   let indexStart = -1;
   const loadStart = async () => {
     const request: InfiniteScrollerRequest = {
       index: indexStart,
       init,
-      direction: 'up'
+      direction: "up"
     };
 
     const response = await window.api.request(props.apiKey, request, props.apiData);
@@ -67,40 +76,41 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
 
     observerStart.observe(container.children[0]);
   };
-  const observerStart = new IntersectionObserver(async entries => {
-    const first = entries[0];
+  const observerStart = new IntersectionObserver(
+    async (entries) => {
+      const first = entries[0];
 
-    if (!first.isIntersecting) {
-      return;
-    }
-
-    observerStart.unobserve(first.target);
-    await loadStart();
-
-    let offset = 0;
-    for (const child of container.children) {
-      if (child === first.target) {
-        break;
+      if (!first.isIntersecting) {
+        return;
       }
 
-      offset += child.scrollHeight;
+      observerStart.unobserve(first.target);
+      await loadStart();
+
+      let offset = 0;
+      for (const child of container.children) {
+        if (child === first.target) {
+          break;
+        }
+
+        offset += child.scrollHeight;
+      }
+
+      container.scrollTo(0, offset);
+    },
+    {
+      root: container,
+      rootMargin: "50px",
+      threshold: 0
     }
-
-    container.scrollTo(0, offset);
-  }, {
-    root: container,
-    rootMargin: "50px",
-    threshold: 0
-  });
-
-
+  );
 
   let indexEnd = 0;
   const loadEnd = async () => {
     const request: InfiniteScrollerRequest = {
       index: indexEnd,
       init,
-      direction: 'down'
+      direction: "down"
     };
 
     const response = await window.api.request(props.apiKey, request, props.apiData);
@@ -116,23 +126,24 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
     }
 
     observerEnd.observe(container.children[container.children.length - 1]);
-  }
-  const observerEnd = new IntersectionObserver(async entries => {
-    const lastElement = entries[0];
+  };
+  const observerEnd = new IntersectionObserver(
+    async (entries) => {
+      const lastElement = entries[0];
 
-    if (!lastElement.isIntersecting) {
-      return;
+      if (!lastElement.isIntersecting) {
+        return;
+      }
+
+      observerEnd.unobserve(lastElement.target);
+      await loadEnd();
+    },
+    {
+      root: container,
+      rootMargin: "50px",
+      threshold: 0
     }
-
-    observerEnd.unobserve(lastElement.target);
-    await loadEnd();
-  }, {
-    root: container,
-    rootMargin: "50px",
-    threshold: 0
-  });
-
-
+  );
 
   const reset = async () => {
     setElements([]);
@@ -140,7 +151,7 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
     observerEnd.disconnect();
     observerStart.disconnect();
 
-    const opt = (await window.api.request(props.apiInitKey, props.apiInitData));
+    const opt = await window.api.request(props.apiInitKey, props.apiInitData);
     if (opt.isNone || opt.value.count === 0) {
       setShow(false);
 
@@ -170,7 +181,7 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
     if (props.onLoadInitial !== undefined) {
       props.onLoadInitial();
     }
-  }
+  };
 
   onMount(async () => {
     if (props.autoload === undefined || props.autoload === true) {
@@ -191,12 +202,10 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
   return (
     <div class={"list"} ref={container} {...rest}>
       <Show when={show() === true} fallback={props.fallback ?? <div>No items...</div>}>
-        <For each={elements()}>{componentProps =>
-          props.builder(componentProps)
-        }</For>
+        <For each={elements()}>{(componentProps) => props.builder(componentProps)}</For>
       </Show>
     </div>
   );
-}
+};
 
 export default InfiniteScroller;

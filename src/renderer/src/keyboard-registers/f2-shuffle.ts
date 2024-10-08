@@ -1,8 +1,6 @@
-import { Keyboard } from '../lib/Keyboard';
-import { addNotice } from '../components/notice/NoticeContainer';
-import { active, ACTIVE_QUEUE } from '../components/scenes/MainScene';
-
-
+import { Keyboard } from "../lib/Keyboard";
+import { addNotice } from "../components/notice/NoticeContainer";
+import { active, ACTIVE_QUEUE } from "../components/scenes/MainScene";
 
 Keyboard.register({
   key: "F2",
@@ -16,7 +14,7 @@ Keyboard.register({
     addNotice({
       class: "notice",
       title: "Shuffled",
-      content: "Current queue have been shuffled",
+      content: "Current queue have been shuffled"
     });
   }
 });

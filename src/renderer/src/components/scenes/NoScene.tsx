@@ -1,5 +1,3 @@
 export default function NoScene() {
-  return (
-    <div class="scene"></div>
-  );
+  return <div class="scene"></div>;
 }

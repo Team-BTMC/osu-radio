@@ -1,19 +1,23 @@
-import { contextBridge, ipcRenderer } from 'electron';
-import type { APIListener, Packet, PacketType } from '../@types';
-import { RequestAPI } from '../RequestAPI';
-import { ListenAPI } from '../ListenAPI';
+import { contextBridge, ipcRenderer } from "electron";
+import type { APIListener, Packet, PacketType } from "../@types";
+import { RequestAPI } from "../RequestAPI";
+import { ListenAPI } from "../ListenAPI";
 
-
-
-function createPacketPreload<T>(channel: string, token: string, data: T, type: PacketType = "DATA"): Packet<T> {
+function createPacketPreload<T>(
+  channel: string,
+  token: string,
+  data: T,
+  type: PacketType = "DATA"
+): Packet<T> {
   return {
-    channel, token, data, type
-  }
+    channel,
+    token,
+    data,
+    type
+  };
 }
 
 const apiListeners = new Map<string, APIListener<any>[]>();
-
-
 
 ipcRenderer.on("communication/renderer", (_evt, packet: Packet<any>) => {
   const p = createPacketPreload(packet.channel, packet.token, undefined as any);
@@ -35,7 +39,7 @@ ipcRenderer.on("communication/renderer", (_evt, packet: Packet<any>) => {
 
       if (got instanceof Promise) {
         promises.push(got);
-        got.then(x => {
+        got.then((x) => {
           responses.push(x);
         });
         continue;
@@ -56,18 +60,23 @@ ipcRenderer.on("communication/renderer", (_evt, packet: Packet<any>) => {
         ipcRenderer.send("communication/main", p);
       } catch (e) {
         console.log(e);
-        console.log("If it says something about not being able to clone object then you are sending non-standard JS object.");
+        console.log(
+          "If it says something about not being able to clone object then you are sending non-standard JS object."
+        );
         console.log(responses);
       }
     })
-    .catch(e => {
+    .catch((e) => {
       console.log(e);
       console.log(promises);
     });
 });
 
 const api = {
-  request<E extends keyof RequestAPI>(event: E, ...args: Parameters<RequestAPI[E]>): Promise<ReturnType<RequestAPI[E]>> {
+  request<E extends keyof RequestAPI>(
+    event: E,
+    ...args: Parameters<RequestAPI[E]>
+  ): Promise<ReturnType<RequestAPI[E]>> {
     return ipcRenderer.invoke(event, ...args) as any;
   },
 
@@ -97,4 +106,4 @@ const api = {
   }
 };
 
-contextBridge.exposeInMainWorld('api', api);
+contextBridge.exposeInMainWorld("api", api);

@@ -1,6 +1,6 @@
-import { resolve } from 'path'
-import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
-import solid from 'vite-plugin-solid'
+import { resolve } from "path";
+import { defineConfig, externalizeDepsPlugin } from "electron-vite";
+import solid from "vite-plugin-solid";
 
 export default defineConfig({
   main: {
@@ -12,9 +12,9 @@ export default defineConfig({
   renderer: {
     resolve: {
       alias: {
-        '@renderer': resolve('src/renderer/src')
+        "@renderer": resolve("src/renderer/src")
       }
     },
     plugins: [solid()]
   }
-})
+});
