@@ -6,7 +6,7 @@ import { song as selectedSong } from "../../../components/song/song.utils";
 import SongHint from "../SongHint";
 import SongImage from "../SongImage";
 import formatTime from "../../../lib/time-formatter";
-import { FastAverageColor } from "fast-average-color"; // Import FastAverageColor
+import { useSongColor } from "../SongColor";
 import "./styles.css";
 
 type SongItemProps = {
@@ -30,9 +30,9 @@ const SongItem: Component<SongItemProps> = ({
 }) => {
   const showSignal = createSignal(false);
   const [_coords, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
-  const [avgColor, setAvgColor] = createSignal<string>("black"); // Default color
-
   let item: HTMLElement;
+
+  const { averageColor, handleImageLoad } = useSongColor();
 
   const showMenu = (evt: MouseEvent) => {
     if (children === undefined) {
@@ -42,19 +42,6 @@ const SongItem: Component<SongItemProps> = ({
 
     setCoords([evt.clientX, evt.clientY]);
     showSignal[1](true);
-  };
-
-  // Handle image load and color extraction
-  const handleImageLoad = (imageElement: HTMLImageElement) => {
-    const fac = new FastAverageColor();
-
-    fac.getColorAsync(imageElement)
-      .then((color) => {
-        setAvgColor(color.hex); // Set the average color in hex format
-      })
-      .catch((err) => {
-        console.error("Error extracting color:", err);
-      });
   };
 
   onMount(() => {
@@ -74,21 +61,23 @@ const SongItem: Component<SongItemProps> = ({
     <div
       class="song-item"
       data-active={selectedSong().path === song.path}
-      ref={(el) => item = el as HTMLElement} // Assign item using Solid.js ref pattern
+      ref={(el) => (item = el as HTMLElement)}
       data-url={song.bg}
       onContextMenu={showMenu}
-      style={{ backgroundColor: avgColor() } as JSX.CSSProperties} // Use the extracted average color
+      style={{ backgroundColor: averageColor() } as JSX.CSSProperties}
     >
-      <SongImage
-        class="song-item__image"
-        src={song.bg}
-        group={group}
-        onImageLoad={handleImageLoad} // Pass the handleImageLoad function to extract color
-      />
+      {song.bg && (
+        <SongImage
+          class="song-item__image"
+          src={song.bg}
+          group={group}
+          onImageLoad={handleImageLoad}
+        />
+      )}
 
       <div class="song-item__container">
         <h3 class="song-item__title">{song.title}</h3>
-        <p class="song-detail__artist">
+        <p class="song-item__artist">
           {song.artist}
           {" // "}
           {formatTime(song.duration * 1_000)} {/* Add song length here */}

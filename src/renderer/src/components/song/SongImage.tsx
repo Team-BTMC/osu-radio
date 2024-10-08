@@ -4,20 +4,19 @@ import { availableResource, getResourcePath } from "../../lib/tungsten/resource"
 
 const SET_SOURCE_EVENT = "set-source";
 const GLOBAL_GROUP = "global-group";
-
 const observers = new Map<string, IntersectionObserver>();
 
 type SongImageProps = {
   src: string | undefined | Accessor<string | undefined>;
   group?: string;
   instantLoad?: boolean;
-  onImageLoad?: (imgElement: HTMLImageElement) => void; // Pass a callback when the image is loaded
+  onImageLoad?: (imgElement: HTMLImageElement) => void;
 } & JSX.IntrinsicElements["div"];
 
 const SongImage: Component<SongImageProps> = (props) => {
   const [src, setSrc] = createSignal(defaultBackground);
   let image!: HTMLDivElement;
-  let hiddenImage!: HTMLImageElement; // Reference to the hidden image
+  let hiddenImage!: HTMLImageElement;
 
   const setSource = (evt) => {
     setSrc(evt.detail);
@@ -32,8 +31,12 @@ const SongImage: Component<SongImageProps> = (props) => {
       setSrc(resolvedSrc);
 
       if (hiddenImage && props.onImageLoad) {
+        // Set crossOrigin before setting src
+        hiddenImage.crossOrigin = "Anonymous";
+        hiddenImage.onload = () => {
+          props.onImageLoad?.(hiddenImage);
+        };
         hiddenImage.src = resolvedSrc;
-        props.onImageLoad(hiddenImage); // Call the callback when image is loaded
       }
 
       return;
@@ -69,8 +72,12 @@ const SongImage: Component<SongImageProps> = (props) => {
             );
 
             if (hiddenImage && props.onImageLoad) {
+              // Set crossOrigin before setting src
+              hiddenImage.crossOrigin = "Anonymous";
+              hiddenImage.onload = () => {
+                props.onImageLoad?.(hiddenImage);
+              };
               hiddenImage.src = resolvedSrc;
-              props.onImageLoad(hiddenImage); // Call the callback when image is loaded
             }
 
             observer?.unobserve(entries[i].target);
@@ -101,10 +108,9 @@ const SongImage: Component<SongImageProps> = (props) => {
       />
       {/* Hidden img element for extracting color */}
       <img
-        ref={hiddenImage} // Reference to the hidden image
-        src={src()} // Same source as the background image
+        ref={hiddenImage}
         alt="hidden"
-        style={{ display: "none" }} // Keep it hidden
+        style={{ visibility: "hidden", position: "absolute", width: 0, height: 0 }}
       />
     </>
   );

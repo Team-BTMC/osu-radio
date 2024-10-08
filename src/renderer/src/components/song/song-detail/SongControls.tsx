@@ -27,13 +27,14 @@ import Bar from "../../bar/Bar";
 import IconButton from "@renderer/components/icon-button/IconButton";
 
 type SongControlsProps = {
-  avgColor: string; // Accept avgColor as a prop
+  // Accept averageColor as a prop
+  averageColor: string;
 };
 
 const SongControls: Component<SongControlsProps> = (props) => {
   const [disable, setDisable] = createSignal(isSongUndefined(song()));
   const [playHint, setPlayHint] = createSignal("");
-  const [isVolumeBarVisible, setIsVolumeBarVisible] = createSignal(false); // Signal to track visibility
+  const [isVolumeBarVisible, setIsVolumeBarVisible] = createSignal(false);
 
   createEffect(() => {
     const disabled = disable();
@@ -49,12 +50,12 @@ const SongControls: Component<SongControlsProps> = (props) => {
   createEffect(() => setDisable(isSongUndefined(song())));
 
   return (
-    <div class="song-controls" style={{ "--dynamic-color": props.avgColor }}>
+    <div class="song-controls" style={{ "--dynamic-color": props.averageColor }}>
       {/* Left part */}
       <div
         class="song-controls__left-part"
-        onMouseEnter={() => setIsVolumeBarVisible(true)}  // Show on hover
-        onMouseLeave={() => setIsVolumeBarVisible(false)} // Hide when not hovered
+        onMouseEnter={() => setIsVolumeBarVisible(true)}
+        onMouseLeave={() => setIsVolumeBarVisible(false)}
       >
         <IconButton>
           <Switch>
@@ -73,9 +74,9 @@ const SongControls: Component<SongControlsProps> = (props) => {
         <div
           class="song-controls__volume-bar"
           classList={{ visible: isVolumeBarVisible() }}  // Add visible class when hovered
-          style={{ "--bar-fill-color": props.avgColor }}
+          style={{ "--bar-fill-color": props.averageColor }}
         >
-          <Bar fill={localVolume()} setFill={setLocalVolume} color={props.avgColor} />
+          <Bar fill={localVolume()} setFill={setLocalVolume} color={props.averageColor} />
         </div>
       </div>
 

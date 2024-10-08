@@ -1,6 +1,6 @@
 .song-detail {
   --padding: 52px;
-  --dynamic-color: black; /* Default dynamic color */
+  --dynamic-color: white; /* Default dynamic color */
 
   height: 100%;
   display: flex;
@@ -75,7 +75,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background: var(--dynamic-color, black);
+        background: var(--dynamic-color, white);
         border-radius: 50%;
         color: var(--on-background);
       }
@@ -92,18 +92,18 @@
         }
 
         .song-controls__volume-bar {
-          opacity: 0.2; /* Default dulled out opacity */
-          transition: opacity 0.3s ease; /* Smooth transition */
-          pointer-events: none; /* Prevent interaction when dulled out */
+          opacity: 0.2;
+          transition: opacity 0.3s ease;
+          pointer-events: none;
         }
 
         .song-controls__volume-bar.visible {
-          opacity: 1; /* Full opacity when visible */
-          pointer-events: auto; /* Enable interaction */
+          opacity: 1;
+          pointer-events: auto;
         }
 
         .song-controls__volume-bar .bar__fill {
-          background-color: var(--dynamic-color, black);
+          background-color: var(--dynamic-color, white);
         }
       }
 

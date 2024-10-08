@@ -76,7 +76,7 @@ const Bar: Component<BarProps> = (props) => {
       }}
       style={{
         "--fill-per": clamp(0, 1, props.fill) * 100 + "%",
-        "--fill-color": props.color || "black"
+        "--fill-color": props.color || "white"
       }}
       onPointerDown={calculateFill}
       data-disabled={props.disabled}
