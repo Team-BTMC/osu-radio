@@ -11,7 +11,7 @@ const defaultPresence: SetActivity = {
   details: "Idle",
   largeImageKey: "logo",
   type: 2, // listening
-  buttons: [{ label: "Check out osu!radio!", url: "https://github.com/Team-BTMC/osu-radio" }]
+  buttons: [{ label: "Check out osu!radio", url: "https://github.com/Team-BTMC/osu-radio" }]
 };
 
 Router.respond("discord::play", async (_evt, song, duration) => {
@@ -35,7 +35,7 @@ Router.respond("discord::play", async (_evt, song, duration) => {
     startTimestamp: startTimestamp,
     endTimestamp: endTimestamp,
     largeImageKey: largeImageKey,
-    buttons: [{ label: "Check out osu!radio!", url: "https://github.com/Team-BTMC/osu-radio" }]
+    buttons: [{ label: "Check out osu!radio", url: "https://github.com/Team-BTMC/osu-radio" }]
   };
 
   if (song.beatmapSetID) {
@@ -64,7 +64,7 @@ Router.respond("discord::pause", async (_evt, song) => {
     type: 2, // listening
     largeImageKey: largeImageKey,
     largeImageText: "Paused",
-    buttons: [{ label: "Check out osu!radio!", url: "https://github.com/Team-BTMC/osu-radio" }]
+    buttons: [{ label: "Check out osu!radio", url: "https://github.com/Team-BTMC/osu-radio" }]
   };
 
   if (song.beatmapSetID) {
