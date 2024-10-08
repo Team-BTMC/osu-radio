@@ -10,6 +10,7 @@ client.login();
 const defaultPresence: SetActivity = {
   details: "Idle",
   largeImageKey: "logo",
+  type: 2, // listening
   buttons: [{ label: "Check out osu!radio!", url: "https://github.com/Team-BTMC/osu-radio" }]
 };
 
