@@ -6,6 +6,7 @@ import { access } from "../fs-promises";
 import { fail, ok } from "../rust-like-utils-backend/Result";
 import { assertNever } from "../tungsten/assertNever";
 import { OsuFile } from "./OsuFile";
+import path from "path/posix";
 
 const bgFileNameRegex = /.*"(?<!Video.*)(.*)".*/;
 const beatmapSetIDRegex = /([0-9]+) .*/;
@@ -118,10 +119,18 @@ export class OsuParser {
   ): DirParseResult {
     let dbBuffer;
 
-    if (databasePath.includes("osu!")) {
-      // Handles any subdirectory of the 'osu!' folder when choosing a directory
-      databasePath = databasePath.substring(0, databasePath.lastIndexOf("osu!") + 4);
+    // Handles any subdirectory of the 'osu!' folder when choosing a directory
+    let currentDir = databasePath;
+    currentDir = databasePath.replaceAll("\\", "/");
+
+    while (currentDir !== path.dirname(currentDir)) {
+      if (fs.existsSync(path.join(currentDir, "osu!.db"))) {
+        databasePath = currentDir;
+        break;
+      }
+      currentDir = path.dirname(currentDir);
     }
+
     let songsFolderPath = databasePath + "/Songs";
 
     try {
