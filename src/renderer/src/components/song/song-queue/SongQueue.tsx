@@ -7,6 +7,8 @@ import scrollIfNeeded from "../../../lib/tungsten/scroll-if-needed";
 import Impulse from "../../../lib/Impulse";
 import SongContextMenuItem from "../../song/context-menu/SongContextMenuItem";
 import "./styles.css";
+import IconButton from "@renderer/components/icon-button/IconButton";
+import { setSongQueueModalOpen } from "./song-queue.utils";
 
 const SongQueue: Component = () => {
   const [count, setCount] = createSignal(0);
@@ -65,6 +67,10 @@ const SongQueue: Component = () => {
     scrollIfNeeded(element, list);
   };
 
+  const handleCloseButtonClick = () => {
+    setSongQueueModalOpen(false);
+  };
+
   onMount(() => {
     window.api.listen("queue::created", resetListing.pulse.bind(resetListing));
     window.api.listen("queue::songChanged", changeSongHighlight);
@@ -79,6 +85,9 @@ const SongQueue: Component = () => {
     <div ref={view} class="song-queue">
       <div class="song-queue_header">
         <h2 class="song-queue_title">Next songs on the queue ({count()})</h2>
+        <IconButton onClick={handleCloseButtonClick}>
+          <i class="ri-close-line" />
+        </IconButton>
       </div>
 
       <InfiniteScroller

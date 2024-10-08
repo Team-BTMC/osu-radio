@@ -1,6 +1,8 @@
 .song-queue {
   .song-queue_header {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: 32px 0px 4px;
     position: sticky;
     top: 0px;

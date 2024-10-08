@@ -26,7 +26,8 @@ const SongImage: Component<SongImageProps> = (props) => {
     const b = typeof props.src === "function" ? props.src() : props.src;
     if (props.instantLoad) {
       const resource = await getResourcePath(b);
-      setSrc(await availableResource(resource, defaultBackground));
+      const resolvedImagePath = await availableResource(resource, defaultBackground);
+      setSrc(resolvedImagePath);
 
       return;
     }

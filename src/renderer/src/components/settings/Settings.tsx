@@ -1,11 +1,3 @@
-import {
-  faGlobe,
-  faVolumeHigh,
-  faVolumeLow,
-  faVolumeXmark,
-  IconDefinition
-} from "@fortawesome/free-solid-svg-icons";
-import Fa from "solid-fa";
 import { Component, JSX, Match, mergeProps, Switch } from "solid-js";
 import Bar from "../bar/Bar";
 import { setVolume, volume } from "@renderer/components/song/song.utils";
@@ -14,10 +6,10 @@ import "./styles.css";
 const Settings: Component = () => {
   return (
     <div class="settings">
-      <SettingsSection title="General" icon={faGlobe}>
+      <SettingsSection title="General" icon="ri-global-line">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, voluptatem.
       </SettingsSection>
-      <SettingsSection title="Audio" icon={faVolumeHigh}>
+      <SettingsSection title="Audio" icon="ri-volume-up-line">
         <GlobalVolumeSetting />
       </SettingsSection>
     </div>
@@ -26,13 +18,13 @@ const Settings: Component = () => {
 
 type SettingsSectionProps = JSX.IntrinsicElements["div"] & {
   title: string;
-  icon: IconDefinition;
+  icon: string;
 };
 const SettingsSection: Component<SettingsSectionProps> = ({ title, icon, children, ...rest }) => {
   return (
     <div {...mergeProps({ class: "settings-section" }, rest)}>
       <div class="settings-section__upper-part">
-        <Fa class="settings-section__upper-part-icon" icon={icon} />
+        <i class={`settings-section__upper-part-icon ${icon}`} />
         <h3 class="settings-section__upper-part-title">{title}</h3>
       </div>
 
@@ -63,13 +55,13 @@ const GlobalVolumeSetting: Component = () => {
         <div class="global-volume-setting__icon">
           <Switch>
             <Match when={volume() === 0}>
-              <Fa icon={faVolumeXmark} />
+              <i class="ri-volume-mute-fill" />
             </Match>
             <Match when={volume() < 0.5}>
-              <Fa icon={faVolumeLow} />
+              <i class="ri-volume-down-fill" />
             </Match>
             <Match when={volume() >= 0.5}>
-              <Fa icon={faVolumeHigh} />
+              <i class="ri-volume-up-fill" />
             </Match>
           </Switch>
         </div>
