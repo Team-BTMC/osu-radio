@@ -34,8 +34,8 @@ export async function main(window: BrowserWindow) {
       window,
       `No songs found in folder: ${orDefault(
         settings.get("osuSongsDir"),
-        "[No folder]"
-      )}. Please make sure this is the directory where you have all your songs saved.`
+        "[No folder]",
+      )}. Please make sure this is the directory where you have all your songs saved.`,
     );
     await configureOsuDir(window);
   }
@@ -66,7 +66,7 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
       await Router.dispatch(mainWindow, "loadingScene::update", {
         current: i,
         max: total,
-        hint: file
+        hint: file,
       });
     }, UPDATE_DELAY_MS);
 
@@ -84,7 +84,7 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
     if (tables.value[SONGS].size === 0) {
       await showError(
         mainWindow,
-        `No songs found in folder: ${dir}. Please make sure this is the directory where you have all your songs saved.`
+        `No songs found in folder: ${dir}. Please make sure this is the directory where you have all your songs saved.`,
       );
       // Try again
       continue;
@@ -99,7 +99,7 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
   await Router.dispatch(mainWindow, "loadingScene::update", {
     max: tables.value[SONGS].size,
     current: tables.value[SONGS].size,
-    hint: `Imported total of ${tables.value[SONGS].size} songs`
+    hint: `Imported total of ${tables.value[SONGS].size} songs`,
   });
 
   // Save created tables
@@ -117,7 +117,7 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
     await Router.dispatch(mainWindow, "loadingScene::update", {
       current: i,
       hint: song,
-      max: total
+      max: total,
     });
   }, UPDATE_DELAY_MS);
 
@@ -138,6 +138,6 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
   await Router.dispatch(mainWindow, "loadingScene::update", {
     current: total,
     hint: "Indexed " + total + " songs",
-    max: total
+    max: total,
   });
 }

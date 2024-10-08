@@ -11,7 +11,7 @@ const DropdownRoot: ParentComponent<PopoverProps> = (props) => {
 const Dropdown = Object.assign(DropdownRoot, {
   Trigger: DropdownTrigger,
   List: DropdownList,
-  Item: DropdownListItem
+  Item: DropdownListItem,
 });
 
 export default Dropdown;

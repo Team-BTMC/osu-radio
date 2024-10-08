@@ -112,7 +112,7 @@ const TagSelect: Component<TagSelectProps> = (props) => {
 
     t[index] = {
       name,
-      isSpecial: !t[index].isSpecial
+      isSpecial: !t[index].isSpecial,
     };
 
     setTags(t);

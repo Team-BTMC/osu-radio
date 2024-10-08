@@ -20,8 +20,8 @@ async function createWindow() {
     webPreferences: {
       preload: join(__dirname, "../preload/index.js"),
       sandbox: false,
-      webSecurity: false
-    }
+      webSecurity: false,
+    },
   });
 
   if (wasMaximized()) {
@@ -52,7 +52,7 @@ async function createWindow() {
 
     dialog.showErrorBox(
       "Report to the developer team to fix",
-      (error as Error).stack ?? String(error)
+      (error as Error).stack ?? String(error),
     );
   });
 }

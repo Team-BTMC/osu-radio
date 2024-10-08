@@ -9,7 +9,7 @@ const Button: Component<Props> = (props) => {
   const defaultProps: Props = {
     variant: "primary",
     size: "medium",
-    type: "button"
+    type: "button",
   };
 
   const mergedProps = mergeProps(defaultProps, props);

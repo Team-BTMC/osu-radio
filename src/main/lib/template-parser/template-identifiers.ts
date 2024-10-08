@@ -5,7 +5,7 @@ const templateIdentifiers = [
   "CREATOR",
   "LENGTH",
   "MODE",
-  "BEATMAP_SET_ID"
+  "BEATMAP_SET_ID",
 ];
 
 export default templateIdentifiers;
