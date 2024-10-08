@@ -6,32 +6,28 @@
 import { TemplateTokenizer, Tokens } from "../tokenizer/TemplateTokenizer";
 import { closest } from "fastest-levenshtein";
 
-
-
 export type ConfigItem = {
-  type: "TEXT" | "IDENT",
-  literal: string
-}
+  type: "TEXT" | "IDENT";
+  literal: string;
+};
 
 export type ConfigError = {
-  type: "error",
+  type: "error";
   error: {
-    message: string,
+    message: string;
     suggestion?: {
-      start: number,
-      end: number,
-      replacement: string,
-      description: string
-    }
-  }
-}
+      start: number;
+      end: number;
+      replacement: string;
+      description: string;
+    };
+  };
+};
 
 export type ConfigSuccess = {
-  type: "success",
-  config: ConfigItem[]
-}
-
-
+  type: "success";
+  config: ConfigItem[];
+};
 
 export class TemplateParser {
   private readonly identifiers: string[];
@@ -49,7 +45,8 @@ export class TemplateParser {
       switch (tokens[i].type) {
         case "{": {
           // Must follow pattern: {TEXT}
-          const isIdentifier = tokens[i + 1]?.type === Tokens.Text && tokens[i + 2]?.type === Tokens.RightSquirly;
+          const isIdentifier =
+            tokens[i + 1]?.type === Tokens.Text && tokens[i + 2]?.type === Tokens.RightSquirly;
 
           if (!isIdentifier) {
             return {
@@ -101,7 +98,7 @@ export class TemplateParser {
           return {
             type: "error",
             error: {
-              message: `Illegal token '${tokens[i].literal}'`,
+              message: `Illegal token '${tokens[i].literal}'`
             }
           };
       }

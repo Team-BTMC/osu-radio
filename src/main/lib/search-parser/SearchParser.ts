@@ -5,37 +5,29 @@ import {
   SearchQuery,
   ValidationSuggestion,
   SearchQuerySuggestion
-} from './@search-types';
-import { closestLevenDist } from './levenshteinDistance';
-
-
+} from "./@search-types";
+import { closestLevenDist } from "./levenshteinDistance";
 
 type ComparisonExtractionTrue = {
-  isPresent: true,
-  start: number,
-  symbol: string
+  isPresent: true;
+  start: number;
+  symbol: string;
 };
 
 type ComparisonExtractionFalse = {
-  isPresent: false,
+  isPresent: false;
 };
 
-type ComparisonExtraction = ComparisonExtractionFalse | ComparisonExtractionTrue
-
-
+type ComparisonExtraction = ComparisonExtractionFalse | ComparisonExtractionTrue;
 
 export class SearchParser {
   private config: SearchConfig;
-
-
 
   constructor(config: SearchConfig) {
     this.config = config;
     this.config.relationSymbols = [...this.config.relationSymbols];
     this.config.relationSymbols.sort((a, b) => b.length - a.length);
   }
-
-
 
   parse(query: string): SearchQuery {
     const tokens = query.trim().split(this.config.tokenDelimiter);
@@ -46,7 +38,7 @@ export class SearchParser {
     for (let i = 0; i < tokens.length; i++) {
       const token = tokens[i].trim();
 
-      if (token === '') {
+      if (token === "") {
         continue;
       }
 
@@ -66,27 +58,33 @@ export class SearchParser {
         // Create suggestion which is able to replace incorrect part of search query
         const slice = tokens.slice(0, i);
         const index = slice.join(this.config.tokenDelimiter);
-        const start = slice.length !== 0
-          ? index.length + this.config.tokenDelimiter.length
-          : index.length;
+        const start =
+          slice.length !== 0 ? index.length + this.config.tokenDelimiter.length : index.length;
 
         return {
           query,
-          type: 'error',
+          type: "error",
           error: {
             message: validation.error.message,
             start,
             end: start + token.length,
-            suggestion: this.createSuggestion(validation.error.suggestion, prop, extracted.symbol, value)
+            suggestion: this.createSuggestion(
+              validation.error.suggestion,
+              prop,
+              extracted.symbol,
+              value
+            )
           }
         };
       }
 
       if (properties[prop] === undefined) {
-        properties[prop] = [{
-          symbol: extracted.symbol,
-          value: validation.parsed
-        }];
+        properties[prop] = [
+          {
+            symbol: extracted.symbol,
+            value: validation.parsed
+          }
+        ];
         continue;
       }
 
@@ -98,7 +96,7 @@ export class SearchParser {
 
     return {
       query,
-      type: 'success',
+      type: "success",
       unnamed,
       properties,
       delimiter: this.config.tokenDelimiter
@@ -132,7 +130,11 @@ export class SearchParser {
     ];
   }
 
-  private validateProperty(prop: string, value: string, comparison: string): SearchPropertyValidation {
+  private validateProperty(
+    prop: string,
+    value: string,
+    comparison: string
+  ): SearchPropertyValidation {
     if (this.config.propertyMap[prop] === undefined) {
       const props = Object.keys(this.config.propertyMap);
       const closest = props[closestLevenDist(prop, props)];
@@ -152,14 +154,22 @@ export class SearchParser {
     return this.config.propertyMap[prop](value, comparison);
   }
 
-  private createSuggestion(validationSuggestion: ValidationSuggestion | undefined, prop: string, symbol: string, value: string): SearchQuerySuggestion | undefined {
+  private createSuggestion(
+    validationSuggestion: ValidationSuggestion | undefined,
+    prop: string,
+    symbol: string,
+    value: string
+  ): SearchQuerySuggestion | undefined {
     if (validationSuggestion === undefined) {
       return undefined;
     }
 
     return {
       description: validationSuggestion.description,
-      fullReplacement: (validationSuggestion.prop ?? prop) + (validationSuggestion.symbol ?? symbol) + (validationSuggestion.value ?? value)
+      fullReplacement:
+        (validationSuggestion.prop ?? prop) +
+        (validationSuggestion.symbol ?? symbol) +
+        (validationSuggestion.value ?? value)
     };
   }
 }

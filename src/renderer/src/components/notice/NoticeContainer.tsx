@@ -1,19 +1,17 @@
-import { For, onMount } from 'solid-js';
+import { For, onMount } from "solid-js";
 import "../../assets/css/notice/notice-container.css";
-import { createStore } from 'solid-js/store';
-import Notice from './Notice';
-import { TokenNamespace } from '../../lib/tungsten/token';
-import { NoticeType, Result } from '../../../../@types';
-import { fail, ok } from '../../lib/rust-like-utils-client/Result';
-import Impulse from '../../lib/Impulse';
-
-
+import { createStore } from "solid-js/store";
+import Notice from "./Notice";
+import { TokenNamespace } from "../../lib/tungsten/token";
+import { NoticeType, Result } from "../../../../@types";
+import { fail, ok } from "../../lib/rust-like-utils-client/Result";
+import Impulse from "../../lib/Impulse";
 
 type NoticeExtended = {
-  notice: NoticeType,
-  updateGradient: Impulse,
-  visible: boolean
-}
+  notice: NoticeType;
+  updateGradient: Impulse;
+  visible: boolean;
+};
 
 const [notices, setNotices] = createStore<NoticeExtended[]>([]);
 const namespace = new TokenNamespace();
@@ -23,11 +21,14 @@ export function addNotice(notice: NoticeType): void {
     notice.id = namespace.create();
   }
 
-  setNotices([...notices, {
-    notice,
-    updateGradient: new Impulse<void>(),
-    visible: false
-  }]);
+  setNotices([
+    ...notices,
+    {
+      notice,
+      updateGradient: new Impulse<void>(),
+      visible: false
+    }
+  ]);
 }
 
 export function hideNotice(id: string | undefined): Result<void, string> {
@@ -36,7 +37,7 @@ export function hideNotice(id: string | undefined): Result<void, string> {
   }
 
   setNotices(
-    ex => ex.notice.id === id,
+    (ex) => ex.notice.id === id,
     "notice",
     "active",
     () => false
@@ -47,9 +48,7 @@ export function hideNotice(id: string | undefined): Result<void, string> {
 
 export { notices };
 
-
-
-const observer = new IntersectionObserver(entries => {
+const observer = new IntersectionObserver((entries) => {
   for (const entry of entries) {
     const el = entry.target;
 
@@ -63,32 +62,27 @@ const observer = new IntersectionObserver(entries => {
       return;
     }
 
-    setNotices(
-      ex => ex.notice.id === id,
-      "visible",
-      entry.isIntersecting
-    );
+    setNotices((ex) => ex.notice.id === id, "visible", entry.isIntersecting);
   }
 });
 
-window.api.listen("notify", n => {
+window.api.listen("notify", (n) => {
   if (n.id === undefined) {
     n.id = namespace.create();
   }
 
-  setNotices([...notices, {
-    notice: n,
-    updateGradient: new Impulse<void>(),
-    visible: false
-  }]);
+  setNotices([
+    ...notices,
+    {
+      notice: n,
+      updateGradient: new Impulse<void>(),
+      visible: false
+    }
+  ]);
 });
-
-
 
 const NoticeContainer = () => {
   let wrapper;
-
-
 
   onMount(() => {
     wrapper.addEventListener("scroll", () => {
@@ -100,19 +94,21 @@ const NoticeContainer = () => {
     });
   });
 
-
-
   return (
     <div class={"notice-container-wrapper"} ref={wrapper}>
       <div class={"notice-container"}>
-        <For each={notices.filter(n => n.notice.active !== false)}>{n =>
-          <Notice notice={n.notice} updateGradient={n.updateGradient} onMount={e => observer.observe(e)}/>
-        }</For>
+        <For each={notices.filter((n) => n.notice.active !== false)}>
+          {(n) => (
+            <Notice
+              notice={n.notice}
+              updateGradient={n.updateGradient}
+              onMount={(e) => observer.observe(e)}
+            />
+          )}
+        </For>
       </div>
     </div>
   );
 };
-
-
 
 export default NoticeContainer;

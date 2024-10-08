@@ -1,7 +1,5 @@
-import { OsuSearchAbleProperties, SongIndex, SongsQueryPayload, Tag } from '../../../@types';
-import { assertNever } from '../tungsten/assertNever';
-
-
+import { OsuSearchAbleProperties, SongIndex, SongsQueryPayload, Tag } from "../../../@types";
+import { assertNever } from "../tungsten/assertNever";
 
 export function filter(indexes: SongIndex[], query: SongsQueryPayload): SongIndex[] {
   if (query.searchQuery === undefined) {
@@ -12,7 +10,7 @@ export function filter(indexes: SongIndex[], query: SongsQueryPayload): SongInde
   // All words are treated as parts of title
   const [title, diffs] = parseUnnamed(query.searchQuery.unnamed);
 
-  return indexes.filter(s => {
+  return indexes.filter((s) => {
     if (query.searchQuery === undefined) {
       // Default pass
       return true;
@@ -61,8 +59,6 @@ export function filter(indexes: SongIndex[], query: SongsQueryPayload): SongInde
   });
 }
 
-
-
 function parseUnnamed(unnamed: string[]): [string, string[]] {
   let titleBuffer = "";
   const diffsBuffer: string[] = [];
@@ -76,7 +72,7 @@ function parseUnnamed(unnamed: string[]): [string, string[]] {
       }
 
       diffsBuffer.push(str);
-      continue
+      continue;
     }
 
     titleBuffer += str;
@@ -84,8 +80,6 @@ function parseUnnamed(unnamed: string[]): [string, string[]] {
 
   return [titleBuffer, diffsBuffer];
 }
-
-
 
 /**
  * Pattern may be spelled incorrectly but still satisfy the filtering. The letters must be in correct order to pass
@@ -104,7 +98,7 @@ function compare(pattern: string, str: string) {
     return {
       distance: 0,
       satisfies: true
-    }
+    };
   }
 
   let patternPtr = 0;
@@ -137,14 +131,22 @@ function compare(pattern: string, str: string) {
 
 function getProp(song: SongIndex, prop: OsuSearchAbleProperties): string | number | undefined {
   switch (prop) {
-    case 'artist': return song.a;
-    case 'title': return song.t;
-    case 'length': return song.d;
-    case 'bpm': return song.bpm;
-    case 'creator': return song.c;
-    case 'mode': return song.m;
-    case 'diff': return song.diffs.join("");
-    default: assertNever(prop);
+    case "artist":
+      return song.a;
+    case "title":
+      return song.t;
+    case "length":
+      return song.d;
+    case "bpm":
+      return song.bpm;
+    case "creator":
+      return song.c;
+    case "mode":
+      return song.m;
+    case "diff":
+      return song.diffs.join("");
+    default:
+      assertNever(prop);
   }
 
   return undefined;
@@ -153,9 +155,12 @@ function getProp(song: SongIndex, prop: OsuSearchAbleProperties): string | numbe
 function verifyString(indexValue: string, symbol: string, propValue: string) {
   switch (symbol) {
     case "=":
-    case "==": return compare(propValue, indexValue).satisfies;
-    case "!=": return !indexValue.includes(propValue);
-    default: console.error(`Relation symbol '${symbol}' is not supported.`);
+    case "==":
+      return compare(propValue, indexValue).satisfies;
+    case "!=":
+      return !indexValue.includes(propValue);
+    default:
+      console.error(`Relation symbol '${symbol}' is not supported.`);
   }
 
   return false;
@@ -164,13 +169,20 @@ function verifyString(indexValue: string, symbol: string, propValue: string) {
 function verifyValue(indexValue: number, symbol: string, propValue: number) {
   switch (symbol) {
     case "=":
-    case "==": return indexValue == propValue;
-    case "!=": return indexValue != propValue;
-    case ">": return indexValue > propValue;
-    case ">=": return indexValue >= propValue;
-    case "<": return indexValue < propValue;
-    case "<=": return indexValue <= propValue;
-    default: console.error(`Relation symbol '${symbol}' is not supported.`);
+    case "==":
+      return indexValue == propValue;
+    case "!=":
+      return indexValue != propValue;
+    case ">":
+      return indexValue > propValue;
+    case ">=":
+      return indexValue >= propValue;
+    case "<":
+      return indexValue < propValue;
+    case "<=":
+      return indexValue <= propValue;
+    default:
+      console.error(`Relation symbol '${symbol}' is not supported.`);
   }
 
   return false;

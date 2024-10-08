@@ -1,6 +1,4 @@
-import { flatRNG } from './math';
-
-
+import { flatRNG } from "./math";
 
 /**
  * Randomly shuffle array of elements

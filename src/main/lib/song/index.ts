@@ -1,13 +1,11 @@
-import { Song, SongIndex } from '../../../@types';
-import { averageBPM, msToBPM } from './average-bpm';
-
-
+import { Song, SongIndex } from "../../../@types";
+import { averageBPM, msToBPM } from "./average-bpm";
 
 function createSongIndex(id: string, song: Song): SongIndex {
   return {
     id,
-    t: (song.beatmapSetID + song.title + (song.titleUnicode ?? '')).toLowerCase(),
-    a: (song.artist + (song.artistUnicode ?? '')).toLowerCase(),
+    t: (song.beatmapSetID + song.title + (song.titleUnicode ?? "")).toLowerCase(),
+    a: (song.artist + (song.artistUnicode ?? "")).toLowerCase(),
     c: song.creator.toLowerCase(),
     d: song.duration,
     m: song.mode,
@@ -17,11 +15,7 @@ function createSongIndex(id: string, song: Song): SongIndex {
   };
 }
 
-
-
 export type IndexCallback = (i: number, song: string) => void;
-
-
 
 /**
  * For each song create song search index and creates relation between tag and song IDs. Returns array of song search
@@ -30,7 +24,10 @@ export type IndexCallback = (i: number, song: string) => void;
  * @param fn
  * @see {SongIndex}
  */
-export function collectTagsAndIndexSongs(songs: { [id: string]: Song }, fn?: IndexCallback): [SongIndex[], Map<string, string[]>] {
+export function collectTagsAndIndexSongs(
+  songs: { [id: string]: Song },
+  fn?: IndexCallback
+): [SongIndex[], Map<string, string[]>] {
   const indexes: SongIndex[] = [];
   const tags = new Map<string, string[]>();
   let i = 0;

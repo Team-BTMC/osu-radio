@@ -1,7 +1,5 @@
-import { Keyboard } from '../lib/Keyboard';
-import { seek } from '../lib/Music';
-
-
+import { seek } from "@renderer/components/song/song.utils";
+import { Keyboard } from "../lib/Keyboard";
 
 Keyboard.register({
   key: "x",

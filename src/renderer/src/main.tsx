@@ -1,5 +1,6 @@
-import { render } from 'solid-js/web';
-import './assets/css/style.css';
-import App from './App';
+import { render } from "solid-js/web";
+import App from "./App";
+import "./global.css";
+import "remixicon/fonts/remixicon.css";
 
-render(() => <App />, document.getElementById('root') as HTMLElement);
+render(() => <App />, document.getElementById("root") as HTMLElement);

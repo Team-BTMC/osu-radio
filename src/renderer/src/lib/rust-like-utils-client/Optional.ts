@@ -1,6 +1,4 @@
-import { Optional } from '../../../../@types';
-
-
+import { Optional } from "../../../../@types";
 
 export function none(): Optional<any> {
   return {

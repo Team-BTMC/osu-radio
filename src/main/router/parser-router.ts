@@ -1,16 +1,8 @@
-import { Router } from '../lib/route-pass/Router';
-import { SearchParser } from '../lib/search-parser/SearchParser';
-import {
-  defaultRelationSymbols,
-  num,
-  set,
-  text,
-  time
-} from '../lib/search-parser/validators';
-import { TemplateParser } from '../lib/template-parser/parser/TemplateParser';
-import templateIdentifiers from '../lib/template-parser/template-identifiers';
-
-
+import { Router } from "../lib/route-pass/Router";
+import { SearchParser } from "../lib/search-parser/SearchParser";
+import { defaultRelationSymbols, num, set, text, time } from "../lib/search-parser/validators";
+import { TemplateParser } from "../lib/template-parser/parser/TemplateParser";
+import templateIdentifiers from "../lib/template-parser/template-identifiers";
 
 /**
  * Examples of valid search queries:
@@ -27,7 +19,7 @@ const searchParser = new SearchParser({
     creator: text(),
     length: time(),
     mode: set(["osu", "taiko", "catch", "mania", "o", "t", "c", "m"]),
-    title: text(),
+    title: text()
   }
 });
 
@@ -36,8 +28,6 @@ Router.respond("parse::search", (_evt, query) => {
   // is returned
   return searchParser.parse(query);
 });
-
-
 
 /**
  * Valid templates:

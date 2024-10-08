@@ -1,14 +1,11 @@
 // Library to create random unique tokens in given namespace
 
-import { flatRNG } from './math';
+import { flatRNG } from "./math";
 
-
-
-const TOKEN_CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
-const TOKEN_CHARSET_ALPHA = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+const TOKEN_CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
+const TOKEN_CHARSET_ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 export type Token = string;
-
 
 const globalTokens: Set<Token> = new Set();
 
@@ -18,7 +15,11 @@ const globalTokens: Set<Token> = new Set();
  * @param length
  * @param set
  */
-export function generateToken(forceFirstLetter = false, length = 8, set: Set<string> = undefined as any): Token {
+export function generateToken(
+  forceFirstLetter = false,
+  length = 8,
+  set: Set<string> = undefined as any
+): Token {
   let id = "";
   const MAX_RETRIES = 10_000;
   let retry = 0;
@@ -44,8 +45,6 @@ export function generateToken(forceFirstLetter = false, length = 8, set: Set<str
   return id;
 }
 
-
-
 /**
  * Free token from given namespace
  * @param token
@@ -54,8 +53,6 @@ export function generateToken(forceFirstLetter = false, length = 8, set: Set<str
 export function freeToken(token: Token, set: Set<Token> = undefined as any): void {
   (set ?? globalTokens).delete(token);
 }
-
-
 
 export class TokenNamespace {
   private readonly set: Set<Token>;
