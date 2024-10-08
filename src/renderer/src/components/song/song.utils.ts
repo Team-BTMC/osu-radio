@@ -7,38 +7,20 @@ import { AudioSource, Optional, Song } from "src/@types";
 /** Range from 0 to 1. */
 export type ZeroToOne = number;
 
-// const DEFAULT_SONG: Song = {
-//   dateAdded: "",
-//   ctime: "",
-//   path: "",
-//   audio: "",
-//   bg: "",
-
-//   artist: "Artist",
-//   title: "Title",
-//   creator: "Creator",
-//   mode: 0,
-//   duration: 0,
-
-//   bpm: [],
-//   tags: [],
-//   diffs: []
-// };
-
 const DEFAULT_SONG: Song = {
   dateAdded: "",
   ctime: "",
   path: "",
   audio: "",
   bg: "",
-  
+
   osuFile: "",
-  
+
   title: "",
   artist: "",
   creator: "",
   duration: 0,
-  
+
   bpm: [],
   diffs: [],
 };
@@ -142,6 +124,9 @@ export async function play(): Promise<void> {
     setMedia(current.media);
   }
 
+  const currentSong = song();
+  await window.api.request("discord::play", currentSong, player.currentTime);
+
   const m = media();
 
   if (m !== undefined && player.src !== m.href) {
@@ -155,7 +140,10 @@ export async function play(): Promise<void> {
   setIsPlaying(true);
 }
 
-export function pause() {
+export async function pause() {
+  const currentSong = song();
+  await window.api.request("discord::pause", currentSong);
+
   setIsPlaying(false);
   player.pause();
 }
@@ -205,12 +193,12 @@ export async function togglePlay(force?: boolean): Promise<void> {
       return;
     }
 
-    pause();
+    await pause();
     return;
   }
 
   if (isPlaying() === true) {
-    pause();
+    await pause();
     return;
   }
 
@@ -265,6 +253,7 @@ window.api.listen("queue::songChanged", async (s) => {
 
   setMedia(new URL(resource.value));
   setSong(s);
+  await window.api.request("discord::play", s);
   await play();
 });
 
