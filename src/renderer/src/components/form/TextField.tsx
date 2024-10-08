@@ -26,8 +26,8 @@ const TextField: Component<TextFieldProps> = (props) => {
     setValue(
       String(input.textContent).replaceAll(
         String.fromCharCode(160), // non-breaking space
-        String.fromCharCode(32) // breaking space
-      ) ?? ""
+        String.fromCharCode(32), // breaking space
+      ) ?? "",
     );
   };
 

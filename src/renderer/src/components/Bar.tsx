@@ -56,7 +56,7 @@ const Bar: Component<BarProps> = (props) => {
     handle.addEventListener(
       "pointerup",
       () => handle.removeEventListener("pointermove", calculateFill),
-      { once: true }
+      { once: true },
     );
   };
 
@@ -66,10 +66,10 @@ const Bar: Component<BarProps> = (props) => {
       classList={{
         bar: true,
         vertical: props.alignment !== undefined,
-        editable: props.setFill !== undefined
+        editable: props.setFill !== undefined,
       }}
       style={{
-        "--fill-per": clamp(0, 1, props.fill) * 100 + "%"
+        "--fill-per": clamp(0, 1, props.fill) * 100 + "%",
       }}
       onPointerDown={calculateFill}
       data-disabled={props.disabled}

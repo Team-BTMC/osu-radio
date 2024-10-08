@@ -73,7 +73,7 @@ export class Router {
       pending.push({
         packet,
         reject,
-        resolve
+        resolve,
       });
     });
 

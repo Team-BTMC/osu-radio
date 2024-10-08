@@ -11,7 +11,7 @@ const defaultPresence: SetActivity = {
   details: "Idle",
   largeImageKey: "logo",
   type: 2, // listening
-  buttons: [{ label: "Check out osu!radio", url: "https://github.com/Team-BTMC/osu-radio" }]
+  buttons: [{ label: "Check out osu!radio", url: "https://github.com/Team-BTMC/osu-radio" }],
 };
 
 Router.respond("discord::play", async (_evt, song, duration) => {
@@ -20,7 +20,7 @@ Router.respond("discord::play", async (_evt, song, duration) => {
 
   const response = await fetch(
     `https://assets.ppy.sh/beatmaps/${song.beatmapSetID}/covers/list@2x.jpg`,
-    { method: "HEAD" }
+    { method: "HEAD" },
   );
 
   let largeImageKey = `https://assets.ppy.sh/beatmaps/${song.beatmapSetID}/covers/list@2x.jpg`;
@@ -35,13 +35,13 @@ Router.respond("discord::play", async (_evt, song, duration) => {
     startTimestamp: startTimestamp,
     endTimestamp: endTimestamp,
     largeImageKey: largeImageKey,
-    buttons: [{ label: "Check out osu!radio", url: "https://github.com/Team-BTMC/osu-radio" }]
+    buttons: [{ label: "Check out osu!radio", url: "https://github.com/Team-BTMC/osu-radio" }],
   };
 
   if (song.beatmapSetID) {
     presence.buttons?.push({
       label: "Go to this map on osu!",
-      url: `https://osu.ppy.sh/beatmapsets/${song.beatmapSetID}`
+      url: `https://osu.ppy.sh/beatmapsets/${song.beatmapSetID}`,
     });
   }
 
@@ -51,7 +51,7 @@ Router.respond("discord::play", async (_evt, song, duration) => {
 Router.respond("discord::pause", async (_evt, song) => {
   const response = await fetch(
     `https://assets.ppy.sh/beatmaps/${song.beatmapSetID}/covers/list@2x.jpg`,
-    { method: "HEAD" }
+    { method: "HEAD" },
   );
 
   let largeImageKey = `https://assets.ppy.sh/beatmaps/${song.beatmapSetID}/covers/list@2x.jpg`;
@@ -64,13 +64,13 @@ Router.respond("discord::pause", async (_evt, song) => {
     type: 2, // listening
     largeImageKey: largeImageKey,
     largeImageText: "Paused",
-    buttons: [{ label: "Check out osu!radio", url: "https://github.com/Team-BTMC/osu-radio" }]
+    buttons: [{ label: "Check out osu!radio", url: "https://github.com/Team-BTMC/osu-radio" }],
   };
 
   if (song.beatmapSetID) {
     presence.buttons?.push({
       label: "Go to this map on osu!",
-      url: `https://osu.ppy.sh/beatmapsets/${song.beatmapSetID}`
+      url: `https://osu.ppy.sh/beatmapsets/${song.beatmapSetID}`,
     });
   }
 

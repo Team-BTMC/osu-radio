@@ -57,9 +57,9 @@ export class TemplateParser {
                   start: tokens[i].position,
                   end: tokens[i].position + tokens[i].literal.length,
                   description: "Remove '{'.",
-                  replacement: ""
-                }
-              }
+                  replacement: "",
+                },
+              },
             };
           }
 
@@ -73,15 +73,15 @@ export class TemplateParser {
                   start: tokens[i + 1].position,
                   end: tokens[i + 1].position + tokens[i + 1].literal.length,
                   description: `Use '${closestIdent}' identifier.`,
-                  replacement: closestIdent
-                }
-              }
+                  replacement: closestIdent,
+                },
+              },
             };
           }
 
           config.push({
             type: "IDENT",
-            literal: tokens[i + 1].literal
+            literal: tokens[i + 1].literal,
           });
 
           i += 2;
@@ -91,22 +91,22 @@ export class TemplateParser {
         case "TEXT":
           config.push({
             type: "TEXT",
-            literal: tokens[i].literal
+            literal: tokens[i].literal,
           });
           break;
         case "ILLEGAL":
           return {
             type: "error",
             error: {
-              message: `Illegal token '${tokens[i].literal}'`
-            }
+              message: `Illegal token '${tokens[i].literal}'`,
+            },
           };
       }
     }
 
     return {
       type: "success",
-      config
+      config,
     };
   }
 }

@@ -8,7 +8,7 @@ import {
   setVolume,
   song,
   togglePlay,
-  volume
+  volume,
 } from "../../lib/Music";
 import { isSongUndefined } from "../../lib/song";
 import Fa from "solid-fa";
@@ -21,7 +21,7 @@ import {
   faPlay,
   faVolumeHigh,
   faVolumeLow,
-  faVolumeXmark
+  faVolumeXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { GLOBAL_ICON_SCALE } from "../../App";
 import Bar from "../Bar";

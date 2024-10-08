@@ -20,8 +20,8 @@ export class WatchFile {
     return ok(
       new WatchFile(
         path.basename(fullyQualifiedPath),
-        new Date(fs.lstatSync(fullyQualifiedPath).ctimeMs).toISOString()
-      )
+        new Date(fs.lstatSync(fullyQualifiedPath).ctimeMs).toISOString(),
+      ),
     );
   }
 }

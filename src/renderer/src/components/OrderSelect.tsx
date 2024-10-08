@@ -5,7 +5,7 @@ import {
   faArrowDown19,
   faArrowDown91,
   faArrowDownAZ,
-  faArrowDownZA
+  faArrowDownZA,
 } from "@fortawesome/free-solid-svg-icons";
 import { GLOBAL_ICON_SCALE } from "../App";
 
@@ -19,33 +19,33 @@ const orderOptions: OrderOption[] = [
   {
     value: "title",
     text: "Title",
-    type: "string"
+    type: "string",
   },
   {
     value: "artist",
     text: "Artist",
-    type: "string"
+    type: "string",
   },
   {
     value: "creator",
     text: "Creator",
-    type: "string"
+    type: "string",
   },
   {
     value: "bpm",
     text: "BPM",
-    type: "number"
+    type: "number",
   },
   {
     value: "duration",
     text: "Length",
-    type: "number"
+    type: "number",
   },
   {
     value: "dateAdded",
     text: "Date Added",
-    type: "number"
-  }
+    type: "number",
+  },
 ];
 
 type OrderSelectProps = {

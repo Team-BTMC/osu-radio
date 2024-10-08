@@ -39,7 +39,7 @@ const QueueView = () => {
       await window.api.request(
         "queue::place",
         s.path,
-        (before as HTMLElement | null)?.dataset.path
+        (before as HTMLElement | null)?.dataset.path,
       );
     };
   };

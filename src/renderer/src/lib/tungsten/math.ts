@@ -8,7 +8,7 @@ export function map(
   fromStart: number,
   fromEnd: number,
   toStart: number,
-  toEnd: number
+  toEnd: number,
 ): number {
   return ((value - fromStart) / (fromEnd - fromStart)) * (toEnd - toStart) + toStart;
 }

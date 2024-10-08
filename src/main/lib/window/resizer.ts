@@ -29,7 +29,7 @@ export function getBounds(): [number, number] {
 
   return [
     orDefault(settings.get("window.width"), 900),
-    orDefault(settings.get("window.height"), 670)
+    orDefault(settings.get("window.height"), 670),
   ];
 }
 

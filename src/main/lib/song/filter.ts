@@ -97,7 +97,7 @@ function compare(pattern: string, str: string) {
   if (pattern.length === 0) {
     return {
       distance: 0,
-      satisfies: true
+      satisfies: true,
     };
   }
 
@@ -118,14 +118,14 @@ function compare(pattern: string, str: string) {
       if (patternPtr === pattern.length) {
         return {
           distance: sum / pattern.length,
-          satisfies: true
+          satisfies: true,
         };
       }
     }
   }
 
   return {
-    satisfies: false
+    satisfies: false,
   };
 }
 

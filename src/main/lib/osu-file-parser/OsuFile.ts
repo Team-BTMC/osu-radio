@@ -58,7 +58,7 @@ export class OsuFile {
     const audio: AudioSource = {
       songID: resourcePath,
       path: audioPath,
-      ctime: (await stat(songPath)).ctime.toISOString()
+      ctime: (await stat(songPath)).ctime.toISOString(),
     };
 
     builder.set("audio", audio.path);
@@ -72,7 +72,7 @@ export class OsuFile {
         bg = some({
           songID: resourcePath,
           path: imagePath,
-          ctime: (await stat(imageSource)).ctime.toISOString()
+          ctime: (await stat(imageSource)).ctime.toISOString(),
         });
 
         builder.set("bg", imagePath);
@@ -104,7 +104,7 @@ export class OsuFile {
     return ok({
       song: builder.build(),
       audio,
-      bg
+      bg,
     });
   }
 

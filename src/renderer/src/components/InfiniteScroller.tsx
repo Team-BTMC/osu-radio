@@ -7,13 +7,13 @@ import {
   onMount,
   Setter,
   Show,
-  splitProps
+  splitProps,
 } from "solid-js";
 import {
   InfiniteScrollerInitResponse,
   InfiniteScrollerRequest,
   InfiniteScrollerResponse,
-  OmitPropsWithoutReturnType
+  OmitPropsWithoutReturnType,
 } from "../../../@types";
 import Impulse from "../lib/Impulse";
 import { RequestAPI } from "../../../RequestAPI";
@@ -46,7 +46,7 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
     "onLoadInitial",
     "fallback",
     "autoload",
-    "setCount"
+    "setCount",
   ]);
 
   const [elements, setElements] = createSignal<any[]>([]);
@@ -59,7 +59,7 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
     const request: InfiniteScrollerRequest = {
       index: indexStart,
       init,
-      direction: "up"
+      direction: "up",
     };
 
     const response = await window.api.request(props.apiKey, request, props.apiData);
@@ -101,8 +101,8 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
     {
       root: container,
       rootMargin: "50px",
-      threshold: 0
-    }
+      threshold: 0,
+    },
   );
 
   let indexEnd = 0;
@@ -110,7 +110,7 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
     const request: InfiniteScrollerRequest = {
       index: indexEnd,
       init,
-      direction: "down"
+      direction: "down",
     };
 
     const response = await window.api.request(props.apiKey, request, props.apiData);
@@ -141,8 +141,8 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
     {
       root: container,
       rootMargin: "50px",
-      threshold: 0
-    }
+      threshold: 0,
+    },
   );
 
   const reset = async () => {

@@ -5,5 +5,5 @@ Keyboard.register({
   key: "c",
   onPress: async () => {
     await togglePlay();
-  }
+  },
 });
