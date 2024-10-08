@@ -10,8 +10,7 @@ export default function DirSelectScene() {
   });
 
   const autodetectDir = async () => {
-    // TODO: Fix me!
-    const autoGetDir = await window.api.request("dir::autoGetOsuSongsDir");
+    const autoGetDir = await window.api.request("dir::autoGetOsuDir");
     if (autoGetDir.isNone) {
       return;
     }
