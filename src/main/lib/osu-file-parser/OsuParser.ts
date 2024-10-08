@@ -117,6 +117,11 @@ export class OsuParser {
     update?: (i: number, total: number, file: string) => any
   ): DirParseResult {
     let dbBuffer;
+
+    if (databasePath.includes("osu!")) {
+      // Handles any subdirectory of the 'osu!' folder when choosing a directory
+      databasePath = databasePath.substring(0, databasePath.lastIndexOf("osu!") + 4);
+    }
     let songsFolderPath = databasePath + "/Songs";
 
     try {
