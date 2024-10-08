@@ -101,7 +101,14 @@ export async function play(): Promise<void> {
     setMedia(current.media);
   }
 
+  const current = await getCurrent();
+  if (current === undefined) {
+    return;
+  }
+
   const m = media();
+
+  await window.api.request("discord::play", current.song, player.currentTime);
 
   if (m !== undefined && player.src !== m) {
     player.src = m;
@@ -114,7 +121,14 @@ export async function play(): Promise<void> {
   setIsPlaying(true);
 }
 
-export function pause() {
+export async function pause() {
+  const song = await getCurrent();
+  if (song === undefined) {
+    return;
+  }
+
+  await window.api.request("discord::pause", song.song);
+
   setIsPlaying(false);
   player.pause();
 }
@@ -166,7 +180,7 @@ export async function setMediaSession(song: Song) {
 
     const actionHandlers = {
       play: () => togglePlay(),
-      pause: pause,
+      pause: () => pause(),
       previoustrack: previous,
       nexttrack: next
     };
@@ -237,24 +251,31 @@ export async function togglePlay(force?: boolean): Promise<void> {
       return;
     }
 
-    pause();
+    await pause();
     return;
   }
 
   if (isPlaying() === true) {
-    pause();
+    await pause();
     return;
   }
 
   await play();
 }
 
-export function seek(range: ZeroToOne): void {
+export async function seek(range: ZeroToOne): Promise<void> {
   if (isNaN(player.duration)) {
     return;
   }
 
   player.currentTime = range * player.duration;
+
+  const song = await getCurrent();
+  if (!song) {
+    return;
+  }
+
+  await window.api.request("discord::play", song.song, player.currentTime);
 
   setDuration(player.duration);
   setTimestamp(player.currentTime);
@@ -316,6 +337,7 @@ window.api.listen("queue::songChanged", async (s) => {
   }
   setMedia(resource.value);
   setSong(s);
+  await window.api.request("discord::play", s);
   await play();
 });
 
