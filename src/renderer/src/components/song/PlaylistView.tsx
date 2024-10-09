@@ -19,69 +19,14 @@ import SongItem from "./SongItem";
 export type PlaylistViewProps = {};
 
 const PlaylistView: Component<PlaylistViewProps> = (props) => {
-  // const querySignal = createSignal("");
-  // const [query] = querySignal;
-
-  // const tagsSignal = createSignal<Tag[]>([], { equals: false });
-  // const [tags] = tagsSignal;
-
-  // const [order, setOrder] = createSignal("title:asc");
-  // const [count, setCount] = createSignal(0);
-
-  // const [, setPayload] = createSignal<SongsQueryPayload>({
-  //   view: props,
-  //   order: order(),
-  //   tags: tags()
-  // });
-
-  // const [searchError, setSearchError] = createSignal<Optional<SearchQueryError>>(none(), {
-  //   equals: false
-  // });
-  // const resetListing = new Impulse();
-
-  // const searchSongs = async () => {
-  //   const o = order();
-  //   const t = tags();
-  //   const parsedQuery = await window.api.request("parse::search", query());
-
-  //   if (parsedQuery.type === "error") {
-  //     setSearchError(some(parsedQuery));
-  //     return;
-  //   }
-
-  //   setSearchError(none());
-  //   setPayload({
-  //     view: props,
-  //     searchQuery: parsedQuery,
-  //     order: o,
-  //     tags: t
-  //   });
-  //   resetListing.pulse();
-  // };
-
-  // onMount(() => {
-  //   createEffect(searchSongs);
-  //   window.api.listen("songView::reset", resetListing.pulse.bind(resetListing));
-  // });
-
-  // onCleanup(() => {
-  //   window.api.removeListener("songView::reset", resetListing.pulse.bind(resetListing));
-  // });
-
-  // const createQueue = async (songResource: ResourceID) => {
-  //   console.log("create queue");
-
-  //   await window.api.request("queue::create", {
-  //     startSong: songResource,
-  //     ...payload()
-  //   });
-  // };
+  const [count, setCount] = createSignal(0);
+  const resetListing = new Impulse();
+  const [payload, setPayload] = createSignal({});
 
   const group = namespace.create(true);
 
   return (
     <div class="playlist-view">
-      yooo
       {/* <Search
         query={querySignal}
         tags={tagsSignal}
@@ -90,23 +35,16 @@ const PlaylistView: Component<PlaylistViewProps> = (props) => {
         error={searchError}
       />
       */}
-      {/*
       <InfiniteScroller
-        apiKey={"query::songsPool"}
-        apiData={payload()}
-        apiInitKey={"query::songsPool::init"}
-        apiInitData={payload()}
+        apiKey={"query::playlists"}
+        // apiData={payload()}
+        apiInitKey={"query::playlists::init"}
+        // apiInitData={payload()}
         setCount={setCount}
         reset={resetListing}
-        fallback={<div>No songs...</div>}
-        builder={(s) => (
-          <SongItem song={s} group={group} onSelect={createQueue}>
-            <PlayNext path={s.path} />
-            <button>Add to playlist</button>
-          </SongItem>
-        )} 
+        fallback={<div>No playlists...</div>}
+        builder={(s) => <div>{s}</div>}
       />
-      */}
     </div>
   );
 };

@@ -64,6 +64,8 @@ export type RequestAPI = {
   ) => InfiniteScrollerResponse<Song>;
   "query::queue::init": () => InfiniteScrollerInitResponse;
   "query::queue": (request: InfiniteScrollerRequest) => InfiniteScrollerResponse<Song>;
+  "query::playlists::init": () => InfiniteScrollerInitResponse;
+  "query::playlists": (request: InfiniteScrollerRequest) => InfiniteScrollerResponse;
 
   "save::localVolume": (volume: number, song: ResourceID) => void;
 
