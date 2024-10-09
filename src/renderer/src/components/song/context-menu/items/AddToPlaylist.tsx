@@ -2,11 +2,11 @@ import { Component, createSignal, Show } from "solid-js";
 import { Song } from "../../../../../../@types";
 import SongContextMenuItem from "../SongContextMenuItem";
 
-type SongPlayNextProps = {
-  path: Song["path"];
+type SongAddToPlaylistNextProps = {
+  song: Song;
 };
 
-const PlayNext: Component<SongPlayNextProps> = (props) => {
+const AddToPlaylist: Component<SongAddToPlaylistNextProps> = (props) => {
   const [show, setShow] = createSignal(false);
 
   window.api.listen("queue::created", () => {
@@ -19,11 +19,11 @@ const PlayNext: Component<SongPlayNextProps> = (props) => {
 
   return (
     <Show when={show()}>
-      <SongContextMenuItem onClick={() => window.api.request("queue::playNext", props.path)}>
-        Play Next
+      <SongContextMenuItem onClick={() => console.log("click", props.song)}>
+        Add to Playlist
       </SongContextMenuItem>
     </Show>
   );
 };
 
-export default PlayNext;
+export default AddToPlaylist;

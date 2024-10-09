@@ -9,6 +9,7 @@ import InfiniteScroller from "../InfiniteScroller";
 import Search from "../search/Search";
 import PlayNext from "./context-menu/items/PlayNext";
 import SongItem from "./SongItem";
+import AddToPlaylist from "./context-menu/items/AddToPlaylist";
 
 export type SongViewProps = {
   isAllSongs?: boolean;
@@ -98,7 +99,7 @@ const SongView: Component<SongViewProps> = (props) => {
         builder={(s) => (
           <SongItem song={s} group={group} onSelect={createQueue}>
             <PlayNext path={s.path} />
-            <button>Add to playlist</button>
+            <AddToPlaylist song={s} />
           </SongItem>
         )}
       />

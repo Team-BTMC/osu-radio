@@ -1,28 +1,26 @@
-import { Router } from '../lib/route-pass/Router';
-import { none, some } from '../lib/rust-like-utils-backend/Optional';
-import { filter } from '../lib/song/filter';
-import order from '../lib/song/order';
-import { indexMapper } from '../lib/song/indexMapper';
-import { Storage } from '../lib/storage/Storage';
-
-
+import { Router } from "../lib/route-pass/Router";
+import { none, some } from "../lib/rust-like-utils-backend/Optional";
+import { filter } from "../lib/song/filter";
+import order from "../lib/song/order";
+import { indexMapper } from "../lib/song/indexMapper";
+import { Storage } from "../lib/storage/Storage";
 
 Router.respond("query::songsPool::init", (_evt, payload) => {
   const indexes = Storage.getTable("system").get("indexes");
+  console.log(indexes);
 
   if (indexes.isNone) {
     return none();
   }
 
   const filtered = filter(indexes.value, payload);
+  console.log(filtered);
 
   return some({
     initialIndex: 0,
     count: filtered.length
   });
 });
-
-
 
 const BUFFER_SIZE = 50;
 
