@@ -19,7 +19,9 @@ const AddToPlaylist: Component<SongAddToPlaylistNextProps> = (props) => {
 
   return (
     <Show when={show()}>
-      <SongContextMenuItem onClick={() => console.log("click", props.song)}>
+      <SongContextMenuItem
+        onClick={() => window.api.request("playlist::add", "PlaylistOne", props.song.path)}
+      >
         Add to Playlist
       </SongContextMenuItem>
     </Show>

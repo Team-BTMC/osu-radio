@@ -37,6 +37,11 @@ export type RequestAPI = {
   "queue::create": (payload: QueueCreatePayload) => void;
   "queue::shuffle": () => void;
 
+  "playlist::add": (playlistName: string, song: ResourceID) => void;
+  "playlist::remove": (song: ResourceID) => void;
+  "playlist::create": (name: string) => void;
+  "playlist::delete": (name: string) => void;
+
   "dir::select": () => Optional<string>;
   "dir::autoGetOsuDir": () => Optional<string>;
   "dir::submit": (dir: string) => void;
