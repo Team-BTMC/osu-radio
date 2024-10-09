@@ -108,7 +108,9 @@ export async function play(): Promise<void> {
 
   const m = media();
 
-  await window.api.request("discord::play", current.song, player.currentTime);
+  setTimeout(async () => {
+    await window.api.request("discord::play", current.song, player.currentTime, player.duration);
+  }, 1000);
 
   if (m !== undefined && player.src !== m) {
     player.src = m;
@@ -275,7 +277,9 @@ export async function seek(range: ZeroToOne): Promise<void> {
     return;
   }
 
-  await window.api.request("discord::play", song.song, player.currentTime);
+  setTimeout(async () => {
+    await window.api.request("discord::play", song.song, player.currentTime, player.duration);
+  }, 400);
 
   setDuration(player.duration);
   setTimestamp(player.currentTime);
@@ -337,7 +341,6 @@ window.api.listen("queue::songChanged", async (s) => {
   }
   setMedia(resource.value);
   setSong(s);
-  await window.api.request("discord::play", s);
   await play();
 });
 
