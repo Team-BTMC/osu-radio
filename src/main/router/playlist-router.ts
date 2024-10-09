@@ -40,7 +40,11 @@ Router.respond("query::playlists::init", (_evt) => {
 Router.respond("query::playlists", (_evt, request) => {
   const playlists = Object.keys(Storage.getTable("playlists").getStruct());
 
-  if (request.index < 0 || request.index > Math.floor(playlists.length / BUFFER_SIZE)) {
+  if (
+    playlists === undefined ||
+    request.index < 0 ||
+    request.index > Math.floor(playlists.length / BUFFER_SIZE)
+  ) {
     return none();
   }
 
@@ -58,11 +62,5 @@ Router.respond("query::playlists", (_evt, request) => {
     index: request.index + 1,
     total: playlists.length,
     items: playlists.slice(start, start + BUFFER_SIZE)
-  });
-
-  return some({
-    index: request.index + 1,
-    total: playlists.length,
-    items: playlists
   });
 });

@@ -7,7 +7,7 @@ import SongDetail from "../song/SongDetail";
 import QueueView from "../queue/QueueView";
 import NoticeContainer from "../notice/NoticeContainer";
 import SettingsView from "../settings/SettingsView";
-import PlaylistView from "../song/PlaylistView";
+import PlaylistView from "../playlist/PlaylistView";
 
 const [active, setActive] = createSignal(0);
 
