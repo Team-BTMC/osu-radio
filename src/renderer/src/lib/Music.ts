@@ -108,9 +108,9 @@ export async function play(): Promise<void> {
 
   const m = media();
 
-  player.onloadedmetadata = async () => {
+  player.addEventListener("loadedmetadata", async () => {
     await window.api.request("discord::play", current.song, player.currentTime, player.duration);
-  };
+  });
 
   if (m !== undefined && player.src !== m) {
     player.src = m;
@@ -283,9 +283,9 @@ export async function seek(range: ZeroToOne): Promise<void> {
     return;
   }
 
-  player.onloadedmetadata = async () => {
+  player.addEventListener("loadedmetadata", async () => {
     await window.api.request("discord::play", current.song, player.currentTime, player.duration);
-  };
+  });
 
   setDuration(player.duration);
   setTimestamp(player.currentTime);
