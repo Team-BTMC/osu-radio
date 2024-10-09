@@ -118,9 +118,13 @@ export class OsuParser {
     update?: (i: number, total: number, file: string) => any
   ): DirParseResult {
     let dbBuffer;
+    // NOTE: databasePath is not double slashed
+    // on windows this will cause uninteded behavior with 'path/posix'
+    // due to the path seperators attempting to escape the string
 
     // Handles any subdirectory of the 'osu!' folder when choosing a directory
     let currentDir = databasePath;
+    // Solution to the issue mentioned in the note above
     currentDir = databasePath.replaceAll("\\", "/");
 
     while (currentDir !== path.dirname(currentDir)) {
