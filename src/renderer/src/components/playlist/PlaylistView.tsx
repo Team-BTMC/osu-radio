@@ -13,6 +13,7 @@ const PlaylistView: Component<PlaylistViewProps> = (props) => {
 
   const group = namespace.create(true);
 
+  //todo: make something like App.tsx or MainScene.tsx to load a playlist (scene signal) or something with Routers
   return (
     <div class="playlist-view">
       {/* <Search

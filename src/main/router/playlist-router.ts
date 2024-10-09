@@ -64,3 +64,41 @@ Router.respond("query::playlists", (_evt, request) => {
     items: playlists.slice(start, start + BUFFER_SIZE)
   });
 });
+
+Router.respond("query::playlistSongs::init", (_evt, playlistName) => {
+  const songs = Storage.getTable("playlists").get(playlistName);
+  const count = Object.keys(songs).length;
+
+  return some({
+    initialIndex: 0,
+    count: count
+  });
+});
+
+Router.respond("query::playlistSongs", (_evt, playlistName, request) => {
+  const songs = Storage.getTable("playlists").get(playlistName).value;
+
+  if (
+    songs === undefined ||
+    request.index < 0 ||
+    request.index > Math.floor(songs.length / BUFFER_SIZE)
+  ) {
+    return none();
+  }
+
+  const start = request.index * BUFFER_SIZE;
+
+  if (request.direction === "up") {
+    return some({
+      index: request.index - 1,
+      total: songs.length,
+      items: songs.slice(start, start + BUFFER_SIZE)
+    });
+  }
+
+  return some({
+    index: request.index + 1,
+    total: songs.length,
+    items: songs.slice(start, start + BUFFER_SIZE)
+  });
+});

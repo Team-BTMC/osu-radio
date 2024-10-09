@@ -121,7 +121,7 @@ export type TableMap = {
   songs: { [key: ResourceID]: Song };
   audio: { [key: ResourceID]: AudioSource };
   images: { [key: ResourceID]: ImageSource };
-  playlists: { [key: string]: ResourceID[] };
+  playlists: { [key: string]: Song[] };
   settings: Settings;
   system: System;
 };
