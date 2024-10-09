@@ -110,7 +110,7 @@ export async function play(): Promise<void> {
 
   setTimeout(async () => {
     await window.api.request("discord::play", current.song, player.currentTime, player.duration);
-  }, 1000);
+  }, 400);
 
   if (m !== undefined && player.src !== m) {
     player.src = m;
