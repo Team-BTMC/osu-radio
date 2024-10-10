@@ -6,6 +6,7 @@ import { access } from "../fs-promises";
 import { fail, ok } from "../rust-like-utils-backend/Result";
 import { assertNever } from "../tungsten/assertNever";
 import { OsuFile } from "./OsuFile";
+import path from "path/posix";
 
 const bgFileNameRegex = /.*"(?<!Video.*)(.*)".*/;
 const beatmapSetIDRegex = /([0-9]+) .*/;
@@ -117,11 +118,23 @@ export class OsuParser {
     update?: (i: number, total: number, file: string) => any,
   ): DirParseResult {
     let dbBuffer;
+    // NOTE: databasePath is not double slashed
+    // on windows this will cause uninteded behavior with 'path/posix'
+    // due to the path seperators attempting to escape the string
 
-    if (databasePath.includes("osu!")) {
-      // Handles any subdirectory of the 'osu!' folder when choosing a directory
-      databasePath = databasePath.substring(0, databasePath.lastIndexOf("osu!") + 4);
+    // Handles any subdirectory of the 'osu!' folder when choosing a directory
+    let currentDir = databasePath;
+    // Solution to the issue mentioned in the note above
+    currentDir = databasePath.replaceAll("\\", "/");
+
+    while (currentDir !== path.dirname(currentDir)) {
+      if (fs.existsSync(path.join(currentDir, "osu!.db"))) {
+        databasePath = currentDir;
+        break;
+      }
+      currentDir = path.dirname(currentDir);
     }
+
     let songsFolderPath = databasePath + "/Songs";
 
     try {
@@ -301,8 +314,10 @@ export class OsuParser {
 
         // Read .osu to get bg source
         const osuFile = await this.parseFile(osuFilePath);
+        if (osuFile.isError) {
+          throw osuFile.error;
+        }
 
-        // @ts-expect-error language server doesn't see .value prop
         const bgSrc = osuFile.value.props.get("bgSrc");
         song.bg = songsFolderPath + "/" + folder + "/" + bgSrc;
 
@@ -321,7 +336,7 @@ export class OsuParser {
           update(i + 1, nb_beatmaps, song.title);
         }
       } catch (err) {
-        console.log(`There was an error processing a beatmap: ${console.log(err)}`);
+        console.error(`There was an error processing a beatmap: ${err}`);
       }
     }
 
