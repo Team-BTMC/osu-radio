@@ -1,8 +1,9 @@
 import { Component } from "solid-js";
 import SongImage from "../song/SongImage";
+import { Playlist } from "src/@types";
 
 type PlaylistItemProps = {
-  playlistName: string;
+  playlist: Playlist;
   group: string;
 };
 
@@ -16,9 +17,9 @@ const PlaylistItem: Component<PlaylistItemProps> = (props) => {
         />
 
         <div class="column">
-          <h3>{props.playlistName}</h3>
-          <p>727 songs</p>
-          <p>7 hours 27 minutes</p>
+          <h3>{props.playlist.name}</h3>
+          <p>{props.playlist.count} songs</p>
+          <p>{props.playlist.length}</p>
         </div>
       </div>
     </div>

@@ -5,6 +5,7 @@ import type {
   InfiniteScrollerRequest,
   InfiniteScrollerResponse,
   Optional,
+  Playlist,
   QueueCreatePayload,
   ResourceID,
   ResourceTables,
@@ -65,7 +66,7 @@ export type RequestAPI = {
   "query::queue::init": () => InfiniteScrollerInitResponse;
   "query::queue": (request: InfiniteScrollerRequest) => InfiniteScrollerResponse<Song>;
   "query::playlists::init": () => InfiniteScrollerInitResponse;
-  "query::playlists": (request: InfiniteScrollerRequest) => InfiniteScrollerResponse;
+  "query::playlists": (request: InfiniteScrollerRequest) => InfiniteScrollerResponse<Playlist>;
   "query::playlistSongs::init": (playlistName: string) => InfiniteScrollerInitResponse;
   "query::playlistSongs": (
     playlistName: string,

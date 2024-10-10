@@ -33,7 +33,7 @@ const PlaylistView: Component<PlaylistViewProps> = (props) => {
         setCount={setCount}
         // reset={resetListing}
         fallback={<div>No playlists...</div>}
-        builder={(s) => <PlaylistItem playlistName={s} group={group}></PlaylistItem>}
+        builder={(s) => <PlaylistItem playlist={s} group={group}></PlaylistItem>}
       />
     </div>
   );

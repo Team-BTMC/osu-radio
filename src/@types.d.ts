@@ -121,9 +121,16 @@ export type TableMap = {
   songs: { [key: ResourceID]: Song };
   audio: { [key: ResourceID]: AudioSource };
   images: { [key: ResourceID]: ImageSource };
-  playlists: { [key: string]: Song[] };
+  playlists: { [key: string]: Playlist };
   settings: Settings;
   system: System;
+};
+
+export type Playlist = {
+  name: string;
+  count: number;
+  length: number; // total length in seconds
+  songs: Song[];
 };
 
 // I guess this is definition of all binary blob files that can be access from the database code?
