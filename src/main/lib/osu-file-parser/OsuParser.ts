@@ -1,43 +1,43 @@
-import { AudioSource, ImageSource, ResourceID, Result, Song } from '../../../@types';
-import readline from 'readline';
-import path from 'path';
-import { fail, ok } from '../rust-like-utils-backend/Result';
-import { OsuFile } from './OsuFile';
-import { access, getFiles, getSubDirs } from '../fs-promises';
-import fs from 'graceful-fs';
-import { assertNever } from '../tungsten/assertNever';
-
-
+import { AudioSource, ImageSource, ResourceID, Result, Song } from "../../../@types";
+import readline from "readline";
+import path from "path";
+import { fail, ok } from "../rust-like-utils-backend/Result";
+import { OsuFile } from "./OsuFile";
+import { access, getFiles, getSubDirs } from "../fs-promises";
+import fs from "graceful-fs";
+import { assertNever } from "../tungsten/assertNever";
 
 const bgFileNameRegex = /.*"(?<!Video.*)(.*)".*/;
 const beatmapSetIDRegex = /([0-9]+) .*/;
 
-
-
-type FileState = 'Initial'
-  | 'NextState'
-  | 'General'
-  | 'Editor'
-  | 'Metadata'
-  | 'Difficulty'
-  | 'Events'
-  | 'TimingPoints'
-  | 'Colours'
-  | 'HitObjects';
+type FileState =
+  | "Initial"
+  | "NextState"
+  | "General"
+  | "Editor"
+  | "Metadata"
+  | "Difficulty"
+  | "Events"
+  | "TimingPoints"
+  | "Colours"
+  | "HitObjects";
 
 const OFFSET = 0;
 const BPM = 1;
 
-
-
 type Table<T> = Map<ResourceID, T>;
 
-export type DirParseResult = Promise<Result<[Table<Song>, Table<AudioSource>, Table<ImageSource>], string>>
+export type DirParseResult = Promise<
+  Result<[Table<Song>, Table<AudioSource>, Table<ImageSource>], string>
+>;
 
 export class OsuParser {
-  static async parseDir(dir: string, update?: (i: number, total: number, file: string) => any): DirParseResult {
-    if (!await access(dir, fs.constants.R_OK)) {
-      return fail('Directory does not exists.');
+  static async parseDir(
+    dir: string,
+    update?: (i: number, total: number, file: string) => any
+  ): DirParseResult {
+    if (!(await access(dir, fs.constants.R_OK))) {
+      return fail("Directory does not exists.");
     }
 
     let lastAudioID = "";
@@ -119,7 +119,7 @@ export class OsuParser {
   }
 
   static async parseFile(file: string): Promise<Result<OsuFile, string>> {
-    if (!await access(file, fs.constants.R_OK)) {
+    if (!(await access(file, fs.constants.R_OK))) {
       return fail("File does not exists.");
     }
 
@@ -129,45 +129,45 @@ export class OsuParser {
       crlfDelay: Infinity
     });
 
-    let state: FileState = 'Initial';
+    let state: FileState = "Initial";
     const props = new Map<string, string>();
     const bpm: number[][] = [];
 
-    lines : for await (const line of fileLines) {
+    lines: for await (const line of fileLines) {
       const trimmed = line.trim();
 
-      if (trimmed === '') {
+      if (trimmed === "") {
         continue;
       }
 
-      if (trimmed[0] === '[' && trimmed[trimmed.length - 1] === ']') {
+      if (trimmed[0] === "[" && trimmed[trimmed.length - 1] === "]") {
         state = trimmed.substring(1, trimmed.length - 1) as FileState;
         continue;
       }
 
       switch (state) {
-        case 'HitObjects':
+        case "HitObjects":
           break lines;
 
-        case 'NextState':
-        case 'Editor':
-        case 'Difficulty':
-        case 'Colours':
-        case 'Initial':
+        case "NextState":
+        case "Editor":
+        case "Difficulty":
+        case "Colours":
+        case "Initial":
           continue;
 
-        case 'Events': {
+        case "Events": {
           const bg = bgFileNameRegex.exec(trimmed);
           if (bg !== null) {
             props.set("bgSrc", bg[1]);
-            state = 'NextState';
+            state = "NextState";
           }
 
           break;
         }
 
-        case 'TimingPoints': {
-          const timingPoint = trimmed.split(',').map(x => Number(x));
+        case "TimingPoints": {
+          const timingPoint = trimmed.split(",").map((x) => Number(x));
 
           if (timingPoint.length === 2) {
             bpm.push(timingPoint);
@@ -186,8 +186,8 @@ export class OsuParser {
           break;
         }
 
-        case 'General':
-        case 'Metadata': {
+        case "General":
+        case "Metadata": {
           const [prop, value] = this.#splitProp(trimmed);
           if (prop === undefined) {
             continue;
@@ -197,7 +197,8 @@ export class OsuParser {
           break;
         }
 
-        default: assertNever(state);
+        default:
+          assertNever(state);
       }
     }
 
@@ -205,9 +206,7 @@ export class OsuParser {
     fileLines.close();
 
     const result = beatmapSetIDRegex.exec(file);
-    const beatmapSetID = result !== null
-      ? Number(result[1])
-      : 0;
+    const beatmapSetID = result !== null ? Number(result[1]) : 0;
 
     return ok(new OsuFile(file, props, bpm, beatmapSetID));
   }

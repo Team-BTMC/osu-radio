@@ -1,8 +1,6 @@
-import { Router } from '../lib/route-pass/Router';
-import { Storage } from '../lib/storage/Storage';
-import { fail, ok } from '../lib/rust-like-utils-backend/Result';
-
-
+import { Router } from "../lib/route-pass/Router";
+import { Storage } from "../lib/storage/Storage";
+import { fail, ok } from "../lib/rust-like-utils-backend/Result";
 
 Router.respond("resource::getPath", (_evt, id) => {
   if (id === undefined) {
@@ -19,16 +17,12 @@ Router.respond("resource::getPath", (_evt, id) => {
   return ok(osuDir.value + "/" + encodeFile(id));
 });
 
-
-
 function encodeFile(uri: string): string {
   return uri
     .split(/[\/\\]/)
-    .map(s => encodeURIComponent(s))
+    .map((s) => encodeURIComponent(s))
     .join("/");
 }
-
-
 
 Router.respond("resource::get", (_evt, id, table) => {
   return Storage.getTable(table).get(id);

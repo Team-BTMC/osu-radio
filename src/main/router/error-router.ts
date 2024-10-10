@@ -1,9 +1,7 @@
-import { Router } from '../lib/route-pass/Router';
-import { BrowserWindow } from 'electron';
+import { Router } from "../lib/route-pass/Router";
+import { BrowserWindow } from "electron";
 
-
-
-let pending: (()=>void)[] = [];
+let pending: (() => void)[] = [];
 
 Router.respond("error::dismissed", () => {
   // Error has been dismissed. Resolve all pending errors
@@ -13,8 +11,6 @@ Router.respond("error::dismissed", () => {
 
   pending = [];
 });
-
-
 
 /**
  * Requests change of scenes to error scene and displays error message. Returned promise is resolved when user dismisses
@@ -27,7 +23,7 @@ export async function showError(window: BrowserWindow, msg: string): Promise<voi
   await Router.dispatch(window, "changeScene", "error");
   await Router.dispatch(window, "error::setMessage", msg);
 
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     pending.push(resolve);
   });
 }

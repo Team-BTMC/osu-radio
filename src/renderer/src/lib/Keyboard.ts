@@ -1,16 +1,12 @@
 type Modifiers = "ctrl" | "shift" | "alt";
 
-
-
 export type KeyboardRegister = {
-  onPress: () => any,
-  key: KeyboardEvent["key"],
-  modifiers?: Modifiers[],
-  preventDefault?: boolean,
-  stopPropagation?: boolean,
-}
-
-
+  onPress: () => any;
+  key: KeyboardEvent["key"];
+  modifiers?: Modifiers[];
+  preventDefault?: boolean;
+  stopPropagation?: boolean;
+};
 
 export class Keyboard {
   private static readonly registers: KeyboardRegister[] = [];
@@ -24,7 +20,7 @@ export class Keyboard {
 
     this.initialized = !this.initialized;
 
-    window.addEventListener("keydown", evt => {
+    window.addEventListener("keydown", (evt) => {
       for (let i = 0; i < this.registers.length; i++) {
         const r = this.registers[i];
 
@@ -44,9 +40,7 @@ export class Keyboard {
           continue;
         }
 
-        const rModCount = r.modifiers !== undefined
-          ? r.modifiers.length
-          : 0;
+        const rModCount = r.modifiers !== undefined ? r.modifiers.length : 0;
 
         const evtModCount = Number(evt.altKey) + Number(evt.shiftKey) + Number(evt.ctrlKey);
 

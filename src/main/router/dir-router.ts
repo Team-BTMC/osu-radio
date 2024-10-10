@@ -3,8 +3,6 @@ import { none, some } from "../lib/rust-like-utils-backend/Optional";
 import { dialog } from "electron";
 import path from "path";
 
-
-
 Router.respond("dir::select", () => {
   const path = dialog.showOpenDialogSync({
     title: "Select your osu! Songs folder",
@@ -17,8 +15,6 @@ Router.respond("dir::select", () => {
 
   return some(path[0]);
 });
-
-
 
 Router.respond("dir::autoGetOsuSongsDir", () => {
   if (process.platform === "win32") {
@@ -35,8 +31,6 @@ Router.respond("dir::autoGetOsuSongsDir", () => {
   return none();
 });
 
-
-
 let pendingDirRequests: ((dir: string) => void)[] = [];
 
 Router.respond("dir::submit", (_evt, dir) => {
@@ -47,8 +41,6 @@ Router.respond("dir::submit", (_evt, dir) => {
 
   pendingDirRequests = [];
 });
-
-
 
 /**
  * Await submitted directory from client. This function works on suspending promise's resolve function in array of

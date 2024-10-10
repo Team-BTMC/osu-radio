@@ -10,8 +10,6 @@ export default function formatTime(ms: number): string {
   return `${minutes}:${prependZero(seconds % 60)}`;
 }
 
-
-
 function prependZero(n: number): string {
   if (n < 10) {
     return "0" + n;

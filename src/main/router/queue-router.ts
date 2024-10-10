@@ -1,36 +1,28 @@
-import { Router } from '../lib/route-pass/Router';
-import { Optional, QueueCreatePayload, QueueView, Result, Song, SongIndex } from '../../@types';
-import { Storage } from '../lib/storage/Storage';
-import { filter } from '../lib/song/filter';
-import { indexMapper } from '../lib/song/indexMapper';
-import { mainWindow } from '../main';
-import order from '../lib/song/order';
-import errorIgnored from '../lib/tungsten/errorIgnored';
-import { none, some } from '../lib/rust-like-utils-backend/Optional';
-import { shuffle } from '../lib/tungsten/collections';
-import { fail, ok } from '../lib/rust-like-utils-backend/Result';
-
-
+import { Router } from "../lib/route-pass/Router";
+import { Optional, QueueCreatePayload, QueueView, Result, Song, SongIndex } from "../../@types";
+import { Storage } from "../lib/storage/Storage";
+import { filter } from "../lib/song/filter";
+import { indexMapper } from "../lib/song/indexMapper";
+import { mainWindow } from "../main";
+import order from "../lib/song/order";
+import errorIgnored from "../lib/tungsten/errorIgnored";
+import { none, some } from "../lib/rust-like-utils-backend/Optional";
+import { shuffle } from "../lib/tungsten/collections";
+import { fail, ok } from "../lib/rust-like-utils-backend/Result";
 
 let queue: Song[];
-
-
 
 Router.respond("queue::exists", () => {
   return queue !== undefined;
 });
 
-
-
 let index = 0;
 let lastPayload: QueueCreatePayload | undefined;
-
-
 
 Router.respond("queue::create", async (_evt, payload) => {
   if (comparePayload(payload, lastPayload)) {
     // Payload is practically same. Find start song and play queue from there
-    const newIndex = queue.findIndex(s => s.path === payload.startSong);
+    const newIndex = queue.findIndex((s) => s.path === payload.startSong);
 
     if (newIndex === -1 || newIndex === index) {
       return;
@@ -38,8 +30,7 @@ Router.respond("queue::create", async (_evt, payload) => {
 
     index = newIndex;
     lastPayload = payload;
-    await Router.dispatch(mainWindow, "queue::songChanged", queue[index])
-      .catch(errorIgnored);
+    await Router.dispatch(mainWindow, "queue::songChanged", queue[index]).catch(errorIgnored);
     return;
   }
 
@@ -60,7 +51,7 @@ Router.respond("queue::create", async (_evt, payload) => {
   }
 
   // Set playing index
-  const songIndex = queue.findIndex(s => s.path === payload.startSong);
+  const songIndex = queue.findIndex((s) => s.path === payload.startSong);
 
   if (songIndex !== -1) {
     index = songIndex;
@@ -68,10 +59,8 @@ Router.respond("queue::create", async (_evt, payload) => {
     index = 0;
   }
 
-  await Router.dispatch(mainWindow, "queue::created")
-    .catch(errorIgnored);
-  await Router.dispatch(mainWindow, "queue::songChanged", queue[index])
-    .catch(errorIgnored);
+  await Router.dispatch(mainWindow, "queue::created").catch(errorIgnored);
+  await Router.dispatch(mainWindow, "queue::songChanged", queue[index]).catch(errorIgnored);
 });
 
 function getIndexes(view: QueueView): SongIndex[] {
@@ -97,7 +86,10 @@ function getIndexes(view: QueueView): SongIndex[] {
   return [];
 }
 
-function comparePayload(current: QueueCreatePayload, last: QueueCreatePayload | undefined): boolean {
+function comparePayload(
+  current: QueueCreatePayload,
+  last: QueueCreatePayload | undefined
+): boolean {
   if (last === undefined) {
     return false;
   }
@@ -126,8 +118,6 @@ function comparePayload(current: QueueCreatePayload, last: QueueCreatePayload | 
 
   return JSON.stringify(current.tags) === JSON.stringify(last.tags);
 }
-
-
 
 Router.respond("queue::duration", (): Optional<number> => {
   const d = duration();
@@ -164,8 +154,6 @@ function duration(startIndex = 0): Result<number, string> {
   return ok(sum);
 }
 
-
-
 Router.respond("queue::shuffle", async () => {
   // Shuffle whole queue except currently playing song. Its position will be first in shuffled queue
   if (queue === undefined) {
@@ -192,17 +180,13 @@ Router.respond("queue::shuffle", async () => {
 
   index = 0;
 
-  await Router.dispatch(mainWindow, "queue::created")
-    .catch(errorIgnored);
-  await Router.dispatch(mainWindow, "queue::songChanged", queue[index])
-    .catch(errorIgnored);
+  await Router.dispatch(mainWindow, "queue::created").catch(errorIgnored);
+  await Router.dispatch(mainWindow, "queue::songChanged", queue[index]).catch(errorIgnored);
 });
-
-
 
 Router.respond("queue::place", (_evt, what, after) => {
   // Find index of subject
-  const whatIndex = queue.findIndex(s => s.path === what);
+  const whatIndex = queue.findIndex((s) => s.path === what);
 
   if (whatIndex === -1) {
     return;
@@ -229,7 +213,7 @@ Router.respond("queue::place", (_evt, what, after) => {
     return;
   }
 
-  const afterIndex = queue.findIndex(s => s.path === after);
+  const afterIndex = queue.findIndex((s) => s.path === after);
 
   if (afterIndex === -1) {
     // After index was not found... put subject back
@@ -256,29 +240,24 @@ Router.respond("queue::place", (_evt, what, after) => {
   }
 });
 
-
-
 Router.respond("queue::play", async (_evt, song) => {
   // Point currently playing index to given song
-  const newIndex = queue.findIndex(s => s.path === song);
+  const newIndex = queue.findIndex((s) => s.path === song);
 
   if (newIndex === -1 || newIndex === index) {
     return;
   }
 
   index = newIndex;
-  await Router.dispatch(mainWindow, "queue::songChanged", queue[index])
-    .catch(errorIgnored);
+  await Router.dispatch(mainWindow, "queue::songChanged", queue[index]).catch(errorIgnored);
 });
-
-
 
 Router.respond("queue::playNext", async (_evt, song) => {
   if (queue === undefined) {
     return;
   }
 
-  const songIndex = queue.findIndex(s => s.path === song);
+  const songIndex = queue.findIndex((s) => s.path === song);
 
   if (songIndex === index) {
     return;
@@ -288,7 +267,7 @@ Router.respond("queue::playNext", async (_evt, song) => {
     const s = Storage.getTable("songs").get(song);
 
     if (s.isNone) {
-      return
+      return;
     }
 
     queue.splice(index + 1, 0, s.value);
@@ -303,18 +282,15 @@ Router.respond("queue::playNext", async (_evt, song) => {
     }
   }
 
-  await Router.dispatch(mainWindow, 'queue::created')
-    .catch(errorIgnored);
+  await Router.dispatch(mainWindow, "queue::created").catch(errorIgnored);
 });
-
-
 
 Router.respond("queue::removeSong", async (_evt, what) => {
   if (what === undefined) {
     return;
   }
 
-  const whatIndex = queue.findIndex(s => s.path === what);
+  const whatIndex = queue.findIndex((s) => s.path === what);
 
   if (whatIndex === -1) {
     return;
@@ -326,18 +302,14 @@ Router.respond("queue::removeSong", async (_evt, what) => {
 
   queue.splice(whatIndex, 1);
 
-  await Router.dispatch(mainWindow, 'queue::created')
-    .catch(errorIgnored);
+  await Router.dispatch(mainWindow, "queue::created").catch(errorIgnored);
 
   if (whatIndex === index) {
-    await Router.dispatch(mainWindow, 'queue::songChanged', queue[index])
-      .catch(errorIgnored);
+    await Router.dispatch(mainWindow, "queue::songChanged", queue[index]).catch(errorIgnored);
   }
 });
 
-
-
-Router.respond('queue::current', () => {
+Router.respond("queue::current", () => {
   if (queue === undefined || queue[index] === undefined) {
     return none();
   }
@@ -345,9 +317,7 @@ Router.respond('queue::current', () => {
   return some(queue[index]);
 });
 
-
-
-Router.respond('queue::previous', async () => {
+Router.respond("queue::previous", async () => {
   if (queue === undefined) {
     return;
   }
@@ -356,33 +326,25 @@ Router.respond('queue::previous', async () => {
     index = queue.length - 1;
   }
 
-  await Router.dispatch(mainWindow, "queue::songChanged", queue[index])
-    .catch(errorIgnored);
+  await Router.dispatch(mainWindow, "queue::songChanged", queue[index]).catch(errorIgnored);
 });
 
-
-
-Router.respond('queue::next', async () => {
+Router.respond("queue::next", async () => {
   if (queue === undefined) {
     return;
   }
 
   if (++index === queue.length) {
-   index = 0;
+    index = 0;
   }
 
-  await Router.dispatch(mainWindow, "queue::songChanged", queue[index])
-    .catch(errorIgnored);
+  await Router.dispatch(mainWindow, "queue::songChanged", queue[index]).catch(errorIgnored);
 });
-
-
 
 const BUFFER_SIZE = 50;
 
 Router.respond("query::queue::init", () => {
-  const count = queue !== undefined
-    ? queue.length
-    : 0;
+  const count = queue !== undefined ? queue.length : 0;
 
   return some({
     initialIndex: Math.floor(index / BUFFER_SIZE),
@@ -390,13 +352,17 @@ Router.respond("query::queue::init", () => {
   });
 });
 
-Router.respond('query::queue', (_evt, request) => {
+Router.respond("query::queue", (_evt, request) => {
   // Queue view may be rendered only around currently playing. When user scrolls up and there is content that could be
   // loaded and prepended the request.direction is "up". If user scrolls down the request.direction is "down". For given
   // request create new page of size BUFFER_SIZE and send it to client to. This way user will load the whole list
   // incrementally, and it will reduce initial load lag
 
-  if (queue === undefined || request.index < 0 || request.index > Math.floor(queue.length / BUFFER_SIZE)) {
+  if (
+    queue === undefined ||
+    request.index < 0 ||
+    request.index > Math.floor(queue.length / BUFFER_SIZE)
+  ) {
     return none();
   }
 

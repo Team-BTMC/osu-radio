@@ -1,31 +1,27 @@
-import { Accessor, Component, createSignal } from 'solid-js';
-import { Optional } from '../../../../@types';
-import { none, orDefault, some } from '../../lib/rust-like-utils-client/Optional';
-import { hideNotice } from './NoticeContainer';
+import { Accessor, Component, createSignal } from "solid-js";
+import { Optional } from "../../../../@types";
+import { none, orDefault, some } from "../../lib/rust-like-utils-client/Optional";
+import { hideNotice } from "./NoticeContainer";
 import "../../assets/css/notice/notice.css";
-import Gradient from '../Gradient';
-import Impulse from '../../lib/Impulse';
-
-
+import Gradient from "../Gradient";
+import Impulse from "../../lib/Impulse";
 
 export type NoticeType = {
-  id?: string,
-  class: "notice" | "warning" | "error",
-  title: string,
-  content: string,
-  timeoutMS?: number,
-  active?: boolean,
-}
+  id?: string;
+  class: "notice" | "warning" | "error";
+  title: string;
+  content: string;
+  timeoutMS?: number;
+  active?: boolean;
+};
 
 type NoticeProps = {
-  notice: NoticeType,
-  updateGradient: Impulse,
-  onMount: (notice: HTMLElement) => any
-}
+  notice: NoticeType;
+  updateGradient: Impulse;
+  onMount: (notice: HTMLElement) => any;
+};
 
-
-
-const Notice: Component<NoticeProps> = props => {
+const Notice: Component<NoticeProps> = (props) => {
   const removeNotice = () => {
     const action = hideNotice(props.notice.id);
 
@@ -38,18 +34,19 @@ const Notice: Component<NoticeProps> = props => {
     } catch (ignored) {}
   };
 
-  const [drain, setDrainTime, pauseDrain] = createDrainAnimation(props.notice.timeoutMS ?? 10_000, removeNotice);
+  const [drain, setDrainTime, pauseDrain] = createDrainAnimation(
+    props.notice.timeoutMS ?? 10_000,
+    removeNotice
+  );
 
   const onRef = (notice: HTMLElement) => {
     props.updateGradient.pulse();
     props.onMount(notice);
-  }
-
-
+  };
 
   return (
     <div
-      class={'notice-wrapper'}
+      class={"notice-wrapper"}
       onPointerEnter={pauseDrain}
       onPointerLeave={() => setDrainTime(props.notice.timeoutMS ?? 10_000)}
       data-id={props.notice.id}
@@ -61,7 +58,7 @@ const Notice: Component<NoticeProps> = props => {
             <div class="head">
               <h3>{props.notice.title}</h3>
               <button onClick={removeNotice}>
-                <i class='ri-close-line' />
+                <i class="ri-close-line" />
               </button>
             </div>
 
@@ -71,10 +68,10 @@ const Notice: Component<NoticeProps> = props => {
           <div
             class="timeout"
             classList={{
-              "pause": drain().isNone
+              pause: drain().isNone
             }}
             style={{
-              "animation": orDefault(drain(), undefined)
+              animation: orDefault(drain(), undefined)
             }}
           ></div>
         </div>
@@ -83,7 +80,10 @@ const Notice: Component<NoticeProps> = props => {
   );
 };
 
-function createDrainAnimation(timeMS: number, onDrained: () => any): [Accessor<Optional<string>>, (timeMS: number) => any, () => any] {
+function createDrainAnimation(
+  timeMS: number,
+  onDrained: () => any
+): [Accessor<Optional<string>>, (timeMS: number) => any, () => any] {
   const [get, set] = createSignal<Optional<string>>(some(drainTemplate(timeMS)));
 
   let timeout = window.setTimeout(onDrained, timeMS);
@@ -96,15 +96,13 @@ function createDrainAnimation(timeMS: number, onDrained: () => any): [Accessor<O
     },
     () => {
       set(none());
-      clearTimeout(timeout)
-    },
+      clearTimeout(timeout);
+    }
   ];
 }
 
 function drainTemplate(timeMS: number): string {
   return `drain-time ${Math.round(timeMS)}ms linear forwards`;
 }
-
-
 
 export default Notice;

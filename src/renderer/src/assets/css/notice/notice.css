@@ -3,8 +3,6 @@
   border-radius: var(--border-radius);
 }
 
-
-
 .notice {
   background-color: rgba(var(--color-fg), var(--level-0));
   width: 100%;
@@ -19,8 +17,6 @@
   background-color: oklch(70% 0.15 20 / var(--level-0));
 }
 
-
-
 .notice .content {
   padding: 16px;
   display: flex;
@@ -33,8 +29,6 @@
   gap: 8px;
   justify-content: space-between;
 }
-
-
 
 .notice .timeout {
   height: 8px;

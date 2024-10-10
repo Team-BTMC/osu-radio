@@ -1,11 +1,8 @@
-import { fail, ok } from '../rust-like-utils-backend/Result';
-import { Result, Song } from '../../../@types';
-import { averageBPM, msToBPM } from './average-bpm';
+import { fail, ok } from "../rust-like-utils-backend/Result";
+import { Result, Song } from "../../../@types";
+import { averageBPM, msToBPM } from "./average-bpm";
 
-
-
-
-export default function order(ordering: string): Result<(a: Song, b: Song) => number, string > {
+export default function order(ordering: string): Result<(a: Song, b: Song) => number, string> {
   const [prop, mode] = ordering.split(":");
   const sortDirection = mode === "asc" ? 1 : -1;
 
@@ -17,7 +14,7 @@ export default function order(ordering: string): Result<(a: Song, b: Song) => nu
   switch (prop) {
     case "dateAdded":
       return ok((a: Song, b: Song) => {
-        return (new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()) * sortDirection
+        return (new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()) * sortDirection;
       });
 
     case "title":
@@ -52,8 +49,7 @@ export default function order(ordering: string): Result<(a: Song, b: Song) => nu
       });
 
     case "duration":
-      return ok((a: Song, b: Song) =>
-        (a.duration - b.duration) * sortDirection);
+      return ok((a: Song, b: Song) => (a.duration - b.duration) * sortDirection);
 
     default:
       return ok((a: Song, b: Song) => {
