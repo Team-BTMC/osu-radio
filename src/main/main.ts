@@ -32,8 +32,8 @@ export async function main(window: BrowserWindow) {
       window,
       `No songs found in folder: ${orDefault(
         settings.get("osuSongsDir"),
-        "[No folder]"
-      )}. Please make sure this is the directory where you have all your songs saved.`
+        "[No folder]",
+      )}. Please make sure this is the directory where you have all your songs saved.`,
     );
     await configureOsuDir(window);
   }
@@ -60,7 +60,7 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
     await Router.dispatch(
       mainWindow,
       "loadingScene::setTitle",
-      "Importing songs from osu! Songs directory"
+      "Importing songs from osu! Songs directory",
     );
 
     // Wrap client update function to update only every UPDATE_DELAY_MS
@@ -86,7 +86,7 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
     if (tables.value[SONGS].size === 0) {
       await showError(
         mainWindow,
-        `No songs found in folder: ${dir}. Please make sure this is the directory where you have all your songs saved.`
+        `No songs found in folder: ${dir}. Please make sure this is the directory where you have all your songs saved.`,
       );
       // Try again
       continue;

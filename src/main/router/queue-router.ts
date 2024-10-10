@@ -88,7 +88,7 @@ function getIndexes(view: QueueView): SongIndex[] {
 
 function comparePayload(
   current: QueueCreatePayload,
-  last: QueueCreatePayload | undefined
+  last: QueueCreatePayload | undefined,
 ): boolean {
   if (last === undefined) {
     return false;

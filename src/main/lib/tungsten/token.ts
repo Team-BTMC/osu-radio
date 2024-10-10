@@ -17,7 +17,7 @@ const globalTokens: Set<Token> = new Set();
 export function generateToken(
   forceFirstLetter = false,
   length = 8,
-  set: Set<string> = undefined as any
+  set: Set<string> = undefined as any,
 ): Token {
   let id = "";
   const MAX_RETRIES = 10_000;

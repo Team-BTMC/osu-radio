@@ -50,7 +50,7 @@ async function createWindow() {
 
     dialog.showErrorBox(
       "Report to the developer team to fix",
-      (error as Error).stack ?? String(error)
+      (error as Error).stack ?? String(error),
     );
   });
 }

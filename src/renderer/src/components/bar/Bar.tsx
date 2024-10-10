@@ -60,7 +60,7 @@ const Bar: Component<BarProps> = (props) => {
     handle?.addEventListener(
       "pointerup",
       () => handle.removeEventListener("pointermove", calculateFill),
-      { once: true }
+      { once: true },
     );
   };
 

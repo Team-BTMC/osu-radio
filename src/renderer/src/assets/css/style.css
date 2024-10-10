@@ -83,7 +83,10 @@ button,
   border-radius: var(--border-radius);
   outline: 0 solid rgba(var(--color-fg), 0);
 
-  transition: background-color 250ms, outline-color 250ms, opacity 250ms;
+  transition:
+    background-color 250ms,
+    outline-color 250ms,
+    opacity 250ms;
 }
 
 button[disabled],

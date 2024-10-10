@@ -113,7 +113,7 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
       root: container,
       rootMargin: "50px",
       threshold: 0,
-    }
+    },
   );
 
   let indexEnd = 0;
@@ -153,7 +153,7 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
       root: container,
       rootMargin: "50px",
       threshold: 0,
-    }
+    },
   );
 
   const reset = async () => {

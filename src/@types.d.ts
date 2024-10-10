@@ -14,7 +14,7 @@ declare global {
       listen<E extends keyof ListenAPI>(channel: E, listener: APIListener<ListenAPI[E]>): void;
       removeListener<E extends keyof ListenAPI>(
         channel: E,
-        listener: APIListener<ListenAPI[E]>
+        listener: APIListener<ListenAPI[E]>,
       ): void;
     };
   }

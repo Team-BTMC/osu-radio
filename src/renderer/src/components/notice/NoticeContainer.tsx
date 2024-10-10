@@ -40,7 +40,7 @@ export function hideNotice(id: string | undefined): Result<void, string> {
     (ex) => ex.notice.id === id,
     "notice",
     "active",
-    () => false
+    () => false,
   );
 
   return ok(undefined);

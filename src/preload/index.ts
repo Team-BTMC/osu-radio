@@ -7,7 +7,7 @@ function createPacketPreload<T>(
   channel: string,
   token: string,
   data: T,
-  type: PacketType = "DATA"
+  type: PacketType = "DATA",
 ): Packet<T> {
   return {
     channel,
@@ -61,7 +61,7 @@ ipcRenderer.on("communication/renderer", (_evt, packet: Packet<any>) => {
       } catch (e) {
         console.log(e);
         console.log(
-          "If it says something about not being able to clone object then you are sending non-standard JS object."
+          "If it says something about not being able to clone object then you are sending non-standard JS object.",
         );
         console.log(responses);
       }

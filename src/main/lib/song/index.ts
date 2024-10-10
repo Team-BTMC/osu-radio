@@ -26,7 +26,7 @@ export type IndexCallback = (i: number, song: string) => void;
  */
 export function collectTagsAndIndexSongs(
   songs: { [id: string]: Song },
-  fn?: IndexCallback
+  fn?: IndexCallback,
 ): [SongIndex[], Map<string, string[]>] {
   const indexes: SongIndex[] = [];
   const tags = new Map<string, string[]>();

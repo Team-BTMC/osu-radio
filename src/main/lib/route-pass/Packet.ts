@@ -4,7 +4,7 @@ export function cratePacket<T>(
   channel: string,
   token: string,
   data: T,
-  type: PacketType = "DATA"
+  type: PacketType = "DATA",
 ): Packet<T> {
   return {
     channel,

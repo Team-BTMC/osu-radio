@@ -29,7 +29,7 @@ export class Storage {
 
     const table = new Table(
       tablePath,
-      JSON.parse(fs.readFileSync(tablePath, { encoding: "utf8" }))
+      JSON.parse(fs.readFileSync(tablePath, { encoding: "utf8" })),
     );
     this.cache.set(name, table);
     return table;
