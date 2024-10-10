@@ -1,6 +1,5 @@
-import { Component, Show } from "solid-js";
-
 import "../../assets/css/select.css";
+import { Component, Show } from "solid-js";
 
 type SettingDropdownProps = {
   label: string;

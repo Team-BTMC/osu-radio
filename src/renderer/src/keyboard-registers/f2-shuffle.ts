@@ -1,6 +1,6 @@
-import { Keyboard } from "../lib/Keyboard";
 import { addNotice } from "../components/notice/NoticeContainer";
 import { active, ACTIVE_QUEUE } from "../components/scenes/MainScene";
+import { Keyboard } from "../lib/Keyboard";
 
 Keyboard.register({
   key: "F2",

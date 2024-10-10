@@ -1,5 +1,5 @@
-import { createSignal } from "solid-js";
 import "../../assets/css/scenes/dir-select.css";
+import { createSignal } from "solid-js";
 
 export default function DirSelectScene() {
   const [dir, setDir] = createSignal("");

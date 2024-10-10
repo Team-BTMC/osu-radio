@@ -1,11 +1,11 @@
-import { Component, createEffect, createSignal, For, Signal } from "solid-js";
-import Fa from "solid-fa";
-import { faTags } from "@fortawesome/free-solid-svg-icons";
 import { GLOBAL_ICON_SCALE } from "../../App";
-import TextField from "../form/TextField";
-import TagItem from "./TagItem";
 import "../../assets/css/search/tag-select.css";
 import Gradient from "../Gradient";
+import TextField from "../form/TextField";
+import TagItem from "./TagItem";
+import { faTags } from "@fortawesome/free-solid-svg-icons";
+import Fa from "solid-fa";
+import { Component, createEffect, createSignal, For, Signal } from "solid-js";
 
 export type Tag = {
   name: string;

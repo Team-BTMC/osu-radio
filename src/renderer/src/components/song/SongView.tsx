@@ -1,4 +1,3 @@
-import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { Optional, ResourceID, SongsQueryPayload, Tag } from "../../../../@types";
 import { SearchQueryError } from "../../../../main/lib/search-parser/@search-types";
 import { namespace } from "../../App";
@@ -7,8 +6,9 @@ import Impulse from "../../lib/Impulse";
 import { none, some } from "../../lib/rust-like-utils-client/Optional";
 import InfiniteScroller from "../InfiniteScroller";
 import Search from "../search/Search";
-import PlayNext from "./context-menu/items/PlayNext";
 import SongItem from "./SongItem";
+import PlayNext from "./context-menu/items/PlayNext";
+import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 
 export type SongViewProps = {
   isAllSongs?: boolean;

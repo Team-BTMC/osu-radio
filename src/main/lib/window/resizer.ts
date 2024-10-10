@@ -1,6 +1,6 @@
-import { BrowserWindow } from "electron";
-import { Storage } from "../storage/Storage";
 import { orDefault } from "../rust-like-utils-backend/Optional";
+import { Storage } from "../storage/Storage";
+import { BrowserWindow } from "electron";
 
 /**
  * Save window dimensions so that it can be opened the same size it was closed

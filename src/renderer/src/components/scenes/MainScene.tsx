@@ -1,12 +1,12 @@
-import SongView from "../song/SongView";
-import { createEffect, createSignal, onMount } from "solid-js";
-import Fa from "solid-fa";
-import { faGear, faHeadphonesSimple, faListUl, faMusic } from "@fortawesome/free-solid-svg-icons";
 import { GLOBAL_ICON_SCALE } from "../../App";
-import SongDetail from "../song/SongDetail";
-import QueueView from "../queue/QueueView";
 import NoticeContainer from "../notice/NoticeContainer";
+import QueueView from "../queue/QueueView";
 import SettingsView from "../settings/SettingsView";
+import SongDetail from "../song/SongDetail";
+import SongView from "../song/SongView";
+import { faGear, faHeadphonesSimple, faListUl, faMusic } from "@fortawesome/free-solid-svg-icons";
+import Fa from "solid-fa";
+import { createEffect, createSignal, onMount } from "solid-js";
 
 const [active, setActive] = createSignal(0);
 

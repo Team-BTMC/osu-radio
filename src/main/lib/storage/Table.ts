@@ -1,6 +1,6 @@
-import fs from "fs";
-import { none, some } from "../rust-like-utils-backend/Optional";
 import { Optional } from "../../../@types";
+import { none, some } from "../rust-like-utils-backend/Optional";
+import fs from "fs";
 
 export class Table<S> {
   private readonly path: string;

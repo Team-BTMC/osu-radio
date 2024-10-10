@@ -1,11 +1,11 @@
-import { Component, createEffect, createSignal } from "solid-js";
-import Bar from "../Bar";
-import { duration, seek, song, timestamp } from "../../lib/Music";
-import formatTime from "../../lib/time-formatter";
-import SongImage from "./SongImage";
 import "../../assets/css/song/song-detail.css";
-import SongControls from "./SongControls";
+import { duration, seek, song, timestamp } from "../../lib/Music";
 import { isSongUndefined } from "../../lib/song";
+import formatTime from "../../lib/time-formatter";
+import Bar from "../Bar";
+import SongControls from "./SongControls";
+import SongImage from "./SongImage";
+import { Component, createEffect, createSignal } from "solid-js";
 
 type SongDetailProps = {};
 

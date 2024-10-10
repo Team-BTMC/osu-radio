@@ -1,8 +1,8 @@
-import SettingDropdown from "./SettingDropdown";
-import "../../assets/css/settings/settings-view.css";
 import "../../assets/css/settings/settings-item.css";
-import { createEffect, createSignal, onMount } from "solid-js";
+import "../../assets/css/settings/settings-view.css";
 import { changeAudioDevice } from "../../lib/Music";
+import SettingDropdown from "./SettingDropdown";
+import { createEffect, createSignal, onMount } from "solid-js";
 
 const SettingsView = () => {
   let view;

@@ -1,7 +1,7 @@
-import { dialog } from "electron";
-import path from "path";
 import { Router } from "../lib/route-pass/Router";
 import { none, some } from "../lib/rust-like-utils-backend/Optional";
+import { dialog } from "electron";
+import path from "path";
 
 Router.respond("dir::select", () => {
   const path = dialog.showOpenDialogSync({

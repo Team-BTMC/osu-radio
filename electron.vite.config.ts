@@ -1,5 +1,5 @@
-import { resolve } from "path";
 import { defineConfig, externalizeDepsPlugin } from "electron-vite";
+import { resolve } from "path";
 import solid from "vite-plugin-solid";
 
 export default defineConfig({

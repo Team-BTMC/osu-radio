@@ -1,13 +1,13 @@
-import { Component, createEffect, createSignal, Setter, Show } from "solid-js";
+import { GLOBAL_ICON_SCALE } from "../App";
 import Select, { SelectOption } from "./Select";
-import Fa from "solid-fa";
 import {
   faArrowDown19,
   faArrowDown91,
   faArrowDownAZ,
   faArrowDownZA,
 } from "@fortawesome/free-solid-svg-icons";
-import { GLOBAL_ICON_SCALE } from "../App";
+import Fa from "solid-fa";
+import { Component, createEffect, createSignal, Setter, Show } from "solid-js";
 
 type OrderOption = SelectOption & {
   type: "number" | "string";

@@ -1,13 +1,13 @@
-import { Accessor, Component, createEffect, createSignal, Setter, Signal } from "solid-js";
-import "../../assets/css/search/search.css";
 import { Optional } from "../../../../@types";
 import { SearchQueryError } from "../../../../main/lib/search-parser/@search-types";
-import TextField from "../form/TextField";
-import Fa from "solid-fa";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { GLOBAL_ICON_SCALE } from "../../App";
-import TagSelect, { Tag } from "./TagSelect";
+import "../../assets/css/search/search.css";
 import OrderSelect from "../OrderSelect";
+import TextField from "../form/TextField";
+import TagSelect, { Tag } from "./TagSelect";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import Fa from "solid-fa";
+import { Accessor, Component, createEffect, createSignal, Setter, Signal } from "solid-js";
 
 export type SearchProps = {
   query: Signal<string>;

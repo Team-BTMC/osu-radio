@@ -1,16 +1,16 @@
-import { GLOBAL_ICON_SCALE, namespace } from "../../App";
-import SongItem from "../song/SongItem";
-import InfiniteScroller from "../InfiniteScroller";
-import { createSignal, onCleanup, onMount } from "solid-js";
-import Fa from "solid-fa";
-import { faShuffle } from "@fortawesome/free-solid-svg-icons";
 import { Song } from "../../../../@types";
-import scrollIfNeeded from "../../lib/tungsten/scroll-if-needed";
-import Impulse from "../../lib/Impulse";
+import { GLOBAL_ICON_SCALE, namespace } from "../../App";
 import "../../assets/css/queue/queue-view.css";
-import SongContextMenuItem from "../song/context-menu/SongContextMenuItem";
-import formatTime from "../../lib/time-formatter";
+import Impulse from "../../lib/Impulse";
 import { orDefault } from "../../lib/rust-like-utils-client/Optional";
+import formatTime from "../../lib/time-formatter";
+import scrollIfNeeded from "../../lib/tungsten/scroll-if-needed";
+import InfiniteScroller from "../InfiniteScroller";
+import SongItem from "../song/SongItem";
+import SongContextMenuItem from "../song/context-menu/SongContextMenuItem";
+import { faShuffle } from "@fortawesome/free-solid-svg-icons";
+import Fa from "solid-fa";
+import { createSignal, onCleanup, onMount } from "solid-js";
 
 const QueueView = () => {
   const [count, setCount] = createSignal(0);

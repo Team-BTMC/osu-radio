@@ -1,4 +1,5 @@
-import { Component, createEffect, createSignal, Match, Show, Switch } from "solid-js";
+import { GLOBAL_ICON_SCALE } from "../../App";
+import "../../assets/css/song/song-controls.css";
 import {
   isPlaying,
   localVolume,
@@ -11,7 +12,7 @@ import {
   volume,
 } from "../../lib/Music";
 import { isSongUndefined } from "../../lib/song";
-import Fa from "solid-fa";
+import Bar from "../Bar";
 import {
   faBackwardStep,
   faForwardStep,
@@ -23,9 +24,8 @@ import {
   faVolumeLow,
   faVolumeXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { GLOBAL_ICON_SCALE } from "../../App";
-import Bar from "../Bar";
-import "../../assets/css/song/song-controls.css";
+import Fa from "solid-fa";
+import { Component, createEffect, createSignal, Match, Show, Switch } from "solid-js";
 
 type SongControlsProps = {};
 

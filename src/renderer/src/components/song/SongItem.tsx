@@ -1,12 +1,12 @@
-import { setMediaSession } from "@renderer/lib/Music";
-import { averageBPM, msToBPM } from "@renderer/lib/song";
-import { Component, createSignal, onMount } from "solid-js";
 import { ResourceID, Song } from "../../../../@types";
 import "../../assets/css/song/song-item.css";
 import draggable from "../../lib/draggable/draggable";
-import SongContextMenu, { ignoreClickInContextMenu } from "./context-menu/SongContextMenu";
 import SongHint from "./SongHint";
 import SongImage from "./SongImage";
+import SongContextMenu, { ignoreClickInContextMenu } from "./context-menu/SongContextMenu";
+import { setMediaSession } from "@renderer/lib/Music";
+import { averageBPM, msToBPM } from "@renderer/lib/song";
+import { Component, createSignal, onMount } from "solid-js";
 
 type SongItemProps = {
   song: Song;
