@@ -1,22 +1,15 @@
-import { DirParseResult, OsuParser } from "./lib/osu-file-parser/OsuParser";
+import { BrowserWindow } from "electron";
 import { Router } from "./lib/route-pass/Router";
-import { orDefault } from "./lib/rust-like-utils-backend/Optional";
-import { collectTagsAndIndexSongs } from "./lib/song";
 import { Storage } from "./lib/storage/Storage";
-import { throttle } from "./lib/throttle";
 import { dirSubmit } from "./router/dir-router";
 import { showError } from "./router/error-router";
-import { DirParseResult, OsuParser } from "./lib/osu-file-parser/OsuParser";
-import { Router } from "./lib/route-pass/Router";
-import { orDefault } from "./lib/rust-like-utils-backend/Optional";
-import { collectTagsAndIndexSongs } from "./lib/song";
-import { Storage } from "./lib/storage/Storage";
-import { throttle } from "./lib/throttle";
-import { dirSubmit } from "./router/dir-router";
-import { showError } from "./router/error-router";
+
 import "./router/import";
-import { BrowserWindow } from "electron";
-import { BrowserWindow } from "electron";
+
+import { DirParseResult, OsuParser } from "./lib/osu-file-parser/OsuParser";
+import { orDefault } from "./lib/rust-like-utils-backend/Optional";
+import { collectTagsAndIndexSongs } from "./lib/song";
+import { throttle } from "./lib/throttle";
 
 export let mainWindow: BrowserWindow;
 
@@ -37,13 +30,6 @@ export async function main(window: BrowserWindow) {
 
   const songsArray = Object.values(Storage.getTable("songs").getStruct());
   if (songsArray.length === 0) {
-    await showError(
-      window,
-      `No songs found in folder: ${orDefault(
-        settings.get("osuSongsDir"),
-        "[No folder]",
-      )}. Please make sure this is the directory where you have all your songs saved.`,
-    );
     await showError(
       window,
       `No songs found in folder: ${orDefault(
@@ -100,10 +86,6 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
         mainWindow,
         `No songs found in folder: ${dir}. Please make sure this is the directory where you have all your songs saved.`,
       );
-      await showError(
-        mainWindow,
-        `No songs found in folder: ${dir}. Please make sure this is the directory where you have all your songs saved.`,
-      );
       // Try again
       continue;
     }
@@ -112,13 +94,11 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
     settings.write("osuSongsDir", dir);
     break;
   } while (true);
-  } while (true);
 
   // Show finished state
   await Router.dispatch(mainWindow, "loadingScene::update", {
     max: tables.value[SONGS].size,
     current: tables.value[SONGS].size,
-    hint: `Imported total of ${tables.value[SONGS].size} songs`,
     hint: `Imported total of ${tables.value[SONGS].size} songs`,
   });
 
@@ -137,7 +117,6 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
     await Router.dispatch(mainWindow, "loadingScene::update", {
       current: i,
       hint: song,
-      max: total,
       max: total,
     });
   }, UPDATE_DELAY_MS);
@@ -160,7 +139,5 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
     current: total,
     hint: "Indexed " + total + " songs",
     max: total,
-    max: total,
   });
 }
-
