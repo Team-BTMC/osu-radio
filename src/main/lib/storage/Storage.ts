@@ -1,10 +1,8 @@
-import fs from 'fs';
-import path from 'path';
-import { app } from 'electron';
-import { BlobMap, TableMap } from '../../../@types';
-import { Table } from './Table';
-
-
+import fs from "fs";
+import path from "path";
+import { app } from "electron";
+import { BlobMap, TableMap } from "../../../@types";
+import { Table } from "./Table";
 
 export class Storage {
   private static cache: Map<string, Table<any>> = new Map();
@@ -21,15 +19,18 @@ export class Storage {
       return hit;
     }
 
-    const tablePath = path.join(app.getPath('userData'), `/storage/${name}.json`);
+    const tablePath = path.join(app.getPath("userData"), `/storage/${name}.json`);
 
     if (!fs.existsSync(tablePath)) {
-      fs.mkdirSync(path.join(app.getPath('userData'), '/storage'), { recursive: true });
-      fs.writeFileSync(tablePath, '{}');
+      fs.mkdirSync(path.join(app.getPath("userData"), "/storage"), { recursive: true });
+      fs.writeFileSync(tablePath, "{}");
       return new Table(tablePath, {} as any);
     }
 
-    const table = new Table(tablePath, JSON.parse(fs.readFileSync(tablePath, { encoding: 'utf8' })));
+    const table = new Table(
+      tablePath,
+      JSON.parse(fs.readFileSync(tablePath, { encoding: "utf8" })),
+    );
     this.cache.set(name, table);
     return table;
   }
@@ -40,9 +41,9 @@ export class Storage {
    * @param contents
    */
   static setTable<T extends keyof TableMap>(name: T, contents: TableMap[T]): Table<TableMap[T]> {
-    const tablePath = path.join(app.getPath('userData'), `/storage/${name}.json`);
+    const tablePath = path.join(app.getPath("userData"), `/storage/${name}.json`);
     if (!fs.existsSync(tablePath)) {
-      fs.mkdirSync(path.join(app.getPath('userData'), '/storage'), { recursive: true });
+      fs.mkdirSync(path.join(app.getPath("userData"), "/storage"), { recursive: true });
     }
 
     fs.writeFileSync(tablePath, JSON.stringify(contents));
@@ -58,7 +59,7 @@ export class Storage {
    */
   static removeTable<T extends keyof TableMap>(name: T): void {
     this.cache.delete(name);
-    fs.unlinkSync(path.join(app.getPath('userData'), `/storage/${name}.json`));
+    fs.unlinkSync(path.join(app.getPath("userData"), `/storage/${name}.json`));
   }
 
   /**
@@ -67,11 +68,11 @@ export class Storage {
    * @param name
    */
   static getBlob<T extends keyof BlobMap>(name: T): Buffer {
-    const blobPath = path.join(app.getPath('userData'), '/storage/' + name);
+    const blobPath = path.join(app.getPath("userData"), "/storage/" + name);
 
     if (!fs.existsSync(blobPath)) {
-      fs.mkdirSync(path.join(app.getPath('userData'), '/storage'), { recursive: true });
-      fs.writeFileSync(blobPath, '');
+      fs.mkdirSync(path.join(app.getPath("userData"), "/storage"), { recursive: true });
+      fs.writeFileSync(blobPath, "");
     }
 
     return fs.readFileSync(blobPath);
@@ -83,10 +84,10 @@ export class Storage {
    * @param blob
    */
   static setBlob<T extends keyof BlobMap>(name: T, blob: Buffer): void {
-    const blobPath = path.join(app.getPath('userData'), '/storage/' + name);
+    const blobPath = path.join(app.getPath("userData"), "/storage/" + name);
 
     if (!fs.existsSync(blobPath)) {
-      fs.mkdirSync(path.join(app.getPath('userData'), '/storage'), { recursive: true });
+      fs.mkdirSync(path.join(app.getPath("userData"), "/storage"), { recursive: true });
     }
 
     fs.writeFileSync(blobPath, blob);

@@ -5,32 +5,40 @@ Roadmap | Alpha Features & Issues: https://github.com/orgs/Team-BTMC/projects/2
 Main Figma Design: [https://www.figma.com/design/tNBJr7TlEsoWsWdAewqoUg](https://www.figma.com/design/tNBJr7TlEsoWsWdAewqoUg/osu!-radio?node-id=0-1&t=aIuThZAj00HcSjM5-1)
 
 # What is osu!radio
+
 It's an application that plays your ${\textsf{\color{#f462a3}osu!}}$ songs!
 
 ![Song Tab](https://github.com/user-attachments/assets/da67b906-1429-4cc1-9087-76026e94b98a "The screen show a UI with all the buttons (Play, Pause, Forward and Rewind, as well as a Seek bar, with 4 songs on the left")
 
 ### Download Guide
+
 > [!NOTE]
 > To use `git` and `npm`, you need to have [git](https://git-scm.com/) & [node.js](https://nodejs.org/en) installed
 
 `1` | Open the terminal in the directory in which you want to download osu!radio. Then run the 2 following commands,
+
 ```sh
 git clone https://github.com/Team-BTMC/osu-radio.git
 ```
+
 ```sh
 cd osu-radio
 ```
 
 `2` | Next, install the necessary files to run osu!radio,
+
 ```sh
 npm install
 ```
 
 `A` | For a production (User) startup,
+
 ```
 npm run start
 ```
+
 `B` | For a hot reloading (Dev) launch,
+
 ```
 npm run dev
 ```
@@ -43,6 +51,7 @@ npm run dev
 > Linux: Be sure to go to `~/.config/` and delete `osu-radio` directory
 
 ### Contribution
+
 > [!TIP]
 > To get started, it's highly recommended to make a [fork](https://github.com/Team-BTMC/osu-radio/fork) of this repository
 
@@ -53,9 +62,11 @@ If you're more interested in the coding side of things, be sure to read [Good Ma
 If you're more interested in contributing as a designer, check out the [Figma](https://www.figma.com/design/tNBJr7TlEsoWsWdAewqoUg/osu!-radio?node-id=0-1&t=aIuThZAj00HcSjM5-1)
 
 Remember! Contributions come in all shapes and sizes.
+
 # The Vision
 
 Technologies:
+
 - Electron
 - Solid JS
 - TypeScript
@@ -68,4 +79,5 @@ For anything **code** related (Discussion, PR, Suggestions), contact **@CaptSiro
 <br>
 
 For anything **design** related (UI / UX, Ideas, Suggestions), contact **@Dudu**
+
 ###### Animations are subject to change (the very few osu!radio has).

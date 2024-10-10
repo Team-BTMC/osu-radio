@@ -18,8 +18,6 @@
   transition: background-size 50ms linear;
 }
 
-
-
 .song-detail .song-image {
   width: 100%;
   border-radius: var(--border-radius);

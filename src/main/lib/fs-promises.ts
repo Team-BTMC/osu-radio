@@ -1,16 +1,12 @@
-import fs from 'graceful-fs';
-
-
+import fs from "graceful-fs";
 
 export function access(path, mode: number | undefined = undefined): Promise<boolean> {
   return new Promise((resolve) => {
-    fs.access(path,  mode, (err) => {
+    fs.access(path, mode, (err) => {
       resolve(err === null);
     });
   });
 }
-
-
 
 export function getSubDirs(dirPath: string): Promise<string[]> {
   return new Promise((resolve, reject) => {
@@ -32,8 +28,6 @@ export function getSubDirs(dirPath: string): Promise<string[]> {
     });
   });
 }
-
-
 
 export function getFiles(dirPath: string, ext?: string): Promise<string[]> {
   return new Promise((resolve, reject) => {
@@ -61,8 +55,6 @@ export function getFiles(dirPath: string, ext?: string): Promise<string[]> {
   });
 }
 
-
-
 export function stat(path: string): Promise<fs.Stats> {
   return new Promise((resolve, reject) => {
     fs.stat(path, (err, stats) => {
@@ -75,8 +67,6 @@ export function stat(path: string): Promise<fs.Stats> {
     });
   });
 }
-
-
 
 export function readFile(path): Promise<string> {
   return new Promise((resolve, reject) => {

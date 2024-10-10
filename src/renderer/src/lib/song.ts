@@ -61,7 +61,7 @@ export function createDefaultSong(): Song {
 
     bpm: [],
     tags: [],
-    diffs: []
+    diffs: [],
   };
 }
 

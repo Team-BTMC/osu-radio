@@ -1,7 +1,5 @@
 const SCROLL_SPEED = 200;
 
-
-
 export default function scrollAnimation(parent, velocity): () => void {
   let requestNext = true;
   let previous = performance.now() / 1_000;

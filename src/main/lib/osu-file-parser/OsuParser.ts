@@ -115,7 +115,7 @@ class BufferReader {
 export class OsuParser {
   static async parseDatabase(
     databasePath: string,
-    update?: (i: number, total: number, file: string) => any
+    update?: (i: number, total: number, file: string) => any,
   ): DirParseResult {
     let dbBuffer;
     // NOTE: databasePath is not double slashed
@@ -205,7 +205,7 @@ export class OsuParser {
           creator: "",
           bpm: [],
           duration: 0,
-          diffs: []
+          diffs: [],
         };
 
         song.artist = db.readString().trim();
@@ -326,7 +326,7 @@ export class OsuParser {
           audioTable.set(song.audio, {
             songID: song.audio,
             path: song.audio,
-            ctime: String(last_modification_time)
+            ctime: String(last_modification_time),
           });
         }
 
@@ -351,7 +351,7 @@ export class OsuParser {
     const stream = fs.createReadStream(file);
     const fileLines = readline.createInterface({
       input: stream,
-      crlfDelay: Infinity
+      crlfDelay: Infinity,
     });
 
     let state: FileState = "Initial";

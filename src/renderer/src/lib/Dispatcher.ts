@@ -1,7 +1,5 @@
 export type EmitterListener<Args> = (args?: Args) => any;
 
-
-
 /**
  * @template EventMap Represents a map of possible events with argument tuple: { "mute": [boolean] }
  */

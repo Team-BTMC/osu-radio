@@ -6,32 +6,28 @@
 import { TemplateTokenizer, Tokens } from "../tokenizer/TemplateTokenizer";
 import { closest } from "fastest-levenshtein";
 
-
-
 export type ConfigItem = {
-  type: "TEXT" | "IDENT",
-  literal: string
-}
+  type: "TEXT" | "IDENT";
+  literal: string;
+};
 
 export type ConfigError = {
-  type: "error",
+  type: "error";
   error: {
-    message: string,
+    message: string;
     suggestion?: {
-      start: number,
-      end: number,
-      replacement: string,
-      description: string
-    }
-  }
-}
+      start: number;
+      end: number;
+      replacement: string;
+      description: string;
+    };
+  };
+};
 
 export type ConfigSuccess = {
-  type: "success",
-  config: ConfigItem[]
-}
-
-
+  type: "success";
+  config: ConfigItem[];
+};
 
 export class TemplateParser {
   private readonly identifiers: string[];
@@ -49,7 +45,8 @@ export class TemplateParser {
       switch (tokens[i].type) {
         case "{": {
           // Must follow pattern: {TEXT}
-          const isIdentifier = tokens[i + 1]?.type === Tokens.Text && tokens[i + 2]?.type === Tokens.RightSquirly;
+          const isIdentifier =
+            tokens[i + 1]?.type === Tokens.Text && tokens[i + 2]?.type === Tokens.RightSquirly;
 
           if (!isIdentifier) {
             return {
@@ -60,9 +57,9 @@ export class TemplateParser {
                   start: tokens[i].position,
                   end: tokens[i].position + tokens[i].literal.length,
                   description: "Remove '{'.",
-                  replacement: ""
-                }
-              }
+                  replacement: "",
+                },
+              },
             };
           }
 
@@ -76,15 +73,15 @@ export class TemplateParser {
                   start: tokens[i + 1].position,
                   end: tokens[i + 1].position + tokens[i + 1].literal.length,
                   description: `Use '${closestIdent}' identifier.`,
-                  replacement: closestIdent
-                }
-              }
+                  replacement: closestIdent,
+                },
+              },
             };
           }
 
           config.push({
             type: "IDENT",
-            literal: tokens[i + 1].literal
+            literal: tokens[i + 1].literal,
           });
 
           i += 2;
@@ -94,7 +91,7 @@ export class TemplateParser {
         case "TEXT":
           config.push({
             type: "TEXT",
-            literal: tokens[i].literal
+            literal: tokens[i].literal,
           });
           break;
         case "ILLEGAL":
@@ -102,14 +99,14 @@ export class TemplateParser {
             type: "error",
             error: {
               message: `Illegal token '${tokens[i].literal}'`,
-            }
+            },
           };
       }
     }
 
     return {
       type: "success",
-      config
+      config,
     };
   }
 }

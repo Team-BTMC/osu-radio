@@ -63,7 +63,7 @@ const [bpm, setBPM] = createSignal<Optional<number>>(none(), {
     }
 
     return true;
-  }
+  },
 });
 export { bpm };
 
@@ -84,7 +84,7 @@ async function getCurrent(): Promise<{ song: Song; media: string } | undefined> 
   }
   return {
     song: song.value,
-    media: resource.value
+    media: resource.value,
   };
 }
 
@@ -182,14 +182,14 @@ export async function setMediaSession(song: Song) {
       play: () => togglePlay(),
       pause: () => pause(),
       previoustrack: previous,
-      nexttrack: next
+      nexttrack: next,
     };
 
     for (const [action, handler] of Object.entries(actionHandlers)) {
       try {
         navigator.mediaSession.setActionHandler(
           action as MediaSessionAction,
-          handler as MediaSessionActionHandler
+          handler as MediaSessionActionHandler,
         );
       } catch (err) {
         console.log(`The media session action "${action}" is not supported yet.`);
@@ -209,8 +209,8 @@ async function setMediaSessionMetadata() {
       { src: bgPath.value, sizes: "192x192", type: "image/png" },
       { src: bgPath.value, sizes: "256x256", type: "image/png" },
       { src: bgPath.value, sizes: "384x384", type: "image/png" },
-      { src: bgPath.value, sizes: "512x512", type: "image/png" }
-    ]
+      { src: bgPath.value, sizes: "512x512", type: "image/png" },
+    ],
   });
 }
 
@@ -219,7 +219,7 @@ function setMediaSessionPosition() {
     navigator.mediaSession.setPositionState({
       duration: song.duration,
       playbackRate: player.playbackRate,
-      position: player.currentTime
+      position: player.currentTime,
     });
   }
 }
@@ -287,7 +287,7 @@ createEffect(async () => {
   const audio = (await window.api.request(
     "resource::get",
     song.audio,
-    "audio"
+    "audio",
   )) as Optional<AudioSource>;
 
   if (audio.isNone) {
@@ -319,7 +319,7 @@ createEffect(async () => {
   const audio = (await window.api.request(
     "resource::get",
     song.audio,
-    "audio"
+    "audio",
   )) as Optional<AudioSource>;
 
   if (!audio.isNone && audio.value.volume === lv) {

@@ -4,8 +4,6 @@
   box-sizing: border-box;
 }
 
-
-
 :root {
   --fixed-layer: 0;
   --normal-layer: 10;
@@ -23,14 +21,12 @@
   --level-1: 0.16;
   --level-2: 0.24;
   --level-3: 0.32;
-  --level-4: 0.40;
+  --level-4: 0.4;
 
   --font-size: 14px;
-  --font-default: 'Inter', sans-serif;
-  --font-monospace: 'JetBrains Mono', monospace;
+  --font-default: "Inter", sans-serif;
+  --font-monospace: "JetBrains Mono", monospace;
 }
-
-
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -38,8 +34,6 @@
     --color-bg: 0, 0, 0;
   }
 }
-
-
 
 ::-webkit-scrollbar {
   width: 8px;
@@ -55,8 +49,6 @@
 ::-webkit-scrollbar-thumb:hover {
   background-color: rgba(var(--color-fg), var(--level-1));
 }
-
-
 
 .center {
   display: flex;
@@ -82,9 +74,8 @@
   cursor: help;
 }
 
-
-
-button, .button-like {
+button,
+.button-like {
   background-color: rgba(var(--color-fg), var(--level-0));
   color: rgba(var(--color-fg));
   border: unset;
@@ -92,22 +83,29 @@ button, .button-like {
   border-radius: var(--border-radius);
   outline: 0 solid rgba(var(--color-fg), 0);
 
-  transition: background-color 250ms, outline-color 250ms, opacity 250ms;
+  transition:
+    background-color 250ms,
+    outline-color 250ms,
+    opacity 250ms;
 }
 
-button[disabled], .button-like[disabled], .button-like[data-disabled] {
+button[disabled],
+.button-like[disabled],
+.button-like[data-disabled] {
   opacity: 0.7;
   transition: opacity 250ms;
 }
 
-button:focus, .button-like:focus {
+button:focus,
+.button-like:focus {
   outline-color: rgba(var(--color-fg), var(--level-2));
   outline-width: 2px;
 
   transition: outline-color-color 0ms;
 }
 
-button:not([disabled]):hover, .button-like:not([disabled], [data-disabled]):hover {
+button:not([disabled]):hover,
+.button-like:not([disabled], [data-disabled]):hover {
   background-color: rgba(var(--color-fg), var(--level-1));
   cursor: pointer;
 
@@ -117,8 +115,6 @@ button:not([disabled]):hover, .button-like:not([disabled], [data-disabled]):hove
 button.icon {
   aspect-ratio: 1/1;
 }
-
-
 
 .dropdown {
   position: relative;
@@ -145,8 +141,6 @@ button.icon {
   border-radius: var(--border-radius);
 }
 
-
-
 .controls .dropdown .menu-wrapper {
   width: calc(44px + 8px + 44px);
   justify-content: space-between;
@@ -169,8 +163,6 @@ button.icon {
   min-width: unset;
 }
 
-
-
 html {
   background-color: rgba(var(--color-bg));
   color: rgba(var(--color-fg));
@@ -192,13 +184,11 @@ dialog {
 }
 
 #root {
-    width: 100vw;
-    height: 100vh;
+  width: 100vw;
+  height: 100vh;
 
-    overflow: hidden;
+  overflow: hidden;
 }
-
-
 
 #main {
   z-index: var(--normal-layer);
@@ -221,8 +211,6 @@ dialog {
 .main * {
   z-index: inherit;
 }
-
-
 
 nav {
   background-color: rgba(var(--color-fg), var(--level-1));
@@ -255,8 +243,6 @@ nav > div.icon {
   place-items: center;
 }
 
-
-
 .side-pane {
   background-color: rgba(var(--color-fg), var(--level-0));
   overflow: hidden;
@@ -267,8 +253,6 @@ nav > div.icon {
   height: 100vh;
   width: 100%;
 }
-
-
 
 main {
   background-color: rgba(var(--color-fg), 0);

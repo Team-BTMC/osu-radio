@@ -1,39 +1,33 @@
-import { SearchPropertyValidation, SearchPropertyValidator } from './@search-types';
-import { closestLevenDist } from './levenshteinDistance';
+import { SearchPropertyValidation, SearchPropertyValidator } from "./@search-types";
+import { closestLevenDist } from "./levenshteinDistance";
 
-
-
-export const equalsSymbols = ['=', '==', '!='];
-export const greaterThanSymbols = ['>', '>='];
-export const lessThanSymbols = ['<', '<='];
+export const equalsSymbols = ["=", "==", "!="];
+export const greaterThanSymbols = [">", ">="];
+export const lessThanSymbols = ["<", "<="];
 
 export const defaultRelationSymbols = [...equalsSymbols, ...greaterThanSymbols, ...lessThanSymbols];
 
-
-
 export function text(): SearchPropertyValidator {
   return (value: string, symbol: string): SearchPropertyValidation => {
-    if (!(symbol === '=' || symbol === '!=' || symbol === '==')) {
+    if (!(symbol === "=" || symbol === "!=" || symbol === "==")) {
       return {
         isValid: false,
         error: {
-          message: 'Text can only use =, ==, != comparison symbols.',
+          message: "Text can only use =, ==, != comparison symbols.",
           suggestion: {
-            symbol: '=',
-            description: 'Use equals instead.'
-          }
-        }
+            symbol: "=",
+            description: "Use equals instead.",
+          },
+        },
       };
     }
 
     return {
       isValid: true,
-      parsed: value
+      parsed: value,
     };
   };
 }
-
-
 
 export function num(includeFloats = true): SearchPropertyValidator {
   const integerRegex = /^[0-9]+$/;
@@ -43,8 +37,8 @@ export function num(includeFloats = true): SearchPropertyValidator {
       return {
         isValid: false,
         error: {
-          message: `Numbers can only use ${defaultRelationSymbols.join(', ')} comparison symbols.`
-        }
+          message: `Numbers can only use ${defaultRelationSymbols.join(", ")} comparison symbols.`,
+        },
       };
     }
 
@@ -54,14 +48,14 @@ export function num(includeFloats = true): SearchPropertyValidator {
         return {
           isValid: false,
           error: {
-            message: `'${value}' is not valid number value.`
-          }
+            message: `'${value}' is not valid number value.`,
+          },
         };
       }
 
       return {
         isValid: true,
-        parsed
+        parsed,
       };
     }
 
@@ -69,23 +63,21 @@ export function num(includeFloats = true): SearchPropertyValidator {
       return {
         isValid: false,
         error: {
-          message: `'${value}' is not valid integer value.`
-        }
+          message: `'${value}' is not valid integer value.`,
+        },
       };
     }
 
     return {
       isValid: true,
-      parsed: Number(value)
+      parsed: Number(value),
     };
   };
 }
 
-
-
 export function set(set: string[], caseSensitive = true): SearchPropertyValidator {
   if (set.length === 0) {
-    throw new Error('Set must have at least one value.');
+    throw new Error("Set must have at least one value.");
   }
 
   // Apply normalization to set values
@@ -109,20 +101,20 @@ export function set(set: string[], caseSensitive = true): SearchPropertyValidato
   }
 
   return (value, symbol): SearchPropertyValidation => {
-    if (!(symbol === '=' || symbol === '!=' || symbol === '==')) {
+    if (!(symbol === "=" || symbol === "!=" || symbol === "==")) {
       return {
         isValid: false,
         error: {
-          message: 'Set can only use =, ==, != comparison symbols.',
+          message: "Set can only use =, ==, != comparison symbols.",
           suggestion: {
-            symbol: '=',
-            description: 'Use equals instead.'
-          }
-        }
+            symbol: "=",
+            description: "Use equals instead.",
+          },
+        },
       };
     }
 
-    const values = value.split(',');
+    const values = value.split(",");
     const setValues = [...set];
 
     for (let i = 0; i < values.length; i++) {
@@ -136,7 +128,7 @@ export function set(set: string[], caseSensitive = true): SearchPropertyValidato
       // Value was not found in set. Suggest the closest value from set
       const incorrectValue = values[i];
       const index = closestLevenDist(incorrectValue, setValues);
-      let description = '';
+      let description = "";
 
       if (index === -1) {
         // Submitted value is completely wrong. Suggest user to remove it
@@ -151,23 +143,21 @@ export function set(set: string[], caseSensitive = true): SearchPropertyValidato
       return {
         isValid: false,
         error: {
-          message: `'${incorrectValue}' is not one of these values: ${set.join(', ')}`,
+          message: `'${incorrectValue}' is not one of these values: ${set.join(", ")}`,
           suggestion: {
-            value: values.join(','),
-            description
-          }
-        }
+            value: values.join(","),
+            description,
+          },
+        },
       };
     }
 
     return {
       isValid: true,
-      parsed: values
+      parsed: values,
     };
   };
 }
-
-
 
 /**
  * Supports multiple values for:
@@ -175,15 +165,16 @@ export function set(set: string[], caseSensitive = true): SearchPropertyValidato
  * - `false`: false, no, 0
  */
 export function bool(): SearchPropertyValidator {
-  return set(['true', 'false', 'yes', 'no', '1', '0'], false);
+  return set(["true", "false", "yes", "no", "1", "0"], false);
 }
-
-
 
 const timeExtractors: [RegExp, (matches: RegExpMatchArray) => any][] = [
   [/^([0-9]+)s?$/, (matches: RegExpMatchArray) => Number(matches[1])],
   [/^([0-9]+)m$/, (matches: RegExpMatchArray) => Number(matches[1]) * 60],
-  [/^([0-9]+):([0-9]+)$/, (matches: RegExpMatchArray) => Number(matches[1]) * 60 + Number(matches[2])]
+  [
+    /^([0-9]+):([0-9]+)$/,
+    (matches: RegExpMatchArray) => Number(matches[1]) * 60 + Number(matches[2]),
+  ],
 ];
 
 /**
@@ -198,8 +189,8 @@ export function time(): SearchPropertyValidator {
       return {
         isValid: false,
         error: {
-          message: `Time can only use ${defaultRelationSymbols.join(', ')} comparison symbols.`
-        }
+          message: `Time can only use ${defaultRelationSymbols.join(", ")} comparison symbols.`,
+        },
       };
     }
 
@@ -214,7 +205,7 @@ export function time(): SearchPropertyValidator {
 
       return {
         isValid: true,
-        parsed: constructor(matches)
+        parsed: constructor(matches),
       };
     }
 
@@ -222,12 +213,12 @@ export function time(): SearchPropertyValidator {
     return {
       isValid: false,
       error: {
-        message: 'Not recognised time format.',
+        message: "Not recognised time format.",
         suggestion: {
-          value: '0:00',
-          description: 'Try using minutes:seconds format.'
-        }
-      }
+          value: "0:00",
+          description: "Try using minutes:seconds format.",
+        },
+      },
     };
   };
 }

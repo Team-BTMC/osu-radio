@@ -1,27 +1,19 @@
-import fs from 'fs';
-import { none, some } from '../rust-like-utils-backend/Optional';
-import { Optional } from '../../../@types';
-
-
+import fs from "fs";
+import { none, some } from "../rust-like-utils-backend/Optional";
+import { Optional } from "../../../@types";
 
 export class Table<S> {
   private readonly path: string;
   private readonly struct: S;
   private ramOnly = false;
 
-
-
   constructor(path: string, struct: S) {
     this.path = path;
     this.struct = struct;
   }
 
-
-
   get<K extends keyof S>(key: K): Optional<S[K]> {
-    return this.struct[key] === undefined
-      ? none()
-      : some(this.struct[key]);
+    return this.struct[key] === undefined ? none() : some(this.struct[key]);
   }
 
   /**
@@ -44,7 +36,7 @@ export class Table<S> {
       return;
     }
 
-    fs.writeFileSync(this.path, JSON.stringify(this.struct), { encoding: 'utf8' });
+    fs.writeFileSync(this.path, JSON.stringify(this.struct), { encoding: "utf8" });
   }
 
   /**
@@ -59,7 +51,7 @@ export class Table<S> {
       return;
     }
 
-    fs.writeFileSync(this.path, JSON.stringify(this.struct), { encoding: 'utf8' });
+    fs.writeFileSync(this.path, JSON.stringify(this.struct), { encoding: "utf8" });
   }
 
   /**
@@ -81,6 +73,6 @@ export class Table<S> {
    */
   writeBack() {
     this.ramOnly = false;
-    fs.writeFileSync(this.path, JSON.stringify(this.struct), { encoding: 'utf8' });
+    fs.writeFileSync(this.path, JSON.stringify(this.struct), { encoding: "utf8" });
   }
 }

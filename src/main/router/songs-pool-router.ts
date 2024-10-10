@@ -1,11 +1,9 @@
-import { Router } from '../lib/route-pass/Router';
-import { none, some } from '../lib/rust-like-utils-backend/Optional';
-import { filter } from '../lib/song/filter';
-import order from '../lib/song/order';
-import { indexMapper } from '../lib/song/indexMapper';
-import { Storage } from '../lib/storage/Storage';
-
-
+import { Router } from "../lib/route-pass/Router";
+import { none, some } from "../lib/rust-like-utils-backend/Optional";
+import { filter } from "../lib/song/filter";
+import order from "../lib/song/order";
+import { indexMapper } from "../lib/song/indexMapper";
+import { Storage } from "../lib/storage/Storage";
 
 Router.respond("query::songsPool::init", (_evt, payload) => {
   const indexes = Storage.getTable("system").get("indexes");
@@ -18,11 +16,9 @@ Router.respond("query::songsPool::init", (_evt, payload) => {
 
   return some({
     initialIndex: 0,
-    count: filtered.length
+    count: filtered.length,
   });
 });
-
-
 
 const BUFFER_SIZE = 50;
 
@@ -57,6 +53,6 @@ Router.respond("query::songsPool", (_evt, request, payload) => {
   return some({
     index: request.index + 1,
     total: songs.length,
-    items: songs.slice(request.index * BUFFER_SIZE, (request.index + 1) * BUFFER_SIZE)
+    items: songs.slice(request.index * BUFFER_SIZE, (request.index + 1) * BUFFER_SIZE),
   });
 });

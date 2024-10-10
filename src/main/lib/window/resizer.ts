@@ -1,8 +1,6 @@
-import { BrowserWindow } from 'electron';
-import { Storage } from '../storage/Storage';
-import { orDefault } from '../rust-like-utils-backend/Optional';
-
-
+import { BrowserWindow } from "electron";
+import { Storage } from "../storage/Storage";
+import { orDefault } from "../rust-like-utils-backend/Optional";
 
 /**
  * Save window dimensions so that it can be opened the same size it was closed
@@ -26,8 +24,6 @@ export default function trackBounds(window: BrowserWindow): void {
   });
 }
 
-
-
 export function getBounds(): [number, number] {
   const settings = Storage.getTable("settings");
 
@@ -37,9 +33,6 @@ export function getBounds(): [number, number] {
   ];
 }
 
-
-
 export function wasMaximized(): boolean {
-  return orDefault(Storage.getTable("settings")
-    .get("window.isMaximized"), false);
+  return orDefault(Storage.getTable("settings").get("window.isMaximized"), false);
 }
