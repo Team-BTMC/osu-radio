@@ -9,7 +9,7 @@ export type GradientColors = {
 
 export const [gradientColors, setGradientColors] = createSignal<GradientColors>({
   top: "dodgerblue",
-  bottom: "crimson"
+  bottom: "crimson",
 });
 
 type GradientProps = {

@@ -11,7 +11,7 @@ function createSongIndex(id: string, song: Song): SongIndex {
     m: song.mode,
     tags: song.tags,
     diffs: song.diffs,
-    bpm: msToBPM(averageBPM(song.bpm, song.duration * 1_000))
+    bpm: msToBPM(averageBPM(song.bpm, song.duration * 1_000)),
   };
 }
 
@@ -26,7 +26,7 @@ export type IndexCallback = (i: number, song: string) => void;
  */
 export function collectTagsAndIndexSongs(
   songs: { [id: string]: Song },
-  fn?: IndexCallback
+  fn?: IndexCallback,
 ): [SongIndex[], Map<string, string[]>] {
   const indexes: SongIndex[] = [];
   const tags = new Map<string, string[]>();

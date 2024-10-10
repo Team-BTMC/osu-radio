@@ -11,7 +11,7 @@ function stylesFromPosition(position: ComputePositionReturn | null): JSX.CSSProp
 
   return {
     top: `${position.y}px`,
-    left: `${position.x}px`
+    left: `${position.x}px`,
   };
 }
 
@@ -21,7 +21,7 @@ const PopoverContent: Component<Props> = (props) => {
 
   createFocusTrap({
     element: state.contentRef,
-    enabled: state.isOpen
+    enabled: state.isOpen,
   });
 
   return (

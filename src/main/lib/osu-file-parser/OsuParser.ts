@@ -34,7 +34,7 @@ export type DirParseResult = Promise<
 export class OsuParser {
   static async parseDir(
     dir: string,
-    update?: (i: number, total: number, file: string) => any
+    update?: (i: number, total: number, file: string) => any,
   ): DirParseResult {
     if (!(await access(dir, fs.constants.R_OK))) {
       return fail("Directory does not exists.");
@@ -126,7 +126,7 @@ export class OsuParser {
     const stream = fs.createReadStream(file);
     const fileLines = readline.createInterface({
       input: stream,
-      crlfDelay: Infinity
+      crlfDelay: Infinity,
     });
 
     let state: FileState = "Initial";

@@ -9,7 +9,7 @@ import Settings from "@renderer/components/settings/Settings";
 import { song } from "@renderer/components/song/song.utils";
 import {
   songQueueModalOpen,
-  toggleSongQueueModalOpen
+  toggleSongQueueModalOpen,
 } from "@renderer/components/song/song-queue/song-queue.utils";
 import "./styles.css";
 

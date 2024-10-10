@@ -8,7 +8,7 @@ export const Tokens = {
   EOF: "EOF",
   LeftSquirly: "{",
   RightSquirly: "}",
-  Text: "TEXT"
+  Text: "TEXT",
 } as const;
 
 type TokenItem = (typeof Tokens)[keyof typeof Tokens];

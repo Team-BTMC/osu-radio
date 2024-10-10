@@ -88,7 +88,7 @@ function getIndexes(view: QueueView): SongIndex[] {
 
 function comparePayload(
   current: QueueCreatePayload,
-  last: QueueCreatePayload | undefined
+  last: QueueCreatePayload | undefined,
 ): boolean {
   if (last === undefined) {
     return false;
@@ -348,7 +348,7 @@ Router.respond("query::queue::init", () => {
 
   return some({
     initialIndex: Math.floor(index / BUFFER_SIZE),
-    count
+    count,
   });
 });
 
@@ -372,13 +372,13 @@ Router.respond("query::queue", (_evt, request) => {
     return some({
       index: request.index - 1,
       total: queue.length,
-      items: queue.slice(start, start + BUFFER_SIZE)
+      items: queue.slice(start, start + BUFFER_SIZE),
     });
   }
 
   return some({
     index: request.index + 1,
     total: queue.length,
-    items: queue.slice(start, start + BUFFER_SIZE)
+    items: queue.slice(start, start + BUFFER_SIZE),
   });
 });

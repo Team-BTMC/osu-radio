@@ -12,7 +12,7 @@ export type ThrottleCancel = () => void;
  */
 export function throttle<F extends (...args: any[]) => any>(
   fn: F,
-  ms: number
+  ms: number,
 ): [ThrottledFunction<F>, ThrottleCancel] {
   let timeout: NodeJS.Timeout | undefined = undefined;
 
@@ -38,6 +38,6 @@ export function throttle<F extends (...args: any[]) => any>(
 
       return timeout;
     },
-    () => clearTimeout(timeout)
+    () => clearTimeout(timeout),
   ];
 }

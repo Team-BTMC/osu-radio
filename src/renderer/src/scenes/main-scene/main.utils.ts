@@ -10,13 +10,13 @@ export const TABS = {
   SONGS: {
     label: "Songs",
     value: "songs",
-    icon: "ri-music-fill"
+    icon: "ri-music-fill",
   },
   SETTINGS: {
     label: "Settings",
     value: "settings",
-    icon: "ri-settings-4-fill"
-  }
+    icon: "ri-settings-4-fill",
+  },
 } satisfies Record<string, Tab>;
 
 const [mainActiveTab, setMainActiveTab] = createSignal(TABS.SONGS.value);

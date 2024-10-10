@@ -15,12 +15,12 @@ function useProviderValue(props: Props) {
   const [selectedValue, setSelectedValue] = useControllableState({
     defaultProp: props.defaultValue || DEFAULT_SELECTED_VALUE,
     onChange: props.onValueChange,
-    prop: props.value
+    prop: props.value,
   });
 
   return {
     selectedValue,
-    setSelectedValue
+    setSelectedValue,
   };
 }
 
@@ -39,7 +39,7 @@ export function useList(): Context {
 }
 
 const List = Object.assign(ListRoot, {
-  Item: ListItem
+  Item: ListItem,
 });
 
 export default List;

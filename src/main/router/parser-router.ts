@@ -19,8 +19,8 @@ const searchParser = new SearchParser({
     creator: text(),
     length: time(),
     mode: set(["osu", "taiko", "catch", "mania", "o", "t", "c", "m"]),
-    title: text()
-  }
+    title: text(),
+  },
 });
 
 Router.respond("parse::search", (_evt, query) => {

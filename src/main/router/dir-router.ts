@@ -6,7 +6,7 @@ import path from "path";
 Router.respond("dir::select", () => {
   const path = dialog.showOpenDialogSync({
     title: "Select your osu! Songs folder",
-    properties: ["openDirectory"]
+    properties: ["openDirectory"],
   });
 
   if (path === undefined) {

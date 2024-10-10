@@ -6,7 +6,7 @@ import {
   ComputePositionReturn,
   offset,
   OffsetOptions,
-  Placement
+  Placement,
 } from "@floating-ui/dom";
 import useControllableState from "@renderer/lib/controllable-state";
 import PopoverOverlay from "./PopoverOverlay";
@@ -28,7 +28,7 @@ function useProviderValue(props: Props) {
   const [isOpen, setIsOpen] = useControllableState<boolean>({
     defaultProp: props.defaultProp || DEFAULT_POPOVER_OPEN,
     onChange: props.onValueChange,
-    prop: props.isOpen
+    prop: props.isOpen,
   });
 
   const [position, setPosition] = createSignal<ComputePositionReturn | null>(null);
@@ -56,7 +56,7 @@ function useProviderValue(props: Props) {
     computePosition(trigger, content, {
       placement: props.placement,
       strategy: "fixed",
-      middleware: [offset(props.offset)]
+      middleware: [offset(props.offset)],
     }).then(setPosition);
   };
 
@@ -70,7 +70,7 @@ function useProviderValue(props: Props) {
     triggerRef,
     setTriggerRef,
     setContentRef,
-    contentRef
+    contentRef,
   };
 }
 
@@ -92,7 +92,7 @@ export function usePopover(): Context {
 const Popover = Object.assign(PopoverRoot, {
   Content: PopoverContent,
   Trigger: PopoverTrigger,
-  Overlay: PopoverOverlay
+  Overlay: PopoverOverlay,
 });
 
 export default Popover;

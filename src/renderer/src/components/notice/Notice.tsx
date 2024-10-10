@@ -36,7 +36,7 @@ const Notice: Component<NoticeProps> = (props) => {
 
   const [drain, setDrainTime, pauseDrain] = createDrainAnimation(
     props.notice.timeoutMS ?? 10_000,
-    removeNotice
+    removeNotice,
   );
 
   const onRef = (notice: HTMLElement) => {
@@ -68,10 +68,10 @@ const Notice: Component<NoticeProps> = (props) => {
           <div
             class="timeout"
             classList={{
-              pause: drain().isNone
+              pause: drain().isNone,
             }}
             style={{
-              animation: orDefault(drain(), undefined)
+              animation: orDefault(drain(), undefined),
             }}
           ></div>
         </div>
@@ -82,7 +82,7 @@ const Notice: Component<NoticeProps> = (props) => {
 
 function createDrainAnimation(
   timeMS: number,
-  onDrained: () => any
+  onDrained: () => any,
 ): [Accessor<Optional<string>>, (timeMS: number) => any, () => any] {
   const [get, set] = createSignal<Optional<string>>(some(drainTemplate(timeMS)));
 
@@ -97,7 +97,7 @@ function createDrainAnimation(
     () => {
       set(none());
       clearTimeout(timeout);
-    }
+    },
   ];
 }
 

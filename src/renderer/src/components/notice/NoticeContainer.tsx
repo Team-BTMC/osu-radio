@@ -26,8 +26,8 @@ export function addNotice(notice: NoticeType): void {
     {
       notice,
       updateGradient: new Impulse<void>(),
-      visible: false
-    }
+      visible: false,
+    },
   ]);
 }
 
@@ -40,7 +40,7 @@ export function hideNotice(id: string | undefined): Result<void, string> {
     (ex) => ex.notice.id === id,
     "notice",
     "active",
-    () => false
+    () => false,
   );
 
   return ok(undefined);
@@ -76,8 +76,8 @@ window.api.listen("notify", (n) => {
     {
       notice: n,
       updateGradient: new Impulse<void>(),
-      visible: false
-    }
+      visible: false,
+    },
   ]);
 });
 

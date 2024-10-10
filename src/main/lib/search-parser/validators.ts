@@ -16,15 +16,15 @@ export function text(): SearchPropertyValidator {
           message: "Text can only use =, ==, != comparison symbols.",
           suggestion: {
             symbol: "=",
-            description: "Use equals instead."
-          }
-        }
+            description: "Use equals instead.",
+          },
+        },
       };
     }
 
     return {
       isValid: true,
-      parsed: value
+      parsed: value,
     };
   };
 }
@@ -37,8 +37,8 @@ export function num(includeFloats = true): SearchPropertyValidator {
       return {
         isValid: false,
         error: {
-          message: `Numbers can only use ${defaultRelationSymbols.join(", ")} comparison symbols.`
-        }
+          message: `Numbers can only use ${defaultRelationSymbols.join(", ")} comparison symbols.`,
+        },
       };
     }
 
@@ -48,14 +48,14 @@ export function num(includeFloats = true): SearchPropertyValidator {
         return {
           isValid: false,
           error: {
-            message: `'${value}' is not valid number value.`
-          }
+            message: `'${value}' is not valid number value.`,
+          },
         };
       }
 
       return {
         isValid: true,
-        parsed
+        parsed,
       };
     }
 
@@ -63,14 +63,14 @@ export function num(includeFloats = true): SearchPropertyValidator {
       return {
         isValid: false,
         error: {
-          message: `'${value}' is not valid integer value.`
-        }
+          message: `'${value}' is not valid integer value.`,
+        },
       };
     }
 
     return {
       isValid: true,
-      parsed: Number(value)
+      parsed: Number(value),
     };
   };
 }
@@ -108,9 +108,9 @@ export function set(set: string[], caseSensitive = true): SearchPropertyValidato
           message: "Set can only use =, ==, != comparison symbols.",
           suggestion: {
             symbol: "=",
-            description: "Use equals instead."
-          }
-        }
+            description: "Use equals instead.",
+          },
+        },
       };
     }
 
@@ -146,15 +146,15 @@ export function set(set: string[], caseSensitive = true): SearchPropertyValidato
           message: `'${incorrectValue}' is not one of these values: ${set.join(", ")}`,
           suggestion: {
             value: values.join(","),
-            description
-          }
-        }
+            description,
+          },
+        },
       };
     }
 
     return {
       isValid: true,
-      parsed: values
+      parsed: values,
     };
   };
 }
@@ -173,8 +173,8 @@ const timeExtractors: [RegExp, (matches: RegExpMatchArray) => any][] = [
   [/^([0-9]+)m$/, (matches: RegExpMatchArray) => Number(matches[1]) * 60],
   [
     /^([0-9]+):([0-9]+)$/,
-    (matches: RegExpMatchArray) => Number(matches[1]) * 60 + Number(matches[2])
-  ]
+    (matches: RegExpMatchArray) => Number(matches[1]) * 60 + Number(matches[2]),
+  ],
 ];
 
 /**
@@ -189,8 +189,8 @@ export function time(): SearchPropertyValidator {
       return {
         isValid: false,
         error: {
-          message: `Time can only use ${defaultRelationSymbols.join(", ")} comparison symbols.`
-        }
+          message: `Time can only use ${defaultRelationSymbols.join(", ")} comparison symbols.`,
+        },
       };
     }
 
@@ -205,7 +205,7 @@ export function time(): SearchPropertyValidator {
 
       return {
         isValid: true,
-        parsed: constructor(matches)
+        parsed: constructor(matches),
       };
     }
 
@@ -216,9 +216,9 @@ export function time(): SearchPropertyValidator {
         message: "Not recognised time format.",
         suggestion: {
           value: "0:00",
-          description: "Try using minutes:seconds format."
-        }
-      }
+          description: "Try using minutes:seconds format.",
+        },
+      },
     };
   };
 }

@@ -5,5 +5,5 @@ Keyboard.register({
   key: "x",
   onPress: () => {
     seek(0);
-  }
+  },
 });

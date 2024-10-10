@@ -4,7 +4,7 @@ import {
   SearchProperty,
   SearchQuery,
   ValidationSuggestion,
-  SearchQuerySuggestion
+  SearchQuerySuggestion,
 } from "./@search-types";
 import { closestLevenDist } from "./levenshteinDistance";
 
@@ -72,9 +72,9 @@ export class SearchParser {
               validation.error.suggestion,
               prop,
               extracted.symbol,
-              value
-            )
-          }
+              value,
+            ),
+          },
         };
       }
 
@@ -82,15 +82,15 @@ export class SearchParser {
         properties[prop] = [
           {
             symbol: extracted.symbol,
-            value: validation.parsed
-          }
+            value: validation.parsed,
+          },
         ];
         continue;
       }
 
       properties[prop].push({
         symbol: extracted.symbol,
-        value: validation.parsed
+        value: validation.parsed,
       });
     }
 
@@ -99,7 +99,7 @@ export class SearchParser {
       type: "success",
       unnamed,
       properties,
-      delimiter: this.config.tokenDelimiter
+      delimiter: this.config.tokenDelimiter,
     };
   }
 
@@ -114,26 +114,26 @@ export class SearchParser {
       return {
         isPresent: true,
         start: index,
-        symbol: this.config.relationSymbols[i]
+        symbol: this.config.relationSymbols[i],
       };
     }
 
     return {
-      isPresent: false
+      isPresent: false,
     };
   }
 
   private split(token: string, extraction: ComparisonExtractionTrue): [string, string] {
     return [
       token.substring(0, extraction.start),
-      token.substring(extraction.start + extraction.symbol.length)
+      token.substring(extraction.start + extraction.symbol.length),
     ];
   }
 
   private validateProperty(
     prop: string,
     value: string,
-    comparison: string
+    comparison: string,
   ): SearchPropertyValidation {
     if (this.config.propertyMap[prop] === undefined) {
       const props = Object.keys(this.config.propertyMap);
@@ -145,9 +145,9 @@ export class SearchParser {
           message: `'${prop}' is not supported`,
           suggestion: {
             prop: closest,
-            description: `Did you mean ${closest}?`
-          }
-        }
+            description: `Did you mean ${closest}?`,
+          },
+        },
       };
     }
 
@@ -158,7 +158,7 @@ export class SearchParser {
     validationSuggestion: ValidationSuggestion | undefined,
     prop: string,
     symbol: string,
-    value: string
+    value: string,
   ): SearchQuerySuggestion | undefined {
     if (validationSuggestion === undefined) {
       return undefined;
@@ -169,7 +169,7 @@ export class SearchParser {
       fullReplacement:
         (validationSuggestion.prop ?? prop) +
         (validationSuggestion.symbol ?? symbol) +
-        (validationSuggestion.value ?? value)
+        (validationSuggestion.value ?? value),
     };
   }
 }
