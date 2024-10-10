@@ -6,7 +6,7 @@ import { none, some } from "../lib/rust-like-utils-backend/Optional";
 Router.respond("dir::select", () => {
   const path = dialog.showOpenDialogSync({
     title: "Select your osu! folder",
-    properties: ["openDirectory"]
+    properties: ["openDirectory"],
   });
 
   if (path === undefined) {

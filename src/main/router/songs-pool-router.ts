@@ -18,7 +18,7 @@ Router.respond("query::songsPool::init", (_evt, payload) => {
 
   return some({
     initialIndex: 0,
-    count: filtered.length
+    count: filtered.length,
   });
 });
 
@@ -55,6 +55,6 @@ Router.respond("query::songsPool", (_evt, request, payload) => {
   return some({
     index: request.index + 1,
     total: songs.length,
-    items: songs.slice(request.index * BUFFER_SIZE, (request.index + 1) * BUFFER_SIZE)
+    items: songs.slice(request.index * BUFFER_SIZE, (request.index + 1) * BUFFER_SIZE),
   });
 });

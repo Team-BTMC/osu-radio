@@ -38,7 +38,7 @@ const SongItem: Component<SongItemProps> = (props) => {
       onClick: ignoreClickInContextMenu(() => props.onSelect(props.song.path)),
       onDrop: props.onDrop ?? (() => {}),
       createHint: SongHint,
-      useOnlyAsOnClickBinder: props.draggable !== true
+      useOnlyAsOnClickBinder: props.draggable !== true,
     });
 
     if (props.selectable === true) {

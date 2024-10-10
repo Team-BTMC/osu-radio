@@ -1,22 +1,13 @@
-import { Component, createEffect, createSignal } from 'solid-js';
-import Bar from '../Bar';
-import {
-  duration,
-  seek,
-  song,
-  timestamp,
-} from '../../lib/Music';
-import formatTime from '../../lib/time-formatter';
-import SongImage from './SongImage';
+import { Component, createEffect, createSignal } from "solid-js";
+import Bar from "../Bar";
+import { duration, seek, song, timestamp } from "../../lib/Music";
+import formatTime from "../../lib/time-formatter";
+import SongImage from "./SongImage";
 import "../../assets/css/song/song-detail.css";
-import SongControls from './SongControls';
-import { isSongUndefined } from '../../lib/song';
+import SongControls from "./SongControls";
+import { isSongUndefined } from "../../lib/song";
 
-
-
-type SongDetailProps = {}
-
-
+type SongDetailProps = {};
 
 const SongDetail: Component<SongDetailProps> = (_props) => {
   const [bg, setBg] = createSignal<string | undefined>();
@@ -28,7 +19,7 @@ const SongDetail: Component<SongDetailProps> = (_props) => {
   return (
     <div class="song-detail">
       <div class="song">
-        <SongImage src={bg} instantLoad={true}/>
+        <SongImage src={bg} instantLoad={true} />
         <h3>{song.title}</h3>
         <span>{song.artist}</span>
       </div>
@@ -45,11 +36,9 @@ const SongDetail: Component<SongDetailProps> = (_props) => {
         </div>
       </div>
 
-      <SongControls/>
+      <SongControls />
     </div>
   );
 };
-
-
 
 export default SongDetail;

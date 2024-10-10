@@ -1,19 +1,17 @@
-import fs from 'graceful-fs';
-import { fail, ok } from '../rust-like-utils-backend/Result';
-import { AudioSource, ImageSource, Optional, Result, Song } from '../../../@types';
-import { none, some } from '../rust-like-utils-backend/Optional';
-import { SongBuilder } from '../song/SongBuilder';
-import path from 'path';
-import { getAudioDurationInSeconds } from 'get-audio-duration';
-import { access, readFile, stat } from '../fs-promises';
-
-
+import fs from "graceful-fs";
+import { fail, ok } from "../rust-like-utils-backend/Result";
+import { AudioSource, ImageSource, Optional, Result, Song } from "../../../@types";
+import { none, some } from "../rust-like-utils-backend/Optional";
+import { SongBuilder } from "../song/SongBuilder";
+import path from "path";
+import { getAudioDurationInSeconds } from "get-audio-duration";
+import { access, readFile, stat } from "../fs-promises";
 
 type ParsedSong = {
-  song: Song,
-  audio: AudioSource,
-  bg: Optional<ImageSource>
-}
+  song: Song;
+  audio: AudioSource;
+  bg: Optional<ImageSource>;
+};
 
 export class OsuFile {
   path: string;
@@ -29,7 +27,7 @@ export class OsuFile {
   }
 
   async toSong(osuDir: string): Promise<Result<ParsedSong, string>> {
-    if (!await access(osuDir, fs.constants.R_OK)) {
+    if (!(await access(osuDir, fs.constants.R_OK))) {
       return fail("File does not exist.");
     }
 
@@ -52,7 +50,7 @@ export class OsuFile {
     const dir = path.dirname(this.path);
 
     const songPath = path.resolve(path.join(dir, audioSrc));
-    if (!await access(songPath, fs.constants.R_OK)) {
+    if (!(await access(songPath, fs.constants.R_OK))) {
       return fail("Audio does not exist.");
     }
 
@@ -60,7 +58,7 @@ export class OsuFile {
     const audio: AudioSource = {
       songID: resourcePath,
       path: audioPath,
-      ctime: (await stat(songPath)).ctime.toISOString()
+      ctime: (await stat(songPath)).ctime.toISOString(),
     };
 
     builder.set("audio", audio.path);
@@ -74,7 +72,7 @@ export class OsuFile {
         bg = some({
           songID: resourcePath,
           path: imagePath,
-          ctime: (await stat(imageSource)).ctime.toISOString()
+          ctime: (await stat(imageSource)).ctime.toISOString(),
         });
 
         builder.set("bg", imagePath);
@@ -82,11 +80,12 @@ export class OsuFile {
     }
 
     const tags = this.props.get("Tags");
-    if (typeof tags === 'string') {
-      builder.set("tags", tags.toLowerCase().split(' '));
+    if (typeof tags === "string") {
+      builder.set("tags", tags.toLowerCase().split(" "));
     }
 
-    builder.set("duration", await getAudioDurationInSeconds(songPath))
+    builder
+      .set("duration", await getAudioDurationInSeconds(songPath))
       .set("bpm", this.bpm)
       .set("title", this.props.get("Title") ?? "")
       .set("titleUnicode", this.props.get("TitleUnicode") ?? "")
@@ -105,12 +104,12 @@ export class OsuFile {
     return ok({
       song: builder.build(),
       audio,
-      bg
+      bg,
     });
   }
 
   static async getProp(file: string, prop: string): Promise<Result<string, string>> {
-    if (!await access(file, fs.constants.R_OK)) {
+    if (!(await access(file, fs.constants.R_OK))) {
       return fail("File does not exist.");
     }
 
@@ -119,14 +118,17 @@ export class OsuFile {
     let offset = 1;
 
     const char = content.charCodeAt(start + 1); // looking for space after ":", because some properties are defined as "name: " and others are "name:"
-    if (char === 32 || char === 160) { // space (32), non-breaking space (160)
+    if (char === 32 || char === 160) {
+      // space (32), non-breaking space (160)
       offset = 2;
     }
 
     for (let i = start + offset; i < content.length; i++) {
-      if (content[i] === '\n'
-        || content[i] === '\r'
-        || (content[i] === '\r' && content[i + 1] === '\n')) {
+      if (
+        content[i] === "\n" ||
+        content[i] === "\r" ||
+        (content[i] === "\r" && content[i + 1] === "\n")
+      ) {
         return ok(content.substring(start + offset, i));
       }
     }

@@ -9,8 +9,6 @@
   background-color: rgba(var(--color-fg), var(--level-0));
 }
 
-
-
 .song-item-hint .image {
   height: 72px;
   margin: 4px;
@@ -20,8 +18,6 @@
   background-color: rgba(var(--color-fg), var(--level-0));
 }
 
-
-
 .song-item-hint .column {
   display: flex;
   flex-direction: column;
@@ -29,21 +25,15 @@
   gap: 8px;
 }
 
-
-
 .song-item-hint .column > div {
   border-radius: var(--border-radius);
   background-color: rgba(var(--color-fg), var(--level-0));
 }
 
-
-
 .song-item-hint .column .heading {
   height: 1.5em;
   width: 70%;
 }
-
-
 
 .song-item-hint .column .text {
   height: 1em;

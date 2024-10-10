@@ -1,32 +1,26 @@
-import { Component, createEffect, createSignal, onCleanup, onMount } from 'solid-js';
+import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import "../assets/css/gradient.css";
-import Impulse from '../lib/Impulse';
-
-
+import Impulse from "../lib/Impulse";
 
 export type GradientColors = {
-  top: string,
-  bottom: string,
-}
+  top: string;
+  bottom: string;
+};
 
 export const [gradientColors, setGradientColors] = createSignal<GradientColors>({
   top: "dodgerblue",
-  bottom: "crimson"
+  bottom: "crimson",
 });
 
 type GradientProps = {
-  classTop?: string,
-  classBottom?: string,
-  update?: Impulse
-  children,
-}
-
-
+  classTop?: string;
+  classBottom?: string;
+  update?: Impulse;
+  children;
+};
 
 const Gradient: Component<GradientProps> = (props) => {
   let bottomLayer;
-
-
 
   const calculateBackground = () => {
     const rect: DOMRect = bottomLayer.getBoundingClientRect();
@@ -39,13 +33,11 @@ const Gradient: Component<GradientProps> = (props) => {
 
     bottomLayer.style.setProperty("--width", `${Math.round(window.innerWidth * 1.25)}px`);
     bottomLayer.style.setProperty("--height", `${Math.round(window.innerHeight * 1.25)}px`);
-  }
+  };
 
   if (props.update !== undefined) {
     props.update.listen(calculateBackground);
   }
-
-
 
   onMount(() => {
     calculateBackground();
@@ -59,18 +51,14 @@ const Gradient: Component<GradientProps> = (props) => {
   createEffect(() => {
     const colors = gradientColors();
 
-    document.documentElement.style.setProperty('--circle-0', colors.top);
-    document.documentElement.style.setProperty('--circle-1', colors.bottom);
+    document.documentElement.style.setProperty("--circle-0", colors.top);
+    document.documentElement.style.setProperty("--circle-1", colors.bottom);
   });
-
-
 
   return (
     <div ref={bottomLayer} class={`bottom-layer ${props.classBottom ?? ""}`}>
       <div class={`gradient-layer`}>
-        <div class={`top-layer ${props.classTop ?? ""}`}>
-          {props.children}
-        </div>
+        <div class={`top-layer ${props.classTop ?? ""}`}>{props.children}</div>
       </div>
     </div>
   );

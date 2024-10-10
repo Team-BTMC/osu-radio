@@ -1,18 +1,16 @@
-import { Component, JSX, onMount, Setter, Signal } from 'solid-js';
+import { Component, JSX, onMount, Setter, Signal } from "solid-js";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import "../../assets/css/form/text-field.css";
-import Fa from 'solid-fa';
-import { GLOBAL_ICON_SCALE } from '../../App';
-
-
+import Fa from "solid-fa";
+import { GLOBAL_ICON_SCALE } from "../../App";
 
 type TextFieldProps = {
-  value: Signal<string>,
-  setInput?: Setter<HTMLElement | undefined>,
-  children?: JSX.Element
-}
+  value: Signal<string>;
+  setInput?: Setter<HTMLElement | undefined>;
+  children?: JSX.Element;
+};
 
-const TextField: Component<TextFieldProps> = props => {
+const TextField: Component<TextFieldProps> = (props) => {
   const [value, setValue] = props.value;
   let input;
 
@@ -28,12 +26,12 @@ const TextField: Component<TextFieldProps> = props => {
     setValue(
       String(input.textContent).replaceAll(
         String.fromCharCode(160), // non-breaking space
-        String.fromCharCode(32) // breaking space
-      ) ?? ""
+        String.fromCharCode(32), // breaking space
+      ) ?? "",
     );
   };
 
-  const onPaste = evt => {
+  const onPaste = (evt) => {
     const selection = window.getSelection();
     if (selection === null) {
       return;
@@ -62,18 +60,16 @@ const TextField: Component<TextFieldProps> = props => {
         class="editable"
         ref={input}
         onInput={onInput}
-        onKeyDown={evt => evt.stopPropagation()}
+        onKeyDown={(evt) => evt.stopPropagation()}
         onPaste={onPaste}
         contenteditable={true}
         spellcheck={false}
       ></div>
       <button class="icon hint" onClick={clear} title={"Clear text input"}>
-        <Fa icon={faXmark} scale={GLOBAL_ICON_SCALE}/>
+        <Fa icon={faXmark} scale={GLOBAL_ICON_SCALE} />
       </button>
     </div>
   );
 };
-
-
 
 export default TextField;

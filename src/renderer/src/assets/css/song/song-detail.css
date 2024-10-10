@@ -22,8 +22,6 @@
   margin-top: 16px;
 }
 
-
-
 .song-detail .seeker {
   width: calc(max(232px, 25vw) - 32px);
   display: flex;

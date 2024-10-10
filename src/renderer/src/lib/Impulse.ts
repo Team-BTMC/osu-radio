@@ -1,7 +1,5 @@
 export type ImpulseListener<T> = (arg: T) => any;
 
-
-
 export default class Impulse<T = void> {
   private readonly listeners: ImpulseListener<T>[];
 
