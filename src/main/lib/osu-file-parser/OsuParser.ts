@@ -314,8 +314,10 @@ export class OsuParser {
 
         // Read .osu to get bg source
         const osuFile = await this.parseFile(osuFilePath);
+        if (osuFile.isError) {
+          throw osuFile.error;
+        }
 
-        // @ts-expect-error language server doesn't see .value prop
         const bgSrc = osuFile.value.props.get("bgSrc");
         song.bg = songsFolderPath + "/" + folder + "/" + bgSrc;
 
@@ -334,7 +336,7 @@ export class OsuParser {
           update(i + 1, nb_beatmaps, song.title);
         }
       } catch (err) {
-        console.log(`There was an error processing a beatmap: ${console.log(err)}`);
+        console.error(`There was an error processing a beatmap: ${err}`);
       }
     }
 
