@@ -1,11 +1,11 @@
-import { Component, createSignal, onMount } from "solid-js";
 import { ResourceID, Song } from "../../../../../@types";
-import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
-import draggable from "../../../lib/draggable/draggable";
 import { song as selectedSong } from "../../../components/song/song.utils";
+import draggable from "../../../lib/draggable/draggable";
 import SongHint from "../SongHint";
 import SongImage from "../SongImage";
+import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import "./styles.css";
+import { Component, createSignal, onMount } from "solid-js";
 
 type SongItemProps = {
   song: Song;

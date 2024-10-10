@@ -1,3 +1,6 @@
+import { OmitPropsWithoutReturnType, Optional } from "../../../@types";
+import { RequestAPI } from "../../../RequestAPI";
+import Impulse from "../lib/Impulse";
 import {
   Component,
   createSignal,
@@ -9,9 +12,6 @@ import {
   Show,
   splitProps,
 } from "solid-js";
-import { OmitPropsWithoutReturnType, Optional } from "../../../@types";
-import Impulse from "../lib/Impulse";
-import { RequestAPI } from "../../../RequestAPI";
 
 export type InfiniteScrollerRequest = {
   index: number;
@@ -113,7 +113,7 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
       root: container,
       rootMargin: "50px",
       threshold: 0,
-    },
+    }
   );
 
   let indexEnd = 0;
@@ -153,7 +153,7 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
       root: container,
       rootMargin: "50px",
       threshold: 0,
-    },
+    }
   );
 
   const reset = async () => {

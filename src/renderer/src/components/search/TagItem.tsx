@@ -1,5 +1,5 @@
-import { Component } from "solid-js";
 import "../../assets/css/search/tag-item.css";
+import { Component } from "solid-js";
 
 export type TagItemProps = {
   name: string;

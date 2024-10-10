@@ -1,6 +1,6 @@
-import { ParentComponent } from "solid-js";
 import List from "../list/List";
 import { Props as ListItemProps } from "../list/ListItem";
+import { ParentComponent } from "solid-js";
 
 const DropdownListItem: ParentComponent<ListItemProps> = (props) => {
   return (

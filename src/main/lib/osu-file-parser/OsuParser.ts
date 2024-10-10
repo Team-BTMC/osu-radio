@@ -1,11 +1,11 @@
 import { AudioSource, ImageSource, ResourceID, Result, Song } from "../../../@types";
-import readline from "readline";
-import path from "path";
-import { fail, ok } from "../rust-like-utils-backend/Result";
-import { OsuFile } from "./OsuFile";
 import { access, getFiles, getSubDirs } from "../fs-promises";
-import fs from "graceful-fs";
+import { fail, ok } from "../rust-like-utils-backend/Result";
 import { assertNever } from "../tungsten/assertNever";
+import { OsuFile } from "./OsuFile";
+import fs from "graceful-fs";
+import path from "path";
+import readline from "readline";
 
 const bgFileNameRegex = /.*"(?<!Video.*)(.*)".*/;
 const beatmapSetIDRegex = /([0-9]+) .*/;
@@ -34,7 +34,7 @@ export type DirParseResult = Promise<
 export class OsuParser {
   static async parseDir(
     dir: string,
-    update?: (i: number, total: number, file: string) => any,
+    update?: (i: number, total: number, file: string) => any
   ): DirParseResult {
     if (!(await access(dir, fs.constants.R_OK))) {
       return fail("Directory does not exists.");

@@ -1,6 +1,6 @@
 import { Router } from "../lib/route-pass/Router";
-import { Storage } from "../lib/storage/Storage";
 import { fail, ok } from "../lib/rust-like-utils-backend/Result";
+import { Storage } from "../lib/storage/Storage";
 
 Router.respond("resource::getPath", (_evt, id) => {
   if (id === undefined) {

@@ -1,8 +1,8 @@
-import type { SongViewProps } from "./renderer/src/components/song/SongView";
+import { ListenAPI } from "./ListenAPI";
+import { RequestAPI } from "./RequestAPI";
 import type { SearchQuerySuccess } from "./main/lib/search-parser/@search-types";
 import { ConfigItem } from "./main/lib/template-parser/parser/TemplateParser";
-import { RequestAPI } from "./RequestAPI";
-import { ListenAPI } from "./ListenAPI";
+import type { SongViewProps } from "./renderer/src/components/song/SongView";
 
 declare global {
   interface Window {
@@ -14,7 +14,7 @@ declare global {
       listen<E extends keyof ListenAPI>(channel: E, listener: APIListener<ListenAPI[E]>): void;
       removeListener<E extends keyof ListenAPI>(
         channel: E,
-        listener: APIListener<ListenAPI[E]>,
+        listener: APIListener<ListenAPI[E]>
       ): void;
     };
   }

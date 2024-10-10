@@ -1,17 +1,17 @@
-import SongList from "../../components/song/song-list/SongList";
-import { Component, For, JSXElement, Match, Show, Switch } from "solid-js";
 import SongDetail from "../../components/song/song-detail/SongDetail";
-import SongImage from "@renderer/components/song/SongImage";
+import SongList from "../../components/song/song-list/SongList";
 import { mainActiveTab, setMainActiveTab, Tab, TABS } from "./main.utils";
+import "./styles.css";
 import IconButton from "@renderer/components/icon-button/IconButton";
-import SongQueue from "@renderer/components/song/song-queue/SongQueue";
 import Settings from "@renderer/components/settings/Settings";
-import { song } from "@renderer/components/song/song.utils";
+import SongImage from "@renderer/components/song/SongImage";
+import SongQueue from "@renderer/components/song/song-queue/SongQueue";
 import {
   songQueueModalOpen,
   toggleSongQueueModalOpen,
 } from "@renderer/components/song/song-queue/song-queue.utils";
-import "./styles.css";
+import { song } from "@renderer/components/song/song.utils";
+import { Component, For, JSXElement, Match, Show, Switch } from "solid-js";
 
 const MainScene: Component = () => {
   return (

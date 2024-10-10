@@ -1,9 +1,9 @@
+import icon from "../../resources/icon.png?asset";
+import trackBounds, { getBounds, wasMaximized } from "./lib/window/resizer";
+import { main } from "./main";
+import { electronApp, is, optimizer } from "@electron-toolkit/utils";
 import { app, BrowserWindow, dialog } from "electron";
 import { join } from "path";
-import { electronApp, is, optimizer } from "@electron-toolkit/utils";
-import icon from "../../resources/icon.png?asset";
-import { main } from "./main";
-import trackBounds, { getBounds, wasMaximized } from "./lib/window/resizer";
 
 async function createWindow() {
   const [width, height] = getBounds();
@@ -50,7 +50,7 @@ async function createWindow() {
 
     dialog.showErrorBox(
       "Report to the developer team to fix",
-      (error as Error).stack ?? String(error),
+      (error as Error).stack ?? String(error)
     );
   });
 }

@@ -1,15 +1,13 @@
-import { BrowserWindow } from "electron";
-import { Storage } from "./lib/storage/Storage";
-import { Router } from "./lib/route-pass/Router";
-import { showError } from "./router/error-router";
-import { dirSubmit } from "./router/dir-router";
-
-import "./router/import";
-
 import { DirParseResult, OsuParser } from "./lib/osu-file-parser/OsuParser";
+import { Router } from "./lib/route-pass/Router";
 import { orDefault } from "./lib/rust-like-utils-backend/Optional";
-import { throttle } from "./lib/throttle";
 import { collectTagsAndIndexSongs } from "./lib/song";
+import { Storage } from "./lib/storage/Storage";
+import { throttle } from "./lib/throttle";
+import { dirSubmit } from "./router/dir-router";
+import { showError } from "./router/error-router";
+import "./router/import";
+import { BrowserWindow } from "electron";
 
 export let mainWindow: BrowserWindow;
 
@@ -32,7 +30,10 @@ export async function main(window: BrowserWindow) {
   if (songsArray.length === 0) {
     await showError(
       window,
-      `No songs found in folder: ${orDefault(settings.get("osuSongsDir"), "[No folder]")}. Please make sure this is the directory where you have all your songs saved.`,
+      `No songs found in folder: ${orDefault(
+        settings.get("osuSongsDir"),
+        "[No folder]"
+      )}. Please make sure this is the directory where you have all your songs saved.`
     );
     await configureOsuDir(window);
   }
@@ -59,7 +60,7 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
     await Router.dispatch(
       mainWindow,
       "loadingScene::setTitle",
-      "Importing songs from osu! Songs directory",
+      "Importing songs from osu! Songs directory"
     );
 
     // Wrap client update function to update only every UPDATE_DELAY_MS
@@ -85,7 +86,7 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
     if (tables.value[SONGS].size === 0) {
       await showError(
         mainWindow,
-        `No songs found in folder: ${dir}. Please make sure this is the directory where you have all your songs saved.`,
+        `No songs found in folder: ${dir}. Please make sure this is the directory where you have all your songs saved.`
       );
       // Try again
       continue;

@@ -1,11 +1,11 @@
-import { For, onMount } from "solid-js";
-import "../../assets/css/notice/notice-container.css";
-import { createStore } from "solid-js/store";
-import Notice, { NoticeType } from "./Notice";
-import { TokenNamespace } from "../../lib/tungsten/token";
 import { Result } from "../../../../@types";
-import { fail, ok } from "../../lib/rust-like-utils-client/Result";
+import "../../assets/css/notice/notice-container.css";
 import Impulse from "../../lib/Impulse";
+import { fail, ok } from "../../lib/rust-like-utils-client/Result";
+import { TokenNamespace } from "../../lib/tungsten/token";
+import Notice, { NoticeType } from "./Notice";
+import { For, onMount } from "solid-js";
+import { createStore } from "solid-js/store";
 
 type NoticeExtended = {
   notice: NoticeType;
@@ -40,7 +40,7 @@ export function hideNotice(id: string | undefined): Result<void, string> {
     (ex) => ex.notice.id === id,
     "notice",
     "active",
-    () => false,
+    () => false
   );
 
   return ok(undefined);

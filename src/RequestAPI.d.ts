@@ -1,10 +1,3 @@
-import type { SearchQuery } from "./main/lib/search-parser/@search-types";
-import type { ConfigError, ConfigSuccess } from "./main/lib/template-parser/parser/TemplateParser";
-import type {
-  InfiniteScrollerInitResponse,
-  InfiniteScrollerRequest,
-  InfiniteScrollerResponse,
-} from "./renderer/src/components/InfiniteScroller";
 import type {
   AudioSource,
   ImageSource,
@@ -17,11 +10,18 @@ import type {
   Song,
   SongsQueryPayload,
 } from "./@types";
+import type { SearchQuery } from "./main/lib/search-parser/@search-types";
+import type { ConfigError, ConfigSuccess } from "./main/lib/template-parser/parser/TemplateParser";
+import type {
+  InfiniteScrollerInitResponse,
+  InfiniteScrollerRequest,
+  InfiniteScrollerResponse,
+} from "./renderer/src/components/InfiniteScroller";
 
 export type RequestAPI = {
   "resource::get": (
     id: ResourceID,
-    table: ResourceTables,
+    table: ResourceTables
   ) => Optional<Song | AudioSource | ImageSource>;
   "resource::getPath": (id: any) => Result<string, string>;
 
@@ -53,7 +53,7 @@ export type RequestAPI = {
   "query::songsPool::init": (payload: SongsQueryPayload) => InfiniteScrollerInitResponse;
   "query::songsPool": (
     request: InfiniteScrollerRequest,
-    payload: SongsQueryPayload,
+    payload: SongsQueryPayload
   ) => InfiniteScrollerResponse<Song>;
   "query::queue::init": () => InfiniteScrollerInitResponse;
   "query::queue": (request: InfiniteScrollerRequest) => InfiniteScrollerResponse<Song>;

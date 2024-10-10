@@ -1,13 +1,13 @@
-import { contextBridge, ipcRenderer } from "electron";
 import type { APIListener, Packet, PacketType } from "../@types";
-import { RequestAPI } from "../RequestAPI";
 import { ListenAPI } from "../ListenAPI";
+import { RequestAPI } from "../RequestAPI";
+import { contextBridge, ipcRenderer } from "electron";
 
 function createPacketPreload<T>(
   channel: string,
   token: string,
   data: T,
-  type: PacketType = "DATA",
+  type: PacketType = "DATA"
 ): Packet<T> {
   return {
     channel,
@@ -61,7 +61,7 @@ ipcRenderer.on("communication/renderer", (_evt, packet: Packet<any>) => {
       } catch (e) {
         console.log(e);
         console.log(
-          "If it says something about not being able to clone object then you are sending non-standard JS object.",
+          "If it says something about not being able to clone object then you are sending non-standard JS object."
         );
         console.log(responses);
       }

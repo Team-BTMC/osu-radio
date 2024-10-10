@@ -15,11 +15,8 @@
   }
 
   .dir-select__container {
-    box-shadow:
-      -19px 414px 166px rgba(0, 0, 0, 0.01),
-      -10px 233px 140px rgba(0, 0, 0, 0.05),
-      -5px 103px 104px rgba(0, 0, 0, 0.09),
-      -1px 26px 57px rgba(0, 0, 0, 0.1);
+    box-shadow: -19px 414px 166px rgba(0, 0, 0, 0.01), -10px 233px 140px rgba(0, 0, 0, 0.05),
+      -5px 103px 104px rgba(0, 0, 0, 0.09), -1px 26px 57px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     justify-content: space-between;

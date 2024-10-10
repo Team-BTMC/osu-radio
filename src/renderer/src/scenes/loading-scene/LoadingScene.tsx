@@ -1,8 +1,8 @@
-import Bar from "../../components/bar/Bar";
-import { createSignal, onCleanup, onMount } from "solid-js";
 import { LoadingSceneUpdate } from "../../../../@types";
+import Bar from "../../components/bar/Bar";
 import { clamp } from "../../lib/tungsten/math";
 import "./styles.css";
+import { createSignal, onCleanup, onMount } from "solid-js";
 
 export default function LoadingScene() {
   const [title, setTitle] = createSignal("");

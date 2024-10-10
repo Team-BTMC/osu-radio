@@ -4,7 +4,7 @@ export type DelayCancel = () => void;
 
 export function delay<F extends (...args: any[]) => any>(
   fn: F,
-  ms: number,
+  ms: number
 ): [DelayedFunction<F>, DelayCancel] {
   let timeout: number | undefined = undefined;
 

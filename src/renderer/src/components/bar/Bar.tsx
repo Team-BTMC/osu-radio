@@ -1,7 +1,6 @@
-import { Component, createEffect, createSignal, onMount } from "solid-js";
 import { clamp } from "../../lib/tungsten/math";
-
 import "./styles.css";
+import { Component, createEffect, createSignal, onMount } from "solid-js";
 
 type BarAlignment = "vertical" | "v" | "horizontal" | "h";
 
@@ -61,7 +60,7 @@ const Bar: Component<BarProps> = (props) => {
     handle?.addEventListener(
       "pointerup",
       () => handle.removeEventListener("pointermove", calculateFill),
-      { once: true },
+      { once: true }
     );
   };
 

@@ -1,7 +1,7 @@
-import { Component, JSX, Match, mergeProps, Switch } from "solid-js";
 import Bar from "../bar/Bar";
-import { setVolume, volume } from "@renderer/components/song/song.utils";
 import "./styles.css";
+import { setVolume, volume } from "@renderer/components/song/song.utils";
+import { Component, JSX, Match, mergeProps, Switch } from "solid-js";
 
 const Settings: Component = () => {
   return (

@@ -1,5 +1,5 @@
-import { Component, JSX, mergeProps } from "solid-js";
 import "./styles.css";
+import { Component, JSX, mergeProps } from "solid-js";
 
 type Props = JSX.IntrinsicElements["button"] & {
   variant?: "primary" | "secondary";

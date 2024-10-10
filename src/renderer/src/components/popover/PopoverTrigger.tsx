@@ -1,6 +1,6 @@
+import { usePopover } from "./Popover";
 import { Component } from "solid-js";
 import { JSX } from "solid-js/jsx-runtime";
-import { usePopover } from "./Popover";
 
 type Props = JSX.IntrinsicElements["button"];
 const PopoverTrigger: Component<Props> = (props) => {

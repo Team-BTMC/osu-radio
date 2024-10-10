@@ -1,8 +1,8 @@
-import fs from "fs";
-import path from "path";
-import { app } from "electron";
 import { BlobMap, TableMap } from "../../../@types";
 import { Table } from "./Table";
+import { app } from "electron";
+import fs from "fs";
+import path from "path";
 
 export class Storage {
   private static cache: Map<string, Table<any>> = new Map();
@@ -29,7 +29,7 @@ export class Storage {
 
     const table = new Table(
       tablePath,
-      JSON.parse(fs.readFileSync(tablePath, { encoding: "utf8" })),
+      JSON.parse(fs.readFileSync(tablePath, { encoding: "utf8" }))
     );
     this.cache.set(name, table);
     return table;

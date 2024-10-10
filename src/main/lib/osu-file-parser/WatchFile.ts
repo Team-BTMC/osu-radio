@@ -1,7 +1,7 @@
-import fs from "fs";
-import path from "path";
 import { Result } from "../../../@types";
 import { fail, ok } from "../rust-like-utils-backend/Result";
+import fs from "fs";
+import path from "path";
 
 export class WatchFile {
   fileName: string;
@@ -20,8 +20,8 @@ export class WatchFile {
     return ok(
       new WatchFile(
         path.basename(fullyQualifiedPath),
-        new Date(fs.lstatSync(fullyQualifiedPath).ctimeMs).toISOString(),
-      ),
+        new Date(fs.lstatSync(fullyQualifiedPath).ctimeMs).toISOString()
+      )
     );
   }
 }

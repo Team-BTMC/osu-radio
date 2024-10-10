@@ -72,7 +72,7 @@ export class SearchParser {
               validation.error.suggestion,
               prop,
               extracted.symbol,
-              value,
+              value
             ),
           },
         };
@@ -133,7 +133,7 @@ export class SearchParser {
   private validateProperty(
     prop: string,
     value: string,
-    comparison: string,
+    comparison: string
   ): SearchPropertyValidation {
     if (this.config.propertyMap[prop] === undefined) {
       const props = Object.keys(this.config.propertyMap);
@@ -158,7 +158,7 @@ export class SearchParser {
     validationSuggestion: ValidationSuggestion | undefined,
     prop: string,
     symbol: string,
-    value: string,
+    value: string
   ): SearchQuerySuggestion | undefined {
     if (validationSuggestion === undefined) {
       return undefined;

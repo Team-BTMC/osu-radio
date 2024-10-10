@@ -1,4 +1,3 @@
-import { Component, createEffect, createSignal, Match, Show, Switch } from "solid-js";
 import {
   isPlaying,
   next,
@@ -11,6 +10,7 @@ import {
 import { isSongUndefined } from "../../../lib/song";
 import Bar from "../../bar/Bar";
 import IconButton from "@renderer/components/icon-button/IconButton";
+import { Component, createEffect, createSignal, Match, Show, Switch } from "solid-js";
 
 type SongControlsProps = {};
 

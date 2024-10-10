@@ -1,6 +1,6 @@
-import { Accessor, createContext, ParentComponent, useContext } from "solid-js";
 import ListItem from "./ListItem";
 import useControllableState from "@renderer/lib/controllable-state";
+import { Accessor, createContext, ParentComponent, useContext } from "solid-js";
 
 const DEFAULT_SELECTED_VALUE = "";
 

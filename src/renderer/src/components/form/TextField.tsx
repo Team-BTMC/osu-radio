@@ -1,5 +1,5 @@
-import { Component, JSX, onMount, Setter, Signal } from "solid-js";
 import "../../assets/css/form/text-field.css";
+import { Component, JSX, onMount, Setter, Signal } from "solid-js";
 
 type TextFieldProps = {
   value: Signal<string>;
@@ -23,8 +23,8 @@ const TextField: Component<TextFieldProps> = (props) => {
     setValue(
       String(input.textContent).replaceAll(
         String.fromCharCode(160), // non-breaking space
-        String.fromCharCode(32), // breaking space
-      ) ?? "",
+        String.fromCharCode(32) // breaking space
+      ) ?? ""
     );
   };
 

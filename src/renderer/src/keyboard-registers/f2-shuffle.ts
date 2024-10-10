@@ -1,5 +1,5 @@
-import { Keyboard } from "../lib/Keyboard";
 import { addNotice } from "../components/notice/NoticeContainer";
+import { Keyboard } from "../lib/Keyboard";
 import { mainActiveTab, TABS } from "@renderer/scenes/main-scene/main.utils";
 
 Keyboard.register({

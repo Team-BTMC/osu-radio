@@ -1,5 +1,4 @@
 // Library to create random unique tokens in given namespace
-
 import { flatRNG } from "./math";
 
 const TOKEN_CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";
@@ -18,7 +17,7 @@ const globalTokens: Set<Token> = new Set();
 export function generateToken(
   forceFirstLetter = false,
   length = 8,
-  set: Set<string> = undefined as any,
+  set: Set<string> = undefined as any
 ): Token {
   let id = "";
   const MAX_RETRIES = 10_000;

@@ -1,8 +1,8 @@
-import { Component, createEffect, createSignal, For, Signal } from "solid-js";
-import TextField from "../form/TextField";
-import TagItem from "./TagItem";
 import "../../assets/css/search/tag-select.css";
 import Gradient from "../Gradient";
+import TextField from "../form/TextField";
+import TagItem from "./TagItem";
+import { Component, createEffect, createSignal, For, Signal } from "solid-js";
 
 export type Tag = {
   name: string;

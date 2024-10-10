@@ -1,6 +1,6 @@
+import { useList } from "./List";
 import { Component } from "solid-js";
 import { JSX } from "solid-js/jsx-runtime";
-import { useList } from "./List";
 
 export type Props = JSX.IntrinsicElements["button"] & {
   value: string;

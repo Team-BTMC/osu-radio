@@ -216,7 +216,7 @@ createEffect(async () => {
   const audio = (await window.api.request(
     "resource::get",
     song().audio,
-    "audio",
+    "audio"
   )) as Optional<AudioSource>;
 
   if (audio.isNone) {
@@ -295,7 +295,7 @@ export const saveLocalVoulme = async (localVolume: ZeroToOne, song: Song) => {
   const audio = (await window.api.request(
     "resource::get",
     song.audio,
-    "audio",
+    "audio"
   )) as Optional<AudioSource>;
 
   if (!audio.isNone && audio.value.volume === localVolume) {

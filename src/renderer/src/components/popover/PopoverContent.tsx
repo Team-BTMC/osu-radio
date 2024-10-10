@@ -1,8 +1,8 @@
-import { Component, Show } from "solid-js";
-import { JSX } from "solid-js/jsx-runtime";
 import { usePopover } from "./Popover";
 import { ComputePositionReturn } from "@floating-ui/dom";
 import createFocusTrap from "solid-focus-trap";
+import { Component, Show } from "solid-js";
+import { JSX } from "solid-js/jsx-runtime";
 
 function stylesFromPosition(position: ComputePositionReturn | null): JSX.CSSProperties | undefined {
   if (!position) {

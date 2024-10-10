@@ -1,10 +1,10 @@
-import { Accessor, Component, createSignal } from "solid-js";
 import { Optional } from "../../../../@types";
-import { none, orDefault, some } from "../../lib/rust-like-utils-client/Optional";
-import { hideNotice } from "./NoticeContainer";
 import "../../assets/css/notice/notice.css";
-import Gradient from "../Gradient";
 import Impulse from "../../lib/Impulse";
+import { none, orDefault, some } from "../../lib/rust-like-utils-client/Optional";
+import Gradient from "../Gradient";
+import { hideNotice } from "./NoticeContainer";
+import { Accessor, Component, createSignal } from "solid-js";
 
 export type NoticeType = {
   id?: string;
@@ -36,7 +36,7 @@ const Notice: Component<NoticeProps> = (props) => {
 
   const [drain, setDrainTime, pauseDrain] = createDrainAnimation(
     props.notice.timeoutMS ?? 10_000,
-    removeNotice,
+    removeNotice
   );
 
   const onRef = (notice: HTMLElement) => {
@@ -82,7 +82,7 @@ const Notice: Component<NoticeProps> = (props) => {
 
 function createDrainAnimation(
   timeMS: number,
-  onDrained: () => any,
+  onDrained: () => any
 ): [Accessor<Optional<string>>, (timeMS: number) => any, () => any] {
   const [get, set] = createSignal<Optional<string>>(some(drainTemplate(timeMS)));
 

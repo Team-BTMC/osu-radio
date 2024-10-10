@@ -1,14 +1,14 @@
-import { Router } from "../lib/route-pass/Router";
 import { Optional, QueueCreatePayload, QueueView, Result, Song, SongIndex } from "../../@types";
-import { Storage } from "../lib/storage/Storage";
+import { Router } from "../lib/route-pass/Router";
+import { none, some } from "../lib/rust-like-utils-backend/Optional";
+import { fail, ok } from "../lib/rust-like-utils-backend/Result";
 import { filter } from "../lib/song/filter";
 import { indexMapper } from "../lib/song/indexMapper";
-import { mainWindow } from "../main";
 import order from "../lib/song/order";
-import errorIgnored from "../lib/tungsten/errorIgnored";
-import { none, some } from "../lib/rust-like-utils-backend/Optional";
+import { Storage } from "../lib/storage/Storage";
 import { shuffle } from "../lib/tungsten/collections";
-import { fail, ok } from "../lib/rust-like-utils-backend/Result";
+import errorIgnored from "../lib/tungsten/errorIgnored";
+import { mainWindow } from "../main";
 
 let queue: Song[];
 
@@ -88,7 +88,7 @@ function getIndexes(view: QueueView): SongIndex[] {
 
 function comparePayload(
   current: QueueCreatePayload,
-  last: QueueCreatePayload | undefined,
+  last: QueueCreatePayload | undefined
 ): boolean {
   if (last === undefined) {
     return false;

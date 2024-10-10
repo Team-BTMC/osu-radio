@@ -1,6 +1,7 @@
-import { createSignal, createContext, useContext, ParentComponent, Accessor } from "solid-js";
 import PopoverContent from "./PopoverContent";
+import PopoverOverlay from "./PopoverOverlay";
 import PopoverTrigger from "./PopoverTrigger";
+import "./styles.css";
 import {
   computePosition,
   ComputePositionReturn,
@@ -9,8 +10,7 @@ import {
   Placement,
 } from "@floating-ui/dom";
 import useControllableState from "@renderer/lib/controllable-state";
-import PopoverOverlay from "./PopoverOverlay";
-import "./styles.css";
+import { createSignal, createContext, useContext, ParentComponent, Accessor } from "solid-js";
 
 export const DEFAULT_POPOVER_OPEN = false;
 

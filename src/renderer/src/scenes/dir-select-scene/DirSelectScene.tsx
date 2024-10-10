@@ -1,6 +1,6 @@
-import { createSignal, onMount } from "solid-js";
 import "./styles.css";
 import Button from "@renderer/components/button/Button";
+import { createSignal, onMount } from "solid-js";
 
 export default function DirSelectScene() {
   const [dir, setDir] = createSignal("");

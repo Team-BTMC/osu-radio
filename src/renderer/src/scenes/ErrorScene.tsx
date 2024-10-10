@@ -1,5 +1,5 @@
-import { createSignal, onCleanup, onMount } from "solid-js";
 import "../assets/css/scenes/error.css";
+import { createSignal, onCleanup, onMount } from "solid-js";
 
 export default function ErrorScene() {
   const [msg, setMsg] = createSignal("");
