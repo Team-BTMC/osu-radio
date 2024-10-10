@@ -1,6 +1,6 @@
+import { Accessor, Component, createEffect, createSignal, JSX, onCleanup, onMount } from "solid-js";
 import defaultBackground from "../../assets/osu-default-background.jpg";
 import { availableResource, getResourcePath } from "../../lib/tungsten/resource";
-import { Accessor, Component, createEffect, createSignal, JSX, onCleanup, onMount } from "solid-js";
 
 const SET_SOURCE_EVENT = "set-source";
 const GLOBAL_GROUP = "global-group";
@@ -51,19 +51,19 @@ const SongImage: Component<SongImageProps> = (props) => {
             }
 
             const resource = await getResourcePath(
-              String(entries[i].target.getAttribute("data-url")),
+              String(entries[i].target.getAttribute("data-url"))
             );
 
             entries[i].target.dispatchEvent(
               new CustomEvent(SET_SOURCE_EVENT, {
-                detail: await availableResource(resource, defaultBackground),
-              }),
+                detail: await availableResource(resource, defaultBackground)
+              })
             );
 
             observer?.unobserve(entries[i].target);
           }
         },
-        { rootMargin: "50px" },
+        { rootMargin: "50px" }
       );
       observers.set(group, observer);
     }
@@ -75,21 +75,13 @@ const SongImage: Component<SongImageProps> = (props) => {
     image.removeEventListener(SET_SOURCE_EVENT, setSource);
   });
 
-  const srcProp = props.src;
-
-  if (typeof srcProp === "function") {
-    createEffect(() => setBg(srcProp()));
-  } else {
-    setBg(srcProp);
-  }
-
   return (
     <div
       {...props}
       ref={image}
       class="song-image"
       style={{
-        "background-image": `url('${src().replaceAll("'", "\\'")}')`,
+        "background-image": `url('${src().replaceAll("'", "\\'")}')`
       }}
       data-url={props.src ?? ""}
     />

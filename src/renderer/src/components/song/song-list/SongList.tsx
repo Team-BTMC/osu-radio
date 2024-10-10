@@ -1,15 +1,15 @@
+import SongListSearch from "../song-list-search/SongListSearch";
+import SongItem from "../song-item/SongItem";
+import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { Optional, ResourceID, SongsQueryPayload, Tag } from "../../../../../@types";
 import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-types";
-import { namespace } from "../../../App";
-import Impulse from "../../../lib/Impulse";
 import { none, some } from "../../../lib/rust-like-utils-client/Optional";
 import InfiniteScroller from "../../InfiniteScroller";
+import { namespace } from "../../../App";
+import Impulse from "../../../lib/Impulse";
 import PlayNext from "../context-menu/items/PlayNext";
-import SongItem from "../song-item/SongItem";
-import SongListSearch from "../song-list-search/SongListSearch";
 import { songsSearch } from "./song-list.utils";
 import "./styles.css";
-import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 
 export type SongViewProps = {
   isAllSongs?: boolean;
@@ -27,11 +27,11 @@ const SongList: Component<SongViewProps> = (props) => {
   const [payload, setPayload] = createSignal<SongsQueryPayload>({
     view: props,
     order: order(),
-    tags: tags(),
+    tags: tags()
   });
 
   const [searchError, setSearchError] = createSignal<Optional<SearchQueryError>>(none(), {
-    equals: false,
+    equals: false
   });
   const resetListing = new Impulse();
 
@@ -50,7 +50,7 @@ const SongList: Component<SongViewProps> = (props) => {
       view: props,
       searchQuery: parsedQuery,
       order: o,
-      tags: t,
+      tags: t
     });
     resetListing.pulse();
   };
@@ -67,7 +67,7 @@ const SongList: Component<SongViewProps> = (props) => {
   const createQueue = async (songResource: ResourceID) => {
     await window.api.request("queue::create", {
       startSong: songResource,
-      ...payload(),
+      ...payload()
     });
   };
 

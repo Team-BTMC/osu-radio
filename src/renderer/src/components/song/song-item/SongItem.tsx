@@ -1,11 +1,11 @@
+import { Component, createSignal, onMount } from "solid-js";
 import { ResourceID, Song } from "../../../../../@types";
-import { song as selectedSong } from "../../../components/song/song.utils";
+import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import draggable from "../../../lib/draggable/draggable";
+import { song as selectedSong } from "../song.utils";
 import SongHint from "../SongHint";
 import SongImage from "../SongImage";
-import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import "./styles.css";
-import { Component, createSignal, onMount } from "solid-js";
 
 type SongItemProps = {
   song: Song;
@@ -23,7 +23,7 @@ const SongItem: Component<SongItemProps> = ({
   children,
   draggable: isDraggable,
   onDrop,
-  selectable,
+  selectable
 }) => {
   const showSignal = createSignal(false);
   const [_coords, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
@@ -42,9 +42,9 @@ const SongItem: Component<SongItemProps> = ({
   onMount(() => {
     draggable(item, {
       onClick: ignoreClickInContextMenu(() => onSelect(song.path)),
-      onDrop: onDrop ?? (() => {}),
+      onDrop: onDrop ?? (() => { }),
       createHint: SongHint,
-      useOnlyAsOnClickBinder: !isDraggable || selectedSong().path === song.path,
+      useOnlyAsOnClickBinder: !isDraggable || selectedSong().path === song.path
     });
 
     if (selectable === true) {

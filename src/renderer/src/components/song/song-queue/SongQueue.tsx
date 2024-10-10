@@ -1,14 +1,14 @@
-import { Song } from "../../../../../@types";
 import { namespace } from "../../../App";
-import Impulse from "../../../lib/Impulse";
-import scrollIfNeeded from "../../../lib/tungsten/scroll-if-needed";
+import SongItem from "../song-item/SongItem";
 import InfiniteScroller from "../../InfiniteScroller";
-import SongContextMenuItem from "../../song/context-menu/SongContextMenuItem";
-import SongItem from "../../song/song-item/SongItem";
-import { setSongQueueModalOpen } from "./song-queue.utils";
+import { Component, createSignal, onCleanup, onMount } from "solid-js";
+import { Song } from "../../../../../@types";
+import scrollIfNeeded from "../../../lib/tungsten/scroll-if-needed";
+import Impulse from "../../../lib/Impulse";
+import SongContextMenuItem from "../context-menu/SongContextMenuItem";
 import "./styles.css";
 import IconButton from "@renderer/components/icon-button/IconButton";
-import { Component, createSignal, onCleanup, onMount } from "solid-js";
+import { setSongQueueModalOpen } from "./song-queue.utils";
 
 const SongQueue: Component = () => {
   const [count, setCount] = createSignal(0);
@@ -35,7 +35,7 @@ const SongQueue: Component = () => {
       await window.api.request(
         "queue::place",
         s.path,
-        (before as HTMLElement | null)?.dataset.path,
+        (before as HTMLElement | null)?.dataset.path
       );
     };
   };

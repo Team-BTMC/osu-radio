@@ -1,6 +1,6 @@
+import { Component, createMemo, createSignal, Match, Setter, Switch } from "solid-js";
 import Dropdown from "@renderer/components/dropdown/Dropdown";
 import IconButton from "@renderer/components/icon-button/IconButton";
-import { Component, createMemo, createSignal, Match, Setter, Switch } from "solid-js";
 
 type OrderOption = {
   text: string;
@@ -11,28 +11,28 @@ type OrderDirection = "asc" | "desc";
 const orderOptions = [
   {
     value: "title",
-    text: "Title",
+    text: "Title"
   },
   {
     value: "artist",
-    text: "Artist",
+    text: "Artist"
   },
   {
     value: "creator",
-    text: "Creator",
+    text: "Creator"
   },
   {
     value: "bpm",
-    text: "BPM",
+    text: "BPM"
   },
   {
     value: "duration",
-    text: "Length",
+    text: "Length"
   },
   {
     value: "dateAdded",
-    text: "Date Added",
-  },
+    text: "Date Added"
+  }
 ] satisfies OrderOption[];
 
 type OrderSelectProps = {

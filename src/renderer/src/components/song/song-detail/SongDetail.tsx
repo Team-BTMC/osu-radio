@@ -1,11 +1,11 @@
-import { isSongUndefined } from "../../../lib/song";
-import formatTime from "../../../lib/time-formatter";
+import { Component } from "solid-js";
 import Bar from "../../bar/Bar";
+import { seek, duration, song, timestamp } from "@renderer/components/song/song.utils";
+import formatTime from "../../../lib/time-formatter";
 import SongImage from "../SongImage";
 import SongControls from "./SongControls";
+import { isSongUndefined } from "../../../lib/song";
 import "./styles.css";
-import { seek, duration, song, timestamp } from "@renderer/components/song/song.utils";
-import { Component } from "solid-js";
 
 const SongDetail: Component = () => {
   return (

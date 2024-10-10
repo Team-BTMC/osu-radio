@@ -1,10 +1,10 @@
+import { Accessor, Component, Setter, Signal } from "solid-js";
 import { Optional } from "../../../../../@types";
 import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-types";
 import { Tag } from "../../search/TagSelect";
 import { setSongsSearch } from "../song-list/song-list.utils";
-import SongListSearchOrderBy from "./SongListSearchOrderBy";
 import "./styles.css";
-import { Accessor, Component, Setter, Signal } from "solid-js";
+import SongListSearchOrderBy from "./SongListSearchOrderBy";
 
 export type SearchProps = {
   tags: Signal<Tag[]>;

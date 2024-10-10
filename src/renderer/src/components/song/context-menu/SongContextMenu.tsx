@@ -1,17 +1,23 @@
+import { Accessor, Component, createEffect, For, onCleanup, onMount, Show, Signal } from 'solid-js';
+import Gradient from '../../Gradient';
 import "../../../assets/css/song/song-context-menu.css";
-import Gradient from "../../Gradient";
-import { Accessor, Component, createEffect, For, onCleanup, onMount, Show, Signal } from "solid-js";
+
+
 
 type SongContextMenuProps = {
-  show: Signal<boolean>;
-  coords: Accessor<[number, number]>;
-  container: any;
-  children: any;
-};
+  show: Signal<boolean>,
+  coords: Accessor<[number, number]>,
+  container: any,
+  children: any,
+}
 
-const SongContextMenu: Component<SongContextMenuProps> = (props) => {
+
+
+const SongContextMenu: Component<SongContextMenuProps> = props => {
   const [show, setShow] = props.show;
   let menu;
+
+
 
   const windowContextMenu = (evt: MouseEvent) => {
     const t = evt.target;
@@ -29,13 +35,13 @@ const SongContextMenu: Component<SongContextMenuProps> = (props) => {
     }
 
     setShow(false);
-  };
+  }
 
   const calculatePosition = () => {
     const c = props.coords();
     menu?.style.setProperty("--x", `${Math.round(c[0])}px`);
     menu?.style.setProperty("--y", `${Math.round(c[1])}px`);
-  };
+  }
 
   onMount(() => {
     createEffect(() => {
@@ -55,21 +61,29 @@ const SongContextMenu: Component<SongContextMenuProps> = (props) => {
   onCleanup(() => {
     window.removeEventListener("click", () => setShow(false));
     window.removeEventListener("contextmenu", windowContextMenu);
-    menu?.removeEventListener("click", (evt) => evt.stopPropagation());
+    menu?.removeEventListener("click", evt => evt.stopPropagation());
   });
+
+
 
   return (
     <Show when={show()}>
       <div class={"song-menu"} ref={menu}>
         <Gradient classTop={"song-menu-container"}>
-          <For each={props.children}>{(child) => child}</For>
+          <For each={props.children}>{child =>
+            child
+          }</For>
         </Gradient>
       </div>
     </Show>
   );
-};
+}
+
+
 
 export default SongContextMenu;
+
+
 
 export function ignoreClickInContextMenu(fn: (evt: MouseEvent) => any): (evt: MouseEvent) => void {
   return (evt: MouseEvent) => {

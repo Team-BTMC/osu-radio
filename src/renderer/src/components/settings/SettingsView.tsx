@@ -1,36 +1,76 @@
-import "../../assets/css/settings/settings-item.css";
-import "../../assets/css/settings/settings-view.css";
-import { changeAudioDevice } from "../../lib/Music";
-import SettingDropdown from "./SettingDropdown";
-import { createEffect, createSignal, onMount } from "solid-js";
+import { Component, JSX, Match, mergeProps, Switch } from "solid-js";
+import Bar from "../bar/Bar";
+import { setVolume, volume } from "@renderer/components/song/song.utils";
+import "./styles.css";
 
-const SettingsView = () => {
-  let view;
-
-  const [audioDevices, setAudioDevices] = createSignal(new Map<string, () => any>());
-
-  const setAudioDevicesMap = () => {
-    const audioMap = new Map<string, () => any>();
-    navigator.mediaDevices.enumerateDevices().then((r) => {
-      for (const device of r) {
-        if (device.kind === "audiooutput") {
-          audioMap.set(device.label, () => changeAudioDevice(device.deviceId));
-        }
-      }
-      setAudioDevices(audioMap);
-    });
-  };
-
-  onMount(() => {
-    createEffect(setAudioDevicesMap);
-  });
-
+const Settings: Component = () => {
   return (
-    <div ref={view} class="settings-view">
-      <div class="list">
-        <SettingDropdown disabled={false} label={"Choose audio device"} options={audioDevices()} />
-      </div>
+    <div class="settings">
+      <SettingsSection title="General" icon="ri-global-line">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, voluptatem.
+      </SettingsSection>
+      <SettingsSection title="Audio" icon="ri-volume-up-line">
+        <GlobalVolumeSetting />
+      </SettingsSection>
     </div>
   );
 };
-export default SettingsView;
+
+type SettingsSectionProps = JSX.IntrinsicElements["div"] & {
+  title: string;
+  icon: string;
+};
+const SettingsSection: Component<SettingsSectionProps> = ({ title, icon, children, ...rest }) => {
+  return (
+    <div {...mergeProps({ class: "settings-section" }, rest)}>
+      <div class="settings-section__upper-part">
+        <i class={`settings-section__upper-part-icon ${icon}`} />
+        <h3 class="settings-section__upper-part-title">{title}</h3>
+      </div>
+
+      {children}
+    </div>
+  );
+};
+
+type SettingProps = JSX.IntrinsicElements["div"] & {
+  label: string;
+  name: string;
+};
+const Setting: Component<SettingProps> = ({ label, name, children, ...rest }) => {
+  return (
+    <div {...mergeProps({ class: "setting" }, rest)}>
+      <label class="setting__label" for={name}>
+        {label}
+      </label>
+      {children}
+    </div>
+  );
+};
+
+const GlobalVolumeSetting: Component = () => {
+  return (
+    <Setting name="global-volume" label="Global volume">
+      <div class="global-volume-setting">
+        <div class="global-volume-setting__icon">
+          <Switch>
+            <Match when={volume() === 0}>
+              <i class="ri-volume-mute-fill" />
+            </Match>
+            <Match when={volume() < 0.5}>
+              <i class="ri-volume-down-fill" />
+            </Match>
+            <Match when={volume() >= 0.5}>
+              <i class="ri-volume-up-fill" />
+            </Match>
+          </Switch>
+        </div>
+        <div class="global-volume-setting__bar">
+          <Bar fill={volume()} setFill={setVolume} />
+        </div>
+      </div>
+    </Setting>
+  );
+};
+
+export default Settings;
