@@ -1,6 +1,6 @@
-import Popover from "../popover/Popover";
+import { Component, JSX } from "solid-js";
 import "./styles.css";
-import { Component, JSX, mergeProps } from "solid-js";
+import Popover from "../popover/Popover";
 
 type Props = JSX.IntrinsicElements["button"];
 const DropdownTrigger: Component<Props> = (props) => {
