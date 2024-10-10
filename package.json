@@ -24,7 +24,9 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
+    "@floating-ui/dom": "^1.6.11",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/graceful-fs": "^4.1.6",
     "@xhayper/discord-rpc": "^1.2.0",
     "electron-updater": "^6.3.9",
@@ -32,7 +34,8 @@
     "get-audio-duration": "^4.0.1",
     "graceful-fs": "^4.2.11",
     "sharp": "^0.33.5",
-    "solid-fa": "^0.2.0"
+    "remixicon": "^4.3.0",
+    "solid-focus-trap": "^0.1.7"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",

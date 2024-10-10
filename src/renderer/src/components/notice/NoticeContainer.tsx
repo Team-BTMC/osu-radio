@@ -1,9 +1,9 @@
-import { NoticeType, Result } from "../../../../@types";
+import { Result } from "../../../../@types";
 import "../../assets/css/notice/notice-container.css";
 import Impulse from "../../lib/Impulse";
 import { fail, ok } from "../../lib/rust-like-utils-client/Result";
 import { TokenNamespace } from "../../lib/tungsten/token";
-import Notice from "./Notice";
+import Notice, { NoticeType } from "./Notice";
 import { For, onMount } from "solid-js";
 import { createStore } from "solid-js/store";
 

@@ -56,3 +56,4 @@ export default function App(): JSX.Element {
 export const GLOBAL_ICON_SCALE = 1.32;
 
 export const namespace = new TokenNamespace();
+

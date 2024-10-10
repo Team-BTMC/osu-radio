@@ -1,6 +1,4 @@
 import "../../assets/css/search/tag-item.css";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import Fa from "solid-fa";
 import { Component } from "solid-js";
 
 export type TagItemProps = {
@@ -27,7 +25,7 @@ const TagItem: Component<TagItemProps> = (props) => {
     >
       <span>{props.name}</span>
       <button onClick={() => props.onRemove(props.name)}>
-        <Fa icon={faXmark} />
+        <i class="ri-close-fill" />
       </button>
     </div>
   );

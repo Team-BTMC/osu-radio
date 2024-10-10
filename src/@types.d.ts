@@ -16,9 +16,27 @@ declare global {
         listener: APIListener<ListenAPI[E]>,
       ): void;
     };
+      request<E extends keyof RequestAPI>(
+        event: E,
+        ...data: Parameters<RequestAPI[E]>
+      ): Promise<ReturnType<RequestAPI[E]>>;
+      listen<E extends keyof ListenAPI>(channel: E, listener: APIListener<ListenAPI[E]>): void;
+      removeListener<E extends keyof ListenAPI>(
+        channel: E,
+        listener: APIListener<ListenAPI[E]>,
+      ): void;
+    };
   }
 }
 
+export type Optional<T> =
+  | {
+      value: T;
+      isNone: false;
+    }
+  | {
+      isNone: true;
+    };
 export type Optional<T> =
   | {
       value: T;
@@ -37,6 +55,15 @@ export type Result<T, E> =
       error: E;
       isError: true;
     };
+export type Result<T, E> =
+  | {
+      value: T;
+      isError: false;
+    }
+  | {
+      error: E;
+      isError: true;
+    };
 
 /** result of absolute file path being hashed (64-bit) */
 export type ResourceID = string;
@@ -46,14 +73,17 @@ export type Resource = {
   path: ResourceID;
   ctime: string;
 };
+};
 
 export type AudioSource = {
   songID: ResourceID;
   volume?: number;
 } & Resource;
+} & Resource;
 
 export type ImageSource = {
   songID: ResourceID;
+} & Resource;
 } & Resource;
 
 export type Song = {
@@ -62,11 +92,18 @@ export type Song = {
   osuFile: string;
 
   dateAdded: string;
+  dateAdded: string;
 
   title: string;
   artist: string;
   creator: string;
+  title: string;
+  artist: string;
+  creator: string;
   // For the life of me I can't remember why is it 2D array
+  bpm: number[][];
+  duration: number;
+  beatmapSetID?: number;
   bpm: number[][];
   duration: number;
   beatmapSetID?: number;
@@ -75,31 +112,51 @@ export type Song = {
   titleUnicode?: string;
   artistUnicode?: string;
   tags?: string[];
+  mode?: number;
+  titleUnicode?: string;
+  artistUnicode?: string;
+  tags?: string[];
 
+  diffs: string[];
+} & Resource;
   diffs: string[];
 } & Resource;
 
 // Serialization is in JSON that's why properties are only single letter
 export type SongIndex = {
   id: string;
+  id: string;
   // title
+  t: string;
   t: string;
   // artist
   a: string;
+  a: string;
   // artist
+  c: string;
   c: string;
   // mode
   m?: number;
+  m?: number;
   // duration
+  d: number;
+  tags?: string[];
   d: number;
   tags?: string[];
   // beatmap difficulty names
   diffs: string[];
   bpm: number;
 };
+  diffs: string[];
+  bpm: number;
+};
 
 // System table definition
 export type System = {
+  "songDir.mtime": string;
+  indexes: SongIndex[];
+  allTags: { [key: string]: string[] };
+};
   "songDir.mtime": string;
   indexes: SongIndex[];
   allTags: { [key: string]: string[] };
@@ -125,9 +182,18 @@ export type TableMap = {
   settings: Settings;
   system: System;
 };
+  songs: { [key: ResourceID]: Song };
+  audio: { [key: ResourceID]: AudioSource };
+  images: { [key: ResourceID]: ImageSource };
+  playlists: { [key: string]: ResourceID[] };
+  settings: Settings;
+  system: System;
+};
 
 // I guess this is definition of all binary blob files that can be access from the database code?
 export type BlobMap = {
+  times;
+};
   times;
 };
 
@@ -137,9 +203,13 @@ export type ResourceTables = "songs" | "audio" | "images";
 type OmitPropsWithReturnType<O extends { [K: string]: (...args: any[]) => any }, V> = {
   [K in keyof O as ReturnType<O[K]> extends V ? never : K]: O[K];
 };
+  [K in keyof O as ReturnType<O[K]> extends V ? never : K]: O[K];
+};
 
 // Types as functions for type
 type OmitPropsWithoutReturnType<O extends { [K: string]: (...args: any[]) => any }, V> = {
+  [K in keyof O as ReturnType<O[K]> extends V ? K : never]: O[K];
+};
   [K in keyof O as ReturnType<O[K]> extends V ? K : never]: O[K];
 };
 
@@ -147,10 +217,21 @@ export type APIFunction<F extends (...args: any) => any> = (
   evt: Electron.IpcMainInvokeEvent,
   ...args: Parameters<F>
 ) => ReturnType<F> | Promise<ReturnType<F>>;
+export type APIFunction<F extends (...args: any) => any> = (
+  evt: Electron.IpcMainInvokeEvent,
+  ...args: Parameters<F>
+) => ReturnType<F> | Promise<ReturnType<F>>;
 
+export type PacketType = "DATA" | "ERROR";
 export type PacketType = "DATA" | "ERROR";
 
 export type Packet<T> = {
+  type: PacketType;
+  data: T;
+  token: string;
+  channel: string;
+  reason?: string;
+};
   type: PacketType;
   data: T;
   token: string;
@@ -161,14 +242,25 @@ export type Packet<T> = {
 export type APIListener<F extends (...args: any) => any> = (
   ...args: Parameters<F>
 ) => ReturnType<F> | Promise<ReturnType<F>>;
+export type APIListener<F extends (...args: any) => any> = (
+  ...args: Parameters<F>
+) => ReturnType<F> | Promise<ReturnType<F>>;
 
 export type Tag = {
+  name: string;
   name: string;
   // Is excluded. Name should be changed to isExcluded in future version
   isSpecial?: boolean;
 };
+  isSpecial?: boolean;
+};
 
 export type SongsQueryPayload = {
+  view: SongViewProps;
+  searchQuery?: SearchQuerySuccess;
+  tags: Tag[];
+  order: string;
+};
   view: SongViewProps;
   searchQuery?: SearchQuerySuccess;
   tags: Tag[];
@@ -182,7 +274,13 @@ export type QueueCreatePayload = {
   view: QueueView;
   searchQuery?: SearchQuerySuccess;
   tags: Tag[];
+  view: QueueView;
+  searchQuery?: SearchQuerySuccess;
+  tags: Tag[];
   // The format is: OsuSearchAbleProperties:(asc|desc) -> bpm:asc
+  order: string;
+  startSong: ResourceID;
+};
   order: string;
   startSong: ResourceID;
 };
@@ -195,8 +293,20 @@ export type OsuSearchAbleProperties =
   | "mode"
   | "title"
   | "diff";
+export type OsuSearchAbleProperties =
+  | "bpm"
+  | "artist"
+  | "creator"
+  | "length"
+  | "mode"
+  | "title"
+  | "diff";
 
 export type LoadingSceneUpdate = {
+  current: number;
+  hint?: string;
+  max?: number;
+};
   current: number;
   hint?: string;
   max?: number;

@@ -1,4 +1,4 @@
-import "../../assets/css/scenes/error.css";
+import "../assets/css/scenes/error.css";
 import { createSignal, onCleanup, onMount } from "solid-js";
 
 export default function ErrorScene() {

@@ -1,7 +1,7 @@
 import { LoadingSceneUpdate } from "../../../../@types";
-import "../../assets/css/scenes/loading.css";
+import Bar from "../../components/bar/Bar";
 import { clamp } from "../../lib/tungsten/math";
-import Bar from "../Bar";
+import "./styles.css";
 import { createSignal, onCleanup, onMount } from "solid-js";
 
 export default function LoadingScene() {
@@ -33,14 +33,14 @@ export default function LoadingScene() {
   });
 
   return (
-    <div id="loading" class="scene center col">
-      <h3 class="title">{title()}</h3>
+    <div class="loading-scene">
+      <h3 class="loading-scene__title">{title()}</h3>
 
-      <div class="container">
+      <div class="loading-scene__bar">
         <Bar fill={current() / max()} />
       </div>
 
-      <span class="hint">{hint()}</span>
+      <span class="loading-scene__hint">{hint()}</span>
     </div>
   );
 }

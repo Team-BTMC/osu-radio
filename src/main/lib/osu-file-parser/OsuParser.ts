@@ -22,6 +22,17 @@ type FileState =
   | "TimingPoints"
   | "Colours"
   | "HitObjects";
+type FileState =
+  | "Initial"
+  | "NextState"
+  | "General"
+  | "Editor"
+  | "Metadata"
+  | "Difficulty"
+  | "Events"
+  | "TimingPoints"
+  | "Colours"
+  | "HitObjects";
 
 const OFFSET = 0;
 const BPM = 1;
@@ -345,6 +356,7 @@ export class OsuParser {
 
   static async parseFile(file: string): Promise<Result<OsuFile, string>> {
     if (!(await access(file, fs.constants.R_OK))) {
+    if (!(await access(file, fs.constants.R_OK))) {
       return fail("File does not exists.");
     }
 
@@ -352,25 +364,31 @@ export class OsuParser {
     const fileLines = readline.createInterface({
       input: stream,
       crlfDelay: Infinity,
+      crlfDelay: Infinity,
     });
 
+    let state: FileState = "Initial";
     let state: FileState = "Initial";
     const props = new Map<string, string>();
     const bpm: number[][] = [];
 
     lines: for await (const line of fileLines) {
+    lines: for await (const line of fileLines) {
       const trimmed = line.trim();
 
+      if (trimmed === "") {
       if (trimmed === "") {
         continue;
       }
 
+      if (trimmed[0] === "[" && trimmed[trimmed.length - 1] === "]") {
       if (trimmed[0] === "[" && trimmed[trimmed.length - 1] === "]") {
         state = trimmed.substring(1, trimmed.length - 1) as FileState;
         continue;
       }
 
       switch (state) {
+        case "HitObjects":
         case "HitObjects":
           break lines;
 
@@ -379,18 +397,27 @@ export class OsuParser {
         case "Difficulty":
         case "Colours":
         case "Initial":
+        case "NextState":
+        case "Editor":
+        case "Difficulty":
+        case "Colours":
+        case "Initial":
           continue;
 
+        case "Events": {
         case "Events": {
           const bg = bgFileNameRegex.exec(trimmed);
           if (bg !== null) {
             props.set("bgSrc", bg[1]);
+            state = "NextState";
             state = "NextState";
           }
 
           break;
         }
 
+        case "TimingPoints": {
+          const timingPoint = trimmed.split(",").map((x) => Number(x));
         case "TimingPoints": {
           const timingPoint = trimmed.split(",").map((x) => Number(x));
 
@@ -413,6 +440,8 @@ export class OsuParser {
 
         case "General":
         case "Metadata": {
+        case "General":
+        case "Metadata": {
           const [prop, value] = this.#splitProp(trimmed);
           if (prop === undefined) {
             continue;
@@ -424,6 +453,8 @@ export class OsuParser {
 
         default:
           assertNever(state);
+        default:
+          assertNever(state);
       }
     }
 
@@ -431,6 +462,7 @@ export class OsuParser {
     fileLines.close();
 
     const result = beatmapSetIDRegex.exec(file);
+    const beatmapSetID = result !== null ? Number(result[1]) : 0;
     const beatmapSetID = result !== null ? Number(result[1]) : 0;
 
     return ok(new OsuFile(file, props, bpm, beatmapSetID));

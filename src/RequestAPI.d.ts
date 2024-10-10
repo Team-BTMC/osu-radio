@@ -36,6 +36,18 @@ export type RequestAPI = {
   "queue::removeSong": (song: ResourceID | undefined) => void;
   "queue::create": (payload: QueueCreatePayload) => void;
   "queue::shuffle": () => void;
+  "queue::exists": () => boolean;
+  "queue::current": () => Optional<Song>;
+  "queue::duration": () => Optional<number>;
+  "queue::remainingDuration": () => Optional<number>;
+  "queue::next": () => void;
+  "queue::previous": () => void;
+  "queue::play": (song: ResourceID) => void;
+  "queue::playNext": (song: ResourceID) => void;
+  "queue::place": (what: ResourceID, after: ResourceID | undefined) => void;
+  "queue::removeSong": (song: ResourceID | undefined) => void;
+  "queue::create": (payload: QueueCreatePayload) => void;
+  "queue::shuffle": () => void;
 
   "dir::select": () => Optional<string>;
   "dir::autoGetOsuDir": () => Optional<string>;
@@ -45,10 +57,15 @@ export type RequestAPI = {
   "discord::pause": (song: Song) => void;
 
   "error::dismissed": () => void;
+  "error::dismissed": () => void;
 
   "parse::search": (query: string) => SearchQuery;
   "parse::template": (template: string) => ConfigSuccess | ConfigError;
+  "parse::search": (query: string) => SearchQuery;
+  "parse::template": (template: string) => ConfigSuccess | ConfigError;
 
+  "settings::write": <K extends keyof Settings>(key: K, value: any) => void;
+  "settings::get": <K extends keyof Settings>(key: K) => Optional<any>;
   "settings::write": <K extends keyof Settings>(key: K, value: any) => void;
   "settings::get": <K extends keyof Settings>(key: K) => Optional<any>;
 
@@ -59,8 +76,19 @@ export type RequestAPI = {
   ) => InfiniteScrollerResponse<Song>;
   "query::queue::init": () => InfiniteScrollerInitResponse;
   "query::queue": (request: InfiniteScrollerRequest) => InfiniteScrollerResponse<Song>;
+  "query::songsPool::init": (payload: SongsQueryPayload) => InfiniteScrollerInitResponse;
+  "query::songsPool": (
+    request: InfiniteScrollerRequest,
+    payload: SongsQueryPayload,
+  ) => InfiniteScrollerResponse<Song>;
+  "query::queue::init": () => InfiniteScrollerInitResponse;
+  "query::queue": (request: InfiniteScrollerRequest) => InfiniteScrollerResponse<Song>;
 
   "save::localVolume": (volume: number, song: ResourceID) => void;
+  "save::localVolume": (volume: number, song: ResourceID) => void;
+
+  "dev::storeLocation": () => string;
+};
 
   "dev::storeLocation": () => string;
 };
