@@ -39,7 +39,7 @@ export type RequestAPI = {
   "queue::shuffle": () => void;
 
   "playlist::add": (playlistName: string, song: Song) => void;
-  "playlist::remove": (song: Song) => void;
+  "playlist::remove": (playlistName: string, song: Song) => void;
   "playlist::create": (name: string) => void;
   "playlist::delete": (name: string) => void;
 
@@ -70,7 +70,7 @@ export type RequestAPI = {
   "query::playlistSongs::init": (playlistName: string) => InfiniteScrollerInitResponse;
   "query::playlistSongs": (
     playlistName: string,
-    request: InfiniteScrollerRequest
+    request: InfiniteScrollerRequest,
   ) => InfiniteScrollerResponse<Song>;
 
   "save::localVolume": (volume: number, song: ResourceID) => void;

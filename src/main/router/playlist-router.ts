@@ -12,7 +12,7 @@ Router.respond("playlist::add", (_evt, playlistName, song) => {
   //temporary, playlist should already exist
   if (playlist.isNone) {
     // create playlist
-    const empty = { count: 0, length: 0, songs: [] };
+    const empty = { name: playlistName, count: 0, length: 0, songs: [] };
     playlists.write(playlistName, empty);
   }
   playlist = playlists.get(playlistName);
@@ -24,9 +24,34 @@ Router.respond("playlist::add", (_evt, playlistName, song) => {
   console.log(
     "MONKA",
     playlists.getStruct(),
-    Object.keys(Storage.getTable("playlists").getStruct())
+    Object.keys(Storage.getTable("playlists").getStruct()),
   );
   console.log(playlist.value);
+});
+
+Router.respond("playlist::create", (_evt, name) => {
+  console.log("create playlist " + name);
+  //todo: check if playlist already exists
+  const playlists = Storage.getTable("playlists");
+  const empty = { name: name, count: 0, length: 0, songs: [] };
+  playlists.write(name, empty);
+});
+
+Router.respond("playlist::delete", (_evt, name) => {
+  console.log("delete playlist " + name);
+  const playlists = Storage.getTable("playlists");
+  playlists.delete(name);
+});
+
+Router.respond("playlist::remove", (_evt, playlistName, song) => {
+  console.log("delete song from " + playlistName, song);
+  const playlists = Storage.getTable("playlists");
+  let playlist = playlists.get(playlistName);
+  const songIndex = playlist.value.songs.indexOf(song, 0);
+  if (songIndex > -1) {
+    playlist.value.songs.splice(songIndex, 1);
+    playlists.write(playlistName, playlist);
+  }
 });
 
 const BUFFER_SIZE = 50;
@@ -37,7 +62,7 @@ Router.respond("query::playlists::init", (_evt) => {
 
   return some({
     initialIndex: 0,
-    count: count
+    count: count,
   });
 });
 
@@ -53,7 +78,7 @@ Router.respond("query::playlists", (_evt, request) => {
       name: v,
       count: plist.value.count,
       length: plist.value.length,
-      songs: plist.value.songs
+      songs: plist.value.songs,
     });
   });
 
@@ -71,14 +96,14 @@ Router.respond("query::playlists", (_evt, request) => {
     return some({
       index: request.index - 1,
       total: test.length,
-      items: test.slice(start, start + BUFFER_SIZE)
+      items: test.slice(start, start + BUFFER_SIZE),
     });
   }
 
   return some({
     index: request.index + 1,
     total: test.length,
-    items: test.slice(start, start + BUFFER_SIZE)
+    items: test.slice(start, start + BUFFER_SIZE),
   });
 });
 
@@ -88,7 +113,7 @@ Router.respond("query::playlistSongs::init", (_evt, playlistName) => {
 
   return some({
     initialIndex: 0,
-    count: count
+    count: count,
   });
 });
 
@@ -109,13 +134,13 @@ Router.respond("query::playlistSongs", (_evt, playlistName, request) => {
     return some({
       index: request.index - 1,
       total: songs.length,
-      items: songs.slice(start, start + BUFFER_SIZE)
+      items: songs.slice(start, start + BUFFER_SIZE),
     });
   }
 
   return some({
     index: request.index + 1,
     total: songs.length,
-    items: songs.slice(start, start + BUFFER_SIZE)
+    items: songs.slice(start, start + BUFFER_SIZE),
   });
 });

@@ -1,8 +1,9 @@
-import { Component, createSignal } from "solid-js";
+import { Component, createSignal, onCleanup, onMount } from "solid-js";
 import "../../assets/css/song/song-view.css";
 import InfiniteScroller from "../InfiniteScroller";
 import PlaylistItem from "./PlaylistItem";
 import { namespace } from "@renderer/App";
+import Impulse from "@renderer/lib/Impulse";
 
 export type PlaylistViewProps = {};
 

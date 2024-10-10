@@ -13,11 +13,12 @@ const PlaylistSongsView: Component<PlaylistSongsProps> = (props) => {
     <div>
       <InfiniteScroller
         apiKey={"query::playlistSongs"}
+        //todo: apiData
         apiInitKey={"query::playlistSongs::init"}
         // setCount={setCount}
         // reset={resetListing}
         // onLoadItems={onSongsLoad}
-        fallback={<div>No queue...</div>}
+        fallback={<div>No songs...</div>}
         builder={(s) => (
           <SongItem
             song={s}
