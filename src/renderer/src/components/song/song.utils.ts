@@ -15,15 +15,13 @@ const DEFAULT_SONG: Song = {
   bg: "",
   osuFile: "",
 
-  artist: "Artist",
-  title: "Title",
-  creator: "Creator",
-  mode: 0,
+  title: "",
+  artist: "",
+  creator: "",
   duration: 0,
 
   bpm: [],
-  tags: [],
-  diffs: []
+  diffs: [],
 };
 
 // ------------
@@ -84,7 +82,7 @@ const [bpm, setBPM] = createSignal<Optional<number>>(none(), {
     }
 
     return true;
-  }
+  },
 });
 export { bpm };
 
@@ -108,7 +106,7 @@ async function getCurrent(): Promise<{ song: Song; media: URL } | undefined> {
 
   return {
     song: song.value,
-    media
+    media,
   };
 }
 
@@ -125,6 +123,9 @@ export async function play(): Promise<void> {
     setMedia(current.media);
   }
 
+  const currentSong = song();
+  await window.api.request("discord::play", currentSong, player.currentTime);
+
   const m = media();
 
   if (m !== undefined && player.src !== m.href) {
@@ -138,7 +139,10 @@ export async function play(): Promise<void> {
   setIsPlaying(true);
 }
 
-export function pause() {
+export async function pause() {
+  const currentSong = song();
+  await window.api.request("discord::pause", currentSong);
+
   setIsPlaying(false);
   player.pause();
 }
@@ -188,12 +192,12 @@ export async function togglePlay(force?: boolean): Promise<void> {
       return;
     }
 
-    pause();
+    await pause();
     return;
   }
 
   if (isPlaying() === true) {
-    pause();
+    await pause();
     return;
   }
 
@@ -217,7 +221,7 @@ createEffect(async () => {
   const audio = (await window.api.request(
     "resource::get",
     song().audio,
-    "audio"
+    "audio",
   )) as Optional<AudioSource>;
 
   if (audio.isNone) {
@@ -248,6 +252,7 @@ window.api.listen("queue::songChanged", async (s) => {
 
   setMedia(new URL(resource.value));
   setSong(s);
+  await window.api.request("discord::play", s);
   await play();
 });
 
@@ -296,7 +301,7 @@ export const saveLocalVoulme = async (localVolume: ZeroToOne, song: Song) => {
   const audio = (await window.api.request(
     "resource::get",
     song.audio,
-    "audio"
+    "audio",
   )) as Optional<AudioSource>;
 
   if (!audio.isNone && audio.value.volume === localVolume) {
