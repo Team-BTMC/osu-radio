@@ -78,7 +78,6 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
           {optionLabel()}
         </Dropdown.Trigger>
         <Dropdown.List
-          class="bg-surface shadow-lg rounded-md overflow-hidden"
           onValueChange={(newSelectedOption) => {
             setIsOpen(false);
             setOption(newSelectedOption);
