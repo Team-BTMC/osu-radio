@@ -63,6 +63,7 @@
     padding: 0px 20px;
     background: var(--contrast-background);
     gap: 4px;
+    -webkit-app-region: drag;
 
     .nav-item {
       display: flex;
@@ -70,6 +71,7 @@
       gap: 16px;
       padding: 4px 16px;
       border-radius: var(--rounded-sm);
+      -webkit-app-region: no-drag;
 
       &:is(:hover, :focus) {
         background: var(--hover-background);
@@ -110,6 +112,8 @@
       &[data-active="true"] {
         color: var(--text-900);
       }
+
+      -webkit-app-region: no-drag;
     }
   }
 }

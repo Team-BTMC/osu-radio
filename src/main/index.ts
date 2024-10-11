@@ -15,6 +15,11 @@ async function createWindow() {
     height,
     show: false,
     autoHideMenuBar: true,
+    titleBarStyle: "hidden",
+    trafficLightPosition: {
+      x: 20,
+      y: 20,
+    },
     ...(process.platform === "linux" ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, "../preload/index.mjs"),

@@ -11,7 +11,16 @@ import {
   toggleSongQueueModalOpen,
 } from "@renderer/components/song/song-queue/song-queue.utils";
 import { song } from "@renderer/components/song/song.utils";
-import { Component, For, JSXElement, Match, Show, Switch } from "solid-js";
+import {
+  Component,
+  createEffect,
+  createSignal,
+  For,
+  JSXElement,
+  Match,
+  Show,
+  Switch,
+} from "solid-js";
 
 const MainScene: Component = () => {
   return (
@@ -34,8 +43,21 @@ const MainScene: Component = () => {
 };
 
 const Nav: Component = () => {
+  const [os, setOs] = createSignal<NodeJS.Platform>();
+
+  createEffect(async () => {
+    const fetchOS = async () => {
+      return await window.api.request("settings::getos");
+    };
+    const os = await fetchOS();
+    setOs(os);
+  });
+
   return (
-    <nav class="nav">
+    <nav
+      class="nav"
+      style={os() === "darwin" ? { padding: "0px 20px 0px 95px" } : { padding: "0px 20px" }}
+    >
       <For each={Object.values(TABS)}>
         {({ label, ...rest }) => <NavItem {...rest}>{label}</NavItem>}
       </For>

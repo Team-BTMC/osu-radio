@@ -51,6 +51,7 @@ export type RequestAPI = {
 
   "settings::write": <K extends keyof Settings>(key: K, value: any) => void;
   "settings::get": <K extends keyof Settings>(key: K) => Optional<any>;
+  "settings::getos": () => NodeJS.Platform;
 
   "query::songsPool::init": (payload: SongsQueryPayload) => InfiniteScrollerInitResponse;
   "query::songsPool": (
