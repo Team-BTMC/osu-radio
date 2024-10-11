@@ -16,15 +16,12 @@
   justify-content: space-between;
 }
 
-
-
 .search .tags {
   width: 30px;
   padding: 4px;
   display: grid;
   place-content: center;
 }
-
 
 .search .error-inline {
   background-color: lch(25% 70 0);

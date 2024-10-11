@@ -1,18 +1,16 @@
-import type { APIFunction, Packet } from '../../../@types';
-import { BrowserWindow, ipcMain } from 'electron';
-import { TokenNamespace } from '../tungsten/token';
-import { assertNever } from '../tungsten/assertNever';
-import { cratePacket } from './Packet';
-import { RequestAPI } from '../../../RequestAPI';
-import { ListenAPI } from '../../../ListenAPI';
-
-
+import type { APIFunction, Packet } from "../../../@types";
+import { BrowserWindow, ipcMain } from "electron";
+import { TokenNamespace } from "../tungsten/token";
+import { assertNever } from "../tungsten/assertNever";
+import { cratePacket } from "./Packet";
+import { RequestAPI } from "../../../RequestAPI";
+import { ListenAPI } from "../../../ListenAPI";
 
 type Pending = {
-  resolve: (value: any) => void,
-  reject: (reason?: any) => void,
-  packet: Packet<any>
-}
+  resolve: (value: any) => void;
+  reject: (reason?: any) => void;
+  packet: Packet<any>;
+};
 
 const tokens = new TokenNamespace();
 const pending: Pending[] = [];
@@ -31,12 +29,11 @@ ipcMain.on("communication/main", (_evt, packet: Packet<any>) => {
         pending[i].reject(packet.reason);
         break;
       }
-      default: assertNever(packet.type);
+      default:
+        assertNever(packet.type);
     }
   }
 });
-
-
 
 export class Router {
   /**
@@ -65,14 +62,18 @@ export class Router {
    * @returns {Promise<any>} The data the Promise is resolved with should be return value of client-side listener
    * function
    */
-  static dispatch<E extends keyof ListenAPI>(window: BrowserWindow, channel: E, ...data: Parameters<ListenAPI[E]>): Promise<any> {
+  static dispatch<E extends keyof ListenAPI>(
+    window: BrowserWindow,
+    channel: E,
+    ...data: Parameters<ListenAPI[E]>
+  ): Promise<any> {
     const packet = cratePacket(channel, tokens.create(), data);
 
     const promise = new Promise((resolve, reject) => {
       pending.push({
         packet,
         reject,
-        resolve
+        resolve,
       });
     });
 

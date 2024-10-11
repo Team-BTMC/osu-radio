@@ -1,28 +1,20 @@
 //todo redo from parent perspective... how did i not think of this... I'm quite stupid
 
-import { Vec2, vec2Length } from '../tungsten/math';
-import scrollAnimation from './scrollAnimation';
-import defaultHint from './defaultHint';
-
-
+import { Vec2, vec2Length } from "../tungsten/math";
+import scrollAnimation from "./scrollAnimation";
+import defaultHint from "./defaultHint";
 
 export type DraggableOptions = {
-  onClick: (event: MouseEvent) => any,
-  onDrop: (beforeElement: Element | null) => any,
-  createHint?: () => HTMLElement,
-  useOnlyAsOnClickBinder?: boolean,
+  onClick: (event: MouseEvent) => any;
+  onDrop: (beforeElement: Element | null) => any;
+  createHint?: () => HTMLElement;
+  useOnlyAsOnClickBinder?: boolean;
 };
-
-
 
 const X = 0 as const;
 const Y = 1;
 
-
-
 const MAX_VELOCITY_SIZE = 20;
-
-
 
 let isDragging = false;
 const velocity: number[] = [];
@@ -41,8 +33,6 @@ let start: Vec2 | undefined = undefined;
 
 let cancelScrollAnimation: (() => void) | undefined = undefined;
 
-
-
 export function getIsDragging(): boolean {
   return isDragging;
 }
@@ -59,19 +49,14 @@ export default function draggable(el: HTMLElement, options: DraggableOptions) {
     return;
   }
 
-
-
-  el.addEventListener("mousedown", evt => {
+  el.addEventListener("mousedown", (evt) => {
     if (evt.button !== 0) {
       return;
     }
 
     onClick = options.onClick;
     clickEvent = evt;
-    start = [
-      evt.clientX,
-      evt.clientY
-    ];
+    start = [evt.clientX, evt.clientY];
 
     const rect = el.getBoundingClientRect();
     element = el;
@@ -79,10 +64,7 @@ export default function draggable(el: HTMLElement, options: DraggableOptions) {
     hint = (options.createHint ?? defaultHint)();
     hint.dataset.dragHint = "YEP";
 
-    offset = [
-      evt.clientX - rect.left,
-      evt.clientY - rect.top,
-    ];
+    offset = [evt.clientX - rect.left, evt.clientY - rect.top];
 
     timeout = window.setTimeout(() => {
       onClick = undefined;
@@ -91,24 +73,25 @@ export default function draggable(el: HTMLElement, options: DraggableOptions) {
     }, 300);
   });
 
-
-
   const parent = el.parentElement;
 
   if (parent === null) {
     return;
   }
 
-  el.addEventListener("mousemove", evt => {
+  el.addEventListener("mousemove", (evt) => {
     if (!isDragging || hint === undefined) {
       return;
     }
 
     const rect = el.getBoundingClientRect();
-    const half = rect.top + (rect.height / 2)
+    const half = rect.top + rect.height / 2;
 
     if (evt.clientY <= half) {
-      if (el.previousElementSibling !== null && (el.previousElementSibling as HTMLElement).dataset.dragHint === "YEP") {
+      if (
+        el.previousElementSibling !== null &&
+        (el.previousElementSibling as HTMLElement).dataset.dragHint === "YEP"
+      ) {
         return;
       }
 
@@ -127,8 +110,6 @@ export default function draggable(el: HTMLElement, options: DraggableOptions) {
 
     parent.insertBefore(hint, el.nextElementSibling);
   });
-
-
 
   if (parent.dataset.onLeave === undefined) {
     parent.dataset.onLeave = "is-set";
@@ -170,9 +151,7 @@ export default function draggable(el: HTMLElement, options: DraggableOptions) {
   }
 }
 
-
-
-window.addEventListener("pointermove", evt => {
+window.addEventListener("pointermove", (evt) => {
   if (!isDragging) {
     return;
   }
@@ -187,10 +166,7 @@ window.addEventListener("pointermove", evt => {
     return;
   }
 
-  const end: Vec2 = [
-    evt.clientX,
-    evt.clientY
-  ];
+  const end: Vec2 = [evt.clientX, evt.clientY];
   const rect = element.getBoundingClientRect();
   const threshold = Math.min(rect.height, rect.width) / 2;
 
@@ -232,8 +208,6 @@ window.addEventListener("pointermove", evt => {
 
   movementY = evt.movementY;
 });
-
-
 
 window.addEventListener("pointerup", () => {
   clearTimeout(timeout);
@@ -279,8 +253,6 @@ window.addEventListener("pointerup", () => {
   cleanUp();
 });
 
-
-
 function cleanUp() {
   isDragging = false;
 
@@ -297,8 +269,6 @@ function cleanUp() {
 
   cancelScrollAnimation = undefined;
 }
-
-
 
 function dispatchDrag() {
   if (onDrag === undefined || hint === undefined || hint.parentElement === null) {
