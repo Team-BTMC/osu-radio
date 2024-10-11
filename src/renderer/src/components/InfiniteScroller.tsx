@@ -1,3 +1,6 @@
+import { OmitPropsWithoutReturnType, Optional } from "../../../@types";
+import { RequestAPI } from "../../../RequestAPI";
+import Impulse from "../lib/Impulse";
 import {
   Component,
   createSignal,
@@ -9,14 +12,22 @@ import {
   Show,
   splitProps,
 } from "solid-js";
-import {
-  InfiniteScrollerInitResponse,
-  InfiniteScrollerRequest,
-  InfiniteScrollerResponse,
-  OmitPropsWithoutReturnType,
-} from "../../../@types";
-import Impulse from "../lib/Impulse";
-import { RequestAPI } from "../../../RequestAPI";
+
+export type InfiniteScrollerRequest = {
+  index: number;
+  init: number;
+  direction: "up" | "down";
+};
+
+export type InfiniteScrollerResponse<T = any> = Optional<{
+  index: number;
+  items: T[];
+}>;
+
+export type InfiniteScrollerInitResponse = Optional<{
+  initialIndex: number;
+  count: number;
+}>;
 
 type InfinityScrollerProps = {
   apiKey: keyof OmitPropsWithoutReturnType<RequestAPI, InfiniteScrollerResponse>;

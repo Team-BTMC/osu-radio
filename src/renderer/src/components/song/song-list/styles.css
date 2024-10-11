@@ -1,0 +1,21 @@
+.song-list {
+  display: flex;
+  flex-direction: column;
+
+  .song-list__search-container {
+    z-index: 3;
+    position: sticky;
+    top: 0px;
+  }
+
+  .song-list__songs {
+    padding: 28px 20px 32px;
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding-bottom: 32px;
+    }
+  }
+}

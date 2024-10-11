@@ -1,11 +1,11 @@
-import fs from "graceful-fs";
-import { fail, ok } from "../rust-like-utils-backend/Result";
 import { AudioSource, ImageSource, Optional, Result, Song } from "../../../@types";
-import { none, some } from "../rust-like-utils-backend/Optional";
-import { SongBuilder } from "../song/SongBuilder";
-import path from "path";
-import { getAudioDurationInSeconds } from "get-audio-duration";
 import { access, readFile, stat } from "../fs-promises";
+import { none, some } from "../rust-like-utils-backend/Optional";
+import { fail, ok } from "../rust-like-utils-backend/Result";
+import { SongBuilder } from "../song/SongBuilder";
+import { getAudioDurationInSeconds } from "get-audio-duration";
+import fs from "graceful-fs";
+import path from "path";
 
 type ParsedSong = {
   song: Song;

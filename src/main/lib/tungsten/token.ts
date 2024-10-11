@@ -1,5 +1,4 @@
 // Library to create random unique tokens in given namespace
-
 import { flatRNG } from "./math";
 
 const TOKEN_CHARSET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";

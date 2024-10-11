@@ -1,15 +1,13 @@
-import { BrowserWindow } from "electron";
-import { Router } from "./lib/route-pass/Router";
-import { Storage } from "./lib/storage/Storage";
-import { dirSubmit } from "./router/dir-router";
-import { showError } from "./router/error-router";
-
-import "./router/import";
-
 import { DirParseResult, OsuParser } from "./lib/osu-file-parser/OsuParser";
+import { Router } from "./lib/route-pass/Router";
 import { orDefault } from "./lib/rust-like-utils-backend/Optional";
 import { collectTagsAndIndexSongs } from "./lib/song";
+import { Storage } from "./lib/storage/Storage";
 import { throttle } from "./lib/throttle";
+import { dirSubmit } from "./router/dir-router";
+import { showError } from "./router/error-router";
+import "./router/import";
+import { BrowserWindow } from "electron";
 
 export let mainWindow: BrowserWindow;
 

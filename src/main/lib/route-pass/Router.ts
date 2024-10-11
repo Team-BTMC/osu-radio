@@ -1,10 +1,10 @@
 import type { APIFunction, Packet } from "../../../@types";
-import { BrowserWindow, ipcMain } from "electron";
-import { TokenNamespace } from "../tungsten/token";
-import { assertNever } from "../tungsten/assertNever";
-import { cratePacket } from "./Packet";
-import { RequestAPI } from "../../../RequestAPI";
 import { ListenAPI } from "../../../ListenAPI";
+import { RequestAPI } from "../../../RequestAPI";
+import { assertNever } from "../tungsten/assertNever";
+import { TokenNamespace } from "../tungsten/token";
+import { cratePacket } from "./Packet";
+import { BrowserWindow, ipcMain } from "electron";
 
 type Pending = {
   resolve: (value: any) => void;

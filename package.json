@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Application to play your osu! songs.",
   "main": "./out/main/index.js",
+  "type": "module",
   "author": "@CaptSiro",
   "homepage": "https://github.com/Team-BTMC/osu-radio",
   "scripts": {
@@ -24,21 +25,26 @@
   "dependencies": {
     "@electron-toolkit/preload": "^3.0.1",
     "@electron-toolkit/utils": "^3.0.0",
+    "@floating-ui/dom": "^1.6.11",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/graceful-fs": "^4.1.6",
     "@xhayper/discord-rpc": "^1.2.0",
     "electron-updater": "^6.3.9",
     "fastest-levenshtein": "^1.0.16",
     "get-audio-duration": "^4.0.1",
     "graceful-fs": "^4.2.11",
+    "node-addon-api": "^8.2.1",
+    "remixicon": "^4.3.0",
     "sharp": "^0.33.5",
-    "solid-fa": "^0.2.0"
+    "solid-focus-trap": "^0.1.7"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",
     "@electron/notarize": "^2.5.0",
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.11.1",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/node": "^22.7.4",
     "@typescript-eslint/eslint-plugin": "^8.8.0",
     "@typescript-eslint/parser": "^8.8.0",
