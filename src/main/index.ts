@@ -1,9 +1,10 @@
+import { Router } from "./lib/route-pass/Router";
+import trackBounds, { getBounds, wasMaximized } from "./lib/window/resizer";
+import { main } from "./main";
+import { electronApp, is, optimizer } from "@electron-toolkit/utils";
 import { app, BrowserWindow, dialog, nativeTheme } from "electron";
 import { join } from "path";
-import { electronApp, is, optimizer } from "@electron-toolkit/utils";
-import { main } from "./main";
-import trackBounds, { getBounds, wasMaximized } from "./lib/window/resizer";
-import { Router } from "./lib/route-pass/Router";
+
 
 async function createWindow() {
   const [width, height] = getBounds();
