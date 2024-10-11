@@ -1,6 +1,6 @@
-import { Accessor, Component, createEffect, For, onCleanup, onMount, Show, Signal } from "solid-js";
-import Gradient from "../../Gradient";
 import "../../../assets/css/song/song-context-menu.css";
+import Gradient from "../../Gradient";
+import { Accessor, Component, createEffect, For, onCleanup, onMount, Show, Signal } from "solid-js";
 
 type SongContextMenuProps = {
   show: Signal<boolean>;

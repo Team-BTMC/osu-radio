@@ -1,7 +1,7 @@
 import { ListenAPI } from "./ListenAPI";
+import { RequestAPI } from "./RequestAPI";
 import type { SearchQuerySuccess } from "./main/lib/search-parser/@search-types";
 import { ConfigItem } from "./main/lib/template-parser/parser/TemplateParser";
-import { RequestAPI } from "./RequestAPI";
 
 declare global {
   interface Window {

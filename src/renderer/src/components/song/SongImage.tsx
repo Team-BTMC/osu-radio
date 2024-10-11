@@ -1,6 +1,6 @@
-import { Accessor, Component, createEffect, createSignal, JSX, onCleanup, onMount } from "solid-js";
 import defaultBackground from "../../assets/osu-default-background.jpg";
 import { availableResource, getResourcePath } from "../../lib/tungsten/resource";
+import { Accessor, Component, createEffect, createSignal, JSX, onCleanup, onMount } from "solid-js";
 
 const SET_SOURCE_EVENT = "set-source";
 const GLOBAL_GROUP = "global-group";

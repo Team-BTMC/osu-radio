@@ -1,13 +1,13 @@
+import { Scenes } from "../../@types";
+import "./keyboard-registers/initialize";
+import { TokenNamespace } from "./lib/tungsten/token";
+import ErrorScene from "./scenes/ErrorScene";
+import NoScene from "./scenes/NoScene";
+import DirSelectScene from "./scenes/dir-select-scene/DirSelectScene";
+import LoadingScene from "./scenes/loading-scene/LoadingScene";
+import MainScene from "./scenes/main-scene/MainScene";
 import type { JSX } from "solid-js";
 import { createSignal, Match, onCleanup, onMount, Switch } from "solid-js";
-import MainScene from "./scenes/main-scene/MainScene";
-import NoScene from "./scenes/NoScene";
-import LoadingScene from "./scenes/loading-scene/LoadingScene";
-import { Scenes } from "../../@types";
-import ErrorScene from "./scenes/ErrorScene";
-import { TokenNamespace } from "./lib/tungsten/token";
-import DirSelectScene from "./scenes/dir-select-scene/DirSelectScene";
-import "./keyboard-registers/initialize";
 
 export default function App(): JSX.Element {
   const [scene, setScene] = createSignal<Scenes>("");

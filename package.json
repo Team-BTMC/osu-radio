@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Application to play your osu! songs.",
   "main": "./out/main/index.js",
+  "type": "module",
   "author": "@CaptSiro",
   "homepage": "https://github.com/Team-BTMC/osu-radio",
   "scripts": {
