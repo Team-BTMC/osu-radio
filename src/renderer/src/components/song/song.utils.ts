@@ -204,12 +204,18 @@ export async function togglePlay(force?: boolean): Promise<void> {
   await play();
 }
 
-export function seek(range: ZeroToOne): void {
+export async function seek(range: ZeroToOne): Promise<void> {
   if (isNaN(player.duration)) {
     return;
   }
-
   player.currentTime = range * player.duration;
+
+  const song = await getCurrent();
+  if (!song) {
+    return;
+  }
+
+  await window.api.request("discord::play", song.song, player.currentTime);
 
   setDuration(player.duration);
   setTimestamp(player.currentTime);
