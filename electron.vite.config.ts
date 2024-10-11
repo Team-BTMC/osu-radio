@@ -1,5 +1,6 @@
 import { defineConfig, externalizeDepsPlugin } from "electron-vite";
 import { resolve } from "path";
+import lucidePreprocess from "vite-plugin-lucide-preprocess";
 import solid from "vite-plugin-solid";
 
 export default defineConfig({
@@ -15,6 +16,6 @@ export default defineConfig({
         "@renderer": resolve("src/renderer/src"),
       },
     },
-    plugins: [solid()],
+    plugins: [solid(), lucidePreprocess()],
   },
 });
