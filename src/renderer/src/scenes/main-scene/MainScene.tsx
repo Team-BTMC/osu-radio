@@ -15,7 +15,7 @@ import { Component, For, JSXElement, Match, Show, Switch } from "solid-js";
 
 const MainScene: Component = () => {
   return (
-    <div class="main-scene">
+    <div class="main-scene bg-accent">
       <Nav />
       <main class="main-scene__main">
         <TabContent />
