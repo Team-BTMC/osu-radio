@@ -26,6 +26,23 @@ async function createWindow() {
       sandbox: false,
       webSecurity: false,
     },
+    /* To be uncommented whenever the title bar is removed and
+    native buttons are added
+
+    titleBarOverlay: {
+      color: "#00000000", // transparent bg for the buttons
+      symbolColor: "#FFFFFF", // the icons are white
+      height: 30,
+    },
+    */
+  });
+
+  window.on("maximize", () => {
+    Router.dispatch(window, "window::maximizeChange", true);
+  });
+
+  window.on("unmaximize", () => {
+    Router.dispatch(window, "window::maximizeChange", false);
   });
 
   if (wasMaximized()) {

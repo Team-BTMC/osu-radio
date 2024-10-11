@@ -60,6 +60,10 @@ const Nav: Component = () => {
 
     setOs(await fetchOS());
     setMaximized(await fetchMaximized());
+
+    window.api.listen("window::maximizeChange", (maximized: boolean) => {
+      setMaximized(maximized);
+    });
   });
 
   return (

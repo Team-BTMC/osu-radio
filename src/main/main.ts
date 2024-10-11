@@ -14,6 +14,14 @@ export let mainWindow: BrowserWindow;
 export async function main(window: BrowserWindow) {
   mainWindow = window;
 
+  mainWindow.on("maximize", () => {
+    mainWindow.webContents.send("maximize-change", true);
+  });
+
+  mainWindow.on("unmaximize", () => {
+    mainWindow.webContents.send("maximize-change", false);
+  });
+
   const settings = Storage.getTable("settings");
 
   // Deleting osuSongsDir will force initial beatmap import
