@@ -1,6 +1,5 @@
 import { Component } from "solid-js";
 import InfiniteScroller from "../../InfiniteScroller";
-import SongContextMenuItem from "../../song/context-menu/SongContextMenuItem";
 import SongItem from "../../song/song-item/SongItem";
 
 type PlaylistSongListProps = {

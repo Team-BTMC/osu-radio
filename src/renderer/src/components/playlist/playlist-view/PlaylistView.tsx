@@ -1,4 +1,4 @@
-import { Component, createSignal, onCleanup, onMount } from "solid-js";
+import { Component, createSignal } from "solid-js";
 import "../../../assets/css/song/song-view.css";
 import InfiniteScroller from "../../InfiniteScroller";
 import PlaylistItem from "../playlist-item/PlaylistItem";
@@ -8,9 +8,8 @@ import IconButton from "../../icon-button/IconButton";
 
 export type PlaylistViewProps = {};
 
-
-const PlaylistView: Component<PlaylistViewProps> = (props) => {
-  const [count, setCount] = createSignal(0);
+const PlaylistView: Component<PlaylistViewProps> = () => {
+  const [_count, setCount] = createSignal(0);
   const resetListing = new Impulse();
   // const [payload, setPayload] = createSignal({});
   const [playlistName, setPlaylistName] = createSignal("");
