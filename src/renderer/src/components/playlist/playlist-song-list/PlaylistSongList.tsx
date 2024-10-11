@@ -1,14 +1,14 @@
 import { Component } from "solid-js";
-import InfiniteScroller from "../InfiniteScroller";
-import SongItem from "../song/SongItem";
-import SongContextMenuItem from "../song/context-menu/SongContextMenuItem";
+import InfiniteScroller from "../../InfiniteScroller";
+import SongContextMenuItem from "../../song/context-menu/SongContextMenuItem";
+import SongItem from "../../song/song-item/SongItem";
 
-type PlaylistSongsProps = {
+type PlaylistSongListProps = {
   playlistName: string;
   group: string;
 };
 
-const PlaylistSongsView: Component<PlaylistSongsProps> = (props) => {
+const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
   return (
     <div>
       <InfiniteScroller
@@ -38,4 +38,4 @@ const PlaylistSongsView: Component<PlaylistSongsProps> = (props) => {
   );
 };
 
-export default PlaylistSongsView;
+export default PlaylistSongList;

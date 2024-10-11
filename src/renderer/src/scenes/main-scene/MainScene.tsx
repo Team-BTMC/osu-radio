@@ -1,4 +1,4 @@
-import PlaylistView from "@renderer/components/playlist/PlaylistView";
+import PlaylistView from "@renderer/components/playlist/playlist-view/PlaylistView";
 import SongDetail from "../../components/song/song-detail/SongDetail";
 import SongList from "../../components/song/song-list/SongList";
 import { mainActiveTab, setMainActiveTab, Tab, TABS } from "./main.utils";

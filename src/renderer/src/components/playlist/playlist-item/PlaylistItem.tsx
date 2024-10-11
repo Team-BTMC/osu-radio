@@ -1,7 +1,7 @@
 import { Component } from "solid-js";
-import SongImage from "../song/SongImage";
+import SongImage from "../../song/SongImage";
 import { Playlist } from "src/@types";
-import IconButton from "../icon-button/IconButton";
+import IconButton from "../../icon-button/IconButton";
 
 type PlaylistItemProps = {
   playlist: Playlist;
