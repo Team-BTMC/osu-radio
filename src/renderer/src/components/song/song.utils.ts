@@ -14,12 +14,10 @@ const DEFAULT_SONG: Song = {
   audio: "",
   bg: "",
   osuFile: "",
-
   title: "",
   artist: "",
   creator: "",
   duration: 0,
-
   bpm: [],
   diffs: [],
 };
@@ -43,33 +41,27 @@ const [volume, setVolume] = createSignal<ZeroToOne>(0.3);
 export { volume, setVolume };
 
 const [localVolume, _setLocalVolume] = createSignal<ZeroToOne>(0.5);
-/** Sets ans saves the local volume. */
+/** Sets and saves the local volume. */
 const setLocalVolume = (newLocalVolume: ZeroToOne) => {
   _setLocalVolume(newLocalVolume);
-  saveLocalVoulme(newLocalVolume, song());
+  saveLocalVolume(newLocalVolume, song());
 };
 export { localVolume, setLocalVolume };
-// -----
+
+let bgPath: Optional<string>;
 
 const player = new Audio();
 
+// Initialize settings
 window.api.request("settings::get", "volume").then((v) => {
-  if (v.isNone) {
-    return;
-  }
-
+  if (v.isNone) return;
   setVolume(v.value);
 });
 
-
 window.api.request("settings::get", "audioDeviceId").then((v) => {
-  if (v.isNone) {
-    return;
-  }
-
+  if (v.isNone) return;
   changeAudioDevice(v.value);
 });
-
 
 function calculateVolume(): number {
   const v = volume();
@@ -79,18 +71,9 @@ player.volume = calculateVolume();
 
 const [bpm, setBPM] = createSignal<Optional<number>>(none(), {
   equals: (prev, next) => {
-    if (prev.isNone && !next.isNone) {
-      return true;
-    }
-
-    if (!prev.isNone && next.isNone) {
-      return true;
-    }
-
-    if (!prev.isNone && !next.isNone) {
-      return prev.value !== next.value;
-    }
-
+    if (prev.isNone && !next.isNone) return true;
+    if (!prev.isNone && next.isNone) return true;
+    if (!prev.isNone && !next.isNone) return prev.value !== next.value;
     return true;
   },
 });
@@ -101,34 +84,24 @@ export { isPlaying };
 
 async function getCurrent(): Promise<{ song: Song; media: URL } | undefined> {
   const song = await window.api.request("queue::current");
-
-  if (song.isNone) {
-    return;
-  }
+  if (song.isNone) return;
 
   const resource = await window.api.request("resource::getPath", song.value.audio);
-
-  if (resource.isError) {
-    return;
-  }
-
-  const media = new URL(resource.value);
+  if (resource.isError) return;
 
   return {
     song: song.value,
-    media,
+    media: new URL(resource.value),
   };
 }
 
 export async function play(): Promise<void> {
   if (media() === undefined) {
     const current = await getCurrent();
-
     if (current === undefined) {
       console.error("Cannot play current song");
       return;
     }
-
     setSong(current.song);
     setMedia(current.media);
   }
@@ -137,29 +110,35 @@ export async function play(): Promise<void> {
   await window.api.request("discord::play", currentSong, player.currentTime);
 
   const m = media();
-
   if (m !== undefined && player.src !== m.href) {
     player.src = m.href;
   }
 
   player.volume = calculateVolume();
-
   await player.play().catch((reason) => console.error(reason));
-
   setIsPlaying(true);
+
+  await setMediaSession(currentSong);
 }
 
 export async function pause() {
   const currentSong = song();
   await window.api.request("discord::pause", currentSong);
-
   setIsPlaying(false);
   player.pause();
 }
 
+export async function changeAudioDevice(deviceId: string) {
+  await window.api.request("settings::write", "audioDeviceId", deviceId);
+  if ("setSinkId" in player && typeof player.setSinkId === "function") {
+    player.setSinkId(deviceId);
+  } else {
+    console.error("Changing audio devices is not supported in your environment.");
+  }
+}
+
 export async function next() {
   await window.api.request("queue::next");
-
   const current = await getCurrent();
   if (current === undefined) {
     console.error("Can't forward queue");
@@ -168,17 +147,17 @@ export async function next() {
 
   player.src = current.media.href;
   setMedia(current.media);
-
-  if (isPlaying() === true) {
-    await play();
-  }
-
   setSong(current.song);
+
+  if (isPlaying()) {
+    await play();
+  } else {
+    await setMediaSession(current.song);
+  }
 }
 
 export async function previous() {
   await window.api.request("queue::previous");
-
   const current = await getCurrent();
   if (current === undefined) {
     console.error("Can't rollback queue");
@@ -187,12 +166,13 @@ export async function previous() {
 
   player.src = current.media.href;
   setMedia(current.media);
-
-  if (isPlaying() === true) {
-    await play();
-  }
-
   setSong(current.song);
+
+  if (isPlaying()) {
+    await play();
+  } else {
+    await setMediaSession(current.song);
+  }
 }
 
 export async function togglePlay(force?: boolean): Promise<void> {
@@ -201,12 +181,11 @@ export async function togglePlay(force?: boolean): Promise<void> {
       await play();
       return;
     }
-
     await pause();
     return;
   }
 
-  if (isPlaying() === true) {
+  if (isPlaying()) {
     await pause();
     return;
   }
@@ -215,35 +194,83 @@ export async function togglePlay(force?: boolean): Promise<void> {
 }
 
 export async function seek(range: ZeroToOne): Promise<void> {
-  if (isNaN(player.duration)) {
-    return;
-  }
+  if (isNaN(player.duration)) return;
+
   player.currentTime = range * player.duration;
-
-  const song = await getCurrent();
-  if (!song) {
-    return;
-  }
-
-  await window.api.request("discord::play", song.song, player.currentTime);
+  const currentSong = song();
+  await window.api.request("discord::play", currentSong, player.currentTime);
 
   setDuration(player.duration);
   setTimestamp(player.currentTime);
+  setMediaSessionPosition();
 }
 
+// Media Session functions
+async function setMediaSession(song: Song) {
+  bgPath = await window.api.request("resource::getMediaSessionImage", song.bg!);
+  if (bgPath.isNone) return;
+
+  if ("mediaSession" in navigator) {
+    await setMediaSessionMetadata();
+    setMediaSessionPosition();
+
+    const actionHandlers = {
+      play: () => togglePlay(),
+      pause: () => pause(),
+      previoustrack: previous,
+      nexttrack: next,
+    };
+
+    for (const [action, handler] of Object.entries(actionHandlers)) {
+      try {
+        navigator.mediaSession.setActionHandler(
+          action as MediaSessionAction,
+          handler as MediaSessionActionHandler,
+        );
+      } catch (err) {
+        console.log(`The media session action "${action}" is not supported yet.`);
+      }
+    }
+  }
+}
+
+async function setMediaSessionMetadata() {
+  if (bgPath.isNone) return;
+
+  navigator.mediaSession.metadata = new MediaMetadata({
+    title: song().title,
+    artist: song().artist,
+    artwork: [
+      { src: bgPath.value, sizes: "96x96", type: "image/png" },
+      { src: bgPath.value, sizes: "128x128", type: "image/png" },
+      { src: bgPath.value, sizes: "192x192", type: "image/png" },
+      { src: bgPath.value, sizes: "256x256", type: "image/png" },
+      { src: bgPath.value, sizes: "384x384", type: "image/png" },
+      { src: bgPath.value, sizes: "512x512", type: "image/png" },
+    ],
+  });
+}
+
+function setMediaSessionPosition() {
+  if ("setPositionState" in navigator.mediaSession) {
+    navigator.mediaSession.setPositionState({
+      duration: song().duration,
+      playbackRate: player.playbackRate,
+      position: player.currentTime,
+    });
+  }
+}
+
+// Effects
 createEffect(async () => {
   setBPM(none());
-
   const audio = (await window.api.request(
     "resource::get",
     song().audio,
     "audio",
   )) as Optional<AudioSource>;
 
-  if (audio.isNone) {
-    return;
-  }
-
+  if (audio.isNone) return;
   setLocalVolume(audio.value.volume ?? 0.5);
 });
 
@@ -259,12 +286,24 @@ createEffect(async () => {
   writeVolume(v);
 });
 
+export const saveLocalVolume = async (localVolume: ZeroToOne, song: Song) => {
+  if (isSongUndefined(song) || localVolume === 0.5) return;
+
+  const audio = (await window.api.request(
+    "resource::get",
+    song.audio,
+    "audio",
+  )) as Optional<AudioSource>;
+
+  if (!audio.isNone && audio.value.volume === localVolume) return;
+
+  await window.api.request("save::localVolume", localVolume, song.path);
+};
+
+// Event Listeners
 window.api.listen("queue::songChanged", async (s) => {
   const resource = await window.api.request("resource::getPath", s.audio);
-
-  if (resource.isError) {
-    return;
-  }
+  if (resource.isError) return;
 
   setMedia(new URL(resource.value));
   setSong(s);
@@ -283,11 +322,12 @@ player.addEventListener("timeupdate", () => {
   setTimestamp(player.currentTime);
   setDuration(player.duration);
 
-  if (isSongUndefined(song()) || song().bpm[0][OFFSET] / 1000 > player.currentTime) {
+  const currentSong = song();
+  if (isSongUndefined(currentSong) || currentSong.bpm[0]?.[OFFSET] / 1000 > player.currentTime) {
     return;
   }
 
-  const bpmOpt = currentBPM(player.currentTime, song().bpm);
+  const bpmOpt = currentBPM(player.currentTime, currentSong.bpm);
   const current = bpm();
 
   if (!bpmOpt.isNone && !current.isNone && bpmOpt.value !== current.value) {
@@ -307,32 +347,4 @@ function currentBPM(offset: number, changes: number[][]): Optional<number> {
   }
 
   return some(msToBPM(changes[changes.length - 1][BPM]));
-}
-
-export const saveLocalVoulme = async (localVolume: ZeroToOne, song: Song) => {
-  if (isSongUndefined(song) || localVolume === 0.5) {
-    return;
-  }
-
-  const audio = (await window.api.request(
-    "resource::get",
-    song.audio,
-    "audio",
-  )) as Optional<AudioSource>;
-
-  if (!audio.isNone && audio.value.volume === localVolume) {
-    return;
-  }
-
-  await window.api.request("save::localVolume", localVolume, song.path);
-};
-
-
-export async function changeAudioDevice(deviceId: string) {
-  await window.api.request("settings::write", "audioDeviceId", deviceId);
-  if ("setSinkId" in player && typeof player.setSinkId === "function") {
-    player.setSinkId(deviceId);
-  } else {
-    console.error("Changing audio devices is not supported in your enviornment.");
-  }
 }
