@@ -1,15 +1,26 @@
 import Bar from "../bar/Bar";
+import Dropdown from "../dropdown/Dropdown";
 import "./styles.css";
-import { setVolume, volume } from "@renderer/components/song/song.utils";
-import { Component, JSX, Match, mergeProps, Switch } from "solid-js";
+import { changeAudioDevice, setVolume, volume } from "@renderer/components/song/song.utils";
+import {
+  Component,
+  createEffect,
+  createSignal,
+  JSX,
+  Match,
+  mergeProps,
+  onMount,
+  Switch,
+} from "solid-js";
 
 const Settings: Component = () => {
   return (
     <div class="settings">
       <SettingsSection title="General" icon="ri-global-line">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, voluptatem.
+        Empty
       </SettingsSection>
       <SettingsSection title="Audio" icon="ri-volume-up-line">
+        <AudioDeviceSetting />
         <GlobalVolumeSetting />
       </SettingsSection>
     </div>
@@ -69,6 +80,50 @@ const GlobalVolumeSetting: Component = () => {
           <Bar fill={volume()} setFill={setVolume} />
         </div>
       </div>
+    </Setting>
+  );
+};
+
+const AudioDeviceSetting: Component = () => {
+  const [isPopoverOpen, setIsPopoverOpen] = createSignal(false);
+  const [selectedAudioDevice, setSelectedAudioDevice] = createSignal("");
+  const [audioDevices, setAudioDevices] = createSignal(new Map<string, () => any>());
+
+  const setAudioDevicesMap = () => {
+    const audioMap = new Map<string, () => any>();
+    navigator.mediaDevices.enumerateDevices().then((r) => {
+      for (const device of r) {
+        if (device.kind === "audiooutput") {
+          audioMap.set(device.label, () => changeAudioDevice(device.deviceId));
+        }
+      }
+      setAudioDevices(audioMap);
+    });
+  };
+
+  onMount(() => {
+    createEffect(setAudioDevicesMap);
+  });
+
+  const handleValueChange = (newSelectedOption: string) => {
+    setSelectedAudioDevice(newSelectedOption);
+    setIsPopoverOpen(false);
+    audioDevices().get(newSelectedOption)?.();
+  };
+
+  return (
+    <Setting name="audio-device" label="Choose audio device">
+      <Dropdown isOpen={isPopoverOpen} onValueChange={setIsPopoverOpen}>
+        <Dropdown.SelectTrigger>
+          {selectedAudioDevice() || "No device selected"}
+        </Dropdown.SelectTrigger>
+
+        <Dropdown.List value={selectedAudioDevice} onValueChange={handleValueChange}>
+          {Array.from(audioDevices().keys()).map((audioDevice) => (
+            <Dropdown.Item value={audioDevice}>{audioDevice}</Dropdown.Item>
+          ))}
+        </Dropdown.List>
+      </Dropdown>
     </Setting>
   );
 };

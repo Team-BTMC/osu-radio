@@ -57,3 +57,27 @@
     background: var(--hover-background);
   }
 }
+
+.dropdown-select-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--rounded);
+  background: var(--surface);
+
+  .dropdown-trigger__icon {
+    color: var(--text-400);
+    font-size: 20px;
+  }
+
+  .dropdown-trigger__text {
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  &:is(:hover, :focus) {
+    background: var(--hover-background);
+  }
+}

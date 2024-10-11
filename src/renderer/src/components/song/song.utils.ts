@@ -61,6 +61,16 @@ window.api.request("settings::get", "volume").then((v) => {
   setVolume(v.value);
 });
 
+
+window.api.request("settings::get", "audioDeviceId").then((v) => {
+  if (v.isNone) {
+    return;
+  }
+
+  changeAudioDevice(v.value);
+});
+
+
 function calculateVolume(): number {
   const v = volume();
   return v + (localVolume() - 0.5) * 2 * v;
@@ -316,3 +326,13 @@ export const saveLocalVoulme = async (localVolume: ZeroToOne, song: Song) => {
 
   await window.api.request("save::localVolume", localVolume, song.path);
 };
+
+
+export async function changeAudioDevice(deviceId: string) {
+  await window.api.request("settings::write", "audioDeviceId", deviceId);
+  if ("setSinkId" in player && typeof player.setSinkId === "function") {
+    player.setSinkId(deviceId);
+  } else {
+    console.error("Changing audio devices is not supported in your enviornment.");
+  }
+}
