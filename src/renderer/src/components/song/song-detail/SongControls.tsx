@@ -94,7 +94,8 @@ const SongControls: Component<SongControlsProps> = () => {
 
       {/* Right part */}
       <div class="song-controls__right-part">
-        <IconButton>
+        {/* // TODO - modal or something so the user can select a playlist */}
+        <IconButton onClick={()=> window.api.request("playlist::add", "test", song())} title="Add to playlist">
           <i class="ri-add-fill" />
         </IconButton>
       </div>

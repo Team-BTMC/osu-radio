@@ -1,3 +1,4 @@
+import PlaylistView from "@renderer/components/playlist/PlaylistView";
 import SongDetail from "../../components/song/song-detail/SongDetail";
 import SongList from "../../components/song/song-list/SongList";
 import { mainActiveTab, setMainActiveTab, Tab, TABS } from "./main.utils";
@@ -71,6 +72,9 @@ const TabContent: Component = () => {
       <Switch fallback={<div>Tab not found</div>}>
         <Match when={mainActiveTab() === TABS.SONGS.value}>
           <SongList isAllSongs={true} />
+        </Match>
+        <Match when={mainActiveTab() === TABS.PLAYLISTS.value}>
+          <PlaylistView />
         </Match>
         <Match when={mainActiveTab() === TABS.SETTINGS.value}>
           <Settings />

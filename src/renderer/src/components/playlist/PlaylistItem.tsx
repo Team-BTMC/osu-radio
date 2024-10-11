@@ -1,6 +1,7 @@
 import { Component } from "solid-js";
 import SongImage from "../song/SongImage";
 import { Playlist } from "src/@types";
+import IconButton from "../icon-button/IconButton";
 
 type PlaylistItemProps = {
   playlist: Playlist;
@@ -23,7 +24,7 @@ function formatPlaylistTime(seconds: number) {
 const PlaylistItem: Component<PlaylistItemProps> = (props) => {
   return (
     <div
-      class="song-item"
+      style="margin-bottom: 5px; border: 1px solid white;"
       onClick={() => {
         console.log(props.playlist.songs);
       }}
@@ -38,6 +39,9 @@ const PlaylistItem: Component<PlaylistItemProps> = (props) => {
           <h3>{props.playlist.name}</h3>
           <p>{props.playlist.count} songs</p>
           <p>{formatPlaylistTime(Math.round(props.playlist.length))}</p>
+          <IconButton onClick={()=>window.api.request("playlist::delete", props.playlist.name)}>
+            <i class="ri-delete-bin-7-fill" />
+          </IconButton>
         </div>
       </div>
     </div>

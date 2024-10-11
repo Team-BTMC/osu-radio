@@ -4,6 +4,7 @@ import { namespace } from "../../../App";
 import Impulse from "../../../lib/Impulse";
 import { none, some } from "../../../lib/rust-like-utils-client/Optional";
 import InfiniteScroller from "../../InfiniteScroller";
+import AddToPlaylist from "../context-menu/items/AddToPlaylist";
 import PlayNext from "../context-menu/items/PlayNext";
 import SongItem from "../song-item/SongItem";
 import SongListSearch from "../song-list-search/SongListSearch";
@@ -91,7 +92,7 @@ const SongList: Component<SongViewProps> = (props) => {
           builder={(s) => (
             <SongItem song={s} group={group} onSelect={createQueue}>
               <PlayNext path={s.path} />
-              <button>Add to playlist</button>
+              <AddToPlaylist song={s} />
             </SongItem>
           )}
         />

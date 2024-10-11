@@ -12,6 +12,11 @@ export const TABS = {
     value: "songs",
     icon: "ri-music-fill",
   },
+  PLAYLISTS: {
+    label: "Playlists",
+    value: "playlists",
+    icon: "ri-settings-fill",
+  },
   SETTINGS: {
     label: "Settings",
     value: "settings",
