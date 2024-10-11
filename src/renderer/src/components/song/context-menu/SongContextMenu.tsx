@@ -69,7 +69,6 @@ const SongContextMenu: Component<SongContextMenuProps> = (props) => {
   );
 };
 
-
 export default SongContextMenu;
 
 export function ignoreClickInContextMenu(fn: (evt: MouseEvent) => any): (evt: MouseEvent) => void {

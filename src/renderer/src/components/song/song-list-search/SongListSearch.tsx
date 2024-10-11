@@ -74,7 +74,10 @@ const SongListSearch: Component<SearchProps> = (props) => {
             setSongsSearch(e.target.value);
           }}
         />
-        <label class="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-600" for="search_input">
+        <label
+          class="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-600"
+          for="search_input"
+        >
           <i class="ri-search-2-line" />
         </label>
       </div>
@@ -83,10 +86,11 @@ const SongListSearch: Component<SearchProps> = (props) => {
         <SongListSearchOrderBy setOrder={props.setOrder} />
       </div>
     </div>
-  )
-}
+  );
+};
 
-{/* <div class="results row">
+{
+  /* <div class="results row">
         <button
           title={
             props.count() === 0 ? "Can not save results as playlist" : "Save results as playlist"
@@ -99,11 +103,14 @@ const SongListSearch: Component<SearchProps> = (props) => {
           <OrderSelect setOrder={props.setOrder} disabled={props.count() === 0} />
           <TagSelect tags={props.tags} disabled={props.count() === 0} />
         </div>
-      </div> */}
+      </div> */
+}
 
-{/* <div class="error-container" classList={{ 'display-none': !doShowError() }}>
+{
+  /* <div class="error-container" classList={{ 'display-none': !doShowError() }}>
         <p class="message" ref={errorMessage}></p>
         <button class="suggestion" ref={suggestion} classList={{ 'display-none': !doShowSuggestion() }}></button>
-      </div> */}
+      </div> */
+}
 
 export default SongListSearch;

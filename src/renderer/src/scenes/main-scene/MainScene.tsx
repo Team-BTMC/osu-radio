@@ -26,7 +26,11 @@ const MainScene: Component = () => {
       </main>
 
       <div class="absolute inset-0 z-[-1] pointer-events-none opacity-[0.072]">
-        <SongImage src={song().bg} instantLoad={true} class="w-full h-full bg-cover filter blur-xl" />
+        <SongImage
+          src={song().bg}
+          instantLoad={true}
+          class="w-full h-full bg-cover filter blur-xl"
+        />
       </div>
     </div>
   );
@@ -41,7 +45,7 @@ const Nav: Component = () => {
 
       <div class="ml-auto">
         <IconButton
-          class={`text-text-700 ${songQueueModalOpen() ? 'text-text-900' : ''}`}
+          class={`text-text-700 ${songQueueModalOpen() ? "text-text-900" : ""}`}
           onClick={toggleSongQueueModalOpen}
         >
           <i class="ri-stack-fill" />
@@ -58,11 +62,13 @@ const NavItem: Component<NavItemProps> = ({ children, value, icon }) => {
   return (
     <button
       class={`flex items-center gap-4 px-4 py-1 rounded-sm hover:bg-surface
-        ${mainActiveTab() === value ? 'bg-surface' : ''}`}
+        ${mainActiveTab() === value ? "bg-surface" : ""}`}
       onclick={() => setMainActiveTab(value)}
     >
-      <i class={`${icon} ${mainActiveTab() === value ? 'text-text-900' : 'text-text-600'}`} />
-      <span class={`text-base font-semibold ${mainActiveTab() === value ? 'text-on-background' : 'text-text-600'}`}>
+      <i class={`${icon} ${mainActiveTab() === value ? "text-text-900" : "text-text-600"}`} />
+      <span
+        class={`text-base font-semibold ${mainActiveTab() === value ? "text-on-background" : "text-text-600"}`}
+      >
         {children}
       </span>
     </button>

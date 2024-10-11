@@ -11,7 +11,11 @@ const SongDetail: Component = () => {
   return (
     <div class="flex flex-col h-full p-8 max-w-2xl w-full">
       <div class="flex-grow mb-8 grid place-items-center">
-        <SongImage src={song().bg} instantLoad={true} class="size-80 bg-cover bg-center object-cover rounded-lg shadow-lg" />
+        <SongImage
+          src={song().bg}
+          instantLoad={true}
+          class="size-80 bg-cover bg-center object-cover rounded-lg shadow-lg"
+        />
       </div>
 
       <div class="space-y-4">

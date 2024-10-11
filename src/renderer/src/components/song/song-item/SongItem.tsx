@@ -42,7 +42,7 @@ const SongItem: Component<SongItemProps> = ({
   onMount(() => {
     draggable(item, {
       onClick: ignoreClickInContextMenu(() => onSelect(song.path)),
-      onDrop: onDrop ?? (() => { }),
+      onDrop: onDrop ?? (() => {}),
       createHint: SongHint,
       useOnlyAsOnClickBinder: !isDraggable || selectedSong().path === song.path,
     });
@@ -54,10 +54,11 @@ const SongItem: Component<SongItemProps> = ({
 
   return (
     <div
-      class={`relative isolate my-4 select-none rounded-md ${selectedSong().path === song.path
-        ? "data-[active=true]:after:bg-black/30 data-[active=true]:outline data-[active=true]:outline-2 data-[active=true]:outline-accent"
-        : ""
-        } hover:after:bg-overlay`}
+      class={`relative isolate my-4 select-none rounded-md ${
+        selectedSong().path === song.path
+          ? "data-[active=true]:after:bg-black/30 data-[active=true]:outline data-[active=true]:outline-2 data-[active=true]:outline-accent"
+          : ""
+      } hover:after:bg-overlay`}
       data-active={selectedSong().path === song.path}
       ref={item}
       data-url={song.bg}
@@ -70,7 +71,9 @@ const SongItem: Component<SongItemProps> = ({
       />
 
       <div class="flex flex-col justify-center min-h-[72px] p-3 bg-black/50 overflow-hidden rounded-md">
-        <h3 class="text-[22px] leading-7 font-extrabold text-shadow shadow-black/60">{song.title}</h3>
+        <h3 class="text-[22px] leading-7 font-extrabold text-shadow shadow-black/60">
+          {song.title}
+        </h3>
         <p class="text-base text-subtext">{song.artist}</p>
       </div>
     </div>

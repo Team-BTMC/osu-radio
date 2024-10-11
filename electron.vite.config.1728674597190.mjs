@@ -2,22 +2,21 @@
 import { defineConfig, externalizeDepsPlugin } from "electron-vite";
 import { resolve } from "path";
 import solid from "vite-plugin-solid";
+
 var electron_vite_config_default = defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin()]
+    plugins: [externalizeDepsPlugin()],
   },
   preload: {
-    plugins: [externalizeDepsPlugin()]
+    plugins: [externalizeDepsPlugin()],
   },
   renderer: {
     resolve: {
       alias: {
-        "@renderer": resolve("src/renderer/src")
-      }
+        "@renderer": resolve("src/renderer/src"),
+      },
     },
-    plugins: [solid()]
-  }
+    plugins: [solid()],
+  },
 });
-export {
-  electron_vite_config_default as default
-};
+export { electron_vite_config_default as default };
