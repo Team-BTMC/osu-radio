@@ -15,7 +15,7 @@ export const TABS = {
   PLAYLISTS: {
     label: "Playlists",
     value: "playlists",
-    icon: "ri-settings-fill",
+    icon: "ri-play-list-fill",
   },
   SETTINGS: {
     label: "Settings",

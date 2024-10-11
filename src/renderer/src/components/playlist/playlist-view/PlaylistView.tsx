@@ -35,7 +35,7 @@ const PlaylistView: Component<PlaylistViewProps> = (props) => {
       */}
       <div class="song-list-search">
         <div class="song-list-search__input-container">
-          <input type="text" id="playlist_input" class="song-list-search__input" onInput={(e)=>{setPlaylistName(e.target.value)}} />
+          <input type="text" id="playlist_input" class="song-list-search__input" placeholder="Create a playlist" onInput={(e)=>{setPlaylistName(e.target.value)}} />
           <label class="song-list-search__icon-container" for="search_input">
             <IconButton onClick={()=>{createPlaylist()}}>
               <i class="ri-add-fill" />
@@ -44,7 +44,7 @@ const PlaylistView: Component<PlaylistViewProps> = (props) => {
         </div>
       </div>
       
-      <p>You have {count()} playlists</p>
+      {/* <p>You have {count()} playlists</p> */}
       <InfiniteScroller
         apiKey={"query::playlists"}
         // apiData={payload()}

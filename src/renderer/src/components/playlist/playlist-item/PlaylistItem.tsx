@@ -2,6 +2,7 @@ import { Component } from "solid-js";
 import SongImage from "../../song/SongImage";
 import { Playlist } from "src/@types";
 import IconButton from "../../icon-button/IconButton";
+import "./styles.css";
 
 type PlaylistItemProps = {
   playlist: Playlist;
@@ -21,27 +22,42 @@ function formatPlaylistTime(seconds: number) {
   return hours + " hours " + minutes + " minutes";
 }
 
+function getSongImage(playlist: Playlist) {
+  const songs = playlist.songs
+  if(songs.length === 0 || songs[0].bg === undefined || songs[0].bg === "") {
+    return "";
+  } else {
+    return songs[0].bg;
+  }
+}
+
 const PlaylistItem: Component<PlaylistItemProps> = (props) => {
   return (
     <div
-      style="margin-bottom: 5px; border: 1px solid white;"
+      class="playlist-item"
       onClick={() => {
         console.log(props.playlist.songs);
       }}
     >
-      <div class={"song-item-container"}>
-        <SongImage
-          src="/mnt/misc/progetti/osu-radio/src/renderer/src/assets/osu-default-background-small.jpg"
-          group={props.group}
-        />
+      <div class="playlist-item-container">
+        <div class="playlist-item__playlist-img">
+          <SongImage
+            src={getSongImage(props.playlist)}
+            group={props.group}
+          />
+        </div>
 
-        <div class="column">
-          <h3>{props.playlist.name}</h3>
-          <p>{props.playlist.count} songs</p>
-          <p>{formatPlaylistTime(Math.round(props.playlist.length))}</p>
-          <IconButton onClick={()=>window.api.request("playlist::delete", props.playlist.name)}>
-            <i class="ri-delete-bin-7-fill" />
-          </IconButton>
+        <div class="playlist-item__playlist-info">
+          <div class="playlist-item__playlist-info__text">
+            <h3>{props.playlist.name}</h3>
+            <p>{props.playlist.count} songs</p>
+            {/* <p>{formatPlaylistTime(Math.round(props.playlist.length))}</p> */}
+          </div>
+          <div class="playlist-item__playlist-info__button">
+            <IconButton onClick={()=>window.api.request("playlist::delete", props.playlist.name)}>
+              <i class="ri-delete-bin-7-fill" />
+            </IconButton>
+          </div>
         </div>
       </div>
     </div>
