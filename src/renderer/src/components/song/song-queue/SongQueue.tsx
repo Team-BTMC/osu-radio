@@ -6,7 +6,6 @@ import InfiniteScroller from "../../InfiniteScroller";
 import SongContextMenuItem from "../context-menu/SongContextMenuItem";
 import SongItem from "../song-item/SongItem";
 import { setSongQueueModalOpen } from "./song-queue.utils";
-import "./styles.css";
 import IconButton from "@renderer/components/icon-button/IconButton";
 import { Component, createSignal, onCleanup, onMount } from "solid-js";
 

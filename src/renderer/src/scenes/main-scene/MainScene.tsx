@@ -65,9 +65,9 @@ const NavItem: Component<NavItemProps> = ({ children, value, icon }) => {
         ${mainActiveTab() === value ? "bg-surface" : ""}`}
       onclick={() => setMainActiveTab(value)}
     >
-      <i class={`${icon} ${mainActiveTab() === value ? "text-text-900" : "text-text-600"}`} />
+      <i class={`${icon} ${mainActiveTab() === value ? "text-text" : "text-subtext"}`} />
       <span
-        class={`text-base font-semibold ${mainActiveTab() === value ? "text-on-background" : "text-text-600"}`}
+        class={`text-base font-semibold ${mainActiveTab() === value ? "text-text" : "text-subtext"}`}
       >
         {children}
       </span>
@@ -77,7 +77,7 @@ const NavItem: Component<NavItemProps> = ({ children, value, icon }) => {
 
 const TabContent: Component = () => {
   return (
-    <div class="overflow-y-auto w-[480px] min-w-[320px] h-full bg-opacity-72 bg-background border-r border-stroke">
+    <div class="overflow-y-auto w-[480px] min-w-[320px] h-full bg-opacity-72 bg-thick-material border-r border-stroke">
       <Switch fallback={<div>Tab not found</div>}>
         <Match when={mainActiveTab() === TABS.SONGS.value}>
           <SongList isAllSongs={true} />
