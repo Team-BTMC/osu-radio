@@ -16,6 +16,6 @@ export default defineConfig({
         "@renderer": resolve("src/renderer/src"),
       },
     },
-    plugins: [solid(), lucidePreprocess()],
+    plugins: [lucidePreprocess(), solid()],
   },
 });
