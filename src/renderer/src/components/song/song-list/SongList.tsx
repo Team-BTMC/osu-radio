@@ -78,7 +78,7 @@ const SongList: Component<SongViewProps> = (props) => {
         <SongListSearch tags={tagsSignal} setOrder={setOrder} count={count} error={searchError} />
       </div>
 
-      <div class="flex-grow overflow-y-auto p-5">
+      <div class="flex-grow overflow-y-auto p-5 py-0">
         <InfiniteScroller
           apiKey={"query::songsPool"}
           apiData={payload()}
