@@ -4,29 +4,17 @@ import { none, some } from "../lib/rust-like-utils-backend/Optional";
 import { Storage } from "../lib/storage/Storage";
 
 Router.respond("playlist::add", (_evt, playlistName, song) => {
-  console.log("add this to " + playlistName + ": " + song);
-
-  //Storage.removeTable("playlists");
   const playlists = Storage.getTable("playlists");
   let playlist = playlists.get(playlistName);
-  //temporary, playlist should already exist
+
   if (playlist.isNone) {
-    // create playlist
-    const empty = { name: playlistName, count: 0, length: 0, songs: [] };
-    playlists.write(playlistName, empty);
+    return;
   }
-  playlist = playlists.get(playlistName);
 
   playlist.value.songs.push(song);
   playlist.value.count = playlist.value.count + 1;
   playlist.value.length = playlist.value.length + song.duration;
   playlists.write(playlistName, playlist.value);
-  console.log(
-    "MONKA",
-    playlists.getStruct(),
-    Object.keys(Storage.getTable("playlists").getStruct()),
-  );
-  console.log(playlist.value);
 });
 
 Router.respond("playlist::create", (_evt, name) => {
@@ -47,10 +35,15 @@ Router.respond("playlist::remove", (_evt, playlistName, song) => {
   console.log("delete song from " + playlistName, song);
   const playlists = Storage.getTable("playlists");
   let playlist = playlists.get(playlistName);
+
+  if(playlist.isNone){
+    return;
+  }
+
   const songIndex = playlist.value.songs.indexOf(song, 0);
   if (songIndex > -1) {
     playlist.value.songs.splice(songIndex, 1);
-    playlists.write(playlistName, playlist);
+    playlists.write(playlistName, playlist.value);
   }
 });
 
@@ -74,6 +67,11 @@ Router.respond("query::playlists", (_evt, request) => {
   let test: Playlist[] = [];
   playlists.forEach((v) => {
     const plist = p.get(v);
+
+    if(plist.isNone){
+      return;
+    }
+
     test.push({
       name: v,
       count: plist.value.count,
@@ -109,6 +107,11 @@ Router.respond("query::playlists", (_evt, request) => {
 
 Router.respond("query::playlistSongs::init", (_evt, playlistName) => {
   const songs = Storage.getTable("playlists").get(playlistName);
+
+  if(songs.isNone){
+    return none();
+  }
+
   const count = Object.keys(songs.value.songs).length;
 
   return some({
@@ -118,7 +121,13 @@ Router.respond("query::playlistSongs::init", (_evt, playlistName) => {
 });
 
 Router.respond("query::playlistSongs", (_evt, playlistName, request) => {
-  const songs = Storage.getTable("playlists").get(playlistName).value.songs;
+  const playlist = Storage.getTable("playlists").get(playlistName);
+
+  if(playlist.isNone){
+    return none();
+  }
+
+  const songs = playlist.value.songs;
 
   if (
     songs === undefined ||
