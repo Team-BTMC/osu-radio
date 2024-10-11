@@ -34,6 +34,7 @@
     "fastest-levenshtein": "^1.0.16",
     "get-audio-duration": "^4.0.1",
     "graceful-fs": "^4.2.11",
+    "lucide-solid": "^0.452.0",
     "node-addon-api": "^8.2.1",
     "remixicon": "^4.3.0",
     "sharp": "^0.33.5",
