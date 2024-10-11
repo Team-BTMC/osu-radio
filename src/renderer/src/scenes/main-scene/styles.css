@@ -83,6 +83,10 @@
       background: var(--hover-background);
     }
 
+    .nav-window-control.close:hover {
+      background: red;
+    }
+
     .nav-item {
       display: flex;
       align-items: center;

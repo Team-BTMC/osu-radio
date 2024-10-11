@@ -11,7 +11,7 @@ import {
   toggleSongQueueModalOpen,
 } from "@renderer/components/song/song-queue/song-queue.utils";
 import { song } from "@renderer/components/song/song.utils";
-import { Maximize, Minimize2, Minus, X } from "lucide-solid";
+import { Minimize2, Minus, Square, X } from "lucide-solid";
 import {
   Accessor,
   Component,
@@ -101,9 +101,12 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
         }}
         class="nav-window-control"
       >
-        {props.maximized() ? <Minimize2 size={20} /> : <Maximize size={20} />}
+        {props.maximized() ? <Minimize2 size={20} /> : <Square size={18} />}
       </button>
-      <button onclick={async () => window.api.request("window::close")} class="nav-window-control">
+      <button
+        onclick={async () => window.api.request("window::close")}
+        class="nav-window-control close"
+      >
         <X size={20} />
       </button>
     </div>
