@@ -63,10 +63,10 @@ const SongListSearch: Component<SearchProps> = (props) => {
   // });
 
   return (
-    <div class="song-list-search">
-      <div class="song-list-search__input-container">
+    <div class="p-5">
+      <div class="relative mb-4">
         <input
-          class="song-list-search__input"
+          class="w-full h-10 pl-10 pr-4 rounded-full bg-thin-material focus:outline-none focus:ring-2 focus:ring-accent"
           type="text"
           id="search_input"
           placeholder="Type to search songs..."
@@ -74,16 +74,19 @@ const SongListSearch: Component<SearchProps> = (props) => {
             setSongsSearch(e.target.value);
           }}
         />
-        <label class="song-list-search__icon-container" for="search_input">
+        <label class="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-600" for="search_input">
           <i class="ri-search-2-line" />
         </label>
       </div>
 
-      <div class="song-list-search__filters">
+      <div class="flex items-center space-x-4">
         <SongListSearchOrderBy setOrder={props.setOrder} />
       </div>
+    </div>
+  )
+}
 
-      {/* <div class="results row">
+{/* <div class="results row">
         <button
           title={
             props.count() === 0 ? "Can not save results as playlist" : "Save results as playlist"
@@ -98,12 +101,9 @@ const SongListSearch: Component<SearchProps> = (props) => {
         </div>
       </div> */}
 
-      {/* <div class="error-container" classList={{ 'display-none': !doShowError() }}>
+{/* <div class="error-container" classList={{ 'display-none': !doShowError() }}>
         <p class="message" ref={errorMessage}></p>
         <button class="suggestion" ref={suggestion} classList={{ 'display-none': !doShowSuggestion() }}></button>
       </div> */}
-    </div>
-  );
-};
 
 export default SongListSearch;

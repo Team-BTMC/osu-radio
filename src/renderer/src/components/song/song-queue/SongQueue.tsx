@@ -82,36 +82,38 @@ const SongQueue: Component = () => {
   });
 
   return (
-    <div ref={view} class="song-queue">
-      <div class="song-queue_header">
-        <h2 class="song-queue_title">Next songs on the queue ({count()})</h2>
+    <div ref={view} class="h-full flex flex-col">
+      <div class="sticky top-0 z-10 flex items-center justify-between p-5 bg-black bg-opacity-90 backdrop-blur-md">
+        <h2 class="text-lg font-semibold">Next songs on the queue ({count()})</h2>
         <IconButton onClick={handleCloseButtonClick}>
           <i class="ri-close-line" />
         </IconButton>
       </div>
 
-      <InfiniteScroller
-        apiKey={"query::queue"}
-        apiInitKey={"query::queue::init"}
-        setCount={setCount}
-        reset={resetListing}
-        onLoadItems={onSongsLoad}
-        fallback={<div>No queue...</div>}
-        builder={(s) => (
-          <SongItem
-            song={s}
-            group={group}
-            selectable={true}
-            draggable={true}
-            onSelect={() => window.api.request("queue::play", s.path)}
-            onDrop={onDrop(s)}
-          >
-            <SongContextMenuItem onClick={() => window.api.request("queue::removeSong", s.path)}>
-              Remove from queue
-            </SongContextMenuItem>
-          </SongItem>
-        )}
-      />
+      <div class="flex-grow overflow-y-auto">
+        <InfiniteScroller
+          apiKey={"query::queue"}
+          apiInitKey={"query::queue::init"}
+          setCount={setCount}
+          reset={resetListing}
+          onLoadItems={onSongsLoad}
+          fallback={<div class="text-center py-8 text-text-600">No queue...</div>}
+          builder={(s) => (
+            <SongItem
+              song={s}
+              group={group}
+              selectable={true}
+              draggable={true}
+              onSelect={() => window.api.request("queue::play", s.path)}
+              onDrop={onDrop(s)}
+            >
+              <SongContextMenuItem onClick={() => window.api.request("queue::removeSong", s.path)}>
+                Remove from queue
+              </SongContextMenuItem>
+            </SongItem>
+          )}
+        />
+      </div>
     </div>
   );
 };

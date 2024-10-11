@@ -62,8 +62,8 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
   });
 
   return (
-    <div class="song-list-search-order-by">
-      <IconButton class="song-list-search-order-by__icon" onClick={switchDirections}>
+    <div class="flex items-center space-x-2">
+      <IconButton class="text-xl" onClick={switchDirections}>
         <Switch>
           <Match when={direction() === "asc"}>
             <i class="ri-sort-asc" />
@@ -74,8 +74,9 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
         </Switch>
       </IconButton>
       <Dropdown isOpen={isOpen} onValueChange={setIsOpen}>
-        <Dropdown.Trigger>{optionLabel()}</Dropdown.Trigger>
+        <Dropdown.Trigger class="px-3 py-1 bg-thin-material rounded-md">{optionLabel()}</Dropdown.Trigger>
         <Dropdown.List
+          class="bg-surface shadow-lg rounded-md overflow-hidden"
           onValueChange={(newSelectedOption) => {
             setIsOpen(false);
             setOption(newSelectedOption);
@@ -84,7 +85,9 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
           value={option}
         >
           {orderOptions.map((option) => (
-            <Dropdown.Item value={option.value}>{option.text}</Dropdown.Item>
+            <Dropdown.Item class="px-4 py-2 hover:bg-accent/20 transition-colors duration-200" value={option.value}>
+              {option.text}
+            </Dropdown.Item>
           ))}
         </Dropdown.List>
       </Dropdown>

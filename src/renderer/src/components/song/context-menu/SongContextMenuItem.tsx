@@ -17,7 +17,14 @@ const SongContextMenuItem: Component<SongContextMenuItemProps> = (props) => {
     item?.removeEventListener("click", props.onClick);
   });
 
-  return <button ref={divAccessor}>{props.children}</button>;
+  return (
+    <button
+      ref={divAccessor}
+      class="w-full text-left px-4 py-2 hover:bg-accent/20 transition-colors duration-200"
+    >
+      {props.children}
+    </button>
+  );
 };
 
 export default SongContextMenuItem;
