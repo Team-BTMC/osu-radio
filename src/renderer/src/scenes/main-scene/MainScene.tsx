@@ -54,12 +54,12 @@ const Nav: Component = () => {
       return await window.api.request("settings::getos");
     };
 
-    const fetchmaximized = async () => {
-      return await window.api.request("settings::maximized");
+    const fetchMaximized = async () => {
+      return await window.api.request("window::maximized");
     };
 
     setOs(await fetchOS());
-    setMaximized(await fetchmaximized());
+    setMaximized(await fetchMaximized());
   });
 
   return (
@@ -76,33 +76,30 @@ const Nav: Component = () => {
           <i class="ri-stack-fill nav__queue-icon" />
         </IconButton>
       </div>
-      {os() !== "darwin" && <NavWindowControls maximized={maximized} setMaximized={setMaximized} />}
+      {os() !== "darwin" && <WindowControls maximized={maximized} setMaximized={setMaximized} />}
     </nav>
   );
 };
 
-function NavWindowControls(props: { maximized: Accessor<boolean>; setMaximized: Setter<boolean> }) {
+function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Setter<boolean> }) {
   return (
     <div class="nav-window-controls">
       <button
-        onclick={async () => window.api.request("settings::minimize")}
+        onclick={async () => window.api.request("window::minimize")}
         class="nav-window-control"
       >
         <Minus size={20} />
       </button>
       <button
         onclick={async () => {
-          window.api.request("settings::maximize");
+          window.api.request("window::maximize");
           props.setMaximized(!props.maximized());
         }}
         class="nav-window-control"
       >
         {props.maximized() ? <Minimize2 size={20} /> : <Maximize size={20} />}
       </button>
-      <button
-        onclick={async () => window.api.request("settings::close")}
-        class="nav-window-control"
-      >
+      <button onclick={async () => window.api.request("window::close")} class="nav-window-control">
         <X size={20} />
       </button>
     </div>
