@@ -108,6 +108,7 @@ export async function play(): Promise<void> {
 
   const currentSong = song();
   await window.api.request("discord::play", currentSong, player.currentTime);
+  document.title = `${currentSong.artist} - ${currentSong.title}`;
 
   const m = media();
   if (m !== undefined && player.src !== m.href) {
