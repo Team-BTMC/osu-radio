@@ -68,4 +68,3 @@ export function createDefaultSong(): Song {
 export function isSongUndefined(song: Song | undefined): boolean {
   return song === undefined || song.path === "";
 }
-

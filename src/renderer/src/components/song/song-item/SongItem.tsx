@@ -23,7 +23,7 @@ const SongItem: Component<SongItemProps> = ({
   children,
   draggable: isDraggable,
   onDrop,
-  selectable
+  selectable,
 }) => {
   const showSignal = createSignal(false);
   const [_coords, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
@@ -42,9 +42,9 @@ const SongItem: Component<SongItemProps> = ({
   onMount(() => {
     draggable(item, {
       onClick: ignoreClickInContextMenu(() => onSelect(song.path)),
-      onDrop: onDrop ?? (() => { }),
+      onDrop: onDrop ?? (() => {}),
       createHint: SongHint,
-      useOnlyAsOnClickBinder: !isDraggable || selectedSong().path === song.path
+      useOnlyAsOnClickBinder: !isDraggable || selectedSong().path === song.path,
     });
 
     if (selectable === true) {

@@ -6,7 +6,7 @@ import {
   togglePlay,
   localVolume,
   setLocalVolume,
-  song
+  song,
 } from "../song.utils";
 import { isSongUndefined } from "../../../lib/song";
 import Bar from "../../bar/Bar";

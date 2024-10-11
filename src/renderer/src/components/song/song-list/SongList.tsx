@@ -27,11 +27,11 @@ const SongList: Component<SongViewProps> = (props) => {
   const [payload, setPayload] = createSignal<SongsQueryPayload>({
     view: props,
     order: order(),
-    tags: tags()
+    tags: tags(),
   });
 
   const [searchError, setSearchError] = createSignal<Optional<SearchQueryError>>(none(), {
-    equals: false
+    equals: false,
   });
   const resetListing = new Impulse();
 
@@ -50,7 +50,7 @@ const SongList: Component<SongViewProps> = (props) => {
       view: props,
       searchQuery: parsedQuery,
       order: o,
-      tags: t
+      tags: t,
     });
     resetListing.pulse();
   };
@@ -67,7 +67,7 @@ const SongList: Component<SongViewProps> = (props) => {
   const createQueue = async (songResource: ResourceID) => {
     await window.api.request("queue::create", {
       startSong: songResource,
-      ...payload()
+      ...payload(),
     });
   };
 

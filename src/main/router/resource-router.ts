@@ -41,4 +41,3 @@ Router.respond("resource::getMediaSessionImage", async (_evt, bgPath) => {
 Router.respond("resource::get", (_evt, id, table) => {
   return Storage.getTable(table).get(id);
 });
-
