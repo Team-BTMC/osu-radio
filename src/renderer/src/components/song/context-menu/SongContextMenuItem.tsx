@@ -20,7 +20,7 @@ const SongContextMenuItem: Component<SongContextMenuItemProps> = (props) => {
   return (
     <button
       ref={divAccessor}
-      class="w-full text-left px-4 py-2 hover:bg-accent/20 transition-colors duration-200"
+      class="hover:bg-accent/20 w-full px-4 py-2 text-left transition-colors duration-200"
     >
       {props.children}
     </button>

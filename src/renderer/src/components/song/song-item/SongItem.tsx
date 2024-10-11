@@ -65,13 +65,13 @@ const SongItem: Component<SongItemProps> = ({
       onContextMenu={showMenu}
     >
       <SongImage
-        class="absolute inset-0 z-[-1] w-full h-full bg-no-repeat bg-cover bg-center rounded-md data-[active=true]:opacity-100 opacity-50"
+        class="absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-50 data-[active=true]:opacity-100"
         src={song.bg}
         group={group}
       />
 
-      <div class="flex flex-col justify-center min-h-[72px] p-3 bg-black/50 overflow-hidden rounded-md">
-        <h3 class="text-[22px] leading-7 font-extrabold text-shadow shadow-black/60">
+      <div class="bg-black/50 flex min-h-[72px] flex-col justify-center overflow-hidden rounded-md p-3">
+        <h3 class="text-shadow shadow-black/60 text-[22px] font-extrabold leading-7">
           {song.title}
         </h3>
         <p class="text-base text-subtext">{song.artist}</p>

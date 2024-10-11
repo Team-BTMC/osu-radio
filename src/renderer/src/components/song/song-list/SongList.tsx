@@ -73,7 +73,7 @@ const SongList: Component<SongViewProps> = (props) => {
   const group = namespace.create(true);
 
   return (
-    <div class="flex flex-col h-full">
+    <div class="flex h-full flex-col">
       <div class="sticky top-0 z-10">
         <SongListSearch tags={tagsSignal} setOrder={setOrder} count={count} error={searchError} />
       </div>
@@ -86,11 +86,11 @@ const SongList: Component<SongViewProps> = (props) => {
           apiInitData={payload()}
           setCount={setCount}
           reset={resetListing}
-          fallback={<div class="text-center py-8 text-text-600">No songs...</div>}
+          fallback={<div class="text-text-600 py-8 text-center">No songs...</div>}
           builder={(s) => (
             <SongItem song={s} group={group} onSelect={createQueue}>
               <PlayNext path={s.path} />
-              <button class="w-full text-left px-4 py-2 hover:bg-accent/20 transition-colors duration-200">
+              <button class="hover:bg-accent/20 w-full px-4 py-2 text-left transition-colors duration-200">
                 Add to playlist
               </button>
             </SongItem>

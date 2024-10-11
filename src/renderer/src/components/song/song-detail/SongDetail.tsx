@@ -8,19 +8,19 @@ import { Component } from "solid-js";
 
 const SongDetail: Component = () => {
   return (
-    <div class="flex flex-col h-full p-8 max-w-2xl w-full">
-      <div class="flex-grow mb-8 grid place-items-center">
+    <div class="flex h-full w-full max-w-2xl flex-col p-8">
+      <div class="mb-8 grid flex-grow place-items-center">
         <SongImage
           src={song().bg}
           instantLoad={true}
-          class="size-80 bg-cover bg-center object-cover rounded-lg shadow-lg"
+          class="size-80 rounded-lg bg-cover bg-center object-cover shadow-lg"
         />
       </div>
 
       <div class="space-y-4">
         <div class="text-center">
           <h2 class="text-2xl font-bold">{song().title}</h2>
-          <span class="text-lg text-text-700">{song().artist}</span>
+          <span class="text-text-700 text-lg">{song().artist}</span>
         </div>
 
         <Bar

@@ -81,8 +81,8 @@ const SongQueue: Component = () => {
   });
 
   return (
-    <div ref={view} class="h-full flex flex-col">
-      <div class="sticky top-0 z-10 flex items-center justify-between p-5 bg-black bg-opacity-90 backdrop-blur-md">
+    <div ref={view} class="flex h-full flex-col">
+      <div class="sticky top-0 z-10 flex items-center justify-between bg-black bg-opacity-90 p-5 backdrop-blur-md">
         <h2 class="text-lg font-semibold">Next songs on the queue ({count()})</h2>
         <IconButton onClick={handleCloseButtonClick}>
           <i class="ri-close-line" />
@@ -96,7 +96,7 @@ const SongQueue: Component = () => {
           setCount={setCount}
           reset={resetListing}
           onLoadItems={onSongsLoad}
-          fallback={<div class="text-center py-8 text-text-600">No queue...</div>}
+          fallback={<div class="text-text-600 py-8 text-center">No queue...</div>}
           builder={(s) => (
             <SongItem
               song={s}

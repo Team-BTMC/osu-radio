@@ -74,7 +74,7 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
         </Switch>
       </IconButton>
       <Dropdown isOpen={isOpen} onValueChange={setIsOpen}>
-        <Dropdown.Trigger class="px-3 py-1 bg-thin-material rounded-md">
+        <Dropdown.Trigger class="rounded-md bg-thin-material px-3 py-1">
           {optionLabel()}
         </Dropdown.Trigger>
         <Dropdown.List
@@ -87,7 +87,7 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
         >
           {orderOptions.map((option) => (
             <Dropdown.Item
-              class="px-4 py-2 hover:bg-accent/20 transition-colors duration-200"
+              class="hover:bg-accent/20 px-4 py-2 transition-colors duration-200"
               value={option.value}
             >
               {option.text}

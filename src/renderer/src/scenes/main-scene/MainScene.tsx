@@ -14,22 +14,22 @@ import { Component, For, JSXElement, Match, Show, Switch } from "solid-js";
 
 const MainScene: Component = () => {
   return (
-    <div class="h-screen overflow-hidden flex flex-col">
+    <div class="flex h-screen flex-col overflow-hidden">
       <Nav />
-      <main class="relative h-[calc(100vh-52px)] flex">
+      <main class="relative flex h-[calc(100vh-52px)]">
         <TabContent />
-        <div class="flex-1 flex items-center justify-center">
+        <div class="flex flex-1 items-center justify-center">
           <SongDetail />
         </div>
 
         <QueueModal />
       </main>
 
-      <div class="absolute inset-0 z-[-1] pointer-events-none opacity-[0.072]">
+      <div class="pointer-events-none absolute inset-0 z-[-1] opacity-[0.072]">
         <SongImage
           src={song().bg}
           instantLoad={true}
-          class="w-full h-full bg-cover filter blur-xl"
+          class="h-full w-full bg-cover blur-xl filter"
         />
       </div>
     </div>
@@ -38,7 +38,7 @@ const MainScene: Component = () => {
 
 const Nav: Component = () => {
   return (
-    <nav class="flex items-center h-[52px] px-5 bg-thick-material gap-1">
+    <nav class="flex h-[52px] items-center gap-1 bg-thick-material px-5">
       <For each={Object.values(TABS)}>
         {({ label, ...rest }) => <NavItem {...rest}>{label}</NavItem>}
       </For>
@@ -61,8 +61,7 @@ type NavItemProps = Pick<Tab, "value" | "icon"> & {
 const NavItem: Component<NavItemProps> = ({ children, value, icon }) => {
   return (
     <button
-      class={`flex items-center gap-4 px-4 py-1 rounded-sm hover:bg-surface
-        ${mainActiveTab() === value ? "bg-surface" : ""}`}
+      class={`flex items-center gap-4 rounded-sm px-4 py-1 hover:bg-surface ${mainActiveTab() === value ? "bg-surface" : ""}`}
       onclick={() => setMainActiveTab(value)}
     >
       <i class={`${icon} ${mainActiveTab() === value ? "text-text" : "text-subtext"}`} />
@@ -77,7 +76,7 @@ const NavItem: Component<NavItemProps> = ({ children, value, icon }) => {
 
 const TabContent: Component = () => {
   return (
-    <div class="overflow-y-auto w-[480px] min-w-[320px] h-full bg-opacity-72 bg-thick-material border-r border-stroke">
+    <div class="bg-opacity-72 h-full w-[480px] min-w-[320px] overflow-y-auto border-r border-stroke bg-thick-material">
       <Switch fallback={<div>Tab not found</div>}>
         <Match when={mainActiveTab() === TABS.SONGS.value}>
           <SongList isAllSongs={true} />
@@ -93,7 +92,7 @@ const TabContent: Component = () => {
 const QueueModal: Component = () => {
   return (
     <Show when={songQueueModalOpen()}>
-      <div class="absolute top-0 right-0 bottom-0 h-full overflow-y-auto w-[480px] bg-gradient-to-b from-black to-zinc-900/72 border-l border-stroke">
+      <div class="to-zinc-900/72 absolute bottom-0 right-0 top-0 h-full w-[480px] overflow-y-auto border-l border-stroke bg-gradient-to-b from-black">
         <SongQueue />
       </div>
     </Show>

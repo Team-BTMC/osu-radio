@@ -47,7 +47,7 @@ const SongControls: Component<SongControlsProps> = () => {
             </Match>
           </Switch>
         </IconButton>
-        <div class="w-24 ml-3">
+        <div class="ml-3 w-24">
           <Bar fill={localVolume()} setFill={setLocalVolume} />
         </div>
       </div>
@@ -65,7 +65,7 @@ const SongControls: Component<SongControlsProps> = () => {
         </IconButton>
 
         <button
-          class="w-12 h-12 flex items-center justify-center bg-accent rounded-full text-2xl"
+          class="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-2xl"
           onClick={() => togglePlay()}
           disabled={disable()}
           title={playHint()}
