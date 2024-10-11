@@ -5,7 +5,7 @@ import { Storage } from "../lib/storage/Storage";
 
 Router.respond("playlist::add", (_evt, playlistName, song) => {
   const playlists = Storage.getTable("playlists");
-  let playlist = playlists.get(playlistName);
+  const playlist = playlists.get(playlistName);
 
   if (playlist.isNone) {
     return;
@@ -34,7 +34,7 @@ Router.respond("playlist::delete", (_evt, name) => {
 Router.respond("playlist::remove", (_evt, playlistName, song) => {
   console.log("delete song from " + playlistName, song);
   const playlists = Storage.getTable("playlists");
-  let playlist = playlists.get(playlistName);
+  const playlist = playlists.get(playlistName);
 
   if(playlist.isNone){
     return;
@@ -64,7 +64,7 @@ Router.respond("query::playlists", (_evt, request) => {
 
   //todo: there has to be a better way to do this
   const p = Storage.getTable("playlists");
-  let test: Playlist[] = [];
+  const playlistsInfo: Playlist[] = [];
   playlists.forEach((v) => {
     const plist = p.get(v);
 
@@ -72,7 +72,7 @@ Router.respond("query::playlists", (_evt, request) => {
       return;
     }
 
-    test.push({
+    playlistsInfo.push({
       name: v,
       count: plist.value.count,
       length: plist.value.length,
@@ -81,9 +81,9 @@ Router.respond("query::playlists", (_evt, request) => {
   });
 
   if (
-    test === undefined ||
+    playlistsInfo === undefined ||
     request.index < 0 ||
-    request.index > Math.floor(test.length / BUFFER_SIZE)
+    request.index > Math.floor(playlistsInfo.length / BUFFER_SIZE)
   ) {
     return none();
   }
@@ -93,15 +93,15 @@ Router.respond("query::playlists", (_evt, request) => {
   if (request.direction === "up") {
     return some({
       index: request.index - 1,
-      total: test.length,
-      items: test.slice(start, start + BUFFER_SIZE),
+      total: playlistsInfo.length,
+      items: playlistsInfo.slice(start, start + BUFFER_SIZE),
     });
   }
 
   return some({
     index: request.index + 1,
-    total: test.length,
-    items: test.slice(start, start + BUFFER_SIZE),
+    total: playlistsInfo.length,
+    items: playlistsInfo.slice(start, start + BUFFER_SIZE),
   });
 });
 
