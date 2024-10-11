@@ -1,7 +1,6 @@
-import { Accessor, Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import defaultBackground from "../../assets/osu-default-background.jpg";
 import { availableResource, getResourcePath } from "../../lib/tungsten/resource";
-import "../../assets/css/song/song-image.css";
+import { Accessor, Component, createEffect, createSignal, JSX, onCleanup, onMount } from "solid-js";
 
 const SET_SOURCE_EVENT = "set-source";
 const GLOBAL_GROUP = "global-group";
@@ -12,12 +11,11 @@ type SongImageProps = {
   src: string | undefined | Accessor<string | undefined>;
   group?: string;
   instantLoad?: boolean;
-};
+} & JSX.IntrinsicElements["div"];
 
 const SongImage: Component<SongImageProps> = (props) => {
-  const [bg, setBg] = createSignal<string | undefined>();
   const [src, setSrc] = createSignal(defaultBackground);
-  let image;
+  let image!: HTMLDivElement;
 
   const setSource = (evt) => {
     setSrc(evt.detail);
@@ -25,11 +23,12 @@ const SongImage: Component<SongImageProps> = (props) => {
   };
 
   createEffect(async () => {
-    const b = bg();
-
-    if (props.instantLoad === true) {
+    const b = typeof props.src === "function" ? props.src() : props.src;
+    if (props.instantLoad) {
       const resource = await getResourcePath(b);
-      setSrc(await availableResource(resource, defaultBackground));
+      const resolvedImagePath = await availableResource(resource, defaultBackground);
+      setSrc(resolvedImagePath);
+
       return;
     }
 
@@ -76,23 +75,16 @@ const SongImage: Component<SongImageProps> = (props) => {
     image.removeEventListener(SET_SOURCE_EVENT, setSource);
   });
 
-  const srcProp = props.src;
-
-  if (typeof srcProp === "function") {
-    createEffect(() => setBg(srcProp()));
-  } else {
-    setBg(srcProp);
-  }
-
   return (
     <div
+      {...props}
       ref={image}
       class="song-image"
       style={{
         "background-image": `url('${src().replaceAll("'", "\\'")}')`,
       }}
-      data-url={bg() ?? ""}
-    ></div>
+      data-url={props.src ?? ""}
+    />
   );
 };
 

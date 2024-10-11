@@ -1,5 +1,5 @@
-import { Component, For, onMount, Setter } from "solid-js";
 import "../assets/css/select.css";
+import { Component, For, onMount, Setter } from "solid-js";
 
 export type SelectOption = {
   value: string;

@@ -1,6 +1,6 @@
-import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import "../assets/css/gradient.css";
 import Impulse from "../lib/Impulse";
+import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 
 export type GradientColors = {
   top: string;

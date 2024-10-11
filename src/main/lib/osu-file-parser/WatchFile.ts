@@ -1,7 +1,7 @@
-import fs from "fs";
-import path from "path";
 import { Result } from "../../../@types";
 import { fail, ok } from "../rust-like-utils-backend/Result";
+import fs from "fs";
+import path from "path";
 
 export class WatchFile {
   fileName: string;

@@ -1,7 +1,7 @@
-import { contextBridge, ipcRenderer } from "electron";
 import type { APIListener, Packet, PacketType } from "../@types";
-import { RequestAPI } from "../RequestAPI";
 import { ListenAPI } from "../ListenAPI";
+import { RequestAPI } from "../RequestAPI";
+import { contextBridge, ipcRenderer } from "electron";
 
 function createPacketPreload<T>(
   channel: string,

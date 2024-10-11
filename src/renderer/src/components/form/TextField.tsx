@@ -1,8 +1,5 @@
-import { Component, JSX, onMount, Setter, Signal } from "solid-js";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import "../../assets/css/form/text-field.css";
-import Fa from "solid-fa";
-import { GLOBAL_ICON_SCALE } from "../../App";
+import { Component, JSX, onMount, Setter, Signal } from "solid-js";
 
 type TextFieldProps = {
   value: Signal<string>;
@@ -65,9 +62,7 @@ const TextField: Component<TextFieldProps> = (props) => {
         contenteditable={true}
         spellcheck={false}
       ></div>
-      <button class="icon hint" onClick={clear} title={"Clear text input"}>
-        <Fa icon={faXmark} scale={GLOBAL_ICON_SCALE} />
-      </button>
+      <button class="icon hint" onClick={clear} title="Clear text input"></button>
     </div>
   );
 };

@@ -1,13 +1,19 @@
-import { Accessor, Component, createSignal } from "solid-js";
-import Fa from "solid-fa";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { GLOBAL_ICON_SCALE } from "../../App";
-import { NoticeType, Optional } from "../../../../@types";
-import { none, orDefault, some } from "../../lib/rust-like-utils-client/Optional";
-import { hideNotice } from "./NoticeContainer";
+import { Optional } from "../../../../@types";
 import "../../assets/css/notice/notice.css";
-import Gradient from "../Gradient";
 import Impulse from "../../lib/Impulse";
+import { none, orDefault, some } from "../../lib/rust-like-utils-client/Optional";
+import Gradient from "../Gradient";
+import { hideNotice } from "./NoticeContainer";
+import { Accessor, Component, createSignal } from "solid-js";
+
+export type NoticeType = {
+  id?: string;
+  class: "notice" | "warning" | "error";
+  title: string;
+  content: string;
+  timeoutMS?: number;
+  active?: boolean;
+};
 
 type NoticeProps = {
   notice: NoticeType;
@@ -52,7 +58,7 @@ const Notice: Component<NoticeProps> = (props) => {
             <div class="head">
               <h3>{props.notice.title}</h3>
               <button onClick={removeNotice}>
-                <Fa icon={faXmark} scale={GLOBAL_ICON_SCALE} />
+                <i class="ri-close-line" />
               </button>
             </div>
 

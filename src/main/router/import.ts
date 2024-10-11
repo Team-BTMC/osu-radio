@@ -1,6 +1,5 @@
 // This file serves as router initializer only. Reason being that main.ts had massive wall of import statements. Now
 // it is just single file
-
 import "./dev-router";
 import "./dir-router";
 import "./discord-router";

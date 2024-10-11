@@ -1,6 +1,6 @@
-import { Component, createEffect, createSignal, onMount } from "solid-js";
-import { clamp } from "../lib/tungsten/math";
 import "../assets/css/bar.css";
+import { clamp } from "../lib/tungsten/math";
+import { Component, createEffect, createSignal, onMount } from "solid-js";
 
 type BarAlignment = "vertical" | "v" | "horizontal" | "h";
 

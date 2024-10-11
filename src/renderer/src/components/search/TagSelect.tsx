@@ -1,11 +1,8 @@
-import { Component, createEffect, createSignal, For, Signal } from "solid-js";
-import Fa from "solid-fa";
-import { faTags } from "@fortawesome/free-solid-svg-icons";
-import { GLOBAL_ICON_SCALE } from "../../App";
-import TextField from "../form/TextField";
-import TagItem from "./TagItem";
 import "../../assets/css/search/tag-select.css";
 import Gradient from "../Gradient";
+import TextField from "../form/TextField";
+import TagItem from "./TagItem";
+import { Component, createEffect, createSignal, For, Signal } from "solid-js";
 
 export type Tag = {
   name: string;
@@ -128,7 +125,7 @@ const TagSelect: Component<TagSelectProps> = (props) => {
         disabled={props.disabled}
         title={"Add/Remove tags for searching"}
       >
-        <Fa icon={faTags} scale={GLOBAL_ICON_SCALE} />
+        <i class="ri-tag-line" />
       </button>
       <dialog ref={dialog} class={"tag-select"}>
         <Gradient classTop={"tag-select-container"}>
