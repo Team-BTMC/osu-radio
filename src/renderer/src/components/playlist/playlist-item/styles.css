@@ -1,52 +1,50 @@
 .playlist-item {
-    --image-size: 70px;
+  --image-size: 70px;
 
-    .playlist-item-container {
-        margin-top: 20px;
-        margin-left: 8px;
-        display: flex;
-        flex-direction: row;
+  .playlist-item-container {
+    margin-top: 20px;
+    margin-left: 8px;
+    display: flex;
+    flex-direction: row;
 
-        .playlist-item__playlist-img {
-            margin: auto 6px auto 6px;
-            border-radius: var(--rounded-lg);
-            .song-image {
-                width: var(--image-size);
-                height: var(--image-size);
-                background-size: cover;
-                background-position: center;
-                border-radius: var(--rounded-lg);
-            }
-
-        }
-
-        .playlist-item__playlist-info {
-            display: flex;
-            flex-direction: row;
-            margin-left: 6px;
-            justify-content: space-between;
-            width: 100%;
-
-            .playlist-item__playlist-info__text {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                font-weight: 300;
-                line-height: 24px;
-            }
-
-            .playlist-item__playlist-info__text h3 {
-                font-size: 28px;
-            }
-
-            .playlist-item__playlist-info__button {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                margin-right: 8px;
-                color: lightcoral;
-                
-            }
-        }
+    .playlist-item__playlist-img {
+      margin: auto 6px auto 6px;
+      border-radius: var(--rounded-lg);
+      .song-image {
+        width: var(--image-size);
+        height: var(--image-size);
+        background-size: cover;
+        background-position: center;
+        border-radius: var(--rounded-lg);
+      }
     }
+
+    .playlist-item__playlist-info {
+      display: flex;
+      flex-direction: row;
+      margin-left: 6px;
+      justify-content: space-between;
+      width: 100%;
+
+      .playlist-item__playlist-info__text {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        font-weight: 300;
+        line-height: 24px;
+      }
+
+      .playlist-item__playlist-info__text h3 {
+        font-size: 28px;
+      }
+
+      .playlist-item__playlist-info__button {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-right: 8px;
+        color: lightcoral;
+      }
+    }
+  }
 }

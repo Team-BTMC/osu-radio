@@ -1,0 +1,38 @@
+.playlist-song-list {
+  margin-top: 24px;
+  .playlist-song-list__top {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    .playlist-song-list__top__left {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-left: 12px;
+      font-size: 20px;
+    }
+
+    .playlist-song-list__top__left > * + * {
+      margin-left: 18px;
+    }
+
+    .playlist-song-list__top__right {
+      margin-right: 16px;
+    }
+  }
+
+  .playlist-song-list__list {
+    margin-top: 24px;
+    .song-item {
+      margin: 12px 12px;
+    }
+  }
+}
+
+.icon-button {
+  padding: 0px;
+  margin: 0px;
+}
