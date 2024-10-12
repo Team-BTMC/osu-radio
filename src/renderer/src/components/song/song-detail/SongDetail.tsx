@@ -8,7 +8,7 @@ import { Component } from "solid-js";
 
 const SongDetail: Component = () => {
   return (
-    <div class="flex h-full w-full max-w-2xl flex-col p-8">
+    <div class="flex h-full w-full max-w-[680px] flex-col p-8">
       <div class="mb-8 grid flex-grow place-items-center">
         <SongImage
           src={song().bg}
@@ -17,11 +17,9 @@ const SongDetail: Component = () => {
         />
       </div>
 
-      <div class="space-y-4">
-        <div class="text-center">
-          <h2 class="text-2xl font-bold">{song().title}</h2>
-          <span class="text-text-700 text-lg">{song().artist}</span>
-        </div>
+      <div class="w-full max-w-[680px] space-y-4">
+        <h2 class="text-2xl font-bold">{song().title}</h2>
+        <span class="text-lg">{song().artist}</span>
 
         <Bar
           fill={timestamp() / (duration() !== 0 ? duration() : 1)}

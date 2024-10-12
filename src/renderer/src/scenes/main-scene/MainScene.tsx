@@ -1,7 +1,7 @@
 import SongDetail from "../../components/song/song-detail/SongDetail";
-import "./styles.css";
 import SongList from "../../components/song/song-list/SongList";
 import { mainActiveTab, setMainActiveTab, Tab, TABS } from "./main.utils";
+import "./styles.css";
 import IconButton from "@renderer/components/icon-button/IconButton";
 import Settings from "@renderer/components/settings/Settings";
 import SongImage from "@renderer/components/song/SongImage";
@@ -27,7 +27,7 @@ import {
 
 const MainScene: Component = () => {
   return (
-    <div class="flex h-screen flex-col overflow-hidden main-scene">
+    <div class="main-scene flex h-screen flex-col overflow-hidden">
       <Nav />
       <main class="relative flex h-[calc(100vh-52px)]">
         <TabContent />
@@ -79,7 +79,7 @@ const Nav: Component = () => {
         {({ label, ...rest }) => <NavItem {...rest}>{label}</NavItem>}
       </For>
 
-      <div class="ml-auto nav__queue">
+      <div class="nav__queue ml-auto">
         <IconButton
           class={`text-text-700 ${songQueueModalOpen() ? "text-text-900" : ""}`}
           onClick={toggleSongQueueModalOpen}
