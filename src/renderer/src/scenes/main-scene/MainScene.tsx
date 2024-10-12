@@ -20,6 +20,7 @@ import {
   For,
   JSXElement,
   Match,
+  onCleanup,
   Setter,
   Show,
   Switch,
@@ -158,9 +159,29 @@ const TabContent: Component = () => {
 };
 
 const QueueModal: Component = () => {
+  let queueModal: HTMLDivElement | undefined;
+
+  const handleOutsideClick = (event: MouseEvent) => {
+    if (queueModal && !queueModal.contains(event.target as Node)) {
+      toggleSongQueueModalOpen();
+    }
+  };
+
+  createEffect(() => {
+    if (songQueueModalOpen()) {
+      document.addEventListener("mousedown", handleOutsideClick);
+    } else {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    }
+
+    onCleanup(() => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    });
+  });
+
   return (
     <Show when={songQueueModalOpen()}>
-      <div class="absolute bottom-0 right-0 top-0 z-20 h-full w-[480px] overflow-y-auto border-l border-stroke shadow-2xl">
+      <div class="queue-modal absolute bottom-0 right-0 top-0 z-20 h-full w-[480px] overflow-y-auto border-l border-stroke shadow-2xl" ref={queueModal}>
         <SongQueue />
       </div>
     </Show>
