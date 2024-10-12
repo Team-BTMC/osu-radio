@@ -91,10 +91,9 @@ app.whenReady().then(async () => {
 
   // Zoom shortcuts. Adding all three because there were mixed reports
   // of which one works or not on different platforms.
-  globalShortcut.register('CommandOrControl+=', () => zoom(0.1));
-  globalShortcut.register('CommandOrControl+-', () => zoom(-0.1));
-  globalShortcut.register('CommandOrControl+0', () => zoom());
-  
+  globalShortcut.register("CommandOrControl+=", () => zoom(0.1));
+  globalShortcut.register("CommandOrControl+-", () => zoom(-0.1));
+  globalShortcut.register("CommandOrControl+0", () => zoom());
 
   await createWindow();
 
