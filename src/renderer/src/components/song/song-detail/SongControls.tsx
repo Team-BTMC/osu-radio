@@ -70,8 +70,8 @@ const SongControls: Component<SongControlsProps> = () => {
           <i class="ri-repeat-2-fill" />
         </IconButton>
       </div>
-      <div class="flex w-full justify-between items-center">
-        <div class="flex justify-start items-center group">
+      <div class="flex w-full items-center justify-between">
+        <div class="group flex items-center justify-start">
           <IconButton class="text-text-700">
             <Switch>
               <Match when={localVolume() === 0}>
@@ -85,9 +85,9 @@ const SongControls: Component<SongControlsProps> = () => {
               </Match>
             </Switch>
           </IconButton>
-            <div class="ml-3 w-24 opacity-0 group-hover:opacity-100  transition-opacity">
-              <Bar fill={localVolume()} setFill={setLocalVolume} />
-            </div>
+          <div class="ml-3 w-24 opacity-0 transition-opacity group-hover:opacity-100">
+            <Bar fill={localVolume()} setFill={setLocalVolume} />
+          </div>
         </div>
         <div>
           <IconButton>
