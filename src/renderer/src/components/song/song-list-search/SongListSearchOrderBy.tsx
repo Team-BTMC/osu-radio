@@ -87,7 +87,7 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
         >
           {orderOptions.map((option) => (
             <Dropdown.Item
-              class="hover:bg-accent/20 px-4 py-2 transition-colors duration-200"
+              class="px-4 py-2 transition-colors duration-200 hover:bg-accent/20"
               value={option.value}
             >
               {option.text}

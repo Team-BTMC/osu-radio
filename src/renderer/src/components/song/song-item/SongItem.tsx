@@ -56,7 +56,7 @@ const SongItem: Component<SongItemProps> = ({
     <div
       class={`relative isolate select-none rounded-md ${
         selectedSong().path === song.path
-          ? "data-[active=true]:after:bg-black/30 data-[active=true]:outline data-[active=true]:outline-2 data-[active=true]:outline-accent"
+          ? "data-[active=true]:outline data-[active=true]:outline-2 data-[active=true]:outline-accent data-[active=true]:after:bg-black/30"
           : ""
       } hover:after:bg-overlay`}
       data-active={selectedSong().path === song.path}
@@ -70,8 +70,8 @@ const SongItem: Component<SongItemProps> = ({
         group={group}
       />
 
-      <div class="bg-black/50 flex min-h-[72px] flex-col justify-center overflow-hidden rounded-md p-3">
-        <h3 class="text-shadow shadow-black/60 text-[22px] font-extrabold leading-7">
+      <div class="flex min-h-[72px] flex-col justify-center overflow-hidden rounded-md bg-black/50 p-3">
+        <h3 class="text-shadow text-[22px] font-extrabold leading-7 shadow-black/60">
           {song.title}
         </h3>
         <p class="text-base text-subtext">{song.artist}</p>

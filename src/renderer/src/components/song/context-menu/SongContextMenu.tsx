@@ -60,7 +60,7 @@ const SongContextMenu: Component<SongContextMenuProps> = (props) => {
   return (
     <Show when={show()}>
       <div class="absolute z-50 overflow-hidden rounded-md bg-surface shadow-lg" ref={menu}>
-        <div class="from-black/30 bg-gradient-to-b to-transparent">
+        <div class="bg-gradient-to-b from-black/30 to-transparent">
           <For each={props.children}>{(child) => child}</For>
         </div>
       </div>

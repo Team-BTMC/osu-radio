@@ -90,7 +90,7 @@ const SongList: Component<SongViewProps> = (props) => {
           builder={(s) => (
             <SongItem song={s} group={group} onSelect={createQueue}>
               <PlayNext path={s.path} />
-              <button class="hover:bg-accent/20 w-full px-4 py-2 text-left transition-colors duration-200">
+              <button class="w-full px-4 py-2 text-left transition-colors duration-200 hover:bg-accent/20">
                 Add to playlist
               </button>
             </SongItem>

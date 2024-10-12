@@ -35,7 +35,8 @@ export default function DirSelectScene() {
   };
   return (
     <div class="dir-select relative grid h-screen place-items-center p-8">
-      <style>jj
+      <style>
+        jj
         {`
         .dir-select{
         background: #D5C3E811;
@@ -51,7 +52,7 @@ export default function DirSelectScene() {
       `}{" "}
       </style>
       <div class="flex h-full max-h-[720px] w-full max-w-[860px] flex-col justify-between gap-12 overflow-y-auto rounded-lg border border-stroke/10 bg-regular-material p-8 shadow-2xl">
-        <h1 class="pt-12 text-center text-2xl text-red-400">Welcome to osu! radio</h1>
+        <h1 class="text-red-400 pt-12 text-center text-2xl">Welcome to osu! radio</h1>
 
         <div class="flex flex-col gap-4">
           <div class="flex flex-col gap-1.5">
