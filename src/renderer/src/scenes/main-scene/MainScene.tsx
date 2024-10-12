@@ -23,8 +23,8 @@ import {
   onCleanup,
   Setter,
   Show,
-  Switch
-} from 'solid-js';
+  Switch,
+} from "solid-js";
 
 const MainScene: Component = () => {
   return (
@@ -147,7 +147,7 @@ const TabContent: Component = () => {
 
 const QueueModal: Component = () => {
   let queueModal: HTMLDivElement | undefined;
-  const [clickedOutside, setClickedOutside] = createSignal(false);
+  const [, setClickedOutside] = createSignal(false);
 
   const handleOutsideClick = (event: MouseEvent) => {
     if (queueModal && !queueModal.contains(event.target as Node)) {
@@ -159,13 +159,13 @@ const QueueModal: Component = () => {
   createEffect(() => {
     if (songQueueModalOpen()) {
       setClickedOutside(false);
-      document.addEventListener('mousedown', handleOutsideClick);
+      document.addEventListener("mousedown", handleOutsideClick);
     } else {
-      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener("mousedown", handleOutsideClick);
     }
 
     onCleanup(() => {
-      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener("mousedown", handleOutsideClick);
     });
   });
 
