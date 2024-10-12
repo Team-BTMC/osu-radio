@@ -14,6 +14,7 @@ import { Component, createSignal } from "solid-js";
 export type PlaylistListProps = {};
 
 const PlaylistList: Component<PlaylistListProps> = () => {
+  // const [playlistSearch, setPlaylistSearch] = createSignal("");
   const [_count, setCount] = createSignal(0);
   const resetListing = new Impulse();
 
@@ -37,7 +38,7 @@ const PlaylistList: Component<PlaylistListProps> = () => {
             class="playlist-list__header__input"
             placeholder="Search in your playlists... (WIP)"
             // onInput={(e) => {
-            //   setPlaylistName(e.target.value);
+            //   setPlaylistSearch(e.target.value);
             // }}
           />
           <i class="ri-search-line playlist-list__header__search-icon"></i>
@@ -58,7 +59,9 @@ const PlaylistList: Component<PlaylistListProps> = () => {
           setCount={setCount}
           reset={resetListing}
           fallback={<div>No playlists...</div>}
-          builder={(s) => <PlaylistItem playlist={s} group={group}></PlaylistItem>}
+          builder={(s) => (
+            <PlaylistItem playlist={s} group={group} reset={resetListing}></PlaylistItem>
+          )}
         />
       </div>
     </div>

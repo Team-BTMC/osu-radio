@@ -5,43 +5,19 @@ import {
   setActivePlaylistName,
   setPlaylistActiveScene,
 } from "../playlist-view/playlist-view.utils";
+import { deletePlaylist, getSongImage } from "./playlist-item.utils";
 import "./styles.css";
+import Impulse from "@renderer/lib/Impulse";
 import { Component } from "solid-js";
 import { Playlist } from "src/@types";
 
-type PlaylistItemProps = {
+export type PlaylistItemProps = {
   playlist: Playlist;
   group: string;
+  reset: Impulse;
 };
 
-// function formatPlaylistTime(seconds: number) {
-//   let minutes = 0;
-//   let hours = 0;
-//   if (seconds > 60) {
-//     minutes = Math.floor(seconds / 60);
-//     if (minutes > 60) {
-//       hours = Math.floor(minutes / 60);
-//     }
-//   }
-
-//   return hours + " hours " + minutes + " minutes";
-// }
-
-function getSongImage(playlist: Playlist) {
-  const songs = playlist.songs;
-  if (songs.length === 0 || songs[0].bg === undefined || songs[0].bg === "") {
-    return "";
-  } else {
-    return songs[0].bg;
-  }
-}
-
 const PlaylistItem: Component<PlaylistItemProps> = (props) => {
-  const deletePlaylist = (e: Event, playlistName: string) => {
-    e.stopPropagation();
-    window.api.request("playlist::delete", playlistName);
-  };
-
   return (
     <div
       class="playlist-item"
@@ -62,7 +38,7 @@ const PlaylistItem: Component<PlaylistItemProps> = (props) => {
             {/* <p>{formatPlaylistTime(Math.round(props.playlist.length))}</p> */}
           </div>
           <div class="playlist-item__playlist-info__button">
-            <IconButton onClick={(e) => deletePlaylist(e, props.playlist.name)}>
+            <IconButton onClick={(e) => deletePlaylist(e, props)}>
               <i class="ri-more-2-line" />
             </IconButton>
           </div>
