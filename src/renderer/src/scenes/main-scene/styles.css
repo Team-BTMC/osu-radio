@@ -12,6 +12,7 @@
       height: 100%;
       display: flex;
       -webkit-app-region: no-drag;
+      padding-left: 5px;
     }
 
     .nav-window-control {
