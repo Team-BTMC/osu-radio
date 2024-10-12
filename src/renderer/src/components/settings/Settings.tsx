@@ -14,7 +14,7 @@ import {
 
 const Settings: Component = () => {
   return (
-    <div class="p-8 flex flex-col gap-10">
+    <div class="flex flex-col gap-10 p-8">
       <SettingsSection title="General" icon="ri-global-line">
         Empty
       </SettingsSection>
@@ -63,7 +63,7 @@ const GlobalVolumeSetting: Component = () => {
   return (
     <Setting name="global-volume" label="Global volume">
       <div class="flex items-center gap-3">
-        <div class="w-4 h-4 flex items-center justify-center">
+        <div class="flex h-4 w-4 items-center justify-center">
           <Switch>
             <Match when={volume() === 0}>
               <i class="ri-volume-mute-fill" />
@@ -114,7 +114,7 @@ const AudioDeviceSetting: Component = () => {
   return (
     <Setting name="audio-device" label="Choose audio device">
       <Dropdown isOpen={isPopoverOpen} onValueChange={setIsPopoverOpen}>
-        <Dropdown.SelectTrigger class="w-full bg-surface text-text border border-stroke rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-accent">
+        <Dropdown.SelectTrigger class="w-full rounded border border-stroke bg-surface px-2 py-1 text-text focus:outline-none focus:ring-2 focus:ring-accent">
           {selectedAudioDevice() || "No device selected"}
         </Dropdown.SelectTrigger>
 

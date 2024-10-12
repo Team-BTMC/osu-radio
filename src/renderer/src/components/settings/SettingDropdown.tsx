@@ -16,11 +16,14 @@ const SettingDropdown: Component<SettingDropdownProps> = (props) => {
   };
 
   return (
-    <div class="flex justify-between items-center mb-2.5">
+    <div class="mb-2.5 flex items-center justify-between">
       <label class="text-sm font-semibold text-text">{props.label}</label>
-      <Show when={props.options.size > 0} fallback={<div class="text-sm text-subtext">Loading audio devices</div>}>
+      <Show
+        when={props.options.size > 0}
+        fallback={<div class="text-sm text-subtext">Loading audio devices</div>}
+      >
         <select
-          class="w-1/2 bg-surface text-text border border-stroke rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-accent"
+          class="w-1/2 rounded border border-stroke bg-surface px-2 py-1 text-text focus:outline-none focus:ring-2 focus:ring-accent"
           disabled={props.disabled}
           onChange={changeOption}
         >
