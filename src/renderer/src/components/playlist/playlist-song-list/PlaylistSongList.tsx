@@ -1,6 +1,6 @@
-import { Component } from "solid-js";
 import InfiniteScroller from "../../InfiniteScroller";
 import SongItem from "../../song/song-item/SongItem";
+import { Component } from "solid-js";
 
 type PlaylistSongListProps = {
   playlistName: string;

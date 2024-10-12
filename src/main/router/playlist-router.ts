@@ -36,7 +36,7 @@ Router.respond("playlist::remove", (_evt, playlistName, song) => {
   const playlists = Storage.getTable("playlists");
   const playlist = playlists.get(playlistName);
 
-  if(playlist.isNone){
+  if (playlist.isNone) {
     return;
   }
 
@@ -68,7 +68,7 @@ Router.respond("query::playlists", (_evt, request) => {
   playlists.forEach((v) => {
     const plist = p.get(v);
 
-    if(plist.isNone){
+    if (plist.isNone) {
       return;
     }
 
@@ -108,7 +108,7 @@ Router.respond("query::playlists", (_evt, request) => {
 Router.respond("query::playlistSongs::init", (_evt, playlistName) => {
   const songs = Storage.getTable("playlists").get(playlistName);
 
-  if(songs.isNone){
+  if (songs.isNone) {
     return none();
   }
 
@@ -123,7 +123,7 @@ Router.respond("query::playlistSongs::init", (_evt, playlistName) => {
 Router.respond("query::playlistSongs", (_evt, playlistName, request) => {
   const playlist = Storage.getTable("playlists").get(playlistName);
 
-  if(playlist.isNone){
+  if (playlist.isNone) {
     return none();
   }
 
