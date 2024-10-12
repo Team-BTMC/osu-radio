@@ -3,7 +3,7 @@ import { Router } from "./lib/route-pass/Router";
 import trackBounds, { getBounds, wasMaximized } from "./lib/window/resizer";
 import { main } from "./main";
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
-import { app, BrowserWindow, dialog, globalShortcut } from "electron";
+import { app, BrowserWindow, dialog } from "electron";
 import { join } from "path";
 
 async function createWindow() {
@@ -51,6 +51,21 @@ async function createWindow() {
 
   trackBounds(window);
 
+  window.webContents.on("before-input-event", (event, input) => {
+    const modKeyHeld = process.platform === "darwin" ? input.meta : input.control;
+    if (modKeyHeld && ["+", "=", "-", "0"].includes(input.key)) {
+      if (input.key === "+" || input.key === "=") {
+        zoom(window, 0.1);
+      } else if (input.key === "-") {
+        zoom(window, -0.1);
+      } else if (input.key === "0") {
+        zoom(window);
+      }
+
+      event.preventDefault();
+    }
+  });
+
   window.on("ready-to-show", async () => {
     window.show();
     await Router.dispatch(window, "changeScene", "main");
@@ -89,12 +104,6 @@ app.whenReady().then(async () => {
     optimizer.watchWindowShortcuts(window);
   });
 
-  // Zoom shortcuts. Adding all three because there were mixed reports
-  // of which one works or not on different platforms.
-  globalShortcut.register("CommandOrControl+=", () => zoom(0.1));
-  globalShortcut.register("CommandOrControl+-", () => zoom(-0.1));
-  globalShortcut.register("CommandOrControl+0", () => zoom());
-
   await createWindow();
 
   app.on("activate", async () => {
@@ -112,10 +121,7 @@ app.on("window-all-closed", () => {
   }
 });
 
-function zoom(factor?: number) {
-  const focusedWindow = BrowserWindow.getFocusedWindow();
-  if (focusedWindow) {
-    const currentZoom = focusedWindow.webContents.getZoomFactor();
-    focusedWindow.webContents.setZoomFactor(factor ? currentZoom + factor : 1);
-  }
+function zoom(window: BrowserWindow, factor?: number) {
+  const currentZoom = window.webContents.getZoomFactor();
+  window.webContents.setZoomFactor(factor ? currentZoom + factor : 1);
 }
