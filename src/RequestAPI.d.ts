@@ -52,6 +52,13 @@ export type RequestAPI = {
   "settings::write": <K extends keyof Settings>(key: K, value: any) => void;
   "settings::get": <K extends keyof Settings>(key: K) => Optional<any>;
 
+  "os::platform": () => NodeJS.Platform;
+
+  "window::close": () => void;
+  "window::minimize": () => void;
+  "window::maximize": () => void;
+  "window::isMaximized": () => boolean;
+
   "query::songsPool::init": (payload: SongsQueryPayload) => InfiniteScrollerInitResponse;
   "query::songsPool": (
     request: InfiniteScrollerRequest,
