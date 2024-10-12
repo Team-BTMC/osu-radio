@@ -57,7 +57,7 @@ export type RequestAPI = {
   "window::close": () => void;
   "window::minimize": () => void;
   "window::maximize": () => void;
-  "window::maximized": () => boolean;
+  "window::isMaximized": () => boolean;
 
   "query::songsPool::init": (payload: SongsQueryPayload) => InfiniteScrollerInitResponse;
   "query::songsPool": (
