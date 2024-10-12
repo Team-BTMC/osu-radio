@@ -13,10 +13,7 @@
       align-items: center;
       margin-left: 12px;
       font-size: 20px;
-    }
-
-    .playlist-song-list__top__left > * + * {
-      margin-left: 18px;
+      gap: 18px;
     }
 
     .playlist-song-list__top__right {

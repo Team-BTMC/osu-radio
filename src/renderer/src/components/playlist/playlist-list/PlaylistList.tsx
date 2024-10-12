@@ -16,16 +16,6 @@ const PlaylistList: Component<PlaylistListProps> = () => {
   const [_count, setCount] = createSignal(0);
   const resetListing = new Impulse();
   // const [payload, setPayload] = createSignal({});
-  const [playlistName, setPlaylistName] = createSignal("");
-
-  const createPlaylist = () => {
-    // last check is probably unnecessary
-    if (playlistName().length === 0 || playlistName() === undefined || playlistName() === "") {
-      return;
-    }
-    window.api.request("playlist::create", playlistName().trim());
-    setPlaylistName("");
-  };
 
   const group = namespace.create(true);
 
@@ -53,7 +43,6 @@ const PlaylistList: Component<PlaylistListProps> = () => {
           <label class="song-list-search__icon-container" for="search_input">
             <IconButton
               onClick={() => {
-                createPlaylist(); //TODO: remove
                 setPlaylistActiveScene(PLAYLIST_SCENE_CREATE);
               }}
             >

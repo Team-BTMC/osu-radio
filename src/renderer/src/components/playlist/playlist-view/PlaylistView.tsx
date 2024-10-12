@@ -8,6 +8,7 @@ import {
   playlistActiveScene,
   activePlaylistName,
 } from "./playlist-view.utils";
+import "./styles.css";
 import { Component, Match, Switch } from "solid-js";
 
 export type PlaylistViewProps = {};
