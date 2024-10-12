@@ -1,5 +1,5 @@
 import Popover, { Props as PopoverProps } from "../popover/Popover";
-import DropdownList from "./DropdownList";
+import { DropdownContent, DropdownList } from "./DropdownContent";
 import DropdownListItem from "./DropdownListItem";
 import DropdownSelectTrigger from "./DropdownSelectTrigger";
 import DropdownTrigger from "./DropdownTrigger";
@@ -12,6 +12,7 @@ const DropdownRoot: ParentComponent<PopoverProps> = (props) => {
 const Dropdown = Object.assign(DropdownRoot, {
   SelectTrigger: DropdownSelectTrigger,
   Trigger: DropdownTrigger,
+  Content: DropdownContent,
   List: DropdownList,
   Item: DropdownListItem,
 });

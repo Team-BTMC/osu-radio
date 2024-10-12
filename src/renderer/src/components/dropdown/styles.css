@@ -1,4 +1,4 @@
-.dropdown-list {
+.dropdown-content {
   display: flex;
   flex-direction: column;
   background-color: var(--background);
@@ -6,6 +6,8 @@
   width: 400px;
   border-radius: var(--rounded);
   border: 1px solid var(--separator);
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .dropdown-list-item {

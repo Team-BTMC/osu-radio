@@ -3,6 +3,7 @@ import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-
 import { Tag } from "../../search/TagSelect";
 import { setSongsSearch } from "../song-list/song-list.utils";
 import SongListSearchOrderBy from "./SongListSearchOrderBy";
+import SongListSearchTags from "./SongListSearchTags";
 import "./styles.css";
 import { Accessor, Component, Setter, Signal } from "solid-js";
 
@@ -81,6 +82,7 @@ const SongListSearch: Component<SearchProps> = (props) => {
 
       <div class="song-list-search__filters">
         <SongListSearchOrderBy setOrder={props.setOrder} />
+        <SongListSearchTags />
       </div>
 
       {/* <div class="results row">

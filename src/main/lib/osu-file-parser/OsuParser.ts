@@ -281,7 +281,7 @@ export class OsuParser {
         song.mode = db.readByte();
 
         db.readString(); // song source
-        song.tags = db.readString();
+        song.tags = db.readString().split(" ");
 
         db.readShort(); // online offset
         db.readString(); // song title font

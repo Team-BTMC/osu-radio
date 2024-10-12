@@ -44,3 +44,24 @@
     font-size: 20px;
   }
 }
+
+.song-list-search-tags {
+  .song-list-search-tags__hint {
+    font-size: 12px;
+  }
+
+  .song-list-search-tags__content {
+    padding-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 6px;
+    column-gap: 8px;
+  }
+
+  .song-list-search-tags__tag {
+    font-size: 14px;
+    background-color: #101013;
+    padding: 2px 8px;
+    border-radius: 6px;
+  }
+}
