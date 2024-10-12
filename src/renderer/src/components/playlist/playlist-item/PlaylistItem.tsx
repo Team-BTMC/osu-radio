@@ -1,6 +1,10 @@
 import IconButton from "../../icon-button/IconButton";
 import SongImage from "../../song/SongImage";
-import { PLAYLIST_SCENE_SONGS, setPlaylistActiveScene } from "../playlist-view/playlist-view.utils";
+import {
+  PLAYLIST_SCENE_SONGS,
+  setActivePlaylistName,
+  setPlaylistActiveScene,
+} from "../playlist-view/playlist-view.utils";
 import "./styles.css";
 import { Component } from "solid-js";
 import { Playlist } from "src/@types";
@@ -37,7 +41,7 @@ const PlaylistItem: Component<PlaylistItemProps> = (props) => {
     <div
       class="playlist-item"
       onClick={() => {
-        console.log(props.playlist.songs);
+        setActivePlaylistName(props.playlist.name);
         setPlaylistActiveScene(PLAYLIST_SCENE_SONGS);
       }}
     >

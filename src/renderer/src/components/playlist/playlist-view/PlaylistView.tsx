@@ -1,10 +1,12 @@
+import PlaylistCreate from "../playlist-create/PlaylistCreate";
 import PlaylistList from "../playlist-list/PlaylistList";
+import PlaylistSongList from "../playlist-song-list/PlaylistSongList";
 import {
   PLAYLIST_SCENE_CREATE,
   PLAYLIST_SCENE_SONGS,
   PLAYLIST_SCENE_LIST,
   playlistActiveScene,
-  setPlaylistActiveScene,
+  activePlaylistName,
 } from "./playlist-view.utils";
 import { Component, Match, Switch } from "solid-js";
 
@@ -18,14 +20,10 @@ const PlaylistView: Component<PlaylistViewProps> = () => {
           <PlaylistList />
         </Match>
         <Match when={playlistActiveScene() == PLAYLIST_SCENE_CREATE}>
-          <button onClick={() => setPlaylistActiveScene(PLAYLIST_SCENE_LIST)}>
-            create playlist, back (click me)
-          </button>
+          <PlaylistCreate />
         </Match>
         <Match when={playlistActiveScene() == PLAYLIST_SCENE_SONGS}>
-          <button onClick={() => setPlaylistActiveScene(PLAYLIST_SCENE_LIST)}>
-            playlist song list, back (click me)
-          </button>
+          <PlaylistSongList playlistName={activePlaylistName()} />
         </Match>
       </Switch>
     </div>

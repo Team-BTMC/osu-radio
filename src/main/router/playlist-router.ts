@@ -105,8 +105,8 @@ Router.respond("query::playlists", (_evt, request) => {
   });
 });
 
-Router.respond("query::playlistSongs::init", (_evt, playlistName) => {
-  const songs = Storage.getTable("playlists").get(playlistName);
+Router.respond("query::playlistSongs::init", (_evt, payload) => {
+  const songs = Storage.getTable("playlists").get(payload.playlistName);
 
   if (songs.isNone) {
     return none();
@@ -120,8 +120,8 @@ Router.respond("query::playlistSongs::init", (_evt, playlistName) => {
   });
 });
 
-Router.respond("query::playlistSongs", (_evt, playlistName, request) => {
-  const playlist = Storage.getTable("playlists").get(playlistName);
+Router.respond("query::playlistSongs", (_evt, request, payload) => {
+  const playlist = Storage.getTable("playlists").get(payload.playlistName);
 
   if (playlist.isNone) {
     return none();

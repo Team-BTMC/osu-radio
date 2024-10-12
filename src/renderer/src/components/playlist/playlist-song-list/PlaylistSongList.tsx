@@ -1,19 +1,31 @@
 import InfiniteScroller from "../../InfiniteScroller";
 import SongItem from "../../song/song-item/SongItem";
-import { Component } from "solid-js";
+import { PLAYLIST_SCENE_LIST, setPlaylistActiveScene } from "../playlist-view/playlist-view.utils";
+import { namespace } from "@renderer/App";
+import { Component, createSignal } from "solid-js";
+import { PlaylistSongsQueryPayload } from "src/@types";
 
 type PlaylistSongListProps = {
   playlistName: string;
-  group: string;
 };
 
 const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
+  const group = namespace.create(true);
+
+  const [payload, _setPlayload] = createSignal<PlaylistSongsQueryPayload>({
+    playlistName: props.playlistName,
+  });
+
   return (
     <div>
+      <button onClick={() => setPlaylistActiveScene(PLAYLIST_SCENE_LIST)}>
+        playlist "{props.playlistName}" song list, back (click me)
+      </button>
       <InfiniteScroller
         apiKey={"query::playlistSongs"}
-        //todo: apiData
+        apiData={payload()}
         apiInitKey={"query::playlistSongs::init"}
+        apiInitData={payload()}
         // setCount={setCount}
         // reset={resetListing}
         // onLoadItems={onSongsLoad}
@@ -21,10 +33,10 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
         builder={(s) => (
           <SongItem
             song={s}
-            group={props.group}
+            group={group}
             selectable={true}
             draggable={true}
-            onSelect={() => window.api.request("queue::play", s.path)}
+            onSelect={() => window.api.request("queue::play", s)}
             // onDrop={onDrop(s)}
           >
             {/* <SongContextMenuItem onClick={() => window.api.request("queue::removeSong", s.path)}>

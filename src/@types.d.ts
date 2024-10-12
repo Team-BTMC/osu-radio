@@ -194,6 +194,11 @@ export type QueueCreatePayload = {
   startSong: ResourceID;
 };
 
+// idk if this is necessary because i'm only passing a string
+export type PlaylistSongsQueryPayload = {
+  playlistName: string;
+};
+
 export type OsuSearchAbleProperties =
   | "bpm"
   | "artist"
