@@ -1,3 +1,4 @@
+import icon from "../../resources/icon.png?asset";
 import { Router } from "./lib/route-pass/Router";
 import trackBounds, { getBounds, wasMaximized } from "./lib/window/resizer";
 import { main } from "./main";
@@ -5,20 +6,8 @@ import { electronApp, is, optimizer } from "@electron-toolkit/utils";
 import { app, BrowserWindow, dialog } from "electron";
 import { join } from "path";
 
-
 async function createWindow() {
   const [width, height] = getBounds();
-
-  //Gets the icon's path based on the users default theme preference.
-  const getIconPath = () => {
-    const iconPath =
-        process.platform === 'win32' 
-        ? join(__dirname, '../../resources/icons/windows/light.ico') 
-        : process.platform === 'darwin' 
-          ? join(__dirname, '../../resources/icons/macos/light.icns') 
-          : join(__dirname, '../../resources/icons/linux/light.png')
-    return (iconPath);
-}
 
   const window = new BrowserWindow({
     title: "osu!radio",
@@ -26,7 +15,7 @@ async function createWindow() {
     height,
     show: false,
     autoHideMenuBar: true,
-    icon: getIconPath(),
+    ...(process.platform === "linux" ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, "../preload/index.mjs"),
       sandbox: false,
