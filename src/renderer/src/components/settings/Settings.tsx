@@ -1,6 +1,5 @@
 import Bar from "../bar/Bar";
 import Dropdown from "../dropdown/Dropdown";
-import "./styles.css";
 import { changeAudioDevice, setVolume, volume } from "@renderer/components/song/song.utils";
 import {
   Component,
@@ -15,7 +14,7 @@ import {
 
 const Settings: Component = () => {
   return (
-    <div class="settings">
+    <div class="p-8 flex flex-col gap-10">
       <SettingsSection title="General" icon="ri-global-line">
         Empty
       </SettingsSection>
@@ -31,14 +30,14 @@ type SettingsSectionProps = JSX.IntrinsicElements["div"] & {
   title: string;
   icon: string;
 };
+
 const SettingsSection: Component<SettingsSectionProps> = ({ title, icon, children, ...rest }) => {
   return (
-    <div {...mergeProps({ class: "settings-section" }, rest)}>
-      <div class="settings-section__upper-part">
-        <i class={`settings-section__upper-part-icon ${icon}`} />
-        <h3 class="settings-section__upper-part-title">{title}</h3>
+    <div {...mergeProps({ class: "flex flex-col gap-6" }, rest)}>
+      <div class="flex items-center gap-3">
+        <i class={`text-subtext ${icon}`} />
+        <h3 class="text-base text-text">{title}</h3>
       </div>
-
       {children}
     </div>
   );
@@ -48,10 +47,11 @@ type SettingProps = JSX.IntrinsicElements["div"] & {
   label: string;
   name: string;
 };
+
 const Setting: Component<SettingProps> = ({ label, name, children, ...rest }) => {
   return (
-    <div {...mergeProps({ class: "setting" }, rest)}>
-      <label class="setting__label" for={name}>
+    <div {...mergeProps({ class: "flex flex-col gap-2.5" }, rest)}>
+      <label class="text-sm font-semibold text-text" for={name}>
         {label}
       </label>
       {children}
@@ -62,8 +62,8 @@ const Setting: Component<SettingProps> = ({ label, name, children, ...rest }) =>
 const GlobalVolumeSetting: Component = () => {
   return (
     <Setting name="global-volume" label="Global volume">
-      <div class="global-volume-setting">
-        <div class="global-volume-setting__icon">
+      <div class="flex items-center gap-3">
+        <div class="w-4 h-4 flex items-center justify-center">
           <Switch>
             <Match when={volume() === 0}>
               <i class="ri-volume-mute-fill" />
@@ -76,7 +76,7 @@ const GlobalVolumeSetting: Component = () => {
             </Match>
           </Switch>
         </div>
-        <div class="global-volume-setting__bar">
+        <div class="flex-1">
           <Bar fill={volume()} setFill={setVolume} />
         </div>
       </div>
@@ -114,7 +114,7 @@ const AudioDeviceSetting: Component = () => {
   return (
     <Setting name="audio-device" label="Choose audio device">
       <Dropdown isOpen={isPopoverOpen} onValueChange={setIsPopoverOpen}>
-        <Dropdown.SelectTrigger>
+        <Dropdown.SelectTrigger class="w-full bg-surface text-text border border-stroke rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-accent">
           {selectedAudioDevice() || "No device selected"}
         </Dropdown.SelectTrigger>
 
