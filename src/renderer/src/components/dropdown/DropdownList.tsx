@@ -8,7 +8,7 @@ const DropdownList: ParentComponent<ListProps> = (props) => {
   return (
     <Portal>
       <Popover.Overlay />
-      <Popover.Content class="dropdown-list">
+      <Popover.Content class="flex flex-col bg-thick-material backdrop-blur-md p-3 w-fit min-w-48 rounded-xl border border-stroke">
         <List {...props} />
       </Popover.Content>
     </Portal>
