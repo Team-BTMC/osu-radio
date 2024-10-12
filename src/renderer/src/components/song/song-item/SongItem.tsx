@@ -54,18 +54,20 @@ const SongItem: Component<SongItemProps> = ({
 
   return (
     <div
-      class={`relative isolate select-none rounded-md ${
-        selectedSong().path === song.path
-          ? "data-[active=true]:outline data-[active=true]:outline-2 data-[active=true]:outline-accent data-[active=true]:after:bg-black/30"
-          : ""
-      } hover:after:bg-overlay`}
+      class="relative isolate select-none rounded-md"
+      classList={{
+        "outline outline-2 outline-accent": selectedSong().path === song.path,
+      }}
       data-active={selectedSong().path === song.path}
       ref={item}
       data-url={song.bg}
       onContextMenu={showMenu}
     >
       <SongImage
-        class="absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-50 data-[active=true]:opacity-100"
+        class="absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-30"
+        classList={{
+          "opacity-90": selectedSong().path === song.path,
+        }}
         src={song.bg}
         group={group}
       />
