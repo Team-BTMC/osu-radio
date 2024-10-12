@@ -51,6 +51,20 @@ async function createWindow() {
 
   trackBounds(window);
 
+  window.webContents.on("before-input-event", (event, input) => {
+    if (input.control && ["+", "=", "-", "0"].includes(input.key)) {
+      if (input.key === "+" || input.key === "=") {
+        zoom(window, 0.1);
+      } else if (input.key === "-") {
+        zoom(window, -0.1);
+      } else if (input.key === "0") {
+        zoom(window);
+      }
+
+      event.preventDefault();
+    }
+  });
+
   window.on("ready-to-show", async () => {
     window.show();
     await Router.dispatch(window, "changeScene", "main");
@@ -105,3 +119,8 @@ app.on("window-all-closed", () => {
     app.quit();
   }
 });
+
+function zoom(window: BrowserWindow, factor?: number) {
+  const currentZoom = window.webContents.getZoomFactor();
+  window.webContents.setZoomFactor(factor ? currentZoom + factor : 1);
+}
