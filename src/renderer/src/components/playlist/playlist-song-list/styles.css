@@ -1,7 +1,8 @@
 .playlist-song-list {
-  margin-top: 24px;
+  margin: 24px 20px;
   .playlist-song-list__top {
     width: 100%;
+    margin-bottom: 24px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -11,25 +12,38 @@
       display: flex;
       flex-direction: row;
       align-items: center;
-      margin-left: 12px;
       font-size: 20px;
-      gap: 18px;
+      line-height: 24px;
+      font-weight: 500;
+      gap: 20px;
+
+      .icon-button {
+        font-size: 20px;
+        color: #eff1f599;
+      }
     }
 
     .playlist-song-list__top__right {
-      margin-right: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #f2f4fc1a;
+      color: #eff1f5;
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+
+      .icon-button {
+        font-size: 20px;
+      }
     }
   }
 
   .playlist-song-list__list {
-    margin-top: 24px;
-    .song-item {
-      margin: 12px 12px;
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
   }
-}
-
-.icon-button {
-  padding: 0px;
-  margin: 0px;
 }

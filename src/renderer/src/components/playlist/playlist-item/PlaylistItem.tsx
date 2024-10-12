@@ -58,7 +58,7 @@ const PlaylistItem: Component<PlaylistItemProps> = (props) => {
           </div>
           <div class="playlist-item__playlist-info__button">
             <IconButton onClick={() => window.api.request("playlist::delete", props.playlist.name)}>
-              <i class="ri-delete-bin-7-fill" />
+              <i class="ri-more-2-line" />
             </IconButton>
           </div>
         </div>

@@ -48,9 +48,6 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
           apiData={payload()}
           apiInitKey={"query::playlistSongs::init"}
           apiInitData={payload()}
-          // setCount={setCount}
-          // reset={resetListing}
-          // onLoadItems={onSongsLoad}
           fallback={<div>No songs in playlist...</div>}
           builder={(s) => (
             <SongItem
@@ -59,12 +56,7 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
               selectable={true}
               draggable={true}
               onSelect={createQueue}
-              // onDrop={onDrop(s)}
-            >
-              {/* <SongContextMenuItem onClick={() => window.api.request("queue::removeSong", s.path)}>
-              Remove from queue
-            </SongContextMenuItem> */}
-            </SongItem>
+            ></SongItem>
           )}
         />
       </div>

@@ -32,8 +32,11 @@
         border-radius: 8px;
         background-color: #84898f33;
         border: none;
-        color: #ffffffd1;
+        color: #ffffff;
         padding: 10px 16px 10px 16px;
+        font-size: 16px;
+        line-height: 24px;
+        font-weight: 400;
       }
     }
   }
@@ -46,11 +49,11 @@
       align-items: center;
       justify-content: center;
       margin-bottom: 24px;
-      height: 36px;
-      background-color: white;
+      height: 42px;
+      background-color: #ffffffeb;
       color: black;
       font-weight: 600;
-      border-radius: 6px;
+      border-radius: 8px;
     }
 
     /* button:hover {

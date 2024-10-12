@@ -6,6 +6,7 @@ import {
   PLAYLIST_SCENE_CREATE,
   setPlaylistActiveScene,
 } from "../playlist-view/playlist-view.utils";
+import "./styles.css";
 import { namespace } from "@renderer/App";
 import Impulse from "@renderer/lib/Impulse";
 import { Component, createSignal } from "solid-js";
@@ -15,7 +16,6 @@ export type PlaylistListProps = {};
 const PlaylistList: Component<PlaylistListProps> = () => {
   const [_count, setCount] = createSignal(0);
   const resetListing = new Impulse();
-  // const [payload, setPayload] = createSignal({});
 
   const group = namespace.create(true);
 
@@ -29,40 +29,38 @@ const PlaylistList: Component<PlaylistListProps> = () => {
         error={searchError}
       />
       */}
-      <div class="song-list-search">
-        <div class="song-list-search__input-container">
+      <div class="playlist-list__header">
+        <div class="playlist-list__header__input-container">
           <input
             type="text"
             id="playlist_input"
-            class="song-list-search__input"
+            class="playlist-list__header__input"
             placeholder="Search in your playlists... (WIP)"
             // onInput={(e) => {
             //   setPlaylistName(e.target.value);
             // }}
           />
-          <label class="song-list-search__icon-container" for="search_input">
-            <IconButton
-              onClick={() => {
-                setPlaylistActiveScene(PLAYLIST_SCENE_CREATE);
-              }}
-            >
-              <i class="ri-add-fill" />
-            </IconButton>
-          </label>
+          <i class="ri-search-line playlist-list__header__search-icon"></i>
         </div>
+        <IconButton
+          onClick={() => {
+            setPlaylistActiveScene(PLAYLIST_SCENE_CREATE);
+          }}
+        >
+          <i class="ri-add-fill" />
+        </IconButton>
       </div>
 
-      {/* <p>You have {count()} playlists</p> */}
-      <InfiniteScroller
-        apiKey={"query::playlists"}
-        // apiData={payload()}
-        apiInitKey={"query::playlists::init"}
-        // apiInitData={payload()}
-        setCount={setCount}
-        reset={resetListing}
-        fallback={<div>No playlists...</div>}
-        builder={(s) => <PlaylistItem playlist={s} group={group}></PlaylistItem>}
-      />
+      <div class="playlist-list__body">
+        <InfiniteScroller
+          apiKey={"query::playlists"}
+          apiInitKey={"query::playlists::init"}
+          setCount={setCount}
+          reset={resetListing}
+          fallback={<div>No playlists...</div>}
+          builder={(s) => <PlaylistItem playlist={s} group={group}></PlaylistItem>}
+        />
+      </div>
     </div>
   );
 };
