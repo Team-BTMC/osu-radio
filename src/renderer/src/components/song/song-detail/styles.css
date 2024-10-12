@@ -147,7 +147,7 @@
   .progress-bar__range {
     display: block;
     height: 20px;
-    background-color: white;
+    background-color: black;
     border-top-left-radius: 8px;
     border-bottom-left-radius: 8px;
     border-right: solid 1px rgba(0, 0, 0, 0.8);
