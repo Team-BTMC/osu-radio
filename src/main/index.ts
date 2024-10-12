@@ -52,7 +52,8 @@ async function createWindow() {
   trackBounds(window);
 
   window.webContents.on("before-input-event", (event, input) => {
-    if ((input.control || input.meta) && ["+", "=", "-", "0"].includes(input.key)) {
+    const modKeyHeld = process.platform === "darwin" ? input.meta : input.control;
+    if (modKeyHeld && ["+", "=", "-", "0"].includes(input.key)) {
       if (input.key === "+" || input.key === "=") {
         zoom(window, 0.1);
       } else if (input.key === "-") {
