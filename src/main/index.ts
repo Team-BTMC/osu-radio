@@ -2,7 +2,7 @@ import { Router } from "./lib/route-pass/Router";
 import trackBounds, { getBounds, wasMaximized } from "./lib/window/resizer";
 import { main } from "./main";
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
-import { app, BrowserWindow, dialog, nativeTheme } from "electron";
+import { app, BrowserWindow, dialog } from "electron";
 import { join } from "path";
 
 
@@ -12,19 +12,13 @@ async function createWindow() {
   //Gets the icon's path based on the users default theme preference.
   const getIconPath = () => {
     const iconPath =
-      process.platform === 'win32'
-        ? (nativeTheme.shouldUseDarkColors
-          ? join(__dirname, '../../resources/icons/windows/dark.ico')
-          : join(__dirname, '../../resources/icons/windows/light.ico'))
-        : process.platform === 'darwin'
-        ? (nativeTheme.shouldUseDarkColors
-          ? join(__dirname, '../../resources/icons/macos/dark.icns')
-          : join(__dirname, '../../resources/icons/macos/light.icns'))
-        : (nativeTheme.shouldUseDarkColors
-          ? join(__dirname, '../../resources/icons/linux/dark.png')
-          : join(__dirname, '../../resources/icons/linux/light.png'));
-          return(iconPath);
-        }
+        process.platform === 'win32' 
+        ? join(__dirname, '../../resources/icons/windows/light.ico') 
+        : process.platform === 'darwin' 
+          ? join(__dirname, '../../resources/icons/macos/light.icns') 
+          : join(__dirname, '../../resources/icons/linux/light.png')
+    return (iconPath);
+}
 
   const window = new BrowserWindow({
     title: "osu!radio",
@@ -39,12 +33,6 @@ async function createWindow() {
       webSecurity: false,
     },
   });
-
-  //Detects when theme is changed to change icon dynamically.
-  nativeTheme.on('updated', () => {
-    const icon = getIconPath(); 
-    window.setIcon(icon);
-});
 
   if (wasMaximized()) {
     window.maximize();
