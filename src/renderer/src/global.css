@@ -4,66 +4,38 @@
 
 :root {
   /* Light theme */
-  --color-thick-material-light: rgba(240, 240, 240, 0.95);
-  --color-regular-material-light: rgba(230, 230, 230, 0.8);
-  --color-text-light: #1a1a1a;
-  --color-subtext-light: rgba(26, 26, 26, 0.6);
-  --color-stroke-light: rgba(0, 0, 0, 0.1);
-  --color-overlay-light: rgba(200, 200, 200, 0.85);
-  --color-accent-light: #7c4dff;
-  --color-surface-light: rgba(180, 180, 180, 0.2);
-  --color-black-light: #ffffff;
-  --color-red-light: #d32f2f;
-  --color-green-light: #388e3c;
-  --color-thin-material-light: rgba(255, 255, 255, 0.5);
-
-  /* Dark theme (original colors) */
-  --color-thick-material-dark: rgba(13, 13, 13, 0.95);
-  --color-regular-material-dark: rgba(18, 18, 18, 0.8);
-  --color-text-dark: #eff1f5;
-  --color-subtext-dark: rgba(239, 241, 245, 0.6);
-  --color-stroke-dark: rgba(242, 244, 252, 0.1);
-  --color-overlay-dark: rgba(161, 162, 171, 0.85);
-  --color-accent-dark: #9366ed;
-  --color-surface-dark: rgba(132, 137, 143, 0.2);
-  --color-black-dark: #0e0e0e;
-  --color-red-dark: #ed6666;
-  --color-green-dark: #78cc32;
-  --color-thin-material-dark: rgba(0, 0, 0, 0.5);
+  --color-thick-material: 240, 240, 240;
+  --color-regular-material: 230, 230, 230;
+  --color-text: 26, 26, 26;
+  --color-subtext: 26, 26, 26;
+  --color-stroke: 0, 0, 0;
+  --color-overlay: 200, 200, 200;
+  --color-accent: 124, 77, 255;
+  --color-surface: 180, 180, 180;
+  --color-black: 255, 255, 255;
+  --color-red: 211, 47, 47;
+  --color-green: 56, 142, 60;
+  --color-thin-material: 255, 255, 255;
 }
 
-:root {
-  --color-thick-material: var(--color-thick-material-light);
-  --color-regular-material: var(--color-regular-material-light);
-  --color-text: var(--color-text-light);
-  --color-subtext: var(--color-subtext-light);
-  --color-stroke: var(--color-stroke-light);
-  --color-overlay: var(--color-overlay-light);
-  --color-accent: var(--color-accent-light);
-  --color-surface: var(--color-surface-light);
-  --color-black: var(--color-black-light);
-  --color-red: var(--color-red-light);
-  --color-green: var(--color-green-light);
-  --color-thin-material: var(--color-thin-material-light);
-}
-
-/* Dark theme */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-thick-material: var(--color-thick-material-dark);
-    --color-regular-material: var(--color-regular-material-dark);
-    --color-text: var(--color-text-dark);
-    --color-subtext: var(--color-subtext-dark);
-    --color-stroke: var(--color-stroke-dark);
-    --color-overlay: var(--color-overlay-dark);
-    --color-accent: var(--color-accent-dark);
-    --color-surface: var(--color-surface-dark);
-    --color-black: var(--color-black-dark);
-    --color-red: var(--color-red-dark);
-    --color-green: var(--color-green-dark);
-    --color-thin-material: var(--color-thin-material-dark);
+    /* Dark theme */
+    --color-thick-material: 13, 13, 13;
+    --color-regular-material: 18, 18, 18;
+    --color-text: 239, 241, 245;
+    --color-subtext: 239, 241, 245;
+    --color-stroke: 242, 244, 252;
+    --color-overlay: 161, 162, 171;
+    --color-accent: 147, 102, 237;
+    --color-surface: 132, 137, 143;
+    --color-black: 14, 14, 14;
+    --color-red: 237, 102, 102;
+    --color-green: 120, 204, 50;
+    --color-thin-material: 0, 0, 0;
   }
 }
+
 
 @font-face {
   font-family: "Nunito";

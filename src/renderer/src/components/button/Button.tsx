@@ -1,26 +1,40 @@
-import "./styles.css";
-import { Component, JSX, mergeProps } from "solid-js";
+import { Component, JSX, splitProps } from "solid-js";
 
-type Props = JSX.IntrinsicElements["button"] & {
-  variant?: "primary" | "secondary";
-  size?: "medium" | "large";
-};
-const Button: Component<Props> = (props) => {
-  const defaultProps: Props = {
-    variant: "primary",
-    size: "medium",
-    type: "button",
+type ButtonVariant = "accent" | "primary" | "secondary" | "ghost";
+type ButtonSize = "medium" | "large";
+
+interface ButtonProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+}
+
+const Button: Component<ButtonProps> = (props) => {
+  const [local, others] = splitProps(props, ["variant", "size", "class", "children"]);
+
+  const variant = () => local.variant || "primary";
+  const size = () => local.size || "medium";
+
+  const baseClasses = "rounded-lg transition-colors duration-200 ease-in-out font-medium";
+  const variantClasses = {
+    accent: "bg-accent text-text ",
+    primary: "bg-red text-thick-material hover:bg-text/40",
+    secondary: "bg-surface text-text",
+    ghost: "bg-transparent text-text",
+  };
+  const sizeClasses = {
+    medium: "px-4 py-2",
+    large: "px-7 py-3 font-bold",
   };
 
-  const mergedProps = mergeProps(defaultProps, props);
-  const { children, variant: _, size: __, ...restProps } = mergedProps;
+  const buttonClasses = () =>
+    `${baseClasses} ${variantClasses[variant()]} ${sizeClasses[size()]} ${local.class || ''}`;
 
   return (
     <button
-      {...restProps}
-      class={`button ${mergedProps.variant} ${mergedProps.size} ${mergedProps.class ?? ""}`}
+      {...others}
+      class={buttonClasses()}
     >
-      {children}
+      {local.children}
     </button>
   );
 };

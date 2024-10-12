@@ -76,7 +76,7 @@ const NavItem: Component<NavItemProps> = ({ children, value, icon }) => {
 
 const TabContent: Component = () => {
   return (
-    <div class="bg-opacity-72 h-full w-[480px] min-w-[320px] overflow-y-auto border-r border-stroke bg-regular-material">
+    <div class="bg-opacity-72 h-full w-[480px] min-w-[320px] overflow-y-auto border-r border-stroke/10 bg-regular-material">
       <Switch fallback={<div>Tab not found</div>}>
         <Match when={mainActiveTab() === TABS.SONGS.value}>
           <SongList isAllSongs={true} />
