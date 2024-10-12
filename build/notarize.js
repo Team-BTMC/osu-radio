@@ -1,8 +1,6 @@
-const { notarize } = require("@electron/notarize");
+import { notarize } from "@electron/notarize";
 
-module.exports = async (context) => {
-  if (process.platform !== "darwin") return;
-
+export default async (context) => {
   console.log("aftersign hook triggered, start to notarize app.");
 
   if (!process.env.CI) {
