@@ -12,7 +12,19 @@ import {
   toggleSongQueueModalOpen,
 } from "@renderer/components/song/song-queue/song-queue.utils";
 import { song } from "@renderer/components/song/song.utils";
-import { Component, For, JSXElement, Match, Show, Switch } from "solid-js";
+import { Minimize2, Minus, Square, X } from "lucide-solid";
+import {
+  Accessor,
+  Component,
+  createEffect,
+  createSignal,
+  For,
+  JSXElement,
+  Match,
+  Setter,
+  Show,
+  Switch,
+} from "solid-js";
 
 const MainScene: Component = () => {
   return (
@@ -35,8 +47,31 @@ const MainScene: Component = () => {
 };
 
 const Nav: Component = () => {
+  const [os, setOs] = createSignal<NodeJS.Platform>();
+  const [maximized, setMaximized] = createSignal<boolean>(false);
+
+  createEffect(async () => {
+    const fetchOS = async () => {
+      return await window.api.request("os::platform");
+    };
+
+    const fetchMaximized = async () => {
+      return await window.api.request("window::isMaximized");
+    };
+
+    setOs(await fetchOS());
+    setMaximized(await fetchMaximized());
+
+    window.api.listen("window::maximizeChange", (maximized: boolean) => {
+      setMaximized(maximized);
+    });
+  });
+
   return (
-    <nav class="nav">
+    <nav
+      class="nav"
+      style={os() === "darwin" ? { padding: "0px 20px 0px 95px" } : { padding: "0px 0px 0px 20px" }}
+    >
       <For each={Object.values(TABS)}>
         {({ label, ...rest }) => <NavItem {...rest}>{label}</NavItem>}
       </For>
@@ -46,9 +81,38 @@ const Nav: Component = () => {
           <i class="ri-stack-fill nav__queue-icon" />
         </IconButton>
       </div>
+      {os() !== "darwin" && <WindowControls maximized={maximized} setMaximized={setMaximized} />}
     </nav>
   );
 };
+
+function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Setter<boolean> }) {
+  return (
+    <div class="nav-window-controls">
+      <button
+        onclick={async () => window.api.request("window::minimize")}
+        class="nav-window-control"
+      >
+        <Minus size={20} />
+      </button>
+      <button
+        onclick={async () => {
+          window.api.request("window::maximize");
+          props.setMaximized(!props.maximized());
+        }}
+        class="nav-window-control"
+      >
+        {props.maximized() ? <Minimize2 size={20} /> : <Square size={18} />}
+      </button>
+      <button
+        onclick={async () => window.api.request("window::close")}
+        class="nav-window-control close"
+      >
+        <X size={20} />
+      </button>
+    </div>
+  );
+}
 
 type NavItemProps = Pick<Tab, "value" | "icon"> & {
   children: JSXElement;

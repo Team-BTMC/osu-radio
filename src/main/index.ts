@@ -3,7 +3,7 @@ import { Router } from "./lib/route-pass/Router";
 import trackBounds, { getBounds, wasMaximized } from "./lib/window/resizer";
 import { main } from "./main";
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
-import { app, BrowserWindow, dialog } from "electron";
+import { app, BrowserWindow, dialog, globalShortcut } from "electron";
 import { join } from "path";
 
 async function createWindow() {
@@ -15,12 +15,34 @@ async function createWindow() {
     height,
     show: false,
     autoHideMenuBar: true,
+    titleBarStyle: "hidden",
+    trafficLightPosition: {
+      x: 20,
+      y: 20,
+    },
     ...(process.platform === "linux" ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, "../preload/index.mjs"),
       sandbox: false,
       webSecurity: false,
     },
+    /* To be uncommented whenever the title bar is removed and
+    native buttons are added
+
+    titleBarOverlay: {
+      color: "#00000000", // transparent bg for the buttons
+      symbolColor: "#FFFFFF", // the icons are white
+      height: 30,
+    },
+    */
+  });
+
+  window.on("maximize", () => {
+    Router.dispatch(window, "window::maximizeChange", true);
+  });
+
+  window.on("unmaximize", () => {
+    Router.dispatch(window, "window::maximizeChange", false);
   });
 
   if (wasMaximized()) {
@@ -67,6 +89,13 @@ app.whenReady().then(async () => {
     optimizer.watchWindowShortcuts(window);
   });
 
+  // Zoom shortcuts. Adding all three because there were mixed reports
+  // of which one works or not on different platforms.
+  globalShortcut.register('CommandOrControl+=', () => zoom(0.1));
+  globalShortcut.register('CommandOrControl+-', () => zoom(-0.1));
+  globalShortcut.register('CommandOrControl+0', () => zoom());
+  
+
   await createWindow();
 
   app.on("activate", async () => {
@@ -83,3 +112,11 @@ app.on("window-all-closed", () => {
     app.quit();
   }
 });
+
+function zoom(factor?: number) {
+  const focusedWindow = BrowserWindow.getFocusedWindow();
+  if (focusedWindow) {
+    const currentZoom = focusedWindow.webContents.getZoomFactor();
+    focusedWindow.webContents.setZoomFactor(factor ? currentZoom + factor : 1);
+  }
+}
