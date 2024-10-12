@@ -89,7 +89,7 @@ function getIndexes(view: QueueView): SongIndex[] {
     const songs: SongIndex[] = [];
     // is there a more efficient way?
     for (let i = 0; i < playlist.value.count; ++i) {
-      let song = indexes.value.find((v) => v.id === playlist.value.songs[i].audio);
+      const song = indexes.value.find((v) => v.id === playlist.value.songs[i].audio);
       if (song !== undefined) {
         songs.push(song);
       }
