@@ -1,4 +1,3 @@
-import "./styles.css";
 import Button from "@renderer/components/button/Button";
 import { createSignal, onMount } from "solid-js";
 
@@ -34,18 +33,35 @@ export default function DirSelectScene() {
 
     await window.api.request("dir::submit", dir());
   };
-
   return (
-    <div class="dir-select">
-      <div class="dir-select__container">
-        <h1 class="dir-select__title">Welcome to osu! radio</h1>
+    <div class="dir-select relative grid h-screen place-items-center p-8">
+      <style>
+        {`
+        .dir-select{
+        background: #D5C3E811;
+          background-image:
+          radial-gradient(at 1% 75%, hsla(228,61%,67%,0.1) 0px, transparent 50%),
+          radial-gradient(at 20% 56%, hsla(87,75%,61%,0.1) 0px, transparent 50%),
+          radial-gradient(at 35% 34%, hsla(50,72%,67%,0.1) 0px, transparent 50%),
+          radial-gradient(at 50% 18%, hsla(296,74%,62%,0.1) 0px, transparent 50%),
+          radial-gradient(at 92% 14%, hsla(54,93%,75%,0.1) 0px, transparent 50%),
+          radial-gradient(at 9% 83%, hsla(226,80%,64%,0.1) 0px, transparent 50%),
+          radial-gradient(at 1% 96%, hsla(221,81%,65%,0.1) 0px, transparent 50%);
+        }
+      `}{" "}
+      </style>
+      <div class="flex h-full max-h-[720px] w-full max-w-[860px] flex-col justify-between gap-12 overflow-y-auto rounded-lg border border-stroke bg-regular-material p-8 shadow-2xl">
+        <h1 class="pt-12 text-center text-2xl text-text">Welcome to osu! radio</h1>
 
-        <div class="select__select-folder-container">
-          <div class="select__select-folder-input-container">
-            <label class="select__select-folder-label">Your osu! Songs folder</label>
-            <div onClick={selectDir} class="select__select-folder-input">
-              {dir() === "" ? "[No folder selected]" : dir()}
-
+        <div class="flex flex-col gap-4">
+          <div class="flex flex-col gap-1.5">
+            <label class="text-sm font-bold text-text">Your osu! Songs folder</label>
+            <div
+              onClick={selectDir}
+              class="flex items-baseline justify-between rounded border border-white/5 bg-regular-material p-1 pl-4"
+            >
+              {" "}
+              <span>{dir() === "" ? "[No folder selected]" : dir()}</span>{" "}
               <Button
                 variant="secondary"
                 onClick={(e) => {
@@ -56,11 +72,11 @@ export default function DirSelectScene() {
                 Select folder
               </Button>
             </div>
-            <p class="select__select-folder-hint">You can always change this in settings.</p>
+            <p class="pt-1 text-sm text-subtext">You can always change this in settings.</p>
           </div>
         </div>
 
-        <div class="select__bottom-part">
+        <div class="flex items-end justify-end">
           <Button size="large" onClick={submitDir}>
             <span>Submit</span>
           </Button>
