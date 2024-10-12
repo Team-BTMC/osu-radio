@@ -2,39 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* Light theme */
+/* Light theme */
+/* :root {
   --color-thick-material: 240, 240, 240;
   --color-regular-material: 230, 230, 230;
   --color-text: 26, 26, 26;
   --color-subtext: 26, 26, 26;
   --color-stroke: 0, 0, 0;
   --color-overlay: 200, 200, 200;
-  --color-accent: 124, 77, 255;
+  --color-accent: 77, 77, 87;
   --color-surface: 180, 180, 180;
   --color-black: 255, 255, 255;
   --color-red: 211, 47, 47;
   --color-green: 56, 142, 60;
   --color-thin-material: 255, 255, 255;
+} */
+
+/* @media (prefers-color-scheme: dark) { */
+:root {
+  /* Dark theme */
+  --color-thick-material: 13, 13, 13;
+  --color-regular-material: 18, 18, 18;
+  --color-text: 239, 241, 245;
+  --color-subtext: 239, 241, 245;
+  --color-stroke: 242, 244, 252;
+  --color-overlay: 161, 162, 171;
+  --color-accent: 147, 147, 157;
+  --color-surface: 132, 137, 143;
+  --color-black: 14, 14, 14;
+  --color-red: 237, 102, 102;
+  --color-green: 120, 204, 50;
+  --color-thin-material: 0, 0, 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    /* Dark theme */
-    --color-thick-material: 13, 13, 13;
-    --color-regular-material: 18, 18, 18;
-    --color-text: 239, 241, 245;
-    --color-subtext: 239, 241, 245;
-    --color-stroke: 242, 244, 252;
-    --color-overlay: 161, 162, 171;
-    --color-accent: 147, 102, 237;
-    --color-surface: 132, 137, 143;
-    --color-black: 14, 14, 14;
-    --color-red: 237, 102, 102;
-    --color-green: 120, 204, 50;
-    --color-thin-material: 0, 0, 0;
-  }
-}
+/* } */
 
 @font-face {
   font-family: "Nunito";

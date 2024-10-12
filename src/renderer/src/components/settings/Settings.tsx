@@ -7,10 +7,10 @@ import {
   createSignal,
   JSX,
   Match,
-  mergeProps,
   onMount,
   Switch,
 } from "solid-js";
+import { cn } from "../../lib/css.utils"
 
 const Settings: Component = () => {
   return (
@@ -33,13 +33,13 @@ type SettingsSectionProps = JSX.IntrinsicElements["div"] & {
 
 const SettingsSection: Component<SettingsSectionProps> = ({ title, icon, children, ...rest }) => {
   return (
-    <div {...mergeProps({ class: "flex flex-col gap-6" }, rest)}>
+    <div class={cn('flex flex-col gap-6', rest.class)}>
       <div class="flex items-center gap-3">
         <i class={`text-subtext ${icon}`} />
         <h3 class="text-base text-text">{title}</h3>
       </div>
       {children}
-    </div>
+    </div >
   );
 };
 
@@ -50,7 +50,7 @@ type SettingProps = JSX.IntrinsicElements["div"] & {
 
 const Setting: Component<SettingProps> = ({ label, name, children, ...rest }) => {
   return (
-    <div {...mergeProps({ class: "flex flex-col gap-2.5" }, rest)}>
+    <div class={cn('flex flex-col gap-2.5', rest.class)}>
       <label class="text-sm font-semibold text-text" for={name}>
         {label}
       </label>
