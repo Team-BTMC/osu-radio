@@ -37,6 +37,11 @@ function getSongImage(playlist: Playlist) {
 }
 
 const PlaylistItem: Component<PlaylistItemProps> = (props) => {
+  const deletePlaylist = (e: Event, playlistName: string) => {
+    e.stopPropagation();
+    window.api.request("playlist::delete", playlistName);
+  };
+
   return (
     <div
       class="playlist-item"
@@ -57,7 +62,7 @@ const PlaylistItem: Component<PlaylistItemProps> = (props) => {
             {/* <p>{formatPlaylistTime(Math.round(props.playlist.length))}</p> */}
           </div>
           <div class="playlist-item__playlist-info__button">
-            <IconButton onClick={() => window.api.request("playlist::delete", props.playlist.name)}>
+            <IconButton onClick={(e) => deletePlaylist(e, props.playlist.name)}>
               <i class="ri-more-2-line" />
             </IconButton>
           </div>
