@@ -8,15 +8,17 @@ import { join } from "path";
 async function createWindow() {
   const [width, height] = getBounds();
 
-  const getIconPath = () => {
-    const iconPath =
-    process.platform === 'win32' 
-    ? join(__dirname, '../../build/icon.ico') 
-    : process.platform === 'darwin' 
-      ? join(__dirname, '../../build/icon.icns') 
-      : join(__dirname, '../../build/icon.png')
-    return (iconPath);
-}
+  function getIcon(): string {
+    if (process.platform === 'win32') {
+      return join(__dirname, '../../build/icon.ico');
+    }
+  
+    if (process.platform === 'darwin') {
+      return join(__dirname, '../../build/icon.icns');
+    }
+  
+    return join(__dirname, '../../build/icon.png');
+  }
 
 
   const window = new BrowserWindow({
@@ -25,7 +27,7 @@ async function createWindow() {
     height,
     show: false,
     autoHideMenuBar: true,
-    icon: getIconPath(),
+    icon: getIcon(),
     webPreferences: {
       preload: join(__dirname, "../preload/index.mjs"),
       sandbox: false,
