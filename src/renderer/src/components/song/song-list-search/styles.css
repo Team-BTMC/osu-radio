@@ -63,5 +63,6 @@
     background-color: #101013;
     padding: 2px 8px;
     border-radius: 6px;
+    user-select: none;
   }
 }
