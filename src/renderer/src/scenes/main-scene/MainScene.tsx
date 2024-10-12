@@ -51,11 +51,11 @@ const Nav: Component = () => {
 
   createEffect(async () => {
     const fetchOS = async () => {
-      return await window.api.request("settings::getos");
+      return await window.api.request("os::platform");
     };
 
     const fetchMaximized = async () => {
-      return await window.api.request("window::maximized");
+      return await window.api.request("window::isMaximized");
     };
 
     setOs(await fetchOS());

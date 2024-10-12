@@ -9,7 +9,7 @@ Router.respond("window::maximize", (_evt) => {
   mainWindow.maximize();
 });
 
-Router.respond("window::maximized", (_evt) => {
+Router.respond("window::isMaximized", (_evt) => {
   try {
     return mainWindow.isMaximized();
   } catch {
