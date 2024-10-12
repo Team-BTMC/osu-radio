@@ -52,7 +52,7 @@ async function createWindow() {
   trackBounds(window);
 
   window.webContents.on("before-input-event", (event, input) => {
-    if (input.control && ["+", "=", "-", "0"].includes(input.key)) {
+    if ((input.control || input.meta) && ["+", "=", "-", "0"].includes(input.key)) {
       if (input.key === "+" || input.key === "=") {
         zoom(window, 0.1);
       } else if (input.key === "-") {
