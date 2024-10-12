@@ -54,7 +54,7 @@ const SongItem: Component<SongItemProps> = ({
 
   return (
     <div
-      class="relative isolate select-none rounded-md"
+      class="group relative isolate select-none rounded-md"
       classList={{
         "outline outline-2 outline-accent": selectedSong().path === song.path,
       }}
@@ -64,7 +64,7 @@ const SongItem: Component<SongItemProps> = ({
       onContextMenu={showMenu}
     >
       <SongImage
-        class="absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-30"
+        class="absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-30 group-hover:opacity-90"
         classList={{
           "opacity-90": selectedSong().path === song.path,
         }}
