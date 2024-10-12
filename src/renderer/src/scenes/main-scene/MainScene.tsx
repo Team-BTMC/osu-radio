@@ -81,7 +81,10 @@ const Nav: Component = () => {
 
       <div class="nav__queue ml-auto">
         <IconButton
-          class={`text-text-700 ${songQueueModalOpen() ? "text-text-900" : ""}`}
+          class="text-subtext"
+          classList={{
+            "text-text": songQueueModalOpen(),
+          }}
           onClick={toggleSongQueueModalOpen}
         >
           <i class="ri-stack-fill" />

@@ -86,7 +86,7 @@ const SongList: Component<SongViewProps> = (props) => {
           apiInitData={payload()}
           setCount={setCount}
           reset={resetListing}
-          fallback={<div class="text-text-600 py-8 text-center">No songs...</div>}
+          fallback={<div class="py-8 text-center text-text">No songs...</div>}
           builder={(s) => (
             <SongItem song={s} group={group} onSelect={createQueue}>
               <PlayNext path={s.path} />

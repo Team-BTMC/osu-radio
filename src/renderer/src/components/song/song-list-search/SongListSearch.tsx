@@ -74,7 +74,7 @@ const SongListSearch: Component<SearchProps> = (props) => {
           }}
         />
         <label
-          class="text-text-600 absolute left-3 top-1/2 -translate-y-1/2 transform"
+          class="absolute left-3 top-1/2 -translate-y-1/2 transform text-text"
           for="search_input"
         >
           <i class="ri-search-2-line" />

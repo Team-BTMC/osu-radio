@@ -72,7 +72,7 @@ const SongControls: Component<SongControlsProps> = () => {
       </div>
       <div class="flex w-full items-center justify-between">
         <div class="group flex items-center justify-start">
-          <IconButton class="text-text-700">
+          <IconButton class="text-text">
             <Switch>
               <Match when={localVolume() === 0}>
                 <i class="ri-volume-mute-fill" />
