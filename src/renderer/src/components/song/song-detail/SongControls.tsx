@@ -64,7 +64,7 @@ const SongControls: Component<SongControlsProps> = () => {
         </IconButton>
 
         <button
-          class="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-2xl"
+          class="flex h-12 w-12 items-center justify-center rounded-full bg-white text-black text-2xl"
           onClick={() => togglePlay()}
           disabled={disable()}
           title={playHint()}
