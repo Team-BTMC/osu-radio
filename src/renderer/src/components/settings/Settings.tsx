@@ -1,17 +1,7 @@
-import Bar from "../bar/Bar";
 import Dropdown from "../dropdown/Dropdown";
 import "./styles.css";
-import { changeAudioDevice, setVolume, volume } from "@renderer/components/song/song.utils";
-import {
-  Component,
-  createEffect,
-  createSignal,
-  JSX,
-  Match,
-  mergeProps,
-  onMount,
-  Switch,
-} from "solid-js";
+import { changeAudioDevice } from "@renderer/components/song/song.utils";
+import { Component, createEffect, createSignal, JSX, mergeProps, onMount } from "solid-js";
 
 const Settings: Component = () => {
   return (
@@ -21,7 +11,6 @@ const Settings: Component = () => {
       </SettingsSection>
       <SettingsSection title="Audio" icon="ri-volume-up-line">
         <AudioDeviceSetting />
-        <GlobalVolumeSetting />
       </SettingsSection>
     </div>
   );
@@ -56,31 +45,6 @@ const Setting: Component<SettingProps> = ({ label, name, children, ...rest }) =>
       </label>
       {children}
     </div>
-  );
-};
-
-const GlobalVolumeSetting: Component = () => {
-  return (
-    <Setting name="global-volume" label="Global volume">
-      <div class="global-volume-setting">
-        <div class="global-volume-setting__icon">
-          <Switch>
-            <Match when={volume() === 0}>
-              <i class="ri-volume-mute-fill" />
-            </Match>
-            <Match when={volume() < 0.5}>
-              <i class="ri-volume-down-fill" />
-            </Match>
-            <Match when={volume() >= 0.5}>
-              <i class="ri-volume-up-fill" />
-            </Match>
-          </Switch>
-        </div>
-        <div class="global-volume-setting__bar">
-          <Bar fill={volume()} setFill={setVolume} />
-        </div>
-      </div>
-    </Setting>
   );
 };
 

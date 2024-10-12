@@ -1,11 +1,17 @@
-import { isSongUndefined } from "../../../lib/song";
 import formatTime from "../../../lib/time-formatter";
-import Bar from "../../bar/Bar";
 import SongImage from "../SongImage";
 import SongControls from "./SongControls";
 import "./styles.css";
-import { seek, duration, song, timestamp } from "@renderer/components/song/song.utils";
-import { Component } from "solid-js";
+import Slider from "@renderer/components/slider/Slider";
+import {
+  seek,
+  duration,
+  song,
+  timestamp,
+  handleSeekStart,
+  handleSeekEnd,
+} from "@renderer/components/song/song.utils";
+import { Component, createMemo, Show } from "solid-js";
 
 const SongDetail: Component = () => {
   return (
@@ -20,19 +26,37 @@ const SongDetail: Component = () => {
           <span class="song-detail__artist">{song().artist}</span>
         </div>
 
-        <Bar
-          fill={timestamp() / (duration() !== 0 ? duration() : 1)}
-          setFill={seek}
-          disabled={isSongUndefined(song())}
-        />
-        <div class="song-detail__time">
-          <span>{formatTime(timestamp() * 1_000)}</span>
-          <span>{formatTime(duration() * 1_000)}</span>
-        </div>
-
+        <ProgressBar />
         <SongControls />
       </div>
     </div>
+  );
+};
+
+const ProgressBar = () => {
+  const currentValue = createMemo(() => {
+    return timestamp() / (duration() !== 0 ? duration() : 1);
+  });
+
+  return (
+    <Slider
+      min={0}
+      max={1}
+      value={currentValue}
+      onValueChange={seek}
+      onValueStart={handleSeekStart}
+      onValueCommit={handleSeekEnd}
+    >
+      <Slider.Track class="progress-bar__track">
+        <Slider.Range class="progress-bar__range" />
+      </Slider.Track>
+      <Slider.Thumb class="progress-bar__thumb" />
+      <Slider.Time class="progress-bar__time">{formatTime(timestamp() * 1_000)}</Slider.Time>
+
+      <Show when={currentValue() < 0.94}>
+        <span class="progress-bar__total">{formatTime(duration() * 1_000)}</span>
+      </Show>
+    </Slider>
   );
 };
 

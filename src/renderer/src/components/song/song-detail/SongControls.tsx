@@ -1,15 +1,7 @@
 import { isSongUndefined } from "../../../lib/song";
-import Bar from "../../bar/Bar";
-import {
-  isPlaying,
-  next,
-  previous,
-  togglePlay,
-  localVolume,
-  setLocalVolume,
-  song,
-} from "../song.utils";
+import { isPlaying, next, previous, togglePlay, song, setVolume, volume } from "../song.utils";
 import IconButton from "@renderer/components/icon-button/IconButton";
+import Slider from "@renderer/components/slider/Slider";
 import { Component, createEffect, createSignal, Match, Show, Switch } from "solid-js";
 
 type SongControlsProps = {};
@@ -33,27 +25,7 @@ const SongControls: Component<SongControlsProps> = () => {
 
   return (
     <div class="song-controls">
-      {/* Left part */}
-      <div class="song-controls__left-part">
-        <IconButton>
-          <Switch>
-            <Match when={localVolume() === 0}>
-              <i class="ri-volume-mute-fill" />
-            </Match>
-            <Match when={localVolume() < 0.5}>
-              <i class="ri-volume-down-fill" />
-            </Match>
-            <Match when={localVolume() >= 0.5}>
-              <i class="ri-volume-up-fill" />
-            </Match>
-          </Switch>
-        </IconButton>
-        <div class="song-controls__volume-bar">
-          <Bar fill={localVolume()} setFill={setLocalVolume} />
-        </div>
-      </div>
-
-      {/* Middle */}
+      <LeftPart />
       <div class="song-controls__middle">
         <IconButton
           onClick={() => window.api.request("queue::shuffle")}
@@ -91,13 +63,70 @@ const SongControls: Component<SongControlsProps> = () => {
           <i class="ri-repeat-2-fill" />
         </IconButton>
       </div>
+      <RightPart />
+    </div>
+  );
+};
 
-      {/* Right part */}
-      <div class="song-controls__right-part">
+const LeftPart = () => {
+  const [isHoveringVolume, setIsHoveringVolume] = createSignal(false);
+  let isHoverintTimeoutId: NodeJS.Timeout;
+
+  return (
+    <div class="song-controls__left-part-wrapper">
+      <div
+        class="song-controls__left-part"
+        onMouseEnter={() => {
+          clearTimeout(isHoverintTimeoutId);
+          setIsHoveringVolume(true);
+        }}
+        onMouseLeave={() => {
+          // Add a timeout so the volume slider doesn't disappear instantly when the mouse leaves it
+          isHoverintTimeoutId = setTimeout(() => {
+            setIsHoveringVolume(false);
+          }, 400);
+        }}
+      >
         <IconButton>
-          <i class="ri-add-fill" />
+          <Switch>
+            <Match when={volume() === 0}>
+              <i class="ri-volume-mute-fill" />
+            </Match>
+            <Match when={volume() < 0.5}>
+              <i class="ri-volume-down-fill" />
+            </Match>
+            <Match when={volume() >= 0.5}>
+              <i class="ri-volume-up-fill" />
+            </Match>
+          </Switch>
         </IconButton>
+
+        <Show when={isHoveringVolume()}>
+          <Slider
+            class="song-controls__volume"
+            min={0}
+            max={1}
+            value={volume}
+            onValueChange={setVolume}
+            enableWheelSlide
+          >
+            <Slider.Track class="song-controls__volume-track">
+              <Slider.Range class="song-controls__volume-range" />
+            </Slider.Track>
+            <Slider.Thumb class="song-controls__volume-thumb" />
+          </Slider>
+        </Show>
       </div>
+    </div>
+  );
+};
+
+const RightPart = () => {
+  return (
+    <div class="song-controls__right-part">
+      <IconButton>
+        <i class="ri-add-fill" />
+      </IconButton>
     </div>
   );
 };

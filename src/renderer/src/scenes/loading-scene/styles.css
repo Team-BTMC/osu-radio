@@ -15,9 +15,22 @@
   }
 
   .loading-scene__bar {
-    height: 12px;
-    width: 100%;
-    max-width: 420px;
+    display: block;
+
+    .loading-scene__loader-track {
+      display: block;
+      height: 12px;
+      width: 420px;
+      background-color: rgba(0, 0, 0, 0.32);
+      border-radius: 4px;
+      overflow: hidden;
+
+      .loading-scene__loader-range {
+        display: block;
+        height: 100%;
+        background-color: white;
+      }
+    }
   }
 
   .loading-scene__hint {
