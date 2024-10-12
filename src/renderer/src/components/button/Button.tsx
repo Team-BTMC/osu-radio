@@ -22,6 +22,7 @@ const Button: Component<ButtonProps> = (props) => {
     ghost: "bg-transparent border-stroke border-solid text-text hover:bg-surface",
     link: "bg-transparent text-text hover:underline text-decoration-2 underline-offset-2",
   };
+  
   const sizeClasses = {
     medium: "px-4 py-2",
     large: "px-7 py-2.5",
