@@ -129,7 +129,7 @@ type NavItemProps = Pick<Tab, "value" | "icon"> & {
 const NavItem: Component<NavItemProps> = ({ children, value, icon }) => {
   return (
     <button
-      class={`flex items-center gap-4 rounded-sm px-4 py-1 hover:bg-surface ${mainActiveTab() === value ? "bg-surface" : ""}`}
+      class={`nav-item flex items-center gap-4 rounded-sm px-4 py-1 hover:bg-surface ${mainActiveTab() === value ? "bg-surface" : ""}`}
       onclick={() => setMainActiveTab(value)}
     >
       <i class={`${icon} ${mainActiveTab() === value ? "text-text" : "text-subtext"}`} />
