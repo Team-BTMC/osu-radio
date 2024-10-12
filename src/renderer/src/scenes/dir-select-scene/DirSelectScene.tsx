@@ -33,23 +33,17 @@ export default function DirSelectScene() {
 
     await window.api.request("dir::submit", dir());
   };
+
+  const GRADIENT = `radial-gradient(at 1% 75%, hsla(228,61%,67%,0.1) 0px, transparent 50%),
+    radial-gradient(at 20% 56%, hsla(87,75%,61%,0.1) 0px, transparent 50%),
+    radial-gradient(at 35% 34%, hsla(50,72%,67%,0.1) 0px, transparent 50%),
+    radial-gradient(at 50% 18%, hsla(296,74%,62%,0.1) 0px, transparent 50%),
+    radial-gradient(at 92% 14%, hsla(54,93%,75%,0.1) 0px, transparent 50%),
+    radial-gradient(at 9% 83%, hsla(226,80%,64%,0.1) 0px, transparent 50%),
+    radial-gradient(at 1% 96%, hsla(221,81%,65%,0.1) 0px, transparent 50%)`;
+
   return (
-    <div class="dir-select relative grid h-screen place-items-center p-8">
-      <style>
-        {`
-        .dir-select{
-        background: #D5C3E811;
-          background-image:
-          radial-gradient(at 1% 75%, hsla(228,61%,67%,0.1) 0px, transparent 50%),
-          radial-gradient(at 20% 56%, hsla(87,75%,61%,0.1) 0px, transparent 50%),
-          radial-gradient(at 35% 34%, hsla(50,72%,67%,0.1) 0px, transparent 50%),
-          radial-gradient(at 50% 18%, hsla(296,74%,62%,0.1) 0px, transparent 50%),
-          radial-gradient(at 92% 14%, hsla(54,93%,75%,0.1) 0px, transparent 50%),
-          radial-gradient(at 9% 83%, hsla(226,80%,64%,0.1) 0px, transparent 50%),
-          radial-gradient(at 1% 96%, hsla(221,81%,65%,0.1) 0px, transparent 50%);
-        }
-      `}{" "}
-      </style>
+    <div class="relative grid h-screen place-items-center p-8" style={{ background: GRADIENT }}>
       <div class="flex h-full max-h-[720px] w-full max-w-[860px] flex-col justify-between gap-12 overflow-y-auto rounded-2xl border border-stroke/10 bg-regular-material p-8 shadow-2xl">
         <h1 class="pt-12 text-center text-2xl">Welcome to osu! radio</h1>
 
