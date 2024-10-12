@@ -54,7 +54,7 @@ const SongItem: Component<SongItemProps> = ({
 
   return (
     <div
-      class={`relative isolate my-4 select-none rounded-md ${
+      class={`relative isolate select-none rounded-md ${
         selectedSong().path === song.path
           ? "data-[active=true]:after:bg-black/30 data-[active=true]:outline data-[active=true]:outline-2 data-[active=true]:outline-accent"
           : ""

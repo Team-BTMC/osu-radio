@@ -81,22 +81,22 @@ const SongQueue: Component = () => {
   });
 
   return (
-    <div ref={view} class="flex h-full flex-col">
-      <div class="sticky top-0 z-10 flex items-center justify-between bg-black bg-opacity-90 p-5 backdrop-blur-md">
+    <div ref={view} class="flex h-full flex-col bg-regular-material backdrop-blur-md">
+      <div class="sticky top-0 z-10 flex items-center justify-between p-5">
         <h2 class="text-lg font-semibold">Next songs on the queue ({count()})</h2>
         <IconButton onClick={handleCloseButtonClick}>
           <i class="ri-close-line" />
         </IconButton>
       </div>
 
-      <div class="flex-grow overflow-y-auto">
+      <div class="flex-grow overflow-y-auto px-4">
         <InfiniteScroller
           apiKey={"query::queue"}
           apiInitKey={"query::queue::init"}
           setCount={setCount}
           reset={resetListing}
           onLoadItems={onSongsLoad}
-          fallback={<div class="text-text-600 py-8 text-center">No queue...</div>}
+          fallback={<div class="py-8 text-center text-subtext">No queue...</div>}
           builder={(s) => (
             <SongItem
               song={s}

@@ -4,6 +4,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        transparent: "transparent",
         "thick-material": "var(--color-thick-material)",
         "regular-material": "var(--color-regular-material)",
         text: "var(--color-text)",
