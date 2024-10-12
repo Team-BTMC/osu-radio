@@ -6,7 +6,7 @@ Main Figma Design: [https://www.figma.com/design/tNBJr7TlEsoWsWdAewqoUg](https:/
 
 # What is osu!radio
 
-It's an application that plays your ${\textsf{\color{#f462a3}osu!}}$ songs!
+It's an application that plays your osu! songs!
 
 ![Song Tab](https://github.com/user-attachments/assets/da67b906-1429-4cc1-9087-76026e94b98a "The screen show a UI with all the buttons (Play, Pause, Forward and Rewind, as well as a Seek bar, with 4 songs on the left")
 
