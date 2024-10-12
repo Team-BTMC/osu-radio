@@ -20,7 +20,6 @@ const SongDetail: Component = () => {
       <div class="w-full max-w-[680px] space-y-4">
         <h2 class="text-2xl font-bold">{song().title}</h2>
         <span class="text-lg">{song().artist}</span>
-
         <Bar
           fill={timestamp() / (duration() !== 0 ? duration() : 1)}
           setFill={seek}

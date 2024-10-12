@@ -181,7 +181,10 @@ const QueueModal: Component = () => {
 
   return (
     <Show when={songQueueModalOpen()}>
-      <div class="queue-modal absolute bottom-0 right-0 top-0 z-20 h-full w-[480px] overflow-y-auto border-l border-stroke shadow-2xl" ref={queueModal}>
+      <div
+        class="queue-modal absolute bottom-0 right-0 top-0 z-20 h-full w-[480px] overflow-y-auto border-l border-stroke shadow-2xl"
+        ref={queueModal}
+      >
         <SongQueue />
       </div>
     </Show>

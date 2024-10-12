@@ -32,8 +32,26 @@ const SongControls: Component<SongControlsProps> = () => {
   createEffect(() => setDisable(isSongUndefined(song())));
 
   return (
-    <div class="flex flex-col items-center">
-      <div class="flex items-center space-x-4">
+    <div class="grid w-full grid-cols-4 items-center gap-4">
+      <div class="group flex w-max items-center">
+        <IconButton class="text-text">
+          <Switch>
+            <Match when={localVolume() === 0}>
+              <i class="ri-volume-mute-fill" />
+            </Match>
+            <Match when={localVolume() < 0.5}>
+              <i class="ri-volume-down-fill" />
+            </Match>
+            <Match when={localVolume() >= 0.5}>
+              <i class="ri-volume-up-fill" />
+            </Match>
+          </Switch>
+        </IconButton>
+        <div class="ml-3 w-24 opacity-0 transition-opacity group-hover:opacity-100">
+          <Bar fill={localVolume()} setFill={setLocalVolume} />
+        </div>
+      </div>
+      <div class="col-span-2 col-start-2 flex items-center justify-center gap-4">
         <IconButton
           onClick={() => window.api.request("queue::shuffle")}
           disabled={disable()}
@@ -70,30 +88,10 @@ const SongControls: Component<SongControlsProps> = () => {
           <i class="ri-repeat-2-fill" />
         </IconButton>
       </div>
-      <div class="flex w-full items-center justify-between">
-        <div class="group flex items-center justify-start">
-          <IconButton class="text-text">
-            <Switch>
-              <Match when={localVolume() === 0}>
-                <i class="ri-volume-mute-fill" />
-              </Match>
-              <Match when={localVolume() < 0.5}>
-                <i class="ri-volume-down-fill" />
-              </Match>
-              <Match when={localVolume() >= 0.5}>
-                <i class="ri-volume-up-fill" />
-              </Match>
-            </Switch>
-          </IconButton>
-          <div class="ml-3 w-24 opacity-0 transition-opacity group-hover:opacity-100">
-            <Bar fill={localVolume()} setFill={setLocalVolume} />
-          </div>
-        </div>
-        <div>
-          <IconButton>
-            <i class="ri-add-fill" />
-          </IconButton>
-        </div>
+      <div class="ml-auto">
+        <IconButton>
+          <i class="ri-add-fill" />
+        </IconButton>
       </div>
     </div>
   );
