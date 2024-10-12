@@ -84,7 +84,7 @@
     }
 
     .nav-window-control.close:hover {
-      background: red;
+      background: hsl(0, 69%, 50%);
     }
 
     .nav-item {
