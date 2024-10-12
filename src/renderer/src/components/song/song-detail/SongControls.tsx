@@ -32,26 +32,7 @@ const SongControls: Component<SongControlsProps> = () => {
   createEffect(() => setDisable(isSongUndefined(song())));
 
   return (
-    <div class="flex items-center justify-between">
-      <div class="flex items-center">
-        <IconButton class="text-text-700">
-          <Switch>
-            <Match when={localVolume() === 0}>
-              <i class="ri-volume-mute-fill" />
-            </Match>
-            <Match when={localVolume() < 0.5}>
-              <i class="ri-volume-down-fill" />
-            </Match>
-            <Match when={localVolume() >= 0.5}>
-              <i class="ri-volume-up-fill" />
-            </Match>
-          </Switch>
-        </IconButton>
-        <div class="ml-3 w-24">
-          <Bar fill={localVolume()} setFill={setLocalVolume} />
-        </div>
-      </div>
-
+    <div class="flex flex-col items-center">
       <div class="flex items-center space-x-4">
         <IconButton
           onClick={() => window.api.request("queue::shuffle")}
@@ -89,11 +70,30 @@ const SongControls: Component<SongControlsProps> = () => {
           <i class="ri-repeat-2-fill" />
         </IconButton>
       </div>
-
-      <div>
-        <IconButton>
-          <i class="ri-add-fill" />
-        </IconButton>
+      <div class="flex w-full justify-between items-center">
+        <div class="flex justify-start items-center group">
+          <IconButton class="text-text-700">
+            <Switch>
+              <Match when={localVolume() === 0}>
+                <i class="ri-volume-mute-fill" />
+              </Match>
+              <Match when={localVolume() < 0.5}>
+                <i class="ri-volume-down-fill" />
+              </Match>
+              <Match when={localVolume() >= 0.5}>
+                <i class="ri-volume-up-fill" />
+              </Match>
+            </Switch>
+          </IconButton>
+            <div class="ml-3 w-24 opacity-0 group-hover:opacity-100  transition-opacity">
+              <Bar fill={localVolume()} setFill={setLocalVolume} />
+            </div>
+        </div>
+        <div>
+          <IconButton>
+            <i class="ri-add-fill" />
+          </IconButton>
+        </div>
       </div>
     </div>
   );
