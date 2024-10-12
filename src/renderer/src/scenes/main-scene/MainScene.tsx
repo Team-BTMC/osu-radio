@@ -21,6 +21,7 @@ import {
   For,
   JSXElement,
   Match,
+  onCleanup,
   Setter,
   Show,
   Switch,
@@ -149,9 +150,29 @@ const TabContent: Component = () => {
 };
 
 const QueueModal: Component = () => {
+  let queueModal: HTMLDivElement | undefined;
+
+  const handleOutsideClick = (event: MouseEvent) => {
+    if (queueModal && !queueModal.contains(event.target as Node)) {
+      toggleSongQueueModalOpen();
+    }
+  };
+
+  createEffect(() => {
+    if (songQueueModalOpen()) {
+      document.addEventListener("mousedown", handleOutsideClick);
+    } else {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    }
+
+    onCleanup(() => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    });
+  });
+
   return (
     <Show when={songQueueModalOpen()}>
-      <div class="queue-modal">
+      <div class="queue-modal" ref={queueModal}>
         <SongQueue />
       </div>
     </Show>
