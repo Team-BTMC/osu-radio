@@ -123,5 +123,7 @@ app.on("window-all-closed", () => {
 
 function zoom(window: BrowserWindow, factor?: number) {
   const currentZoom = window.webContents.getZoomFactor();
-  window.webContents.setZoomFactor(factor ? currentZoom + factor : 1);
+  const newZoom = factor ? currentZoom + factor : 1;
+  const clampedZoom = Math.max(Math.min(newZoom, 2), 0.5);
+  window.webContents.setZoomFactor(clampedZoom);
 }
