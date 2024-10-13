@@ -37,7 +37,7 @@
         font-size: 16px;
         line-height: 24px;
         font-weight: 400;
-        font-family: "Nunito";
+        font-family: inherit;
       }
     }
   }
@@ -113,7 +113,8 @@
         font-size: 16px;
         line-height: 24px;
         font-weight: 400;
-        font-family: "Nunito";
+        font-family: inherit;
+        width: 100%;
       }
 
       button {

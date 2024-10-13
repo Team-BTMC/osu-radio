@@ -4,7 +4,8 @@ import { PLAYLIST_SCENE_LIST, setPlaylistActiveScene } from "../playlist-view/pl
 import "./styles.css";
 import { namespace } from "@renderer/App";
 import IconButton from "@renderer/components/icon-button/IconButton";
-import { Component, createSignal } from "solid-js";
+import Impulse from "@renderer/lib/Impulse";
+import { Component, createSignal, onCleanup, onMount } from "solid-js";
 import { PlaylistSongsQueryPayload, ResourceID } from "src/@types";
 
 type PlaylistSongListProps = {
@@ -17,6 +18,11 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
   const [payload, _setPlayload] = createSignal<PlaylistSongsQueryPayload>({
     playlistName: props.playlistName,
   });
+
+  const reset = new Impulse();
+
+  onMount(() => window.api.listen("playlist::resetSongList", reset.pulse.bind(reset)));
+  onCleanup(() => window.api.removeListener("playlist::resetSongList", reset.pulse.bind(reset)));
 
   const createQueue = async (songResource: ResourceID) => {
     await window.api.request("queue::create", {
@@ -48,6 +54,7 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
           apiData={payload()}
           apiInitKey={"query::playlistSongs::init"}
           apiInitData={payload()}
+          reset={reset}
           fallback={<div>No songs in playlist...</div>}
           builder={(s) => (
             <SongItem

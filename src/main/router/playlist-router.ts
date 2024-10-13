@@ -2,8 +2,10 @@ import { Playlist } from "../../@types";
 import { Router } from "../lib/route-pass/Router";
 import { none, some } from "../lib/rust-like-utils-backend/Optional";
 import { Storage } from "../lib/storage/Storage";
+import errorIgnored from "../lib/tungsten/errorIgnored";
+import { mainWindow } from "../main";
 
-Router.respond("playlist::add", (_evt, playlistName, song) => {
+Router.respond("playlist::add", async (_evt, playlistName, song) => {
   const playlists = Storage.getTable("playlists");
   const playlist = playlists.get(playlistName);
 
@@ -15,6 +17,8 @@ Router.respond("playlist::add", (_evt, playlistName, song) => {
   playlist.value.count = playlist.value.count + 1;
   playlist.value.length = playlist.value.length + song.duration;
   playlists.write(playlistName, playlist.value);
+  await Router.dispatch(mainWindow, "playlist::resetList").catch(errorIgnored);
+  await Router.dispatch(mainWindow, "playlist::resetSongList").catch(errorIgnored);
 });
 
 Router.respond("playlist::create", (_evt, name) => {

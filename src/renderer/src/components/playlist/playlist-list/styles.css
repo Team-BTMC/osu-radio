@@ -7,42 +7,48 @@
     margin-bottom: 24px;
 
     .playlist-list__header__input-container {
-      height: 40px;
       display: flex;
-      align-items: center;
+      flex-direction: row;
+      justify-content: space-between;
       flex: 1;
+      height: 40px;
+      align-items: center;
       border: 1px solid #f2f4fc1a;
       border-radius: 8px;
-      padding: 8px 12px;
+      /* padding: 8px 12px; */
+      margin-right: 8px;
 
       .playlist-list__header__input {
-        flex: 1;
         background-color: transparent;
         border: none;
         font-size: 16px;
         color: white;
-        font-family: "Nunito";
+        font-family: inherit;
+        margin-left: 12px;
+        width: 100%;
       }
-
       .playlist-list__header__search-icon {
         font-size: 20px;
         color: #eff1f599;
+        margin-right: 12px;
       }
     }
 
-    .icon-button {
-      font-size: 20px;
-      width: 20px;
-      height: 20px;
-      color: #eff1f5;
-      border: 1px solid #f2f4fc1a;
-      border-radius: 8px;
-      padding: 9px;
-      margin: 0px 0px 0px 6px; /* why is this button so weird */
+    .playlist-list__header__create-playlist {
+      .icon-button {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+        color: #eff1f5;
+        border: 1px solid #f2f4fc1a;
+        border-radius: 8px;
+        padding: 9px;
+        margin: 0px; /* why is this button so weird */
 
-      &[data-open="true"] {
-        background-color: #ffffffeb;
-        color: #0d0d0df2;
+        &[data-open="true"] {
+          background-color: #ffffffeb;
+          color: #0d0d0df2;
+        }
       }
     }
   }

@@ -10,7 +10,7 @@ import PlaylistItem from "../playlist-item/PlaylistItem";
 import "./styles.css";
 import { namespace } from "@renderer/App";
 import Impulse from "@renderer/lib/Impulse";
-import { Component, createSignal, Match, Switch } from "solid-js";
+import { Component, createSignal, Match, onCleanup, onMount, Switch } from "solid-js";
 
 export type PlaylistListProps = {};
 
@@ -21,6 +21,11 @@ const PlaylistList: Component<PlaylistListProps> = () => {
   const [showCreateBox, setShowCreateBox] = createSignal(false);
 
   const group = namespace.create(true);
+
+  onMount(() => window.api.listen("playlist::resetList", resetListing.pulse.bind(resetListing)));
+  onCleanup(() =>
+    window.api.removeListener("playlist::resetList", resetListing.pulse.bind(resetListing)),
+  );
 
   return (
     <div class="playlist-list">
@@ -45,15 +50,17 @@ const PlaylistList: Component<PlaylistListProps> = () => {
           />
           <i class="ri-search-line playlist-list__header__search-icon"></i>
         </div>
-        <IconButton
-          onClick={() => {
-            // setPlaylistActiveScene(PLAYLIST_SCENE_CREATE);
-            setShowCreateBox(true);
-          }}
-          data-open={showCreateBox()}
-        >
-          <i class="ri-add-fill" />
-        </IconButton>
+        <div class="playlist-list__header__create-playlist">
+          <IconButton
+            onClick={() => {
+              // setPlaylistActiveScene(PLAYLIST_SCENE_CREATE);
+              setShowCreateBox(!showCreateBox());
+            }}
+            data-open={showCreateBox()}
+          >
+            <i class="ri-add-fill" />
+          </IconButton>
+        </div>
       </div>
 
       <div class="playlist-list__body">
