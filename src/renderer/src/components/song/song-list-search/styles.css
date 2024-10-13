@@ -47,7 +47,14 @@
 
 .song-list-search-tags {
   .song-list-search-tags__hint {
-    font-size: 12px;
+    font-size: 14px;
+    color: var(--text-600);
+  }
+
+  .song-list-search-tags__hint-dismiss {
+    color: #ff4d4d;
+    padding-left: 2px;
+    text-decoration: underline;
   }
 
   .song-list-search-tags__content {
@@ -64,5 +71,31 @@
     padding: 2px 8px;
     border-radius: 6px;
     user-select: none;
+    border: 1px solid transparent;
+
+    &[data-mode="include"] {
+      color: #04d000;
+      background: rgba(4, 208, 0, 0.05);
+      border: 1px solid #04d000;
+    }
+
+    &[data-mode="discart"] {
+      color: #ff4040;
+      background: #101013;
+      border: 1px dashed #ff4040;
+    }
+  }
+}
+
+.tags-selected-label {
+  display: flex;
+  gap: 8px;
+
+  :is(.tags-selected-label__name[data-mode="include"], .tags-selected-label__include) {
+    color: #04d000;
+  }
+
+  :is(.tags-selected-label__name[data-mode="discart"], .tags-selected-label__discart) {
+    color: #ff4040;
   }
 }
