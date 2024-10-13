@@ -46,6 +46,7 @@ const ProgressBar = () => {
       onValueChange={seek}
       onValueStart={handleSeekStart}
       onValueCommit={handleSeekEnd}
+      animate
     >
       <Slider.Track class="progress-bar__track">
         <Slider.Range class="progress-bar__range" />

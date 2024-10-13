@@ -14,7 +14,7 @@ import {
   Setter,
   useContext,
 } from "solid-js";
-import { DOMElement } from "solid-js/jsx-runtime";
+import { DOMElement, JSX } from "solid-js/jsx-runtime";
 
 const DEFAULT_SLIDER_VALUE = 0;
 const DEFAULT_MIN = 0;
@@ -30,6 +30,7 @@ export type Props = {
   max?: number;
   class?: string;
   enableWheelSlide?: boolean;
+  animate?: boolean;
 };
 
 type Event = PointerEvent & {
@@ -47,6 +48,7 @@ function convertValueToPercentage(value: number, min: number, max: number) {
 }
 
 function useProviderValue(props: Props) {
+  const [isDragging, setIsDragging] = createSignal(false);
   const [thumbWidth, setThumbWidth] = createSignal<number>(0);
   const [thumb, _setThumb] = createSignal<HTMLElement>();
   const [value, setValue] = useControllableState({
@@ -60,10 +62,27 @@ function useProviderValue(props: Props) {
     setThumbWidth(node.getBoundingClientRect().width);
   };
 
+  const startDragging = () => {
+    setIsDragging(true);
+  };
+  const stopDragging = () => {
+    setIsDragging(false);
+  };
+
   const min = props.min ?? DEFAULT_MIN;
   const max = props.max ?? DEFAULT_MAX;
 
   const percentage = createMemo(() => convertValueToPercentage(value(), min, max));
+  const transitionStyleValue = createMemo<JSX.CSSProperties>(() => {
+    if (!props.animate || isDragging()) {
+      return {};
+    }
+
+    return {
+      "transition-timing-function": "cubic-bezier(0.4, 0, 0.2, 1)",
+      "transition-duration": "160ms",
+    };
+  });
 
   return {
     thumbWidth,
@@ -74,6 +93,9 @@ function useProviderValue(props: Props) {
     setThumb,
     min,
     max,
+    transitionStyleValue,
+    startDragging,
+    stopDragging,
   };
 }
 
@@ -118,9 +140,11 @@ const SliderRoot: ParentComponent<Props> = (props) => {
       return;
     }
 
+    sliderContext.startDragging();
     sliderContext.setValue(value);
   };
   const handleSlideEnd = () => {
+    sliderContext.stopDragging();
     props.onValueCommit?.();
   };
 

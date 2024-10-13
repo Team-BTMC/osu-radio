@@ -7,11 +7,13 @@ const SliderTime: Component<JSX.IntrinsicElements["span"]> = (props) => {
   return (
     <span
       style={{
+        ...state.transitionStyleValue(),
         position: "absolute",
         right: `calc(${100 - state.percentage()}%)`,
         left: "0px",
         top: "0px",
         "pointer-events": "none",
+        "transition-property": "right",
       }}
     >
       <span {...props} />

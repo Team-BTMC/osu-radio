@@ -19,10 +19,12 @@ const SliderThumb: Component<JSX.IntrinsicElements["span"]> = (props) => {
   return (
     <span
       style={{
+        ...state.transitionStyleValue(),
         position: "absolute",
         left: `calc(${state.percentage()}% + ${thumbInBoundsOffset()}px)`,
         top: "0px",
         "pointer-events": "none",
+        "transition-property": "left",
       }}
     >
       <span
