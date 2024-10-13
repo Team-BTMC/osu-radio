@@ -18,8 +18,7 @@ export type SongViewProps = {
 };
 
 const SongList: Component<SongViewProps> = (props) => {
-  const tagsSignal = createSignal<Tag[]>([], { equals: false });
-  const [tags] = tagsSignal;
+  const [tags, setTags] = createSignal<Tag[]>([], { equals: false });
 
   const [order, setOrder] = createSignal("title:asc");
   const [count, setCount] = createSignal(0);
@@ -76,7 +75,7 @@ const SongList: Component<SongViewProps> = (props) => {
   return (
     <div class="song-list">
       <div class="song-list__search-container">
-        <SongListSearch tags={tagsSignal} setOrder={setOrder} count={count} error={searchError} />
+        <SongListSearch setTags={setTags} setOrder={setOrder} count={count} error={searchError} />
       </div>
 
       <div class="song-list__songs">
