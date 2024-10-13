@@ -35,8 +35,8 @@ Router.respond("playlist::delete", (_evt, name) => {
   playlists.delete(name);
 });
 
-Router.respond("playlist::remove", (_evt, playlistName, song) => {
-  console.log("delete song from " + playlistName, song);
+Router.respond("playlist::remove", async (_evt, playlistName, song) => {
+  console.log("delete " + song.title + " from " + playlistName);
   const playlists = Storage.getTable("playlists");
   const playlist = playlists.get(playlistName);
 
@@ -44,10 +44,15 @@ Router.respond("playlist::remove", (_evt, playlistName, song) => {
     return;
   }
 
-  const songIndex = playlist.value.songs.indexOf(song, 0);
+  // i assume that audio is the primary key
+  const songIndex = playlist.value.songs.findIndex((s) => s.audio === song.audio);
+
   if (songIndex > -1) {
     playlist.value.songs.splice(songIndex, 1);
+    playlist.value.count = playlist.value.count - 1;
+    playlist.value.length = playlist.value.length - song.duration;
     playlists.write(playlistName, playlist.value);
+    await Router.dispatch(mainWindow, "playlist::resetSongList").catch(errorIgnored);
   }
 });
 

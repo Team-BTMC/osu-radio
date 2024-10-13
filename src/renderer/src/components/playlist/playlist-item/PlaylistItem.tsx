@@ -38,7 +38,7 @@ const PlaylistItem: Component<PlaylistItemProps> = (props) => {
             {/* <p>{formatPlaylistTime(Math.round(props.playlist.length))}</p> */}
           </div>
           <div class="playlist-item__playlist-info__button">
-            <IconButton onClick={(e) => deletePlaylist(e, props)}>
+            <IconButton onClick={(e) => deletePlaylist(e, props)} data-open={"false"}>
               <i class="ri-more-2-line" />
             </IconButton>
           </div>

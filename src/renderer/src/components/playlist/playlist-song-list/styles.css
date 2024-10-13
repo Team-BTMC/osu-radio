@@ -35,6 +35,11 @@
 
       .icon-button {
         font-size: 20px;
+        border-radius: 8px;
+        &[data-open="true"] {
+          background-color: #ffffffeb;
+          color: #0d0d0df2;
+        }
       }
     }
   }
@@ -44,6 +49,26 @@
       display: flex;
       flex-direction: column;
       gap: 16px;
+    }
+
+    .playlist-song-list__list__item {
+      display: flex;
+      width: 100%;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+
+      .song-item {
+        width: 100%;
+      }
+
+      .icon-button {
+        margin-left: 12px;
+        margin-right: -2px;
+        color: lightcoral;
+        border-radius: 8px;
+        border: 1px solid #f2f4fc1a;
+      }
     }
   }
 }

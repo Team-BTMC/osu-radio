@@ -5,8 +5,8 @@ import "./styles.css";
 import { namespace } from "@renderer/App";
 import IconButton from "@renderer/components/icon-button/IconButton";
 import Impulse from "@renderer/lib/Impulse";
-import { Component, createSignal, onCleanup, onMount } from "solid-js";
-import { PlaylistSongsQueryPayload, ResourceID } from "src/@types";
+import { Component, createSignal, Match, onCleanup, onMount, Switch } from "solid-js";
+import { PlaylistSongsQueryPayload, ResourceID, Song } from "src/@types";
 
 type PlaylistSongListProps = {
   playlistName: string;
@@ -18,6 +18,8 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
   const [payload, _setPlayload] = createSignal<PlaylistSongsQueryPayload>({
     playlistName: props.playlistName,
   });
+
+  const [editMode, setEditMode] = createSignal(false);
 
   const reset = new Impulse();
 
@@ -33,6 +35,10 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
     });
   };
 
+  const deleteSong = async (playlistName: string, song: Song) => {
+    await window.api.request("playlist::remove", playlistName, song);
+  };
+
   return (
     <div class="playlist-song-list">
       <div class="playlist-song-list__top">
@@ -43,7 +49,7 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
           <h3>{props.playlistName}</h3>
         </div>
         <div class="playlist-song-list__top__right">
-          <IconButton>
+          <IconButton onClick={() => setEditMode(!editMode())} data-open={editMode()}>
             <i class="ri-edit-line"></i>
           </IconButton>
         </div>
@@ -57,13 +63,22 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
           reset={reset}
           fallback={<div>No songs in playlist...</div>}
           builder={(s) => (
-            <SongItem
-              song={s}
-              group={group}
-              selectable={true}
-              draggable={true}
-              onSelect={createQueue}
-            ></SongItem>
+            <div class="playlist-song-list__list__item">
+              <SongItem
+                song={s}
+                group={group}
+                selectable={true}
+                draggable={true}
+                onSelect={createQueue}
+              ></SongItem>
+              <Switch fallback={""}>
+                <Match when={editMode() === true}>
+                  <IconButton onClick={() => deleteSong(props.playlistName, s)}>
+                    <i class="ri-delete-bin-line playlist-song-list__list__item__delete-button"></i>
+                  </IconButton>
+                </Match>
+              </Switch>
+            </div>
           )}
         />
       </div>

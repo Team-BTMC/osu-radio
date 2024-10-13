@@ -53,6 +53,14 @@
         border: 1px solid #f2f4fc1a;
         border-radius: 8px;
         z-index: 3;
+
+        .icon-button {
+          border-radius: 8px;
+          &[data-open="true"] {
+            background-color: #ffffffeb;
+            color: #0d0d0df2;
+          }
+        }
       }
     }
   }
