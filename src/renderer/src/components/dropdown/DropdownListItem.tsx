@@ -4,9 +4,11 @@ import { ParentComponent } from "solid-js";
 
 const DropdownListItem: ParentComponent<ListItemProps> = (props) => {
   return (
-    <List.Item class="dropdown-list-item" value={props.value}>
+    <List.Item
+      class="flex items-center justify-between rounded-md p-2 hover:bg-stroke data-[selected=true]:bg-overlay/30"
+      value={props.value}
+    >
       <span>{props.children}</span>
-      <i class="ri-check-line dropdown-list-item_icon" />
     </List.Item>
   );
 };
