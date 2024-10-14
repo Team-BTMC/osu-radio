@@ -6,6 +6,8 @@ import { electronApp, is, optimizer } from "@electron-toolkit/utils";
 import { app, BrowserWindow, dialog } from "electron";
 import { join } from "path";
 
+if (!app.requestSingleInstanceLock()) app.quit();
+
 async function createWindow() {
   const [width, height] = getBounds();
 
@@ -35,6 +37,11 @@ async function createWindow() {
       height: 30,
     },
     */
+  });
+
+  app.on("second-instance", () => {
+    if (window.isMinimized()) window.restore();
+    window.focus();
   });
 
   window.on("maximize", () => {
