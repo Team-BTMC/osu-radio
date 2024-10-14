@@ -1,7 +1,6 @@
 import formatTime from "../../../lib/time-formatter";
 import SongImage from "../SongImage";
 import SongControls from "./SongControls";
-import "./styles.css";
 import Slider from "@renderer/components/slider/Slider";
 import {
   seek,
@@ -44,7 +43,7 @@ const ProgressBar = () => {
 
   return (
     <Slider
-      class="block mt-4"
+      class="mt-4 block"
       min={0}
       max={1}
       value={currentValue}
@@ -53,16 +52,16 @@ const ProgressBar = () => {
       onValueCommit={handleSeekEnd}
       animate
     >
-      <Slider.Track class="flex items-center p-1 h-7 bg-thick-material rounded-xl">
-        <Slider.Range class="block h-5 bg-surface rounded-l-lg" />
+      <Slider.Track class="flex h-7 items-center rounded-xl bg-thick-material p-1">
+        <Slider.Range class="block h-5 rounded-l-lg bg-surface" />
       </Slider.Track>
-      <Slider.Thumb class="-mt-0.5 block w-1.5 h-8 bg-white rounded-lg" />
-      <Slider.Time class="block pt-1.5 px-3 text-[13px] font-bold text-end z-10">
+      <Slider.Thumb class="-mt-0.5 block h-8 w-1.5 rounded-lg bg-white" />
+      <Slider.Time class="z-10 block px-3 pt-1.5 text-end text-[13px] font-bold">
         {formatTime(timestamp() * 1_000)}
       </Slider.Time>
 
       <Show when={currentValue() < 0.94}>
-        <span class="absolute top-0 right-0 block pt-1.5 px-3 text-[13px] text-end z-10">
+        <span class="absolute right-0 top-0 z-10 block px-3 pt-1.5 text-end text-[13px]">
           {formatTime(duration() * 1_000)}
         </span>
       </Show>
