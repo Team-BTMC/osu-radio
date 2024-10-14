@@ -1,7 +1,7 @@
 import { cn } from "../../lib/css.utils";
 import Dropdown from "../dropdown/Dropdown";
 import { changeAudioDevice } from "@renderer/components/song/song.utils";
-import { Component, createEffect, createSignal, JSX, onMount, Switch } from "solid-js";
+import { Component, createEffect, createSignal, JSX, onMount } from "solid-js";
 
 const Settings: Component = () => {
   return (
