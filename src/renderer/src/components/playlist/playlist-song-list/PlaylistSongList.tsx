@@ -1,7 +1,6 @@
 import InfiniteScroller from "../../InfiniteScroller";
 import SongItem from "../../song/song-item/SongItem";
 import { PLAYLIST_SCENE_LIST, setPlaylistActiveScene } from "../playlist-view/playlist-view.utils";
-import "./styles.css";
 import { namespace } from "@renderer/App";
 import IconButton from "@renderer/components/icon-button/IconButton";
 import Impulse from "@renderer/lib/Impulse";
@@ -40,30 +39,39 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
   };
 
   return (
-    <div class="playlist-song-list">
-      <div class="playlist-song-list__top">
-        <div class="playlist-song-list__top__left">
-          <IconButton onClick={() => setPlaylistActiveScene(PLAYLIST_SCENE_LIST)}>
+    <div class="mx-5 my-6">
+      <div class="mb-6 flex w-full flex-row items-center justify-between">
+        <div class="flex flex-row items-center gap-5 text-xl font-medium">
+          <IconButton
+            onClick={() => setPlaylistActiveScene(PLAYLIST_SCENE_LIST)}
+            class="text-xl text-text"
+          >
             <i class="ri-arrow-left-line"></i>
           </IconButton>
           <h3>{props.playlistName}</h3>
         </div>
-        <div class="playlist-song-list__top__right">
-          <IconButton onClick={() => setEditMode(!editMode())} data-open={editMode()}>
+        <div class="flex h-10 w-10 items-center justify-center rounded-lg border border-stroke text-text">
+          <IconButton
+            onClick={() => setEditMode(!editMode())}
+            data-open={editMode()}
+            class="rounded-lg text-xl"
+            classList={{ "bg-accent text-thick-material": editMode() }}
+          >
             <i class="ri-edit-line"></i>
           </IconButton>
         </div>
       </div>
-      <div class="playlist-song-list__list">
+      <div>
         <InfiniteScroller
           apiKey={"query::playlistSongs"}
           apiData={payload()}
           apiInitKey={"query::playlistSongs::init"}
           apiInitData={payload()}
           reset={reset}
+          class="flex flex-col gap-4"
           fallback={<div>No songs in playlist...</div>}
           builder={(s) => (
-            <div class="playlist-song-list__list__item">
+            <div class="flex w-full flex-row items-center justify-center">
               <SongItem
                 song={s}
                 group={group}
@@ -73,8 +81,11 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
               ></SongItem>
               <Switch fallback={""}>
                 <Match when={editMode() === true}>
-                  <IconButton onClick={() => deleteSong(props.playlistName, s)}>
-                    <i class="ri-delete-bin-line playlist-song-list__list__item__delete-button"></i>
+                  <IconButton
+                    onClick={() => deleteSong(props.playlistName, s)}
+                    class="ml-3 mr-[-2px] rounded-lg border border-stroke text-rose-300"
+                  >
+                    <i class="ri-delete-bin-line"></i>
                   </IconButton>
                 </Match>
               </Switch>

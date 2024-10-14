@@ -6,7 +6,6 @@ import {
   setPlaylistActiveScene,
 } from "../playlist-view/playlist-view.utils";
 import { deletePlaylist, getSongImage } from "./playlist-item.utils";
-import "./styles.css";
 import Impulse from "@renderer/lib/Impulse";
 import { Component } from "solid-js";
 import { Playlist } from "src/@types";
@@ -20,25 +19,33 @@ export type PlaylistItemProps = {
 const PlaylistItem: Component<PlaylistItemProps> = (props) => {
   return (
     <div
-      class="playlist-item"
       onClick={() => {
         setActivePlaylistName(props.playlist.name);
         setPlaylistActiveScene(PLAYLIST_SCENE_SONGS);
       }}
     >
-      <div class="playlist-item-container">
-        <div class="playlist-item__playlist-img">
-          <SongImage src={getSongImage(props.playlist)} group={props.group} />
+      <div class="flex flex-row gap-4">
+        <div class="rounded-lg">
+          <SongImage
+            src={getSongImage(props.playlist)}
+            group={props.group}
+            class="h-[71px] w-[71px] rounded-lg bg-cover bg-center"
+          />
         </div>
 
-        <div class="playlist-item__playlist-info">
-          <div class="playlist-item__playlist-info__text">
-            <h3>{props.playlist.name}</h3>
+        <div class="ml-[6px] flex w-full flex-row items-center justify-between">
+          <div class="flex flex-col justify-center text-base font-medium text-text">
+            <h3 class="text-3xl font-bold">{props.playlist.name}</h3>
             <p>{props.playlist.count} songs</p>
             {/* <p>{formatPlaylistTime(Math.round(props.playlist.length))}</p> */}
           </div>
-          <div class="playlist-item__playlist-info__button">
-            <IconButton onClick={(e) => deletePlaylist(e, props)} data-open={"false"}>
+          <div class="z-[3] flex h-10 w-10 flex-col items-center justify-center rounded-lg border border-stroke text-text">
+            <IconButton
+              class="rounded-lg"
+              classList={{ "bg-accent text-thick-material": false }}
+              onClick={(e) => deletePlaylist(e, props)}
+              data-open={"false"}
+            >
               <i class="ri-more-2-line" />
             </IconButton>
           </div>

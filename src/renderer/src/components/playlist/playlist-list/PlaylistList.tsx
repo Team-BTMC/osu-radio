@@ -1,4 +1,3 @@
-import "../../../assets/css/song/song-view.css";
 import InfiniteScroller from "../../InfiniteScroller";
 import IconButton from "../../icon-button/IconButton";
 import PlaylistCreateBox from "../playlist-create/PlaylistCreateBox";
@@ -7,7 +6,6 @@ import PlaylistItem from "../playlist-item/PlaylistItem";
 //   PLAYLIST_SCENE_CREATE,
 //   setPlaylistActiveScene,
 // } from "../playlist-view/playlist-view.utils";
-import "./styles.css";
 import { namespace } from "@renderer/App";
 import Impulse from "@renderer/lib/Impulse";
 import { Component, createSignal, Match, onCleanup, onMount, Switch } from "solid-js";
@@ -28,7 +26,7 @@ const PlaylistList: Component<PlaylistListProps> = () => {
   );
 
   return (
-    <div class="playlist-list">
+    <div class="mx-5 my-6">
       {/* <Search
         query={querySignal}
         tags={tagsSignal}
@@ -37,25 +35,27 @@ const PlaylistList: Component<PlaylistListProps> = () => {
         error={searchError}
       />
       */}
-      <div class="playlist-list__header">
-        <div class="playlist-list__header__input-container">
+      <div class="mb-6 flex flex-row items-center">
+        <div class="mr-2 flex h-10 flex-1 flex-row items-center justify-between rounded-lg border border-stroke">
           <input
             type="text"
             id="playlist_input"
-            class="playlist-list__header__input"
+            class="color-white ml-3 w-full border-none bg-transparent font-[inherit] text-base"
             placeholder="Search in your playlists... (WIP)"
             // onInput={(e) => {
             //   setPlaylistSearch(e.target.value);
             // }}
           />
-          <i class="ri-search-line playlist-list__header__search-icon"></i>
+          <i class="ri-search-line mr-3 text-xl text-text"></i>
         </div>
-        <div class="playlist-list__header__create-playlist">
+        <div class="rounded-lg border border-stroke">
           <IconButton
+            class="m-0 h-5 w-5 rounded-lg p-[9px] text-xl text-text"
             onClick={() => {
               // setPlaylistActiveScene(PLAYLIST_SCENE_CREATE);
               setShowCreateBox(!showCreateBox());
             }}
+            classList={{ "bg-accent text-thick-material": showCreateBox() }}
             data-open={showCreateBox()}
           >
             <i class="ri-add-fill" />
@@ -63,7 +63,7 @@ const PlaylistList: Component<PlaylistListProps> = () => {
         </div>
       </div>
 
-      <div class="playlist-list__body">
+      <div>
         <Switch fallback={""}>
           <Match when={showCreateBox() === true}>
             <PlaylistCreateBox group={group} isOpen={setShowCreateBox} reset={resetListing} />
@@ -75,6 +75,7 @@ const PlaylistList: Component<PlaylistListProps> = () => {
           setCount={setCount}
           reset={resetListing}
           fallback={<div>No playlists...</div>}
+          class="flex flex-col gap-4"
           builder={(s) => (
             <PlaylistItem playlist={s} group={group} reset={resetListing}></PlaylistItem>
           )}
