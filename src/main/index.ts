@@ -29,7 +29,6 @@ async function createWindow() {
     height,
     show: false,
     autoHideMenuBar: true,
-    icon: getIcon(),
     titleBarStyle: "hidden",
     trafficLightPosition: {
       x: 20,
