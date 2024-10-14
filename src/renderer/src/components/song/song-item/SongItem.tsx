@@ -4,7 +4,6 @@ import SongHint from "../SongHint";
 import SongImage from "../SongImage";
 import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import { song as selectedSong } from "../song.utils";
-import "./styles.css";
 import { Component, createSignal, onMount } from "solid-js";
 
 type SongItemProps = {
@@ -16,6 +15,7 @@ type SongItemProps = {
   onDrop?: (before: Element | null) => any;
   children?: any;
 };
+
 const SongItem: Component<SongItemProps> = ({
   group,
   onSelect,
@@ -54,17 +54,29 @@ const SongItem: Component<SongItemProps> = ({
 
   return (
     <div
-      class="song-item"
+      class="group relative isolate select-none rounded-md"
+      classList={{
+        "outline outline-2 outline-accent": selectedSong().path === song.path,
+      }}
       data-active={selectedSong().path === song.path}
       ref={item}
       data-url={song.bg}
       onContextMenu={showMenu}
     >
-      <SongImage class="song-item__image" src={song.bg} group={group} />
+      <SongImage
+        class="absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-30 group-hover:opacity-90"
+        classList={{
+          "opacity-90": selectedSong().path === song.path,
+        }}
+        src={song.bg}
+        group={group}
+      />
 
-      <div class="song-item__container">
-        <h3 class="song-item__title">{song.title}</h3>
-        <p class="song-item__artist">{song.artist}</p>
+      <div class="flex min-h-[72px] flex-col justify-center overflow-hidden rounded-md bg-black/50 p-3">
+        <h3 class="text-shadow text-[22px] font-extrabold leading-7 shadow-black/60">
+          {song.title}
+        </h3>
+        <p class="text-base text-subtext">{song.artist}</p>
       </div>
     </div>
   );

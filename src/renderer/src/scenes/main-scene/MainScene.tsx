@@ -29,19 +29,23 @@ import {
 
 const MainScene: Component = () => {
   return (
-    <div class="main-scene">
+    <div class="main-scene flex h-screen flex-col overflow-hidden">
       <Nav />
-      <main class="main-scene__main">
+      <main class="relative flex h-[calc(100vh-52px)]">
         <TabContent />
-        <div class="main-scene__song-detail">
+        <div class="flex flex-1 items-center justify-center">
           <SongDetail />
         </div>
 
         <QueueModal />
       </main>
 
-      <div class="main-scene__bg-image">
-        <SongImage src={song().bg} instantLoad={true} />
+      <div class="pointer-events-none absolute inset-0 z-[-1] opacity-[0.072]">
+        <SongImage
+          src={song().bg}
+          instantLoad={true}
+          class="h-full w-full bg-cover blur-xl filter"
+        />
       </div>
     </div>
   );
@@ -77,9 +81,15 @@ const Nav: Component = () => {
         {({ label, ...rest }) => <NavItem {...rest}>{label}</NavItem>}
       </For>
 
-      <div class="nav__queue">
-        <IconButton data-active={songQueueModalOpen()} onClick={toggleSongQueueModalOpen}>
-          <i class="ri-stack-fill nav__queue-icon" />
+      <div class="nav__queue ml-auto">
+        <IconButton
+          class="text-subtext"
+          classList={{
+            "text-text": songQueueModalOpen(),
+          }}
+          onClick={toggleSongQueueModalOpen}
+        >
+          <i class="ri-stack-fill" />
         </IconButton>
       </div>
       {os() !== "darwin" && <WindowControls maximized={maximized} setMaximized={setMaximized} />}
@@ -121,19 +131,22 @@ type NavItemProps = Pick<Tab, "value" | "icon"> & {
 const NavItem: Component<NavItemProps> = ({ children, value, icon }) => {
   return (
     <button
-      class="nav-item"
-      data-selected={mainActiveTab() === value}
+      class={`nav-item flex items-center gap-4 rounded-sm px-4 py-1 hover:bg-surface ${mainActiveTab() === value ? "bg-surface" : ""}`}
       onclick={() => setMainActiveTab(value)}
     >
-      <i class={`nav-item__icon ${icon}`} />
-      <span class="nav-item__text">{children}</span>
+      <i class={`${icon} ${mainActiveTab() === value ? "text-text" : "text-subtext"}`} />
+      <span
+        class={`text-base font-semibold ${mainActiveTab() === value ? "text-text" : "text-subtext"}`}
+      >
+        {children}
+      </span>
     </button>
   );
 };
 
 const TabContent: Component = () => {
   return (
-    <div class="tab-content">
+    <div class="h-full w-[480px] min-w-[320px] overflow-y-auto border-r border-stroke/10 bg-regular-material shadow-2xl">
       <Switch fallback={<div>Tab not found</div>}>
         <Match when={mainActiveTab() === TABS.SONGS.value}>
           <SongList isAllSongs={true} />
@@ -172,7 +185,10 @@ const QueueModal: Component = () => {
 
   return (
     <Show when={songQueueModalOpen()}>
-      <div class="queue-modal" ref={queueModal}>
+      <div
+        class="queue-modal absolute bottom-0 right-0 top-0 z-20 h-full w-[480px] overflow-y-auto border-l border-stroke shadow-2xl"
+        ref={queueModal}
+      >
         <SongQueue />
       </div>
     </Show>

@@ -1,13 +1,12 @@
 import Popover from "../popover/Popover";
-import "./styles.css";
 import { Component, JSX } from "solid-js";
 
 type Props = JSX.IntrinsicElements["button"];
 const DropdownSelectTrigger: Component<Props> = (props) => {
   return (
-    <Popover.Trigger class="dropdown-select-trigger">
-      <span class="dropdown-select-trigger__text">{props.children}</span>
-      <i class="ri-arrow-down-s-line dropdown-select-trigger__icon" />
+    <Popover.Trigger class="flex items-center justify-between gap-2 rounded bg-surface px-4 py-2.5 hover:bg-overlay">
+      <span class="text-base leading-6">{props.children}</span>
+      <i class="ri-arrow-down-s-line text-xl text-subtext" />
     </Popover.Trigger>
   );
 };

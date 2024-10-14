@@ -1,4 +1,3 @@
-import "../../assets/css/form/text-field.css";
 import { Component, JSX, onMount, Setter, Signal } from "solid-js";
 
 type TextFieldProps = {
@@ -51,10 +50,10 @@ const TextField: Component<TextFieldProps> = (props) => {
   };
 
   return (
-    <div class="text-field button-like">
+    <div class="button-like flex w-full items-center gap-2 overflow-hidden p-2 focus-within:outline-2 focus-within:transition-none hover:cursor-text">
       {props.children}
       <div
-        class="editable"
+        class="flex-1 overflow-hidden whitespace-nowrap focus:outline-none"
         ref={input}
         onInput={onInput}
         onKeyDown={(evt) => evt.stopPropagation()}
@@ -62,7 +61,13 @@ const TextField: Component<TextFieldProps> = (props) => {
         contenteditable={true}
         spellcheck={false}
       ></div>
-      <button class="icon hint" onClick={clear} title="Clear text input"></button>
+      <button
+        class="mr-1 grid place-items-center bg-transparent p-0 hover:cursor-pointer hover:bg-transparent focus:outline-none"
+        onClick={clear}
+        title="Clear text input"
+      >
+        {/* TODO: Add clear icon */}
+      </button>
     </div>
   );
 };

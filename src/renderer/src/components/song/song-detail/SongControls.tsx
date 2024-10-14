@@ -32,10 +32,9 @@ const SongControls: Component<SongControlsProps> = () => {
   createEffect(() => setDisable(isSongUndefined(song())));
 
   return (
-    <div class="song-controls">
-      {/* Left part */}
-      <div class="song-controls__left-part">
-        <IconButton>
+    <div class="grid w-full grid-cols-4 items-center gap-4">
+      <div class="group flex w-max items-center">
+        <IconButton class="text-text">
           <Switch>
             <Match when={localVolume() === 0}>
               <i class="ri-volume-mute-fill" />
@@ -48,13 +47,11 @@ const SongControls: Component<SongControlsProps> = () => {
             </Match>
           </Switch>
         </IconButton>
-        <div class="song-controls__volume-bar">
+        <div class="ml-3 w-24 opacity-0 transition-opacity group-hover:opacity-100">
           <Bar fill={localVolume()} setFill={setLocalVolume} />
         </div>
       </div>
-
-      {/* Middle */}
-      <div class="song-controls__middle">
+      <div class="col-span-2 col-start-2 flex items-center justify-center gap-4">
         <IconButton
           onClick={() => window.api.request("queue::shuffle")}
           disabled={disable()}
@@ -67,7 +64,7 @@ const SongControls: Component<SongControlsProps> = () => {
         </IconButton>
 
         <button
-          class="song-controls__toggle-play"
+          class="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-2xl text-thick-material"
           onClick={() => togglePlay()}
           disabled={disable()}
           title={playHint()}
@@ -91,9 +88,7 @@ const SongControls: Component<SongControlsProps> = () => {
           <i class="ri-repeat-2-fill" />
         </IconButton>
       </div>
-
-      {/* Right part */}
-      <div class="song-controls__right-part">
+      <div class="ml-auto">
         {/* // TODO - modal or something so the user can select a playlist */}
         <IconButton
           onClick={() => window.api.request("playlist::add", "test", song())}
