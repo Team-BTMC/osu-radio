@@ -61,7 +61,7 @@ const ProgressBar = () => {
       </Slider.Time>
 
       <Show when={currentValue() < 0.94}>
-        <span class="absolute right-0 top-0 z-10 block px-3 pt-1.5 text-end text-[13px]">
+        <span class="pointer-events-none absolute right-0 top-0 z-10 block px-3 pt-1.5 text-end text-[13px]">
           {formatTime(duration() * 1_000)}
         </span>
       </Show>

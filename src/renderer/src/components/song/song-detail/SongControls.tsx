@@ -26,7 +26,7 @@ const SongControls: Component<SongControlsProps> = () => {
   return (
     <div class="flex w-full items-center gap-4">
       <LeftPart />
-      <div class="flex flex-1 gap-6 items-center justify-center">
+      <div class="flex flex-1 items-center justify-center gap-6">
         <IconButton
           onClick={() => window.api.request("queue::shuffle")}
           disabled={disable()}
@@ -78,7 +78,7 @@ const LeftPart = () => {
   return (
     <div class="flex-1">
       <div
-        class="group flex gap-4 w-max items-center"
+        class="group flex w-max items-center gap-4"
         onMouseEnter={() => {
           clearTimeout(isHoverintTimeoutId);
           setIsHoveringVolume(true);
@@ -106,17 +106,17 @@ const LeftPart = () => {
 
         <Show when={isHoveringVolume()}>
           <Slider
-            class="flex items-center w-28 h-8 flex-grow"
+            class="flex h-8 w-28 flex-grow items-center"
             min={0}
             max={1}
             value={volume}
             onValueChange={setVolume}
             enableWheelSlide
           >
-            <Slider.Track class="h-1 bg-thick-material flex-1 rounded">
-              <Slider.Range class="block h-1 bg-white rounded" />
+            <Slider.Track class="h-1 flex-1 rounded bg-thick-material">
+              <Slider.Range class="block h-1 rounded bg-white" />
             </Slider.Track>
-            <Slider.Thumb class="block h-4 w-4 rounded-full bg-white mt-2" />
+            <Slider.Thumb class="mt-2 block h-4 w-4 rounded-full bg-white" />
           </Slider>
         </Show>
       </div>
@@ -126,7 +126,7 @@ const LeftPart = () => {
 
 const RightPart = () => {
   return (
-    <div class="flex-1 flex justify-end">
+    <div class="flex flex-1 justify-end">
       <IconButton>
         <i class="ri-add-fill" />
       </IconButton>
