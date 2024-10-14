@@ -61,13 +61,9 @@ function useProviderValue(props: Props) {
 
   const setThumb = (node: HTMLElement) => {
     _setThumb(node);
-    console.log("node.getBoundingClientRect().width", node, node.getBoundingClientRect());
-
     onMount(() => {
-      console.log("node.getBoundingClientRect().width", node, node.getBoundingClientRect());
       setThumbWidth(node.getBoundingClientRect().width);
     });
-    // setThumbWidth(node.getBoundingClientRect().width);
   };
 
   const startDragging = () => {
