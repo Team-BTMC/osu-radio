@@ -1,4 +1,3 @@
-import IconButton from "../../icon-button/IconButton";
 import SongImage from "../../song/SongImage";
 import {
   PLAYLIST_SCENE_SONGS,
@@ -6,6 +5,7 @@ import {
   setPlaylistActiveScene,
 } from "../playlist-view/playlist-view.utils";
 import { deletePlaylist, getSongImage } from "./playlist-item.utils";
+import Button from "@renderer/components/button/Button";
 import Impulse from "@renderer/lib/Impulse";
 import { Component } from "solid-js";
 import { Playlist } from "src/@types";
@@ -39,16 +39,15 @@ const PlaylistItem: Component<PlaylistItemProps> = (props) => {
             <p>{props.playlist.count} songs</p>
             {/* <p>{formatPlaylistTime(Math.round(props.playlist.length))}</p> */}
           </div>
-          <div class="z-[3] flex h-10 w-10 flex-col items-center justify-center rounded-lg border border-stroke text-text">
-            <IconButton
-              class="rounded-lg"
-              classList={{ "bg-accent text-thick-material": false }}
-              onClick={(e) => deletePlaylist(e, props)}
-              data-open={"false"}
-            >
-              <i class="ri-more-2-line" />
-            </IconButton>
-          </div>
+          <Button
+            variant={"ghost"}
+            size={"icon"}
+            class="flex items-center justify-center border"
+            classList={{ "bg-accent text-thick-material": false }}
+            onClick={(e) => deletePlaylist(e, props)}
+          >
+            <i class="ri-more-2-line" />
+          </Button>
         </div>
       </div>
     </div>

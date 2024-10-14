@@ -1,5 +1,4 @@
 import InfiniteScroller from "../../InfiniteScroller";
-import IconButton from "../../icon-button/IconButton";
 import PlaylistCreateBox from "../playlist-create/PlaylistCreateBox";
 import PlaylistItem from "../playlist-item/PlaylistItem";
 // import {
@@ -7,6 +6,7 @@ import PlaylistItem from "../playlist-item/PlaylistItem";
 //   setPlaylistActiveScene,
 // } from "../playlist-view/playlist-view.utils";
 import { namespace } from "@renderer/App";
+import Button from "@renderer/components/button/Button";
 import Impulse from "@renderer/lib/Impulse";
 import { Component, createSignal, Match, onCleanup, onMount, Switch } from "solid-js";
 
@@ -26,7 +26,7 @@ const PlaylistList: Component<PlaylistListProps> = () => {
   );
 
   return (
-    <div class="mx-5 my-6">
+    <div class="flex h-full flex-col">
       {/* <Search
         query={querySignal}
         tags={tagsSignal}
@@ -35,47 +35,58 @@ const PlaylistList: Component<PlaylistListProps> = () => {
         error={searchError}
       />
       */}
-      <div class="mb-6 flex flex-row items-center">
-        <div class="mr-2 flex h-10 flex-1 flex-row items-center justify-between rounded-lg border border-stroke">
-          <input
-            type="text"
-            id="playlist_input"
-            class="color-white ml-3 w-full border-none bg-transparent font-[inherit] text-base"
-            placeholder="Search in your playlists... (WIP)"
-            // onInput={(e) => {
-            //   setPlaylistSearch(e.target.value);
-            // }}
-          />
-          <i class="ri-search-line mr-3 text-xl text-text"></i>
+      <div class="z-1 sticky top-0 mx-5 mt-6 flex flex-col">
+        <div class="mb-6 flex w-full flex-row items-center">
+          <div class="mr-2 h-[38px] w-full rounded-lg border border-stroke">
+            <input
+              class="h-[38px] w-full rounded-lg bg-transparent pl-3 focus:outline-none focus:ring-2 focus:ring-accent"
+              type="text"
+              id="search_input"
+              placeholder="Search in your playlists... (WIP)"
+              // onInput={(e) => {
+              //   setPlaylistSearch(e.target.value);
+              // }}
+            />
+            <label
+              class="absolute top-1/2 -translate-x-8 -translate-y-[26px] transform text-xl text-text"
+              classList={{ "-translate-y-[131px]": showCreateBox() }}
+              for="search_input"
+            >
+              <i class="ri-search-line" />
+            </label>
+          </div>
+          <div class="rounded-lg">
+            {/* // TODO: fix button misaligning when the scrollbar appears */}
+            <Button
+              onClick={() => {
+                // setPlaylistActiveScene(PLAYLIST_SCENE_CREATE);
+                setShowCreateBox(!showCreateBox());
+              }}
+              // bg-accent doesn't work for some reason
+              classList={{ "bg-white text-thick-material": showCreateBox() }}
+              class="flex items-center justify-center border"
+              variant={"ghost"}
+              size={"icon"}
+            >
+              <i class="ri-add-fill" />
+            </Button>
+          </div>
         </div>
-        <div class="rounded-lg border border-stroke">
-          <IconButton
-            class="m-0 h-5 w-5 rounded-lg p-[9px] text-xl text-text"
-            onClick={() => {
-              // setPlaylistActiveScene(PLAYLIST_SCENE_CREATE);
-              setShowCreateBox(!showCreateBox());
-            }}
-            classList={{ "bg-accent text-thick-material": showCreateBox() }}
-            data-open={showCreateBox()}
-          >
-            <i class="ri-add-fill" />
-          </IconButton>
-        </div>
-      </div>
-
-      <div>
         <Switch fallback={""}>
           <Match when={showCreateBox() === true}>
             <PlaylistCreateBox group={group} isOpen={setShowCreateBox} reset={resetListing} />
           </Match>
         </Switch>
+      </div>
+
+      <div class="flex flex-grow overflow-auto">
         <InfiniteScroller
           apiKey={"query::playlists"}
           apiInitKey={"query::playlists::init"}
           setCount={setCount}
           reset={resetListing}
           fallback={<div>No playlists...</div>}
-          class="flex flex-col gap-4"
+          class="mx-5 my-6 flex w-full flex-col gap-4"
           builder={(s) => (
             <PlaylistItem playlist={s} group={group} reset={resetListing}></PlaylistItem>
           )}
