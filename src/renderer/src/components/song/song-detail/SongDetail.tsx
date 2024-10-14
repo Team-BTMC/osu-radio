@@ -15,15 +15,19 @@ import { Component, createMemo, Show } from "solid-js";
 
 const SongDetail: Component = () => {
   return (
-    <div class="song-detail">
-      <div class="song-detail__song-bg">
-        <SongImage src={song().bg} instantLoad={true} />
+    <div class="flex h-full w-full max-w-[800px] flex-col p-8">
+      <div class="mb-8 grid flex-grow place-items-center">
+        <SongImage
+          src={song().bg}
+          instantLoad={true}
+          class="size-80 rounded-lg bg-cover bg-center object-cover shadow-lg"
+        />
       </div>
 
-      <div class="song-detail__bottom-part">
+      <div class="w-full max-w-[800px] space-y-4">
         <div class="song-detail__texts">
-          <h2 class="song-detail__title">{song().title}</h2>
-          <span class="song-detail__artist">{song().artist}</span>
+          <h2 class="text-2xl font-bold">{song().title}</h2>
+          <span class="text-lg">{song().artist}</span>
         </div>
 
         <ProgressBar />
@@ -40,6 +44,7 @@ const ProgressBar = () => {
 
   return (
     <Slider
+      class="block mt-4"
       min={0}
       max={1}
       value={currentValue}
@@ -48,14 +53,18 @@ const ProgressBar = () => {
       onValueCommit={handleSeekEnd}
       animate
     >
-      <Slider.Track class="progress-bar__track">
-        <Slider.Range class="progress-bar__range" />
+      <Slider.Track class="flex items-center p-1 h-7 bg-thick-material rounded-xl">
+        <Slider.Range class="block h-5 bg-surface rounded-l-lg" />
       </Slider.Track>
-      <Slider.Thumb class="progress-bar__thumb" />
-      <Slider.Time class="progress-bar__time">{formatTime(timestamp() * 1_000)}</Slider.Time>
+      <Slider.Thumb class="-mt-0.5 block w-1.5 h-8 bg-white rounded-lg" />
+      <Slider.Time class="block pt-1.5 px-3 text-[13px] font-bold text-end z-10">
+        {formatTime(timestamp() * 1_000)}
+      </Slider.Time>
 
       <Show when={currentValue() < 0.94}>
-        <span class="progress-bar__total">{formatTime(duration() * 1_000)}</span>
+        <span class="absolute top-0 right-0 block pt-1.5 px-3 text-[13px] text-end z-10">
+          {formatTime(duration() * 1_000)}
+        </span>
       </Show>
     </Slider>
   );

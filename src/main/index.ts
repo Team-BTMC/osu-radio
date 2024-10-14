@@ -6,6 +6,8 @@ import { electronApp, is, optimizer } from "@electron-toolkit/utils";
 import { app, BrowserWindow, dialog } from "electron";
 import { join } from "path";
 
+if (!app.requestSingleInstanceLock()) app.quit();
+
 async function createWindow() {
   const [width, height] = getBounds();
 
@@ -15,12 +17,39 @@ async function createWindow() {
     height,
     show: false,
     autoHideMenuBar: true,
+    titleBarStyle: "hidden",
+    trafficLightPosition: {
+      x: 20,
+      y: 20,
+    },
     ...(process.platform === "linux" ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, "../preload/index.mjs"),
       sandbox: false,
       webSecurity: false,
     },
+    /* To be uncommented whenever the title bar is removed and
+    native buttons are added
+
+    titleBarOverlay: {
+      color: "#00000000", // transparent bg for the buttons
+      symbolColor: "#FFFFFF", // the icons are white
+      height: 30,
+    },
+    */
+  });
+
+  app.on("second-instance", () => {
+    if (window.isMinimized()) window.restore();
+    window.focus();
+  });
+
+  window.on("maximize", () => {
+    Router.dispatch(window, "window::maximizeChange", true);
+  });
+
+  window.on("unmaximize", () => {
+    Router.dispatch(window, "window::maximizeChange", false);
   });
 
   if (wasMaximized()) {
@@ -28,6 +57,21 @@ async function createWindow() {
   }
 
   trackBounds(window);
+
+  window.webContents.on("before-input-event", (event, input) => {
+    const modKeyHeld = process.platform === "darwin" ? input.meta : input.control;
+    if (modKeyHeld && ["+", "=", "-", "0"].includes(input.key)) {
+      if (input.key === "+" || input.key === "=") {
+        zoom(window, 0.1);
+      } else if (input.key === "-") {
+        zoom(window, -0.1);
+      } else if (input.key === "0") {
+        zoom(window);
+      }
+
+      event.preventDefault();
+    }
+  });
 
   window.on("ready-to-show", async () => {
     window.show();
@@ -83,3 +127,10 @@ app.on("window-all-closed", () => {
     app.quit();
   }
 });
+
+function zoom(window: BrowserWindow, factor?: number) {
+  const currentZoom = window.webContents.getZoomFactor();
+  const newZoom = factor ? currentZoom + factor : 1;
+  const clampedZoom = Math.max(Math.min(newZoom, 2), 0.5);
+  window.webContents.setZoomFactor(clampedZoom);
+}

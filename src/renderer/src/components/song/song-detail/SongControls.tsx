@@ -24,9 +24,9 @@ const SongControls: Component<SongControlsProps> = () => {
   createEffect(() => setDisable(isSongUndefined(song())));
 
   return (
-    <div class="song-controls">
+    <div class="flex w-full items-center gap-4">
       <LeftPart />
-      <div class="song-controls__middle">
+      <div class="flex flex-1 gap-6 items-center justify-center">
         <IconButton
           onClick={() => window.api.request("queue::shuffle")}
           disabled={disable()}
@@ -34,24 +34,27 @@ const SongControls: Component<SongControlsProps> = () => {
         >
           <i class="ri-shuffle-fill" />
         </IconButton>
-        <IconButton onClick={() => previous()} disabled={disable()} title="Play previous">
-          <i class="ri-skip-back-mini-fill" />
-        </IconButton>
 
-        <button
-          class="song-controls__toggle-play"
-          onClick={() => togglePlay()}
-          disabled={disable()}
-          title={playHint()}
-        >
-          <Show when={!isPlaying()} fallback={<i class="ri-pause-fill" />}>
-            <i class="ri-play-fill" />
-          </Show>
-        </button>
+        <div class="flex items-center gap-4">
+          <IconButton onClick={() => previous()} disabled={disable()} title="Play previous">
+            <i class="ri-skip-back-mini-fill" />
+          </IconButton>
 
-        <IconButton onClick={() => next()} disabled={disable()} title="Play next">
-          <i class="ri-skip-forward-mini-fill"></i>
-        </IconButton>
+          <button
+            class="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-2xl text-thick-material"
+            onClick={() => togglePlay()}
+            disabled={disable()}
+            title={playHint()}
+          >
+            <Show when={!isPlaying()} fallback={<i class="ri-pause-fill" />}>
+              <i class="ri-play-fill" />
+            </Show>
+          </button>
+
+          <IconButton onClick={() => next()} disabled={disable()} title="Play next">
+            <i class="ri-skip-forward-mini-fill"></i>
+          </IconButton>
+        </div>
 
         <IconButton
           onClick={() => {
@@ -73,9 +76,9 @@ const LeftPart = () => {
   let isHoverintTimeoutId: NodeJS.Timeout;
 
   return (
-    <div class="song-controls__left-part-wrapper">
+    <div class="flex-1">
       <div
-        class="song-controls__left-part"
+        class="group flex gap-4 w-max items-center"
         onMouseEnter={() => {
           clearTimeout(isHoverintTimeoutId);
           setIsHoveringVolume(true);
@@ -84,7 +87,7 @@ const LeftPart = () => {
           // Add a timeout so the volume slider doesn't disappear instantly when the mouse leaves it
           isHoverintTimeoutId = setTimeout(() => {
             setIsHoveringVolume(false);
-          }, 400);
+          }, 320);
         }}
       >
         <IconButton>
@@ -103,17 +106,17 @@ const LeftPart = () => {
 
         <Show when={isHoveringVolume()}>
           <Slider
-            class="song-controls__volume"
+            class="flex items-center w-28 h-8 flex-grow"
             min={0}
             max={1}
             value={volume}
             onValueChange={setVolume}
             enableWheelSlide
           >
-            <Slider.Track class="song-controls__volume-track">
-              <Slider.Range class="song-controls__volume-range" />
+            <Slider.Track class="h-1 bg-thick-material flex-1 rounded">
+              <Slider.Range class="block h-1 bg-white rounded" />
             </Slider.Track>
-            <Slider.Thumb class="song-controls__volume-thumb" />
+            <Slider.Thumb class="block h-4 w-4 rounded-full bg-white mt-2" />
           </Slider>
         </Show>
       </div>
@@ -123,7 +126,7 @@ const LeftPart = () => {
 
 const RightPart = () => {
   return (
-    <div class="song-controls__right-part">
+    <div class="flex-1 flex justify-end">
       <IconButton>
         <i class="ri-add-fill" />
       </IconButton>

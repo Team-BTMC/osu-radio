@@ -3,6 +3,7 @@ import SliderThumb from "./SliderThumb";
 import SliderTime from "./SliderTime";
 import SliderTrack from "./SliderTrack";
 import useControllableState from "@renderer/lib/controllable-state";
+import { cn } from "@renderer/lib/css.utils";
 import { linearScale } from "@renderer/lib/linear-scale";
 import { clamp } from "@renderer/lib/tungsten/math";
 import {
@@ -10,6 +11,7 @@ import {
   createContext,
   createMemo,
   createSignal,
+  onMount,
   ParentComponent,
   Setter,
   useContext,
@@ -59,7 +61,13 @@ function useProviderValue(props: Props) {
 
   const setThumb = (node: HTMLElement) => {
     _setThumb(node);
-    setThumbWidth(node.getBoundingClientRect().width);
+    console.log("node.getBoundingClientRect().width", node, node.getBoundingClientRect());
+
+    onMount(() => {
+      console.log("node.getBoundingClientRect().width", node, node.getBoundingClientRect());
+      setThumbWidth(node.getBoundingClientRect().width);
+    });
+    // setThumbWidth(node.getBoundingClientRect().width);
   };
 
   const startDragging = () => {
@@ -197,10 +205,7 @@ type SlideImplementationProps = {
 const SlideImplementation: ParentComponent<SlideImplementationProps> = (props) => {
   return (
     <span
-      class={props.class}
-      style={{
-        position: "relative",
-      }}
+      class={cn("relative", props.class)}
       ref={props.ref}
       onPointerDown={(event) => {
         const target = event.target as HTMLElement;

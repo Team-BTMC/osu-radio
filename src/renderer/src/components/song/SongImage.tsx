@@ -79,7 +79,6 @@ const SongImage: Component<SongImageProps> = (props) => {
     <div
       {...props}
       ref={image}
-      class="song-image"
       style={{
         "background-image": `url('${src().replaceAll("'", "\\'")}')`,
       }}
