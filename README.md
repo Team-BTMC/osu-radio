@@ -71,7 +71,7 @@ Technologies:
 - Solid JS
 - TypeScript
 
-The main discussion is in the [BTMC TALENT SERVER](https://discord.gg/mefjfMjV), #prj-osu-radio
+The main discussion is in the [BTMC TALENT SERVER](https://discord.gg/VvMzQ3AxFT), #prj-osu-radio
 <br>
 We'll be staying on Electron for the time being. As for UI, it will stay web-based for ease of use & cost of being web-based :)
 <br>
