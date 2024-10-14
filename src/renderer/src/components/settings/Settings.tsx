@@ -1,7 +1,7 @@
 import { cn } from "../../lib/css.utils";
 import Dropdown from "../dropdown/Dropdown";
-import { changeAudioDevice, volume } from "@renderer/components/song/song.utils";
-import { Component, createEffect, createSignal, JSX, Match, onMount, Switch } from "solid-js";
+import { changeAudioDevice } from "@renderer/components/song/song.utils";
+import { Component, createEffect, createSignal, JSX, onMount, Switch } from "solid-js";
 
 const Settings: Component = () => {
   return (
@@ -10,7 +10,6 @@ const Settings: Component = () => {
         Empty
       </SettingsSection>
       <SettingsSection title="Audio" icon="ri-volume-up-line">
-        <GlobalVolumeSetting />
         <AudioDeviceSetting />
       </SettingsSection>
     </div>
@@ -47,29 +46,6 @@ const Setting: Component<SettingProps> = ({ label, name, children, ...rest }) =>
       </label>
       {children}
     </div>
-  );
-};
-
-const GlobalVolumeSetting: Component = () => {
-  return (
-    <Setting name="global-volume" label="Global volume">
-      <div class="flex items-center gap-3">
-        <div class="flex h-4 w-4 items-center justify-center">
-          <Switch>
-            <Match when={volume() === 0}>
-              <i class="ri-volume-mute-fill" />
-            </Match>
-            <Match when={volume() < 0.5}>
-              <i class="ri-volume-down-fill" />
-            </Match>
-            <Match when={volume() >= 0.5}>
-              <i class="ri-volume-up-fill" />
-            </Match>
-          </Switch>
-        </div>
-        <div class="flex-1"></div>
-      </div>
-    </Setting>
   );
 };
 
