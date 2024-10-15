@@ -21,15 +21,15 @@ const TagSelect: Component<TagSelectProps> = (props) => {
   const [tags, setTags] = props.tags;
   const tagSignal = createSignal("");
   const [tagField, setTagField] = createSignal<HTMLElement | undefined>();
-  let dialog;
+  let dialog: HTMLDialogElement | undefined;
 
   const openDialog = () => {
-    dialog.showModal();
+    dialog?.showModal();
     window.dispatchEvent(new Event("resize"));
   };
 
   const closeDialog = () => {
-    dialog.close();
+    dialog?.close();
     const field = tagField();
 
     if (field === undefined) {

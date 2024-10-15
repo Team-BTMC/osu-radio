@@ -13,10 +13,10 @@ const SongQueue: Component = () => {
   const [count, setCount] = createSignal(0);
   const resetListing = new Impulse();
   const group = namespace.create(true);
-  let view;
+  let view: HTMLDivElement | undefined;
 
   const onSongsLoad = async () => {
-    if (view === undefined) {
+    if (!view) {
       return;
     }
 
@@ -44,20 +44,20 @@ const SongQueue: Component = () => {
       return;
     }
 
-    const selected = view.querySelector(".song-item.selected");
+    const selected = view.querySelector<HTMLElement>(".song-item.selected");
     if (selected !== null && selected.dataset.path !== song.path) {
       selected.classList.remove("selected");
     }
 
     const path = song.path.replaceAll('"', '\\"').replaceAll("\\", "\\\\");
-    const element = view.querySelector(`.song-item[data-path="${path}"]`);
+    const element = view.querySelector<HTMLElement>(`.song-item[data-path="${path}"]`);
     element?.classList.add("selected");
 
     if (element === null) {
       return;
     }
 
-    const list = element.closest(".list");
+    const list = element.closest<HTMLElement>(".list");
 
     if (list === null) {
       return;

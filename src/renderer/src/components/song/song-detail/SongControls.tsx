@@ -12,9 +12,7 @@ import {
 import IconButton from "@renderer/components/icon-button/IconButton";
 import { Component, createEffect, createSignal, Match, Show, Switch } from "solid-js";
 
-type SongControlsProps = {};
-
-const SongControls: Component<SongControlsProps> = () => {
+const SongControls: Component = () => {
   const [disable, setDisable] = createSignal(isSongUndefined(song()));
   const [playHint, setPlayHint] = createSignal("");
 
