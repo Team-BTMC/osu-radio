@@ -23,9 +23,10 @@ const PlaylistItem: Component<PlaylistItemProps> = (props) => {
         setActivePlaylistName(props.playlist.name);
         setPlaylistActiveScene(PLAYLIST_SCENE_SONGS);
       }}
+      class="max-w-[428px]"
     >
       <div class="flex flex-row gap-4">
-        <div class="rounded-lg">
+        <div class="flex items-center justify-center rounded-lg">
           <SongImage
             src={getSongImage(props.playlist)}
             group={props.group}
@@ -41,6 +42,7 @@ const PlaylistItem: Component<PlaylistItemProps> = (props) => {
           </div>
           <Button
             variant={"ghost"}
+            // variant={check() ? "accent" : "ghost"}
             size={"icon"}
             class="flex items-center justify-center border"
             classList={{ "bg-accent text-thick-material": false }}

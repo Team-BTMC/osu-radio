@@ -5,6 +5,8 @@ import { Storage } from "../lib/storage/Storage";
 import errorIgnored from "../lib/tungsten/errorIgnored";
 import { mainWindow } from "../main";
 
+const BUFFER_SIZE = 50;
+
 Router.respond("playlist::add", async (_evt, playlistName, song) => {
   const playlists = Storage.getTable("playlists");
   const playlist = playlists.get(playlistName);
@@ -56,7 +58,20 @@ Router.respond("playlist::remove", async (_evt, playlistName, song) => {
   }
 });
 
-const BUFFER_SIZE = 50;
+Router.respond("playlist::rename", (_evt, oldName, newName) => {
+  console.log("rename from " + oldName + " to " + newName);
+  const playlists = Storage.getTable("playlists");
+  const oldPlaylist = playlists.get(oldName);
+
+  if (oldPlaylist.isNone) {
+    return;
+  }
+
+  oldPlaylist.value.name = newName;
+  //todo: check if the new name is already used
+  playlists.write(newName, oldPlaylist.value);
+  playlists.delete(oldName);
+});
 
 Router.respond("query::playlists::init", (_evt) => {
   const playlists = Storage.getTable("playlists").getStruct();

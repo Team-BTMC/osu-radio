@@ -12,10 +12,13 @@ type PlaylistSongListProps = {
   playlistName: string;
 };
 
+// let localPlaylistName: string;
+
 const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
   const group = namespace.create(true);
+  // const [playlistName, setPlaylistName] = createSignal("");
 
-  const [payload, _setPlayload] = createSignal<PlaylistSongsQueryPayload>({
+  const [payload, _setPayload] = createSignal<PlaylistSongsQueryPayload>({
     playlistName: props.playlistName,
   });
 
@@ -23,9 +26,14 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
 
   const reset = new Impulse();
 
-  onMount(() => window.api.listen("playlist::resetSongList", reset.pulse.bind(reset)));
+  onMount(() => {
+    window.api.listen("playlist::resetSongList", reset.pulse.bind(reset));
+    // localPlaylistName = props.playlistName;
+    // setPayload({ playlistName: localPlaylistName });
+  });
   onCleanup(() => window.api.removeListener("playlist::resetSongList", reset.pulse.bind(reset)));
 
+  //todo move these to a .utils.ts file
   const createQueue = async (songResource: ResourceID) => {
     await window.api.request("queue::create", {
       startSong: songResource,
@@ -39,6 +47,18 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
     await window.api.request("playlist::remove", playlistName, song);
   };
 
+  // const renamePlaylist = async (newName: string) => {
+  //   newName = newName.trim();
+  //   if (newName === undefined || newName === "" || newName === localPlaylistName) {
+  //     return;
+  //   }
+
+  //   await window.api.request("playlist::rename", localPlaylistName, newName);
+  //   localPlaylistName = newName;
+  //   setPayload({ playlistName: localPlaylistName });
+  //   reset.pulse();
+  // };
+
   return (
     <div class="mx-5 my-6">
       <div class="mb-6 flex w-full flex-row items-center justify-between">
@@ -49,14 +69,32 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
           >
             <i class="ri-arrow-left-line text-overlay"></i>
           </IconButton>
+          {/* <Switch fallback={""}>
+            <Match when={editMode() === true}>
+              <input
+                class="h-10 rounded-full border border-stroke bg-transparent pl-4 pr-4 focus:outline-none focus:ring-2 focus:ring-accent"
+                type="text"
+                id="playlist_name"
+                value={localPlaylistName}
+                onInput={(e) => {
+                  setPlaylistName(e.target.value);
+                }}
+              />
+            </Match>
+            <Match when={editMode() === false}>
+              <h3 class="text-xl">{localPlaylistName}</h3>
+            </Match>
+          </Switch> */}
           <h3 class="text-xl">{props.playlistName}</h3>
         </div>
         <Button
-          variant={"ghost"}
+          variant={editMode() ? "accent" : "ghost"}
           size={"icon"}
           class="flex items-center justify-center border"
-          onClick={() => setEditMode(!editMode())}
-          classList={{ "bg-white text-thick-material": editMode() }}
+          onClick={() => {
+            // await renamePlaylist(playlistName());
+            setEditMode(!editMode());
+          }}
         >
           <i class="ri-edit-line text-xl" />
         </Button>

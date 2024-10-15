@@ -43,6 +43,7 @@ export type RequestAPI = {
   "playlist::remove": (playlistName: string, song: Song) => void;
   "playlist::create": (name: string) => void;
   "playlist::delete": (name: string) => void;
+  "playlist::rename": (oldName: string, newName: string) => void;
 
   "dir::select": () => Optional<string>;
   "dir::autoGetOsuDir": () => Optional<string>;
