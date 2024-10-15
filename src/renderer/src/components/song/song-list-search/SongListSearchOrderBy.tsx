@@ -1,13 +1,13 @@
 import Dropdown from "@renderer/components/dropdown/Dropdown";
 import IconButton from "@renderer/components/icon-button/IconButton";
 import { Component, createMemo, createSignal, Match, Setter, Switch } from "solid-js";
+import { OrderDirection, OrderOptions, OrderType } from "src/@types";
 
 type OrderOption = {
   text: string;
-  value: string;
+  value: OrderOptions;
 };
 
-type OrderDirection = "asc" | "desc";
 const orderOptions = [
   {
     value: "title",
@@ -36,19 +36,17 @@ const orderOptions = [
 ] satisfies OrderOption[];
 
 type OrderSelectProps = {
-  setOrder: Setter<string>;
+  setOrder: Setter<OrderType>;
   disabled?: boolean;
 };
 
 const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
   const [isOpen, setIsOpen] = createSignal(false);
-  const [option, setOption] = createSignal("title");
+  const [option, setOption] = createSignal<OrderOptions>("title");
   const [direction, setDirection] = createSignal<OrderDirection>("asc");
 
   const handlerOrderChanged = () => {
-    const o = option();
-    const d = direction();
-    props.setOrder(`${o}:${d}`);
+    props.setOrder({ prop: option(), mode: direction() });
   };
 
   const switchDirections = () => {
@@ -80,7 +78,7 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
         <Dropdown.List
           onValueChange={(newSelectedOption) => {
             setIsOpen(false);
-            setOption(newSelectedOption);
+            setOption(newSelectedOption as OrderOptions);
             handlerOrderChanged();
           }}
           value={option}

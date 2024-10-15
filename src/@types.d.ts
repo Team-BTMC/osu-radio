@@ -168,11 +168,20 @@ export type Tag = {
   isSpecial?: boolean;
 };
 
+export type OrderOptions = "title" | "artist" | "creator" | "bpm" | "duration" | "dateAdded";
+
+export type OrderDirection = "asc" | "desc";
+
+export type OrderType = {
+  prop: OrderOptions;
+  mode: OrderDirection;
+};
+
 export type SongsQueryPayload = {
   view: SongViewProps;
   searchQuery?: SearchQuerySuccess;
   tags: Tag[];
-  order: string;
+  order: OrderType;
 };
 
 // Context for backend to use proper database (all songs, current queue, playlist(s))
@@ -182,8 +191,7 @@ export type QueueCreatePayload = {
   view: QueueView;
   searchQuery?: SearchQuerySuccess;
   tags: Tag[];
-  // The format is: OsuSearchAbleProperties:(asc|desc) -> bpm:asc
-  order: string;
+  order: OrderType;
   startSong: ResourceID;
 };
 

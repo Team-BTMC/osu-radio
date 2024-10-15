@@ -7,6 +7,7 @@
     "src/preload/*.d.ts"
   ],
   "compilerOptions": {
+    "noImplicitAny": true,
     "composite": true,
     "jsxImportSource": "solid-js",
     "baseUrl": ".",

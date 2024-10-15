@@ -1,4 +1,4 @@
-export class State<T extends {}, K extends keyof T = keyof T> {
+export class State<T extends object, K extends keyof T = keyof T> {
   private readonly schema: Map<K, T[K]>;
   constructor() {
     this.schema = new Map();
