@@ -83,6 +83,15 @@ Router.respond("query::playlists::init", (_evt) => {
   });
 });
 
+Router.respond("query::playlistNames", () => {
+  const playlists = Storage.getTable("playlists").getStruct();
+  const names = Object.keys(playlists);
+
+  return some({
+    playlistNames: names,
+  });
+});
+
 Router.respond("query::playlists", (_evt, request) => {
   const playlists = Object.keys(Storage.getTable("playlists").getStruct());
 

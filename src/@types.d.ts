@@ -246,3 +246,7 @@ export type InfiniteScrollerInitResponse = Optional<{
   initialIndex: number;
   count: number;
 }>;
+
+export type PlaylistNamesResponse = Optional<{
+  playlistNames: string[];
+}>;

@@ -6,6 +6,7 @@ import type {
   InfiniteScrollerResponse,
   Optional,
   Playlist,
+  PlaylistNamesResponse,
   PlaylistSongsQueryPayload,
   QueueCreatePayload,
   ResourceID,
@@ -83,6 +84,7 @@ export type RequestAPI = {
     request: InfiniteScrollerRequest,
     payload: PlaylistSongsQueryPayload,
   ) => InfiniteScrollerResponse<Song>;
+  "query::playlistNames": () => PlaylistNamesResponse;
 
   "save::localVolume": (volume: number, song: ResourceID) => void;
 
