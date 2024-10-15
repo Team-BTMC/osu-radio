@@ -26,8 +26,8 @@ const SongItem: Component<SongItemProps> = ({
   selectable,
 }) => {
   const showSignal = createSignal(false);
-  const [_coords, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
-  let item;
+  const [, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
+  let item: HTMLDivElement | undefined;
 
   const showMenu = (evt: MouseEvent) => {
     if (children === undefined) {
@@ -40,6 +40,10 @@ const SongItem: Component<SongItemProps> = ({
   };
 
   onMount(() => {
+    if (!item) {
+      return;
+    }
+
     draggable(item, {
       onClick: ignoreClickInContextMenu(() => onSelect(song.path)),
       onDrop: onDrop ?? (() => {}),
@@ -48,7 +52,7 @@ const SongItem: Component<SongItemProps> = ({
     });
 
     if (selectable === true) {
-      (item as HTMLElement).dataset.path = song.path;
+      item.dataset.path = song.path;
     }
   });
 
