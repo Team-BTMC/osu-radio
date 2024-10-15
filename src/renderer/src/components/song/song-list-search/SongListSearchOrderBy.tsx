@@ -1,7 +1,7 @@
 import Dropdown from "@renderer/components/dropdown/Dropdown";
 import IconButton from "@renderer/components/icon-button/IconButton";
 import { Component, createMemo, createSignal, Match, Setter, Switch } from "solid-js";
-import { OrderDirection, OrderOptions, OrderType } from "src/@types";
+import { OrderDirection, OrderOptions, Order } from "src/@types";
 
 type OrderOption = {
   text: string;
@@ -36,7 +36,7 @@ const orderOptions = [
 ] satisfies OrderOption[];
 
 type OrderSelectProps = {
-  setOrder: Setter<OrderType>;
+  setOrder: Setter<Order>;
   disabled?: boolean;
 };
 

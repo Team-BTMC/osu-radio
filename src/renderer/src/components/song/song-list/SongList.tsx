@@ -1,4 +1,4 @@
-import { Optional, OrderType, ResourceID, SongsQueryPayload, Tag } from "../../../../../@types";
+import { Optional, Order, ResourceID, SongsQueryPayload, Tag } from "../../../../../@types";
 import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-types";
 import { namespace } from "../../../App";
 import Impulse from "../../../lib/Impulse";
@@ -20,7 +20,7 @@ const SongList: Component<SongViewProps> = (props) => {
   const tagsSignal = createSignal<Tag[]>([], { equals: false });
   const [tags] = tagsSignal;
 
-  const [order, setOrder] = createSignal<OrderType>({ option: "title", direction: "asc" });
+  const [order, setOrder] = createSignal<Order>({ option: "title", direction: "asc" });
   const [count, setCount] = createSignal(0);
 
   const [payload, setPayload] = createSignal<SongsQueryPayload>({

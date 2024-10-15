@@ -172,7 +172,7 @@ export type OrderOptions = "title" | "artist" | "creator" | "bpm" | "duration" |
 
 export type OrderDirection = "asc" | "desc";
 
-export type OrderType = {
+export type Order = {
   option: OrderOptions;
   direction: OrderDirection;
 };
@@ -181,7 +181,7 @@ export type SongsQueryPayload = {
   view: SongViewProps;
   searchQuery?: SearchQuerySuccess;
   tags: Tag[];
-  order: OrderType;
+  order: Order;
 };
 
 // Context for backend to use proper database (all songs, current queue, playlist(s))
@@ -191,7 +191,7 @@ export type QueueCreatePayload = {
   view: QueueView;
   searchQuery?: SearchQuerySuccess;
   tags: Tag[];
-  order: OrderType;
+  order: Order;
   startSong: ResourceID;
 };
 

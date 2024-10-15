@@ -1,8 +1,8 @@
-import { OrderType, Result, Song } from "../../../@types";
+import { Order, Result, Song } from "../../../@types";
 import { ok } from "../rust-like-utils-backend/Result";
 import { averageBPM, msToBPM } from "./average-bpm";
 
-export default function order(ordering: OrderType): Result<(a: Song, b: Song) => number, string> {
+export default function order(ordering: Order): Result<(a: Song, b: Song) => number, string> {
   const { option, direction } = ordering;
   const sortDirection = direction === "asc" ? 1 : -1;
 
