@@ -173,8 +173,8 @@ export type OrderOptions = "title" | "artist" | "creator" | "bpm" | "duration" |
 export type OrderDirection = "asc" | "desc";
 
 export type OrderType = {
-  prop: OrderOptions;
-  mode: OrderDirection;
+  option: OrderOptions;
+  direction: OrderDirection;
 };
 
 export type SongsQueryPayload = {

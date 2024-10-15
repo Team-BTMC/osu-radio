@@ -3,10 +3,10 @@ import { ok } from "../rust-like-utils-backend/Result";
 import { averageBPM, msToBPM } from "./average-bpm";
 
 export default function order(ordering: OrderType): Result<(a: Song, b: Song) => number, string> {
-  const { prop, mode } = ordering;
-  const sortDirection = mode === "asc" ? 1 : -1;
+  const { option, direction } = ordering;
+  const sortDirection = direction === "asc" ? 1 : -1;
 
-  switch (prop) {
+  switch (option) {
     case "dateAdded":
       return ok((a: Song, b: Song) => {
         return (new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()) * sortDirection;
@@ -16,15 +16,15 @@ export default function order(ordering: OrderType): Result<(a: Song, b: Song) =>
     case "artist":
     case "creator":
       return ok((a: Song, b: Song) => {
-        if (a[prop] === "") {
+        if (a[option] === "") {
           return 1;
         }
 
-        if (b[prop] === "") {
+        if (b[option] === "") {
           return -1;
         }
 
-        return a[prop].localeCompare(b[prop]) * sortDirection;
+        return a[option].localeCompare(b[option]) * sortDirection;
       });
 
     case "bpm":
@@ -48,11 +48,11 @@ export default function order(ordering: OrderType): Result<(a: Song, b: Song) =>
 
     default:
       return ok((a: Song, b: Song) => {
-        if (a[prop] === "") {
+        if (a[option] === "") {
           return 1;
         }
 
-        if (b[prop] === "") {
+        if (b[option] === "") {
           return -1;
         }
 

@@ -141,7 +141,8 @@ export class OsuParser {
       // NOTE: This isn't readFile from fs-promises.ts.
       //       We want to read binary data here, not utf-8 encoded data!
       dbBuffer = await fs.promises.readFile(databasePath + "/osu!.db");
-    } catch {
+    } catch (err) {
+      console.error(err);
       return fail("Failed to read osu!.db.");
     }
 

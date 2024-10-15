@@ -46,7 +46,7 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
   const [direction, setDirection] = createSignal<OrderDirection>("asc");
 
   const handlerOrderChanged = () => {
-    props.setOrder({ prop: option(), mode: direction() });
+    props.setOrder({ option: option(), direction: direction() });
   };
 
   const switchDirections = () => {

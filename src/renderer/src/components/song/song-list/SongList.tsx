@@ -20,7 +20,7 @@ const SongList: Component<SongViewProps> = (props) => {
   const tagsSignal = createSignal<Tag[]>([], { equals: false });
   const [tags] = tagsSignal;
 
-  const [order, setOrder] = createSignal<OrderType>({ prop: "title", mode: "asc" });
+  const [order, setOrder] = createSignal<OrderType>({ option: "title", direction: "asc" });
   const [count, setCount] = createSignal(0);
 
   const [payload, setPayload] = createSignal<SongsQueryPayload>({
