@@ -16,7 +16,7 @@ const buttonStyles = cva(
       size: {
         medium: "px-4 py-2",
         large: "px-7 py-2.5",
-        icon: "grid place-items-center aspect-square size-10 p-1",
+        icon: "grid place-items-center aspect-square size-9 p-1 -m-2",
       },
     },
     defaultVariants: {
