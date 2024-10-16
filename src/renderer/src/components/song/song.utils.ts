@@ -228,7 +228,7 @@ async function setMediaSession(song: Song) {
           action as MediaSessionAction,
           handler as MediaSessionActionHandler,
         );
-      } catch (err) {
+      } catch {
         console.log(`The media session action "${action}" is not supported yet.`);
       }
     }

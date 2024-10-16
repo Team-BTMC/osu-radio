@@ -10,6 +10,6 @@ Router.respond("settings::write", (_evt, key, value) => {
   Storage.getTable("settings").write(key, value);
 });
 
-Router.respond("os::platform", (_evt) => {
+Router.respond("os::platform", () => {
   return os.platform();
 });

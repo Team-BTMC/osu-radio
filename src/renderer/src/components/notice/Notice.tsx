@@ -31,7 +31,7 @@ const Notice: Component<NoticeProps> = (props) => {
 
     try {
       pauseDrain();
-    } catch (ignored) {}
+    } catch {}
   };
 
   const [drain, setDrainTime, pauseDrain] = createDrainAnimation(

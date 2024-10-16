@@ -8,9 +8,13 @@ type TextFieldProps = {
 
 const TextField: Component<TextFieldProps> = (props) => {
   const [value, setValue] = props.value;
-  let input;
+  let input: HTMLInputElement | undefined;
 
   onMount(() => {
+    if (!input) {
+      return;
+    }
+
     if (props.setInput !== undefined) {
       props.setInput(input);
     }
@@ -19,6 +23,10 @@ const TextField: Component<TextFieldProps> = (props) => {
   });
 
   const onInput = () => {
+    if (!input) {
+      return;
+    }
+
     setValue(
       String(input.textContent).replaceAll(
         String.fromCharCode(160), // non-breaking space
@@ -27,11 +35,9 @@ const TextField: Component<TextFieldProps> = (props) => {
     );
   };
 
-  const onPaste = (evt) => {
+  const onPaste = (evt: ClipboardEvent) => {
     const selection = window.getSelection();
-    if (selection === null) {
-      return;
-    }
+    if (selection === null || !evt.clipboardData) return;
 
     evt.stopPropagation();
     evt.preventDefault();
@@ -44,6 +50,10 @@ const TextField: Component<TextFieldProps> = (props) => {
   };
 
   const clear = () => {
+    if (!input) {
+      return;
+    }
+
     input.textContent = "";
     onInput();
     input.focus();

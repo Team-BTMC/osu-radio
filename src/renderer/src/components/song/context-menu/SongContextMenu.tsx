@@ -10,7 +10,7 @@ type SongContextMenuProps = {
 
 const SongContextMenu: Component<SongContextMenuProps> = (props) => {
   const [show, setShow] = props.show;
-  let menu;
+  let menu: HTMLDivElement | undefined;
 
   const windowContextMenu = (evt: MouseEvent) => {
     const t = evt.target;

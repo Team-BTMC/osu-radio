@@ -1,4 +1,4 @@
-import { Optional } from "../../../../../@types";
+import { Optional, Order } from "../../../../../@types";
 import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-types";
 import { Tag } from "../../search/TagSelect";
 import { setSongsSearch } from "../song-list/song-list.utils";
@@ -9,7 +9,7 @@ export type SearchProps = {
   tags: Signal<Tag[]>;
   count: Accessor<number>;
   error: Accessor<Optional<SearchQueryError>>;
-  setOrder: Setter<string>;
+  setOrder: Setter<Order>;
 };
 
 const SongListSearch: Component<SearchProps> = (props) => {
