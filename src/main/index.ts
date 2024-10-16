@@ -1,4 +1,3 @@
-import icon from "../../resources/icon.png?asset";
 import { Router } from "./lib/route-pass/Router";
 import createMenu from "./lib/window/menu";
 import trackBounds, { getBounds, wasMaximized } from "./lib/window/resizer";
@@ -12,6 +11,19 @@ if (!app.requestSingleInstanceLock()) app.quit();
 async function createWindow() {
   const [width, height] = getBounds();
 
+  function getIcon(): string {
+    if (process.platform === 'win32') {
+      return join(__dirname, '../../build/icon.ico');
+    }
+  
+    if (process.platform === 'darwin') {
+      return join(__dirname, '../../build/icon.icns');
+    }
+  
+    return join(__dirname, '../../build/icon.png');
+  }
+
+
   const window = new BrowserWindow({
     title: "osu!radio",
     width,
@@ -23,7 +35,7 @@ async function createWindow() {
       x: 20,
       y: 20,
     },
-    ...(process.platform === "linux" ? { icon } : {}),
+    icon: getIcon(),
     webPreferences: {
       preload: join(__dirname, "../preload/index.mjs"),
       sandbox: false,
