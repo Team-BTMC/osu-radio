@@ -1,5 +1,5 @@
+import Button from "@renderer/components/button/Button";
 import Dropdown from "@renderer/components/dropdown/Dropdown";
-import IconButton from "@renderer/components/icon-button/IconButton";
 import { Component, createMemo, createSignal, Match, Setter, Switch } from "solid-js";
 import { OrderDirection, OrderOptions, Order } from "src/@types";
 
@@ -61,7 +61,12 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
 
   return (
     <div class="flex items-center space-x-2">
-      <IconButton class="text-xl" onClick={switchDirections}>
+      <Button
+        variant={"ghost"}
+        class="rounded-full border-none text-xl"
+        size="icon"
+        onClick={switchDirections}
+      >
         <Switch>
           <Match when={direction() === "asc"}>
             <i class="ri-sort-asc" />
@@ -70,7 +75,7 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
             <i class="ri-sort-desc" />
           </Match>
         </Switch>
-      </IconButton>
+      </Button>
       <Dropdown isOpen={isOpen} onValueChange={setIsOpen}>
         <Dropdown.Trigger class="rounded-md bg-thin-material px-3 py-1">
           {optionLabel()}

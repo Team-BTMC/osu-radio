@@ -1,8 +1,9 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import { Component, JSX, splitProps } from "solid-js";
+import { twMerge } from "tailwind-merge";
 
 const buttonStyles = cva(
-  "rounded-lg transition-colors duration-200 ease-in-out font-medium", // base classes
+  ["rounded-lg", "transition-colors", "duration-200", "ease-in-out", "font-medium"],
   {
     variants: {
       variant: {
@@ -15,6 +16,7 @@ const buttonStyles = cva(
       size: {
         medium: "px-4 py-2",
         large: "px-7 py-2.5",
+        icon: "grid place-items-center aspect-square size-10 p-1",
       },
     },
     defaultVariants: {
@@ -31,7 +33,7 @@ const Button: Component<ButtonProps> = (props) => {
 
   return (
     <button
-      class={buttonStyles({ variant: local.variant, size: local.size, class: local.class })}
+      class={twMerge(buttonStyles({ variant: local.variant, size: local.size }), local.class)}
       {...others}
     >
       {local.children}
