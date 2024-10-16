@@ -37,16 +37,14 @@ export { duration, setDuration };
 const [timestamp, setTimestamp] = createSignal(0);
 export { timestamp, setTimestamp };
 
+const [isSeeking, setIsSeeking] = createSignal({
+  value: false,
+  pausedSeekingStart: false,
+});
+export { isSeeking, setIsSeeking };
+
 const [volume, setVolume] = createSignal<ZeroToOne>(0.3);
 export { volume, setVolume };
-
-const [localVolume, _setLocalVolume] = createSignal<ZeroToOne>(0.5);
-/** Sets and saves the local volume. */
-const setLocalVolume = (newLocalVolume: ZeroToOne) => {
-  _setLocalVolume(newLocalVolume);
-  saveLocalVolume(newLocalVolume, song());
-};
-export { localVolume, setLocalVolume };
 
 let bgPath: Optional<string>;
 
@@ -63,11 +61,7 @@ window.api.request("settings::get", "audioDeviceId").then((v) => {
   changeAudioDevice(v.value);
 });
 
-function calculateVolume(): number {
-  const v = volume();
-  return v + (localVolume() - 0.5) * 2 * v;
-}
-player.volume = calculateVolume();
+player.volume = volume();
 
 const [bpm, setBPM] = createSignal<Optional<number>>(none(), {
   equals: (prev, next) => {
@@ -115,7 +109,6 @@ export async function play(): Promise<void> {
     player.src = m.href;
   }
 
-  player.volume = calculateVolume();
   await player.play().catch((reason) => console.error(reason));
   setIsPlaying(true);
 
@@ -195,15 +188,13 @@ export async function togglePlay(force?: boolean): Promise<void> {
 }
 
 export async function seek(range: ZeroToOne): Promise<void> {
-  if (isNaN(player.duration)) return;
+  if (isNaN(player.duration)) {
+    return;
+  }
 
-  player.currentTime = range * player.duration;
-  const currentSong = song();
-  await window.api.request("discord::play", currentSong, player.currentTime);
-
-  setDuration(player.duration);
-  setTimestamp(player.currentTime);
-  setMediaSessionPosition();
+  const newTime = range * duration();
+  player.currentTime = newTime;
+  setTimestamp(newTime);
 }
 
 // Media Session functions
@@ -262,21 +253,8 @@ function setMediaSessionPosition() {
   }
 }
 
-// Effects
-createEffect(async () => {
-  setBPM(none());
-  const audio = (await window.api.request(
-    "resource::get",
-    song().audio,
-    "audio",
-  )) as Optional<AudioSource>;
-
-  if (audio.isNone) return;
-  setLocalVolume(audio.value.volume ?? 0.5);
-});
-
 createEffect(() => {
-  player.volume = calculateVolume();
+  player.volume = volume();
 });
 
 const [writeVolume] = delay(async (volume: number) => {
@@ -313,17 +291,29 @@ window.api.listen("queue::songChanged", async (s) => {
 });
 
 player.addEventListener("ended", async () => {
+  if (isSeeking().value) {
+    return;
+  }
+
   await next();
 });
 
 const OFFSET = 0;
 const BPM = 1;
 
-player.addEventListener("timeupdate", () => {
-  setTimestamp(player.currentTime);
+player.addEventListener("loadedmetadata", () => {
   setDuration(player.duration);
-
+});
+player.addEventListener("timeupdate", async () => {
+  setTimestamp(player.currentTime);
   const currentSong = song();
+
+  // Discord
+  await window.api.request("discord::play", currentSong, player.currentTime);
+
+  // Media session
+  setMediaSessionPosition();
+
   if (isSongUndefined(currentSong) || currentSong.bpm[0]?.[OFFSET] / 1000 > player.currentTime) {
     return;
   }
@@ -349,3 +339,30 @@ function currentBPM(offset: number, changes: number[][]): Optional<number> {
 
   return some(msToBPM(changes[changes.length - 1][BPM]));
 }
+
+export const handleSeekStart = () => {
+  setIsSeeking({
+    value: true,
+    pausedSeekingStart: player.paused,
+  });
+
+  player.pause();
+};
+
+export const handleSeekEnd = () => {
+  const pausedSeekingStart = isSeeking().pausedSeekingStart;
+
+  setIsSeeking({
+    value: false,
+    pausedSeekingStart: false,
+  });
+
+  if (player.duration === player.currentTime) {
+    next();
+    return;
+  }
+
+  if (!pausedSeekingStart) {
+    player.play();
+  }
+};
