@@ -47,14 +47,25 @@ const PlaylistList: Component<PlaylistListProps> = () => {
               //   setPlaylistSearch(e.target.value);
               // }}
             />
-            <label
-              // why does this not work anymore ??????
-              classList={{ "-translate-y-[131px]": showCreateBox() === true }}
-              class="absolute top-1/2 -translate-x-8 -translate-y-[26px] transform text-xl text-text"
-              for="search_input"
-            >
-              <i class="ri-search-line" />
-            </label>
+            {/* this whole switch-match only for -translate-y-[], classlist doesn't work, if there's a better way pls tell me */}
+            <Switch>
+              <Match when={showCreateBox() === true}>
+                <label
+                  class="absolute top-1/2 -translate-x-8 -translate-y-[129px] transform text-xl text-text"
+                  for="search_input"
+                >
+                  <i class="ri-search-line" />
+                </label>
+              </Match>
+              <Match when={showCreateBox() === false}>
+                <label
+                  class="absolute top-1/2 -translate-x-8 -translate-y-[26px] transform text-xl text-text"
+                  for="search_input"
+                >
+                  <i class="ri-search-line" />
+                </label>
+              </Match>
+            </Switch>
           </div>
           <div class="rounded-lg">
             {/* // TODO: fix button misaligning when the scrollbar appears */}

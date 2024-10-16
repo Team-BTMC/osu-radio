@@ -28,3 +28,12 @@ export function deletePlaylist(e: Event, props: PlaylistItemProps) {
 
 //   return hours + " hours " + minutes + " minutes";
 // }
+export const renamePlaylist = async (oldName: string, newName: string) => {
+  newName = newName.trim();
+  if (newName === undefined || newName === "" || newName === oldName) {
+    return;
+  }
+
+  await window.api.request("playlist::rename", oldName, newName);
+  // reset.pulse();
+};
