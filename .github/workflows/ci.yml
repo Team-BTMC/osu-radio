@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup
-        uses: ../actions/setup
+        uses: ./.github/actions/setup
 
       - name: Run TypeScript compiler
         run: npm run typecheck
@@ -26,17 +26,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Setup
-        uses: ../actions/setup
+        uses: ./.github/actions/setup
 
       - name: Run Eslint
-        run: npm run lint
+        run: npm run lint:check
 
   format:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
       - name: Setup
-        uses: ../actions/setup
+        uses: ./.github/actions/setup
 
       - name: Run Prettier
         run: npm run format:check
