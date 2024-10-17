@@ -58,7 +58,7 @@ const SongItem: Component<SongItemProps> = ({
 
   return (
     <div
-      class="group relative isolate select-none rounded-md"
+      class="group relative isolate w-full select-none rounded-md"
       classList={{
         "outline outline-2 outline-accent": selectedSong().path === song.path,
       }}
