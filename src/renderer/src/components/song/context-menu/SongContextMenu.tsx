@@ -30,7 +30,7 @@ const SongContextMenu: Component<SongContextMenuProps> = (props) => {
     const targetItem = t.closest(".group");
 
     if (targetItem !== null) {
-      setPos([evt.clientX, evt.clientY - 52]);
+      setPos([evt.offsetX + 30, evt.clientY - 52]);
     }
   };
 
@@ -64,11 +64,11 @@ const SongContextMenu: Component<SongContextMenuProps> = (props) => {
   return (
     <Show when={show()}>
       <div
-        class={"absolute z-30 overflow-hidden rounded-md bg-thick-material shadow-lg"}
+        class={"absolute z-30 rounded-lg bg-thick-material"}
         style={{ top: pos()[1] + "px", left: pos()[0] + "px" }}
         ref={menu}
       >
-        <div class="relative z-30 bg-gradient-to-b from-black/30 to-transparent">
+        <div class="flex flex-col gap-1 rounded-lg bg-thick-material p-2">
           <For each={props.children}>{(child) => child}</For>
         </div>
       </div>

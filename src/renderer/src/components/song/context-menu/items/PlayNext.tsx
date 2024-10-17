@@ -15,7 +15,8 @@ const PlayNext: Component<SongPlayNextProps> = (props) => {
         }
       }}
     >
-      Play Next
+      <p>Play next</p>
+      <i class="ri-menu-add-line"></i>
     </SongContextMenuItem>
   );
 };

@@ -5,6 +5,7 @@ import Impulse from "../../../lib/Impulse";
 import { none, some } from "../../../lib/rust-like-utils-client/Optional";
 import InfiniteScroller from "../../InfiniteScroller";
 import SongContextMenu from "../context-menu/SongContextMenu";
+import SongContextMenuItem from "../context-menu/SongContextMenuItem";
 import PlayNext from "../context-menu/items/PlayNext";
 import SongItem from "../song-item/SongItem";
 import SongListSearch from "../song-list-search/SongListSearch";
@@ -110,9 +111,14 @@ const SongList: Component<SongViewProps> = (props) => {
         <Show when={queryCreated() === true}>
           <PlayNext path={song()?.path} />
         </Show>
-        <button class="relative z-50 w-full px-4 py-2 text-left transition-colors duration-200 hover:bg-accent/20">
-          Add to playlist
-        </button>
+        <SongContextMenuItem
+          onClick={() => {
+            console.log("yo");
+          }}
+        >
+          <p>Add to playlist</p>
+          <i class="ri-add-line"></i>
+        </SongContextMenuItem>
       </SongContextMenu>
     </div>
   );

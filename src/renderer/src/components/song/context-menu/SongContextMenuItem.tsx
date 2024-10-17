@@ -1,3 +1,4 @@
+import Button from "@renderer/components/button/Button";
 import { Component, onCleanup } from "solid-js";
 
 type SongContextMenuItemProps = {
@@ -18,12 +19,13 @@ const SongContextMenuItem: Component<SongContextMenuItemProps> = (props) => {
   });
 
   return (
-    <button
+    <Button
       ref={divAccessor}
-      class="w-full px-4 py-2 text-left transition-colors duration-200 hover:bg-accent/20"
+      variant={"ghost"}
+      class="flex min-w-56 flex-row justify-between rounded-md bg-thick-material text-left transition-colors duration-200 hover:bg-accent/20"
     >
       {props.children}
-    </button>
+    </Button>
   );
 };
 
