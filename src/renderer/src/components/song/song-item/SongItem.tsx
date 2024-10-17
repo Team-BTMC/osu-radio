@@ -2,9 +2,8 @@ import { ResourceID, Song } from "../../../../../@types";
 import draggable from "../../../lib/draggable/draggable";
 import SongHint from "../SongHint";
 import SongImage from "../SongImage";
-import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import { song as selectedSong } from "../song.utils";
-import { Component, createSignal, onMount } from "solid-js";
+import { Component, onMount, Setter, Signal } from "solid-js";
 
 type SongItemProps = {
   song: Song;
@@ -14,28 +13,24 @@ type SongItemProps = {
   draggable?: true;
   onDrop?: (before: Element | null) => any;
   children?: any;
+  showSignal: Signal<boolean>;
+  setSong: Setter<Song | undefined>;
 };
 
 const SongItem: Component<SongItemProps> = ({
   group,
   onSelect,
   song,
-  children,
   draggable: isDraggable,
   onDrop,
   selectable,
+  showSignal,
+  setSong,
 }) => {
-  const showSignal = createSignal(false);
-  const [, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
   let item: HTMLDivElement | undefined;
 
-  const showMenu = (evt: MouseEvent) => {
-    if (children === undefined) {
-      showSignal[1](false);
-      return;
-    }
-
-    setCoords([evt.clientX, evt.clientY]);
+  const showMenu = () => {
+    setSong(song);
     showSignal[1](true);
   };
 
@@ -45,7 +40,7 @@ const SongItem: Component<SongItemProps> = ({
     }
 
     draggable(item, {
-      onClick: ignoreClickInContextMenu(() => onSelect(song.path)),
+      onClick: () => onSelect(song.path),
       onDrop: onDrop ?? (() => {}),
       createHint: SongHint,
       useOnlyAsOnClickBinder: !isDraggable || selectedSong().path === song.path,
@@ -58,7 +53,7 @@ const SongItem: Component<SongItemProps> = ({
 
   return (
     <div
-      class="group relative isolate select-none rounded-md"
+      class="group relative isolate z-20 select-none rounded-md"
       classList={{
         "outline outline-2 outline-accent": selectedSong().path === song.path,
       }}
@@ -76,7 +71,7 @@ const SongItem: Component<SongItemProps> = ({
         group={group}
       />
 
-      <div class="flex min-h-[72px] flex-col justify-center overflow-hidden rounded-md bg-black/50 p-3">
+      <div class="z-20 flex min-h-[72px] flex-col justify-center overflow-hidden rounded-md bg-black/50 p-3">
         <h3 class="text-shadow text-[22px] font-extrabold leading-7 shadow-black/60">
           {song.title}
         </h3>

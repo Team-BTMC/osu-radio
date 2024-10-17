@@ -3,6 +3,7 @@ import { namespace } from "../../../App";
 import Impulse from "../../../lib/Impulse";
 import scrollIfNeeded from "../../../lib/tungsten/scroll-if-needed";
 import InfiniteScroller from "../../InfiniteScroller";
+import SongContextMenu from "../context-menu/SongContextMenu";
 import SongContextMenuItem from "../context-menu/SongContextMenuItem";
 import SongItem from "../song-item/SongItem";
 import { setSongQueueModalOpen } from "./song-queue.utils";
@@ -11,6 +12,8 @@ import { Component, createSignal, onCleanup, onMount } from "solid-js";
 
 const SongQueue: Component = () => {
   const [count, setCount] = createSignal(0);
+  const showSignal = createSignal(false);
+  const [song, setSong] = createSignal<Song>();
   const resetListing = new Impulse();
   const group = namespace.create(true);
   let view: HTMLDivElement | undefined;
@@ -105,14 +108,31 @@ const SongQueue: Component = () => {
               draggable={true}
               onSelect={() => window.api.request("queue::play", s.path)}
               onDrop={onDrop(s)}
-            >
-              <SongContextMenuItem onClick={() => window.api.request("queue::removeSong", s.path)}>
-                Remove from queue
-              </SongContextMenuItem>
-            </SongItem>
+              showSignal={showSignal}
+              setSong={setSong}
+            ></SongItem>
           )}
         />
       </div>
+      <SongContextMenu show={showSignal}>
+        <SongContextMenuItem
+          onClick={() => {
+            console.log("todo");
+          }}
+        >
+          <p>Add to playlist</p>
+          <i class="ri-add-line"></i>
+        </SongContextMenuItem>
+
+        <SongContextMenuItem
+          onClick={() => {
+            window.api.request("queue::removeSong", song()?.path);
+          }}
+        >
+          <p>Remove from queue</p>
+          <i class="ri-delete-back-2-line"></i>
+        </SongContextMenuItem>
+      </SongContextMenu>
     </div>
   );
 };
