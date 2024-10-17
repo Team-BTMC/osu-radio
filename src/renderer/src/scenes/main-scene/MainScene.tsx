@@ -2,7 +2,7 @@ import SongDetail from "../../components/song/song-detail/SongDetail";
 import SongList from "../../components/song/song-list/SongList";
 import { mainActiveTab, setMainActiveTab, Tab, TABS } from "./main.utils";
 import "./styles.css";
-import IconButton from "@renderer/components/icon-button/IconButton";
+import Button from "@renderer/components/button/Button";
 import Settings from "@renderer/components/settings/Settings";
 import SongImage from "@renderer/components/song/SongImage";
 import SongQueue from "@renderer/components/song/song-queue/SongQueue";
@@ -82,22 +82,24 @@ const Nav: Component = () => {
   return (
     <nav
       class="nav"
-      style={os() === "darwin" ? { padding: "0px 20px 0px 95px" } : { padding: "0px 0px 0px 20px" }}
+      style={os() === "darwin" ? { padding: "0px 0px 0px 95px" } : { padding: "0px 0px 0px 20px" }}
     >
       <For each={Object.values(TABS)}>
         {({ label, ...rest }) => <NavItem {...rest}>{label}</NavItem>}
       </For>
 
       <div class="nav__queue ml-auto">
-        <IconButton
-          class="text-subtext"
+        <Button
+          variant="ghost"
+          size="icon"
           classList={{
             "text-text": songQueueModalOpen(),
           }}
+          class="mr-2"
           onClick={toggleSongQueueModalOpen}
         >
           <i class="ri-stack-fill" />
-        </IconButton>
+        </Button>
       </div>
       {os() !== "darwin" && <WindowControls maximized={maximized} setMaximized={setMaximized} />}
     </nav>

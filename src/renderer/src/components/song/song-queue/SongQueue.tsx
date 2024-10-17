@@ -6,7 +6,7 @@ import InfiniteScroller from "../../InfiniteScroller";
 import SongContextMenuItem from "../context-menu/SongContextMenuItem";
 import SongItem from "../song-item/SongItem";
 import { setSongQueueModalOpen } from "./song-queue.utils";
-import IconButton from "@renderer/components/icon-button/IconButton";
+import Button from "@renderer/components/button/Button";
 import { Component, createSignal, onCleanup, onMount } from "solid-js";
 
 const SongQueue: Component = () => {
@@ -84,9 +84,9 @@ const SongQueue: Component = () => {
     <div ref={view} class="flex h-full flex-col bg-regular-material backdrop-blur-md">
       <div class="sticky top-0 z-10 flex items-center justify-between p-5">
         <h2 class="text-lg font-semibold">Next songs on the queue ({count()})</h2>
-        <IconButton onClick={handleCloseButtonClick}>
+        <Button variant="ghost" onClick={handleCloseButtonClick}>
           <i class="ri-close-line" />
-        </IconButton>
+        </Button>
       </div>
 
       <div class="flex-grow overflow-y-auto px-4">
