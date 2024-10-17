@@ -5,19 +5,28 @@ on:
     branches:
       - master
   pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
 jobs:
-  Typing-and-Linting:
+  typecheck:
+    timeout-minutes: 10
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - name: Install dependencies
-        run: npm install
+      - name: Setup
+        uses: ../actions/setup
+
       - name: Run TypeScript compiler
         run: npm run typecheck
-      - name: Run Eslint check
-        run: npm run lint:check
+
+  lint:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup
+        uses: ../actions/setup
+
+      - name: Run Eslint
+        run: npm run lint
