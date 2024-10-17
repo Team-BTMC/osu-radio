@@ -1,15 +1,26 @@
 import "../../../assets/css/song/song-context-menu.css";
-import { Accessor, Component, createEffect, For, onCleanup, onMount, Show, Signal } from "solid-js";
+import {
+  Accessor,
+  Component,
+  createEffect,
+  createSignal,
+  For,
+  onCleanup,
+  onMount,
+  Show,
+  Signal,
+} from "solid-js";
 
 type SongContextMenuProps = {
   show: Signal<boolean>;
   coords: Accessor<[number, number]>;
-  container: any;
   children: any;
+  isContextOpen: Signal<boolean>;
 };
 
 const SongContextMenu: Component<SongContextMenuProps> = (props) => {
   const [show, setShow] = props.show;
+  const [pos, setPos] = createSignal<[number, number]>(props.coords());
   let menu: HTMLDivElement | undefined;
 
   const windowContextMenu = (evt: MouseEvent) => {
@@ -19,21 +30,19 @@ const SongContextMenu: Component<SongContextMenuProps> = (props) => {
       return;
     }
 
-    const targetItem = t.closest(".song-item");
-    const menuParent = menu?.closest(".song-item");
+    const targetItem = t.closest(".group");
+    const menuParent = menu?.closest(".group");
+    setPos([evt.layerX, evt.layerY]);
+
+    // console.log(menu, targetItem, menuParent, evt.target);
+    // console.log(props.children);
 
     if (targetItem === menuParent) {
       evt.stopPropagation();
-      return;
+    } else {
+      setShow(false);
+      props.isContextOpen[1](false);
     }
-
-    setShow(false);
-  };
-
-  const calculatePosition = () => {
-    const c = props.coords();
-    menu?.style.setProperty("--x", `${Math.round(c[0])}px`);
-    menu?.style.setProperty("--y", `${Math.round(c[1])}px`);
   };
 
   onMount(() => {
@@ -45,22 +54,36 @@ const SongContextMenu: Component<SongContextMenuProps> = (props) => {
         return;
       }
 
-      calculatePosition();
-      window.addEventListener("click", () => setShow(false), { once: true });
+      props.isContextOpen[1](true);
+
+      window.addEventListener(
+        "click",
+        () => {
+          setShow(false);
+          props.isContextOpen[1](false);
+        },
+        { once: true },
+      );
       window.addEventListener("contextmenu", windowContextMenu);
     });
   });
 
   onCleanup(() => {
-    window.removeEventListener("click", () => setShow(false));
+    window.removeEventListener("click", () => {
+      setShow(false);
+      props.isContextOpen[1](false);
+    });
     window.removeEventListener("contextmenu", windowContextMenu);
-    menu?.removeEventListener("click", (evt) => evt.stopPropagation());
   });
 
   return (
     <Show when={show()}>
-      <div class="absolute z-50 overflow-hidden rounded-md bg-surface shadow-lg" ref={menu}>
-        <div class="bg-gradient-to-b from-black/30 to-transparent">
+      <div
+        class={"absolute z-30 overflow-hidden rounded-md bg-thick-material shadow-lg"}
+        style={{ top: pos()[1] + "px", left: pos()[0] + "px" }}
+        ref={menu}
+      >
+        <div class="relative z-30 bg-gradient-to-b from-black/30 to-transparent">
           <For each={props.children}>{(child) => child}</For>
         </div>
       </div>

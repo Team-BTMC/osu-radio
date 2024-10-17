@@ -22,6 +22,7 @@ const SongList: Component<SongViewProps> = (props) => {
 
   const [order, setOrder] = createSignal<Order>({ option: "title", direction: "asc" });
   const [count, setCount] = createSignal(0);
+  const isContextOpen = createSignal(false);
 
   const [payload, setPayload] = createSignal<SongsQueryPayload>({
     view: props,
@@ -88,7 +89,7 @@ const SongList: Component<SongViewProps> = (props) => {
           reset={resetListing}
           fallback={<div class="py-8 text-center text-text">No songs...</div>}
           builder={(s) => (
-            <SongItem song={s} group={group} onSelect={createQueue}>
+            <SongItem song={s} group={group} onSelect={createQueue} isContextOpen={isContextOpen}>
               <PlayNext path={s.path} />
               <button class="w-full px-4 py-2 text-left transition-colors duration-200 hover:bg-accent/20">
                 Add to playlist

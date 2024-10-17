@@ -2,9 +2,9 @@ import { ResourceID, Song } from "../../../../../@types";
 import draggable from "../../../lib/draggable/draggable";
 import SongHint from "../SongHint";
 import SongImage from "../SongImage";
-import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
+import SongContextMenu, { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import { song as selectedSong } from "../song.utils";
-import { Component, createSignal, onMount } from "solid-js";
+import { Component, createSignal, onMount, Signal } from "solid-js";
 
 type SongItemProps = {
   song: Song;
@@ -14,6 +14,7 @@ type SongItemProps = {
   draggable?: true;
   onDrop?: (before: Element | null) => any;
   children?: any;
+  isContextOpen: Signal<boolean>;
 };
 
 const SongItem: Component<SongItemProps> = ({
@@ -24,9 +25,10 @@ const SongItem: Component<SongItemProps> = ({
   draggable: isDraggable,
   onDrop,
   selectable,
+  isContextOpen,
 }) => {
   const showSignal = createSignal(false);
-  const [, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
+  const [coords, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
   let item: HTMLDivElement | undefined;
 
   const showMenu = (evt: MouseEvent) => {
@@ -35,7 +37,12 @@ const SongItem: Component<SongItemProps> = ({
       return;
     }
 
-    setCoords([evt.clientX, evt.clientY]);
+    if (isContextOpen[0]() === true) {
+      return;
+    }
+
+    setCoords([evt.layerX, evt.layerY]);
+    console.log(coords());
     showSignal[1](true);
   };
 
@@ -58,7 +65,7 @@ const SongItem: Component<SongItemProps> = ({
 
   return (
     <div
-      class="group relative isolate select-none rounded-md"
+      class="group relative isolate z-20 select-none rounded-md"
       classList={{
         "outline outline-2 outline-accent": selectedSong().path === song.path,
       }}
@@ -76,12 +83,15 @@ const SongItem: Component<SongItemProps> = ({
         group={group}
       />
 
-      <div class="flex min-h-[72px] flex-col justify-center overflow-hidden rounded-md bg-black/50 p-3">
+      <div class="z-20 flex min-h-[72px] flex-col justify-center overflow-hidden rounded-md bg-black/50 p-3">
         <h3 class="text-shadow text-[22px] font-extrabold leading-7 shadow-black/60">
           {song.title}
         </h3>
         <p class="text-base text-subtext">{song.artist}</p>
       </div>
+      <SongContextMenu show={showSignal} coords={coords} isContextOpen={isContextOpen}>
+        {...children}
+      </SongContextMenu>
     </div>
   );
 };
