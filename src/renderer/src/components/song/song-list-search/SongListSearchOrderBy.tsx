@@ -60,13 +60,8 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
   });
 
   return (
-    <div class="flex items-center space-x-2">
-      <Button
-        variant={"ghost"}
-        class="rounded-full border-none text-xl"
-        size="icon"
-        onClick={switchDirections}
-      >
+    <div class="flex items-center space-x-3">
+      <Button variant={"ghost"} size="icon" onClick={switchDirections}>
         <Switch>
           <Match when={direction() === "asc"}>
             <i class="ri-sort-asc" />

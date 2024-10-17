@@ -82,12 +82,12 @@ const Nav: Component = () => {
 
       <div class="nav__queue ml-auto">
         <Button
-          variant={"ghost"}
-          class="rounded-full border-none text-xl text-subtext"
+          variant="ghost"
           size="icon"
           classList={{
             "text-text": songQueueModalOpen(),
           }}
+          class="mr-2"
           onClick={toggleSongQueueModalOpen}
         >
           <i class="ri-stack-fill" />

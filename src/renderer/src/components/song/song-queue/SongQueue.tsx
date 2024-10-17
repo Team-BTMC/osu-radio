@@ -84,7 +84,7 @@ const SongQueue: Component = () => {
     <div ref={view} class="flex h-full flex-col bg-regular-material backdrop-blur-md">
       <div class="sticky top-0 z-10 flex items-center justify-between p-5">
         <h2 class="text-lg font-semibold">Next songs on the queue ({count()})</h2>
-        <Button onClick={handleCloseButtonClick}>
+        <Button variant="ghost" onClick={handleCloseButtonClick}>
           <i class="ri-close-line" />
         </Button>
       </div>

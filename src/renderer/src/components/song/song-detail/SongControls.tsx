@@ -32,7 +32,7 @@ const SongControls: Component = () => {
   return (
     <div class="grid w-full grid-cols-4 items-center gap-4">
       <div class="group flex w-max items-center">
-        <Button variant={"ghost"} class="rounded-full border-none text-xl" size="icon">
+        <Button variant={"ghost"} size="icon">
           <Switch>
             <Match when={localVolume() === 0}>
               <i class="ri-volume-mute-fill" />
@@ -52,7 +52,6 @@ const SongControls: Component = () => {
       <div class="col-span-2 col-start-2 flex items-center justify-center gap-4">
         <Button
           variant={"ghost"}
-          class="rounded-full border-none text-xl"
           size="icon"
           onClick={() => window.api.request("queue::shuffle")}
           disabled={disable()}
@@ -62,7 +61,6 @@ const SongControls: Component = () => {
         </Button>
         <Button
           variant={"ghost"}
-          class="rounded-full border-none text-2xl"
           size="icon"
           onClick={() => previous()}
           disabled={disable()}
@@ -84,7 +82,6 @@ const SongControls: Component = () => {
 
         <Button
           variant={"ghost"}
-          class="rounded-full border-none text-2xl"
           size="icon"
           onClick={() => next()}
           disabled={disable()}
@@ -95,7 +92,7 @@ const SongControls: Component = () => {
 
         <Button
           variant={"ghost"}
-          class="rounded-full border-none text-xl"
+          class=""
           size="icon"
           onClick={() => {
             // TODO - implement repeat
@@ -107,7 +104,7 @@ const SongControls: Component = () => {
         </Button>
       </div>
       <div class="ml-auto">
-        <Button variant={"ghost"} class="rounded-full border-none text-xl" size="icon">
+        <Button variant="ghost" size="icon">
           <i class="ri-add-fill" />
         </Button>
       </div>
