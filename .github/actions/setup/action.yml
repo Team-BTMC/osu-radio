@@ -15,4 +15,3 @@ runs:
 
     - shell: bash
       run: npm ci
-
