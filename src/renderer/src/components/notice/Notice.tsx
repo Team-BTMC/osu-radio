@@ -4,6 +4,7 @@ import Impulse from "../../lib/Impulse";
 import { none, orDefault, some } from "../../lib/rust-like-utils-client/Optional";
 import Gradient from "../Gradient";
 import { hideNotice } from "./NoticeContainer";
+import { XIcon } from "lucide-solid";
 import { Accessor, Component, createSignal } from "solid-js";
 
 export type NoticeType = {
@@ -58,7 +59,7 @@ const Notice: Component<NoticeProps> = (props) => {
             <div class="head">
               <h3>{props.notice.title}</h3>
               <button onClick={removeNotice}>
-                <i class="ri-close-line" />
+                <XIcon size={20} />
               </button>
             </div>
 

@@ -3,6 +3,7 @@ import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-
 import { Tag } from "../../search/TagSelect";
 import { setSongsSearch } from "../song-list/song-list.utils";
 import SongListSearchOrderBy from "./SongListSearchOrderBy";
+import { SearchIcon } from "lucide-solid";
 import { Accessor, Component, Setter, Signal } from "solid-js";
 
 export type SearchProps = {
@@ -77,7 +78,7 @@ const SongListSearch: Component<SearchProps> = (props) => {
           class="absolute left-3 top-1/2 -translate-y-1/2 transform text-text"
           for="search_input"
         >
-          <i class="ri-search-2-line" />
+          <SearchIcon size={20} class="opacity-70" />
         </label>
       </div>
 
