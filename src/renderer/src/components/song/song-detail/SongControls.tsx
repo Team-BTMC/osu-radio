@@ -92,7 +92,6 @@ const SongControls: Component = () => {
 
         <Button
           variant={"ghost"}
-          class=""
           size="icon"
           onClick={() => {
             // TODO - implement repeat
