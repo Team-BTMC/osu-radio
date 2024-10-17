@@ -74,7 +74,7 @@ const PlaylistItem: Component<PlaylistItemProps> = (props) => {
             variant={"ghost"}
             // variant={check() ? "accent" : "ghost"}
             size={"icon"}
-            class="flex items-center justify-center border"
+            class=""
             classList={{ "bg-accent text-thick-material": false }}
             // onClick={(e) => deletePlaylist(e, props)}
             onClick={(e) => {

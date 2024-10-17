@@ -1,4 +1,4 @@
-import IconButton from "@renderer/components/icon-button/IconButton";
+import Button from "@renderer/components/button/Button";
 import SongImage from "@renderer/components/song/SongImage";
 import Impulse from "@renderer/lib/Impulse";
 import { Component, createSignal, Setter } from "solid-js";
@@ -24,11 +24,11 @@ const PlaylistCreateBox: Component<PlaylistCreateBoxProps> = (props) => {
 
   return (
     <div class="mb-6 rounded-xl bg-thick-material">
-      <div class="flex flex-row justify-between p-4">
-        <h3>Create a new playlist</h3>
-        <IconButton onClick={() => props.isOpen(false)}>
+      <div class="flex flex-row items-center justify-between p-4">
+        <h3 class="text-xl">Create a new playlist</h3>
+        <Button variant={"ghost"} onClick={() => props.isOpen(false)}>
           <i class="ri-close-line text-xl text-accent" />
-        </IconButton>
+        </Button>
       </div>
       <div class="m-4 mt-0 flex flex-row">
         <div class="mr-4 rounded-lg">

@@ -3,7 +3,6 @@ import SongItem from "../../song/song-item/SongItem";
 import { PLAYLIST_SCENE_LIST, setPlaylistActiveScene } from "../playlist-view/playlist-view.utils";
 import { namespace } from "@renderer/App";
 import Button from "@renderer/components/button/Button";
-import IconButton from "@renderer/components/icon-button/IconButton";
 import Impulse from "@renderer/lib/Impulse";
 import { Component, createSignal, Match, onCleanup, onMount, Switch } from "solid-js";
 import { PlaylistSongsQueryPayload, ResourceID, Song } from "src/@types";
@@ -63,12 +62,13 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
     <div class="mx-5 my-6">
       <div class="mb-6 flex w-full flex-row items-center justify-between">
         <div class="flex flex-row items-center gap-5 text-xl font-medium">
-          <IconButton
+          <Button
+            variant={"ghost"}
             onClick={() => setPlaylistActiveScene(PLAYLIST_SCENE_LIST)}
-            class="text-xl text-text"
+            class="text-xl"
           >
             <i class="ri-arrow-left-line text-overlay"></i>
-          </IconButton>
+          </Button>
           {/* <Switch fallback={""}>
             <Match when={editMode() === true}>
               <input
@@ -90,7 +90,7 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
         <Button
           variant={editMode() ? "accent" : "ghost"}
           size={"icon"}
-          class="flex items-center justify-center border"
+          class="rounded-lg"
           onClick={() => {
             // await renamePlaylist(playlistName());
             setEditMode(!editMode());
@@ -123,7 +123,7 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
                     variant={"ghost"}
                     size={"icon"}
                     // this needs to be slightly larger for some reason (probably margin)
-                    class="ml-3 flex w-11 items-center justify-center border"
+                    class="ml-3 w-10 rounded-lg"
                     onClick={() => deleteSong(props.playlistName, s)}
                   >
                     <i class="ri-delete-bin-line text-lg text-rose-300" />

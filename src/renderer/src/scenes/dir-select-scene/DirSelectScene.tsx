@@ -49,7 +49,7 @@ export default function DirSelectScene() {
 
         <div class="flex flex-col gap-4">
           <div class="flex flex-col gap-1.5">
-            <label class="text-sm font-bold text-text">Your osu! Songs folder</label>
+            <label class="text-sm font-bold text-text">Your osu! folder</label>
             <div
               onClick={selectDir}
               class="flex items-baseline justify-between rounded-xl border border-white/5 bg-regular-material p-1 pl-4"

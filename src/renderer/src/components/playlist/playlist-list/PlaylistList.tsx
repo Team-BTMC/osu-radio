@@ -31,9 +31,9 @@ const PlaylistList: Component = () => {
       */}
       <div class="z-1 sticky top-0 mx-5 mt-6 flex flex-col">
         <div class="mb-6 flex w-full flex-row items-center">
-          <div class="mr-2 h-10 w-full rounded-lg border border-stroke">
+          <div class="mr-2 h-11 w-full rounded-lg border border-stroke">
             <input
-              class="h-10 w-full rounded-lg bg-transparent pl-3 focus:outline-none focus:ring-2 focus:ring-accent"
+              class="h-11 w-full rounded-lg bg-transparent pl-3 focus:outline-none focus:ring-2 focus:ring-accent"
               type="text"
               id="search_input"
               placeholder="Search in your playlists... (WIP)"
@@ -45,7 +45,7 @@ const PlaylistList: Component = () => {
             <Switch>
               <Match when={showCreateBox() === true}>
                 <label
-                  class="absolute top-1/2 -translate-x-8 -translate-y-[129px] transform text-xl text-text"
+                  class="absolute top-1/2 -translate-x-8 -translate-y-[139px] transform text-xl text-text"
                   for="search_input"
                 >
                   <i class="ri-search-line" />
@@ -61,14 +61,14 @@ const PlaylistList: Component = () => {
               </Match>
             </Switch>
           </div>
-          <div class="rounded-lg">
+          <div class="ml-3">
             {/* // TODO: fix button misaligning when the scrollbar appears */}
             <Button
               onClick={() => {
                 setShowCreateBox(!showCreateBox());
               }}
               // bg-accent doesn't work for some reason
-              class="flex items-center justify-center border"
+              class="rounded-lg text-xl"
               variant={showCreateBox() ? "accent" : "ghost"}
               size={"icon"}
             >
