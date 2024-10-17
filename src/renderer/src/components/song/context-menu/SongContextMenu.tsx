@@ -1,6 +1,5 @@
 import "../../../assets/css/song/song-context-menu.css";
 import {
-  Accessor,
   Component,
   createEffect,
   createSignal,
@@ -13,14 +12,12 @@ import {
 
 type SongContextMenuProps = {
   show: Signal<boolean>;
-  coords: Accessor<[number, number]>;
   children: any;
-  isContextOpen: Signal<boolean>;
 };
 
 const SongContextMenu: Component<SongContextMenuProps> = (props) => {
   const [show, setShow] = props.show;
-  const [pos, setPos] = createSignal<[number, number]>(props.coords());
+  const [pos, setPos] = createSignal<[number, number]>([0, 0]);
   let menu: HTMLDivElement | undefined;
 
   const windowContextMenu = (evt: MouseEvent) => {
@@ -31,17 +28,9 @@ const SongContextMenu: Component<SongContextMenuProps> = (props) => {
     }
 
     const targetItem = t.closest(".group");
-    const menuParent = menu?.closest(".group");
-    setPos([evt.layerX, evt.layerY]);
 
-    // console.log(menu, targetItem, menuParent, evt.target);
-    // console.log(props.children);
-
-    if (targetItem === menuParent) {
-      evt.stopPropagation();
-    } else {
-      setShow(false);
-      props.isContextOpen[1](false);
+    if (targetItem !== null) {
+      setPos([evt.clientX, evt.clientY - 52]);
     }
   };
 
@@ -54,13 +43,10 @@ const SongContextMenu: Component<SongContextMenuProps> = (props) => {
         return;
       }
 
-      props.isContextOpen[1](true);
-
       window.addEventListener(
         "click",
         () => {
           setShow(false);
-          props.isContextOpen[1](false);
         },
         { once: true },
       );
@@ -71,7 +57,6 @@ const SongContextMenu: Component<SongContextMenuProps> = (props) => {
   onCleanup(() => {
     window.removeEventListener("click", () => {
       setShow(false);
-      props.isContextOpen[1](false);
     });
     window.removeEventListener("contextmenu", windowContextMenu);
   });

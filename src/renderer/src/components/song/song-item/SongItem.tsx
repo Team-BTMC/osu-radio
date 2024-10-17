@@ -2,9 +2,9 @@ import { ResourceID, Song } from "../../../../../@types";
 import draggable from "../../../lib/draggable/draggable";
 import SongHint from "../SongHint";
 import SongImage from "../SongImage";
-import SongContextMenu, { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
+import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import { song as selectedSong } from "../song.utils";
-import { Component, createSignal, onMount, Signal } from "solid-js";
+import { Component, onMount, Setter, Signal } from "solid-js";
 
 type SongItemProps = {
   song: Song;
@@ -14,35 +14,24 @@ type SongItemProps = {
   draggable?: true;
   onDrop?: (before: Element | null) => any;
   children?: any;
-  isContextOpen: Signal<boolean>;
+  showSignal: Signal<boolean>;
+  setSong: Setter<Song | undefined>;
 };
 
 const SongItem: Component<SongItemProps> = ({
   group,
   onSelect,
   song,
-  children,
   draggable: isDraggable,
   onDrop,
   selectable,
-  isContextOpen,
+  showSignal,
+  setSong,
 }) => {
-  const showSignal = createSignal(false);
-  const [coords, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
   let item: HTMLDivElement | undefined;
 
-  const showMenu = (evt: MouseEvent) => {
-    if (children === undefined) {
-      showSignal[1](false);
-      return;
-    }
-
-    if (isContextOpen[0]() === true) {
-      return;
-    }
-
-    setCoords([evt.layerX, evt.layerY]);
-    console.log(coords());
+  const showMenu = () => {
+    setSong(song);
     showSignal[1](true);
   };
 
@@ -89,9 +78,6 @@ const SongItem: Component<SongItemProps> = ({
         </h3>
         <p class="text-base text-subtext">{song.artist}</p>
       </div>
-      <SongContextMenu show={showSignal} coords={coords} isContextOpen={isContextOpen}>
-        {...children}
-      </SongContextMenu>
     </div>
   );
 };
