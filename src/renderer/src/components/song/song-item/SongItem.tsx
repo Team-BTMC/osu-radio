@@ -2,7 +2,6 @@ import { ResourceID, Song } from "../../../../../@types";
 import draggable from "../../../lib/draggable/draggable";
 import SongHint from "../SongHint";
 import SongImage from "../SongImage";
-import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import { song as selectedSong } from "../song.utils";
 import { Component, onMount, Setter, Signal } from "solid-js";
 
@@ -41,7 +40,7 @@ const SongItem: Component<SongItemProps> = ({
     }
 
     draggable(item, {
-      onClick: ignoreClickInContextMenu(() => onSelect(song.path)),
+      onClick: () => onSelect(song.path),
       onDrop: onDrop ?? (() => {}),
       createHint: SongHint,
       useOnlyAsOnClickBinder: !isDraggable || selectedSong().path === song.path,
