@@ -30,3 +30,13 @@ jobs:
 
       - name: Run Eslint
         run: npm run lint
+
+  format:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup
+        uses: ../actions/setup
+
+      - name: Run Prettier
+        run: npm run format:check
