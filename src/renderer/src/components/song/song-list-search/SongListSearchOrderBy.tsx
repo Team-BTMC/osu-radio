@@ -1,6 +1,6 @@
 import Dropdown from "@renderer/components/dropdown/Dropdown";
 import IconButton from "@renderer/components/icon-button/IconButton";
-import { Component, createMemo, createSignal, Match, Setter, Switch } from "solid-js";
+import { Component, createMemo, createSignal, For, Match, Setter, Switch } from "solid-js";
 import { OrderDirection, OrderOptions, Order } from "src/@types";
 
 type OrderOption = {
@@ -83,14 +83,16 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
           }}
           value={option}
         >
-          {orderOptions.map((option) => (
-            <Dropdown.Item
-              class="px-4 py-2 transition-colors duration-200 hover:bg-accent/20"
-              value={option.value}
-            >
-              {option.text}
-            </Dropdown.Item>
-          ))}
+          <For each={orderOptions}>
+            {(option) => (
+              <Dropdown.Item
+                class="px-4 py-2 transition-colors duration-200 hover:bg-accent/20"
+                value={option.value}
+              >
+                {option.text}
+              </Dropdown.Item>
+            )}
+          </For>
         </Dropdown.List>
       </Dropdown>
     </div>
