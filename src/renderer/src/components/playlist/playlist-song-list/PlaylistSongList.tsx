@@ -18,7 +18,7 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
   const group = namespace.create(true);
   // const [playlistName, setPlaylistName] = createSignal("");
 
-  const [payload, _setPayload] = createSignal<PlaylistSongsQueryPayload>({
+  const [payload] = createSignal<PlaylistSongsQueryPayload>({
     playlistName: props.playlistName,
   });
 
@@ -37,7 +37,7 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
   const createQueue = async (songResource: ResourceID) => {
     await window.api.request("queue::create", {
       startSong: songResource,
-      order: "",
+      order: { direction: "asc", option: "none" },
       tags: [],
       view: { playlist: props.playlistName },
     });

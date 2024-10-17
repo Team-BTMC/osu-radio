@@ -73,7 +73,7 @@ Router.respond("playlist::rename", (_evt, oldName, newName) => {
   playlists.delete(oldName);
 });
 
-Router.respond("query::playlists::init", (_evt) => {
+Router.respond("query::playlists::init", () => {
   const playlists = Storage.getTable("playlists").getStruct();
   const count = Object.keys(playlists).length;
 

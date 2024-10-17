@@ -1,20 +1,14 @@
 import InfiniteScroller from "../../InfiniteScroller";
 import PlaylistCreateBox from "../playlist-create/PlaylistCreateBox";
 import PlaylistItem from "../playlist-item/PlaylistItem";
-// import {
-//   PLAYLIST_SCENE_CREATE,
-//   setPlaylistActiveScene,
-// } from "../playlist-view/playlist-view.utils";
 import { namespace } from "@renderer/App";
 import Button from "@renderer/components/button/Button";
 import Impulse from "@renderer/lib/Impulse";
 import { Component, createSignal, Match, onCleanup, onMount, Switch } from "solid-js";
 
-export type PlaylistListProps = {};
-
-const PlaylistList: Component<PlaylistListProps> = () => {
+const PlaylistList: Component = () => {
   // const [playlistSearch, setPlaylistSearch] = createSignal("");
-  const [_count, setCount] = createSignal(0);
+  const [, setCount] = createSignal(0);
   const resetListing = new Impulse();
   const [showCreateBox, setShowCreateBox] = createSignal(false);
 
@@ -71,7 +65,6 @@ const PlaylistList: Component<PlaylistListProps> = () => {
             {/* // TODO: fix button misaligning when the scrollbar appears */}
             <Button
               onClick={() => {
-                // setPlaylistActiveScene(PLAYLIST_SCENE_CREATE);
                 setShowCreateBox(!showCreateBox());
               }}
               // bg-accent doesn't work for some reason

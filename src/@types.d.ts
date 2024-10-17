@@ -175,7 +175,14 @@ export type Tag = {
   isSpecial?: boolean;
 };
 
-export type OrderOptions = "title" | "artist" | "creator" | "bpm" | "duration" | "dateAdded";
+export type OrderOptions =
+  | "title"
+  | "artist"
+  | "creator"
+  | "bpm"
+  | "duration"
+  | "dateAdded"
+  | "none";
 
 export type OrderDirection = "asc" | "desc";
 

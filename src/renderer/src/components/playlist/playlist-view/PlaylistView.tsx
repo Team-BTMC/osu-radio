@@ -1,8 +1,6 @@
-import PlaylistCreate from "../playlist-create/PlaylistCreate";
 import PlaylistList from "../playlist-list/PlaylistList";
 import PlaylistSongList from "../playlist-song-list/PlaylistSongList";
 import {
-  PLAYLIST_SCENE_CREATE,
   PLAYLIST_SCENE_SONGS,
   PLAYLIST_SCENE_LIST,
   playlistActiveScene,
@@ -10,17 +8,12 @@ import {
 } from "./playlist-view.utils";
 import { Component, Match, Switch } from "solid-js";
 
-export type PlaylistViewProps = {};
-
-const PlaylistView: Component<PlaylistViewProps> = () => {
+const PlaylistView: Component = () => {
   return (
     <div class="h-full overflow-y-auto">
       <Switch fallback={<div>idk</div>}>
         <Match when={playlistActiveScene() == PLAYLIST_SCENE_LIST}>
           <PlaylistList />
-        </Match>
-        <Match when={playlistActiveScene() == PLAYLIST_SCENE_CREATE}>
-          <PlaylistCreate />
         </Match>
         <Match when={playlistActiveScene() == PLAYLIST_SCENE_SONGS}>
           <PlaylistSongList playlistName={activePlaylistName()} />

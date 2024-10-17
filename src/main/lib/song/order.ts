@@ -1,5 +1,5 @@
 import { Order, Result, Song } from "../../../@types";
-import { ok } from "../rust-like-utils-backend/Result";
+import { fail, ok } from "../rust-like-utils-backend/Result";
 import { averageBPM, msToBPM } from "./average-bpm";
 
 export default function order(ordering: Order): Result<(a: Song, b: Song) => number, string> {
@@ -45,6 +45,9 @@ export default function order(ordering: Order): Result<(a: Song, b: Song) => num
 
     case "duration":
       return ok((a: Song, b: Song) => (a.duration - b.duration) * sortDirection);
+
+    case "none":
+      return fail("");
 
     default:
       return ok((a: Song, b: Song) => {

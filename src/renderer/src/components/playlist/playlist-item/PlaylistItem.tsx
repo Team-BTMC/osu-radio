@@ -30,7 +30,7 @@ const PlaylistItem: Component<PlaylistItemProps> = (props) => {
           setPlaylistActiveScene(PLAYLIST_SCENE_SONGS);
         }
       }}
-      class="max-w-[428px]"
+      class=""
     >
       <div class="flex flex-row gap-4">
         <div class="flex items-center justify-center rounded-lg">
