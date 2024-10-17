@@ -22,8 +22,8 @@
 .filling-container {
   width: 100%;
   height: 100%;
-  border-radius: var(--rounded-sm);
-  background-color: var(--text-400);
+  border-radius: 999px;
+  background-color: rgba(var(--color-surface), 0.5);
   overflow: hidden;
 }
 
@@ -33,7 +33,7 @@
 }
 
 .bar .filling {
-  background-color: var(--text-900);
+  background-color: rgba(var(--color-accent), 1);
 }
 
 .bar:not(.editable) .filling {
@@ -54,7 +54,7 @@
   width: 12px;
   aspect-ratio: 1/1;
   border-radius: 50%;
-  background-color: var(--text-900);
+  background-color: rgba(var(--color-accent), 1);
   position: absolute;
 }
 
