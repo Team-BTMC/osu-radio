@@ -111,9 +111,10 @@ const SongList: Component<SongViewProps> = (props) => {
         <Show when={queryCreated() === true}>
           <PlayNext path={song()?.path} />
         </Show>
+
         <SongContextMenuItem
           onClick={() => {
-            console.log("yo");
+            console.log("todo");
           }}
         >
           <p>Add to playlist</p>

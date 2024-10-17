@@ -110,26 +110,23 @@ const SongQueue: Component = () => {
               onDrop={onDrop(s)}
               showSignal={showSignal}
               setSong={setSong}
-            >
-              {/* <SongContextMenuItem onClick={() => window.api.request("queue::removeSong", s.path)}>
-                Remove from queue
-              </SongContextMenuItem> */}
-            </SongItem>
+            ></SongItem>
           )}
         />
       </div>
       <SongContextMenu show={showSignal}>
         <SongContextMenuItem
           onClick={() => {
-            console.log("yo");
+            console.log("todo");
           }}
         >
           <p>Add to playlist</p>
           <i class="ri-add-line"></i>
         </SongContextMenuItem>
+
         <SongContextMenuItem
           onClick={() => {
-            console.log("remove " + song()?.title);
+            window.api.request("queue::removeSong", song()?.path);
           }}
         >
           <p>Remove from queue</p>
