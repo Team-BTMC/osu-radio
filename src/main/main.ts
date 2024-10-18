@@ -52,7 +52,7 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
   let tables: Awaited<DirParseResult>;
   const settings = Storage.getTable("settings");
 
-  do {
+  while (true) {
     await Router.dispatch(mainWindow, "changeScene", "dir-select");
     const dir = await dirSubmit();
 
@@ -91,7 +91,7 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
     // All went smoothly. Save osu directory and continue with import procedure
     settings.write("osuSongsDir", dir);
     break;
-  } while (true);
+  }
 
   // Show finished state
   await Router.dispatch(mainWindow, "loadingScene::update", {

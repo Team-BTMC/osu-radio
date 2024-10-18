@@ -1,4 +1,4 @@
-import { Component, Show } from "solid-js";
+import { Component, For, Show } from "solid-js";
 
 type SettingDropdownProps = {
   label: string;
@@ -27,9 +27,9 @@ const SettingDropdown: Component<SettingDropdownProps> = (props) => {
           disabled={props.disabled}
           onChange={changeOption}
         >
-          {Array.from(props.options.keys()).map((option) => (
-            <option value={option}>{option}</option>
-          ))}
+          <For each={Array.from(props.options.keys())}>
+            {(option) => <option value={option}>{option}</option>}
+          </For>
         </select>
       </Show>
     </div>

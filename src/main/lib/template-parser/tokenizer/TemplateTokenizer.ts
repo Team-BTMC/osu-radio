@@ -51,14 +51,14 @@ export class TemplateTokenizer {
     switch (this.char) {
       case "\0":
         return createToken(Tokens.EOF, this.char, this.position);
-      case "\\":
+      case "\\": {
         const next = this.peek();
         if (next === "{" || next === "}") {
           this.readChar();
           return createToken(Tokens.Text, this.char, this.position);
         }
-
         return createToken(Tokens.Text, this.char, this.position);
+      }
       case "{":
         return createToken(Tokens.LeftSquirly, this.char, this.position);
       case "}":

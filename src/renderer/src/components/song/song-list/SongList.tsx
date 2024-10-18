@@ -16,17 +16,18 @@ export type SongViewProps = {
   playlist?: string;
 };
 
-const SongList: Component<SongViewProps> = (props) => {
-  const tagsSignal = createSignal<Tag[]>([], { equals: false });
-  const [tags] = tagsSignal;
+const DEFAULT_TAGS_VALUE: Tag[] = [];
+const DEFAULT_ORDER_VALUE: Order = { option: "title", direction: "asc" };
 
-  const [order, setOrder] = createSignal<Order>({ option: "title", direction: "asc" });
+const SongList: Component<SongViewProps> = (props) => {
+  const [tags, setTags] = createSignal(DEFAULT_TAGS_VALUE, { equals: false });
+  const [order, setOrder] = createSignal(DEFAULT_ORDER_VALUE);
   const [count, setCount] = createSignal(0);
 
   const [payload, setPayload] = createSignal<SongsQueryPayload>({
     view: props,
-    order: order(),
-    tags: tags(),
+    order: DEFAULT_ORDER_VALUE,
+    tags: DEFAULT_TAGS_VALUE,
   });
 
   const [searchError, setSearchError] = createSignal<Optional<SearchQueryError>>(none(), {
@@ -75,7 +76,12 @@ const SongList: Component<SongViewProps> = (props) => {
   return (
     <div class="flex h-full flex-col">
       <div class="sticky top-0 z-10">
-        <SongListSearch tags={tagsSignal} setOrder={setOrder} count={count} error={searchError} />
+        <SongListSearch
+          tags={[tags, setTags]}
+          setOrder={setOrder}
+          count={count}
+          error={searchError}
+        />
       </div>
 
       <div class="flex-grow overflow-y-auto p-5 py-0">
