@@ -6,7 +6,7 @@ Main Figma Design: [https://www.figma.com/design/tNBJr7TlEsoWsWdAewqoUg](https:/
 
 # What is osu!radio
 
-It's an application that plays your ${\textsf{\color{#f462a3}osu!}}$ songs!
+It's an application that plays your osu! songs!
 
 ![Song Tab](https://github.com/user-attachments/assets/da67b906-1429-4cc1-9087-76026e94b98a "The screen show a UI with all the buttons (Play, Pause, Forward and Rewind, as well as a Seek bar, with 4 songs on the left")
 
@@ -71,7 +71,7 @@ Technologies:
 - Solid JS
 - TypeScript
 
-The main discussion is in the [BTMC TALENT SERVER](https://discord.gg/mefjfMjV), #prj-osu-radio
+The main discussion is in the [BTMC TALENT SERVER](https://discord.gg/VvMzQ3AxFT), #prj-osu-radio
 <br>
 We'll be staying on Electron for the time being. As for UI, it will stay web-based for ease of use & cost of being web-based :)
 <br>

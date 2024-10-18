@@ -1,6 +1,17 @@
 import Dropdown from "@renderer/components/dropdown/Dropdown";
 import useControllableState from "@renderer/lib/controllable-state";
-import { Accessor, Component, createMemo, createSignal, For, Match, Show, Switch } from "solid-js";
+import { cva } from "class-variance-authority";
+import {
+  Accessor,
+  Component,
+  createMemo,
+  createSignal,
+  For,
+  JSX,
+  Match,
+  Show,
+  Switch,
+} from "solid-js";
 
 export type TagMode = "include" | "discart";
 export type TagLabel = ReturnType<typeof tagsToLabel>;
@@ -115,22 +126,44 @@ const SongListSearchTags: Component<Props> = (props) => {
               </button>
             </div>
           </Show>
-          <div class="song-list-search-tags__content">
+          <div class="flex flex-wrap gap-x-1.5 gap-y-2 pt-2">
             <For each={tags()}>
               {(tag) => (
-                <button
-                  data-mode={selectedTags().get(tag)}
-                  onClick={() => handleTagClick(tag)}
-                  class="song-list-search-tags__tag"
-                >
+                <Tag tag={tag} onTagClick={handleTagClick} mode={selectedTags().get(tag)}>
                   {tag}
-                </button>
+                </Tag>
               )}
             </For>
           </div>
         </div>
       </Dropdown.Content>
     </Dropdown>
+  );
+};
+
+export type TagProps = {
+  mode?: TagMode;
+  tag: string;
+  children: JSX.Element;
+  onTagClick?: (tag: string) => void;
+};
+const tagStyles = cva(["select-none rounded px-3 py-1"], {
+  variants: {
+    mode: {
+      default: "border-solid border-stroke",
+      include: "border-solid border-green bg-green/5",
+      discart: "border-dashed border-red bg-red/5",
+    },
+  },
+  defaultVariants: {
+    mode: "default",
+  },
+});
+const Tag: Component<TagProps> = (props) => {
+  return (
+    <button onClick={() => props.onTagClick?.(props.tag)} class={tagStyles({ mode: props.mode })}>
+      {props.children}
+    </button>
   );
 };
 
@@ -144,15 +177,20 @@ const TagSelectedLabel: Component<TagSelectedLabelProps> = (props) => {
   };
 
   return (
-    <span class="tags-selected-label">
-      <span data-mode={firstTag().mode} class="tags-selected-label__name">
+    <span class="flex gap-2">
+      <span
+        classList={{
+          "text-green": firstTag().mode === "include",
+          "text-red": firstTag().mode === "discart",
+        }}
+      >
         {firstTag().name}
       </span>
       <Show when={props.label().additionalInclude > 0}>
-        <span class="tags-selected-label__include">+{props.label().additionalInclude}</span>
+        <span class="text-green">+{props.label().additionalInclude}</span>
       </Show>
       <Show when={props.label().additionalDiscart > 0}>
-        <span class="tags-selected-label__discart">-{props.label().additionalDiscart}</span>
+        <span class="text-red">-{props.label().additionalDiscart}</span>
       </Show>
     </span>
   );

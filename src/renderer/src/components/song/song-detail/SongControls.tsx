@@ -9,12 +9,10 @@ import {
   setLocalVolume,
   song,
 } from "../song.utils";
-import IconButton from "@renderer/components/icon-button/IconButton";
+import Button from "@renderer/components/button/Button";
 import { Component, createEffect, createSignal, Match, Show, Switch } from "solid-js";
 
-type SongControlsProps = {};
-
-const SongControls: Component<SongControlsProps> = () => {
+const SongControls: Component = () => {
   const [disable, setDisable] = createSignal(isSongUndefined(song()));
   const [playHint, setPlayHint] = createSignal("");
 
@@ -32,10 +30,9 @@ const SongControls: Component<SongControlsProps> = () => {
   createEffect(() => setDisable(isSongUndefined(song())));
 
   return (
-    <div class="song-controls">
-      {/* Left part */}
-      <div class="song-controls__left-part">
-        <IconButton>
+    <div class="grid w-full grid-cols-4 items-center gap-4">
+      <div class="group flex w-max items-center">
+        <Button variant={"ghost"} size="icon">
           <Switch>
             <Match when={localVolume() === 0}>
               <i class="ri-volume-mute-fill" />
@@ -47,27 +44,33 @@ const SongControls: Component<SongControlsProps> = () => {
               <i class="ri-volume-up-fill" />
             </Match>
           </Switch>
-        </IconButton>
-        <div class="song-controls__volume-bar">
+        </Button>
+        <div class="ml-3 w-24 opacity-0 transition-opacity group-hover:opacity-100">
           <Bar fill={localVolume()} setFill={setLocalVolume} />
         </div>
       </div>
-
-      {/* Middle */}
-      <div class="song-controls__middle">
-        <IconButton
+      <div class="col-span-2 col-start-2 flex items-center justify-center gap-4">
+        <Button
+          variant={"ghost"}
+          size="icon"
           onClick={() => window.api.request("queue::shuffle")}
           disabled={disable()}
           title="Shuffle"
         >
           <i class="ri-shuffle-fill" />
-        </IconButton>
-        <IconButton onClick={() => previous()} disabled={disable()} title="Play previous">
+        </Button>
+        <Button
+          variant={"ghost"}
+          size="icon"
+          onClick={() => previous()}
+          disabled={disable()}
+          title="Play previous"
+        >
           <i class="ri-skip-back-mini-fill" />
-        </IconButton>
+        </Button>
 
         <button
-          class="song-controls__toggle-play"
+          class="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-2xl text-thick-material"
           onClick={() => togglePlay()}
           disabled={disable()}
           title={playHint()}
@@ -77,11 +80,19 @@ const SongControls: Component<SongControlsProps> = () => {
           </Show>
         </button>
 
-        <IconButton onClick={() => next()} disabled={disable()} title="Play next">
+        <Button
+          variant={"ghost"}
+          size="icon"
+          onClick={() => next()}
+          disabled={disable()}
+          title="Play next"
+        >
           <i class="ri-skip-forward-mini-fill"></i>
-        </IconButton>
+        </Button>
 
-        <IconButton
+        <Button
+          variant={"ghost"}
+          size="icon"
           onClick={() => {
             // TODO - implement repeat
           }}
@@ -89,14 +100,12 @@ const SongControls: Component<SongControlsProps> = () => {
           title="Repeat"
         >
           <i class="ri-repeat-2-fill" />
-        </IconButton>
+        </Button>
       </div>
-
-      {/* Right part */}
-      <div class="song-controls__right-part">
-        <IconButton>
+      <div class="ml-auto">
+        <Button variant="ghost" size="icon">
           <i class="ri-add-fill" />
-        </IconButton>
+        </Button>
       </div>
     </div>
   );

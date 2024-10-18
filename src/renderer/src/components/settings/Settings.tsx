@@ -1,21 +1,12 @@
+import { cn } from "../../lib/css.utils";
 import Bar from "../bar/Bar";
 import Dropdown from "../dropdown/Dropdown";
-import "./styles.css";
 import { changeAudioDevice, setVolume, volume } from "@renderer/components/song/song.utils";
-import {
-  Component,
-  createEffect,
-  createSignal,
-  JSX,
-  Match,
-  mergeProps,
-  onMount,
-  Switch,
-} from "solid-js";
+import { Component, createEffect, createSignal, JSX, Match, onMount, Switch } from "solid-js";
 
 const Settings: Component = () => {
   return (
-    <div class="settings">
+    <div class="flex flex-col gap-10 p-8">
       <SettingsSection title="General" icon="ri-global-line">
         Empty
       </SettingsSection>
@@ -31,14 +22,14 @@ type SettingsSectionProps = JSX.IntrinsicElements["div"] & {
   title: string;
   icon: string;
 };
+
 const SettingsSection: Component<SettingsSectionProps> = ({ title, icon, children, ...rest }) => {
   return (
-    <div {...mergeProps({ class: "settings-section" }, rest)}>
-      <div class="settings-section__upper-part">
-        <i class={`settings-section__upper-part-icon ${icon}`} />
-        <h3 class="settings-section__upper-part-title">{title}</h3>
+    <div class={cn("flex flex-col gap-6", rest.class)}>
+      <div class="flex items-center gap-3">
+        <i class={`text-subtext ${icon}`} />
+        <h3 class="text-base text-text">{title}</h3>
       </div>
-
       {children}
     </div>
   );
@@ -48,10 +39,11 @@ type SettingProps = JSX.IntrinsicElements["div"] & {
   label: string;
   name: string;
 };
+
 const Setting: Component<SettingProps> = ({ label, name, children, ...rest }) => {
   return (
-    <div {...mergeProps({ class: "setting" }, rest)}>
-      <label class="setting__label" for={name}>
+    <div class={cn("flex flex-col gap-2.5", rest.class)}>
+      <label class="text-sm font-semibold text-text" for={name}>
         {label}
       </label>
       {children}
@@ -62,8 +54,8 @@ const Setting: Component<SettingProps> = ({ label, name, children, ...rest }) =>
 const GlobalVolumeSetting: Component = () => {
   return (
     <Setting name="global-volume" label="Global volume">
-      <div class="global-volume-setting">
-        <div class="global-volume-setting__icon">
+      <div class="flex items-center gap-3">
+        <div class="flex h-4 w-4 items-center justify-center">
           <Switch>
             <Match when={volume() === 0}>
               <i class="ri-volume-mute-fill" />
@@ -76,7 +68,7 @@ const GlobalVolumeSetting: Component = () => {
             </Match>
           </Switch>
         </div>
-        <div class="global-volume-setting__bar">
+        <div class="flex-1">
           <Bar fill={volume()} setFill={setVolume} />
         </div>
       </div>
@@ -114,7 +106,7 @@ const AudioDeviceSetting: Component = () => {
   return (
     <Setting name="audio-device" label="Choose audio device">
       <Dropdown isOpen={isPopoverOpen} onValueChange={setIsPopoverOpen}>
-        <Dropdown.SelectTrigger>
+        <Dropdown.SelectTrigger class="w-full rounded border border-stroke bg-surface px-2 py-1 text-text hover:bg-red focus:outline-none focus:ring-2 focus:ring-accent">
           {selectedAudioDevice() || "No device selected"}
         </Dropdown.SelectTrigger>
 

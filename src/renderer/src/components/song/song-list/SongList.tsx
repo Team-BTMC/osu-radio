@@ -1,4 +1,4 @@
-import { Optional, ResourceID, SongsQueryPayload, Tag } from "../../../../../@types";
+import { Optional, Order, ResourceID, SongsQueryPayload, Tag } from "../../../../../@types";
 import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-types";
 import { namespace } from "../../../App";
 import Impulse from "../../../lib/Impulse";
@@ -8,7 +8,6 @@ import PlayNext from "../context-menu/items/PlayNext";
 import SongItem from "../song-item/SongItem";
 import SongListSearch from "../song-list-search/SongListSearch";
 import { songsSearch } from "./song-list.utils";
-import "./styles.css";
 import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 
 export type SongViewProps = {
@@ -20,7 +19,7 @@ export type SongViewProps = {
 const SongList: Component<SongViewProps> = (props) => {
   const [tags, setTags] = createSignal<Tag[]>([], { equals: false });
 
-  const [order, setOrder] = createSignal("title:asc");
+  const [order, setOrder] = createSignal<Order>({ option: "title", direction: "asc" });
   const [count, setCount] = createSignal(0);
 
   const [payload, setPayload] = createSignal<SongsQueryPayload>({
@@ -73,12 +72,12 @@ const SongList: Component<SongViewProps> = (props) => {
   const group = namespace.create(true);
 
   return (
-    <div class="song-list">
-      <div class="song-list__search-container">
+    <div class="flex h-full flex-col">
+      <div class="sticky top-0 z-10">
         <SongListSearch setTags={setTags} setOrder={setOrder} count={count} error={searchError} />
       </div>
 
-      <div class="song-list__songs">
+      <div class="flex-grow overflow-y-auto p-5 py-0">
         <InfiniteScroller
           apiKey={"query::songsPool"}
           apiData={payload()}
@@ -86,11 +85,13 @@ const SongList: Component<SongViewProps> = (props) => {
           apiInitData={payload()}
           setCount={setCount}
           reset={resetListing}
-          fallback={<div>No songs...</div>}
+          fallback={<div class="py-8 text-center text-text">No songs...</div>}
           builder={(s) => (
             <SongItem song={s} group={group} onSelect={createQueue}>
               <PlayNext path={s.path} />
-              <button>Add to playlist</button>
+              <button class="w-full px-4 py-2 text-left transition-colors duration-200 hover:bg-accent/20">
+                Add to playlist
+              </button>
             </SongItem>
           )}
         />

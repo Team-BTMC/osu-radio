@@ -62,11 +62,15 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
 
   const [elements, setElements] = createSignal<any[]>([]);
   const [show, setShow] = createSignal(true);
-  let container;
+  let container: HTMLDivElement | undefined;
   let init: number;
 
   let indexStart = -1;
   const loadStart = async () => {
+    if (!container) {
+      return;
+    }
+
     const request: InfiniteScrollerRequest = {
       index: indexStart,
       init,
@@ -89,6 +93,10 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
   };
   const observerStart = new IntersectionObserver(
     async (entries) => {
+      if (!container) {
+        return;
+      }
+
       const first = entries[0];
 
       if (!first.isIntersecting) {
@@ -118,6 +126,10 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
 
   let indexEnd = 0;
   const loadEnd = async () => {
+    if (!container) {
+      return;
+    }
+
     const request: InfiniteScrollerRequest = {
       index: indexEnd,
       init,
@@ -211,7 +223,7 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
   });
 
   return (
-    <div class={"list"} ref={container} {...rest}>
+    <div class={"list flex flex-col gap-4 py-4"} ref={container} {...rest}>
       <Show when={show() === true} fallback={props.fallback ?? <div>No items...</div>}>
         <For each={elements()}>{(componentProps) => props.builder(componentProps)}</For>
       </Show>

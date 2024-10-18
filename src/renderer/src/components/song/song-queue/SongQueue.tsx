@@ -6,18 +6,17 @@ import InfiniteScroller from "../../InfiniteScroller";
 import SongContextMenuItem from "../context-menu/SongContextMenuItem";
 import SongItem from "../song-item/SongItem";
 import { setSongQueueModalOpen } from "./song-queue.utils";
-import "./styles.css";
-import IconButton from "@renderer/components/icon-button/IconButton";
+import Button from "@renderer/components/button/Button";
 import { Component, createSignal, onCleanup, onMount } from "solid-js";
 
 const SongQueue: Component = () => {
   const [count, setCount] = createSignal(0);
   const resetListing = new Impulse();
   const group = namespace.create(true);
-  let view;
+  let view: HTMLDivElement | undefined;
 
   const onSongsLoad = async () => {
-    if (view === undefined) {
+    if (!view) {
       return;
     }
 
@@ -45,20 +44,20 @@ const SongQueue: Component = () => {
       return;
     }
 
-    const selected = view.querySelector(".song-item.selected");
+    const selected = view.querySelector<HTMLElement>(".song-item.selected");
     if (selected !== null && selected.dataset.path !== song.path) {
       selected.classList.remove("selected");
     }
 
     const path = song.path.replaceAll('"', '\\"').replaceAll("\\", "\\\\");
-    const element = view.querySelector(`.song-item[data-path="${path}"]`);
+    const element = view.querySelector<HTMLElement>(`.song-item[data-path="${path}"]`);
     element?.classList.add("selected");
 
     if (element === null) {
       return;
     }
 
-    const list = element.closest(".list");
+    const list = element.closest<HTMLElement>(".list");
 
     if (list === null) {
       return;
@@ -82,36 +81,38 @@ const SongQueue: Component = () => {
   });
 
   return (
-    <div ref={view} class="song-queue">
-      <div class="song-queue_header">
-        <h2 class="song-queue_title">Next songs on the queue ({count()})</h2>
-        <IconButton onClick={handleCloseButtonClick}>
+    <div ref={view} class="flex h-full flex-col bg-regular-material backdrop-blur-md">
+      <div class="sticky top-0 z-10 flex items-center justify-between p-5">
+        <h2 class="text-lg font-semibold">Next songs on the queue ({count()})</h2>
+        <Button variant="ghost" onClick={handleCloseButtonClick}>
           <i class="ri-close-line" />
-        </IconButton>
+        </Button>
       </div>
 
-      <InfiniteScroller
-        apiKey={"query::queue"}
-        apiInitKey={"query::queue::init"}
-        setCount={setCount}
-        reset={resetListing}
-        onLoadItems={onSongsLoad}
-        fallback={<div>No queue...</div>}
-        builder={(s) => (
-          <SongItem
-            song={s}
-            group={group}
-            selectable={true}
-            draggable={true}
-            onSelect={() => window.api.request("queue::play", s.path)}
-            onDrop={onDrop(s)}
-          >
-            <SongContextMenuItem onClick={() => window.api.request("queue::removeSong", s.path)}>
-              Remove from queue
-            </SongContextMenuItem>
-          </SongItem>
-        )}
-      />
+      <div class="flex-grow overflow-y-auto px-4">
+        <InfiniteScroller
+          apiKey={"query::queue"}
+          apiInitKey={"query::queue::init"}
+          setCount={setCount}
+          reset={resetListing}
+          onLoadItems={onSongsLoad}
+          fallback={<div class="py-8 text-center text-subtext">No queue...</div>}
+          builder={(s) => (
+            <SongItem
+              song={s}
+              group={group}
+              selectable={true}
+              draggable={true}
+              onSelect={() => window.api.request("queue::play", s.path)}
+              onDrop={onDrop(s)}
+            >
+              <SongContextMenuItem onClick={() => window.api.request("queue::removeSong", s.path)}>
+                Remove from queue
+              </SongContextMenuItem>
+            </SongItem>
+          )}
+        />
+      </div>
     </div>
   );
 };

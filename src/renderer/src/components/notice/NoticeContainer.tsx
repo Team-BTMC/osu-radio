@@ -82,10 +82,10 @@ window.api.listen("notify", (n) => {
 });
 
 const NoticeContainer = () => {
-  let wrapper;
+  let wrapper: HTMLDivElement | undefined;
 
   onMount(() => {
-    wrapper.addEventListener("scroll", () => {
+    wrapper?.addEventListener("scroll", () => {
       for (let i = 0; i < notices.length; i++) {
         if (notices[i].visible) {
           notices[i].updateGradient.pulse();

@@ -1,13 +1,13 @@
+import Button from "@renderer/components/button/Button";
 import Dropdown from "@renderer/components/dropdown/Dropdown";
-import IconButton from "@renderer/components/icon-button/IconButton";
 import { Component, createMemo, createSignal, Match, Setter, Switch } from "solid-js";
+import { OrderDirection, OrderOptions, Order } from "src/@types";
 
 type OrderOption = {
   text: string;
-  value: string;
+  value: OrderOptions;
 };
 
-type OrderDirection = "asc" | "desc";
 const orderOptions = [
   {
     value: "title",
@@ -36,19 +36,17 @@ const orderOptions = [
 ] satisfies OrderOption[];
 
 type OrderSelectProps = {
-  setOrder: Setter<string>;
+  setOrder: Setter<Order>;
   disabled?: boolean;
 };
 
 const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
   const [isOpen, setIsOpen] = createSignal(false);
-  const [option, setOption] = createSignal("title");
+  const [option, setOption] = createSignal<OrderOptions>("title");
   const [direction, setDirection] = createSignal<OrderDirection>("asc");
 
   const handlerOrderChanged = () => {
-    const o = option();
-    const d = direction();
-    props.setOrder(`${o}:${d}`);
+    props.setOrder({ option: option(), direction: direction() });
   };
 
   const switchDirections = () => {
@@ -62,8 +60,8 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
   });
 
   return (
-    <div class="song-list-search-order-by">
-      <IconButton class="song-list-search-order-by__icon" onClick={switchDirections}>
+    <div class="flex items-center space-x-3">
+      <Button variant={"ghost"} size="icon" onClick={switchDirections}>
         <Switch>
           <Match when={direction() === "asc"}>
             <i class="ri-sort-asc" />
@@ -72,19 +70,26 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
             <i class="ri-sort-desc" />
           </Match>
         </Switch>
-      </IconButton>
+      </Button>
       <Dropdown isOpen={isOpen} onValueChange={setIsOpen}>
-        <Dropdown.Trigger>{optionLabel()}</Dropdown.Trigger>
+        <Dropdown.Trigger class="rounded-md bg-thin-material px-3 py-1">
+          {optionLabel()}
+        </Dropdown.Trigger>
         <Dropdown.List
           onValueChange={(newSelectedOption) => {
             setIsOpen(false);
-            setOption(newSelectedOption);
+            setOption(newSelectedOption as OrderOptions);
             handlerOrderChanged();
           }}
           value={option}
         >
           {orderOptions.map((option) => (
-            <Dropdown.Item value={option.value}>{option.text}</Dropdown.Item>
+            <Dropdown.Item
+              class="px-4 py-2 transition-colors duration-200 hover:bg-accent/20"
+              value={option.value}
+            >
+              {option.text}
+            </Dropdown.Item>
           ))}
         </Dropdown.List>
       </Dropdown>

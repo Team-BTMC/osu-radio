@@ -1,3 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Light theme */
+/* :root {
+  --color-thick-material: 240, 240, 240;
+  --color-regular-material: 230, 230, 230;
+  --color-text: 26, 26, 26;
+  --color-subtext: 26, 26, 26;
+  --color-stroke: 0, 0, 0;
+  --color-overlay: 200, 200, 200;
+  --color-accent: 77, 77, 87;
+  --color-surface: 180, 180, 180;
+  --color-black: 255, 255, 255;
+  --color-red: 211, 47, 47;
+  --color-green: 56, 142, 60;
+  --color-thin-material: 255, 255, 255;
+} */
+
+/* @media (prefers-color-scheme: dark) { */
+:root {
+  /* Dark theme */
+  --color-thick-material: 13, 13, 13;
+  --color-regular-material: 18, 18, 18;
+  --color-text: 239, 241, 245;
+  --color-subtext: 239, 241, 245;
+  --color-stroke: 242, 244, 252;
+  --color-overlay: 161, 162, 171;
+  --color-accent: 255, 255, 255;
+  --color-surface: 132, 137, 143;
+  --color-black: 14, 14, 14;
+  --color-red: 237, 102, 102;
+  --color-green: 120, 204, 50;
+  --color-thin-material: 0, 0, 0;
+}
+
+/* } */
+
 @font-face {
   font-family: "Nunito";
   src:
@@ -34,50 +73,9 @@
   box-sizing: border-box;
 }
 
-:root {
-  /* Typography */
-  --font-size: 16px;
-
-  /* Colors */
-  --surface: rgba(132, 137, 143, 0.2);
-  --background: #18181b;
-  --background-rgb: 24, 24, 27;
-  --on-background: #ffffff;
-  --contrast-background: #000000;
-  --separator: #27272a;
-  --hover-background: radial-gradient(rgba(255, 255, 255, 0.072), rgba(255, 255, 255, 0.092));
-
-  --text-50: rgba(255, 255, 255, 0.1);
-  --text-900: rgba(255, 255, 255, 0.92);
-  --text-800: rgba(255, 255, 255, 0.82);
-  --text-700: rgba(255, 255, 255, 0.72);
-  --text-600: rgba(255, 255, 255, 0.62);
-  --text-500: rgba(255, 255, 255, 0.52);
-  --text-400: rgba(255, 255, 255, 0.42);
-  --text-300: rgba(255, 255, 255, 0.32);
-
-  --button-primary-color: rgb(0, 0, 0);
-  --button-primary-background-color: rgb(250, 250, 250);
-  --button-primary-background-color-hover: rgba(250, 250, 250, 0.82);
-
-  --button-secondary-color: #ffffff1f;
-  --button-secondary-color-hover: #ffffff3a;
-
-  --input-background: #292929;
-
-  /* Border */
-  --rounded-sm: 4px;
-  --rounded: 8px;
-  --rounded-lg: 12px;
-}
-
-body {
-  overflow: hidden;
-}
-
 html {
-  background: var(--background);
-  color: var(--on-background);
+  background: rgba(var(--color-thick-material));
+  color: rgb(var(--color-text));
 
   font-family: "Nunito", sans-serif;
   font-optical-sizing: auto;
@@ -91,13 +89,16 @@ button {
   width: 8px;
   height: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background-color: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
-  background-color: var(--text-300);
+  background-color: rgba(var(--color-surface), 0.5);
   border-radius: 999px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background-color: var(--text-400);
+  background-color: rgba(var(--color-surface), 0.7);
 }

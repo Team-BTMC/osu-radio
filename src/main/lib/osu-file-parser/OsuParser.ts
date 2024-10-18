@@ -36,14 +36,14 @@ export type DirParseResult = Promise<
 // Should probably get moved to another file, or make a wrapper instead.
 
 class BufferReader {
-  buffer: any;
+  buffer: Buffer;
   pos: number;
-  constructor(buffer) {
+  constructor(buffer: Buffer) {
     this.buffer = buffer;
     this.pos = 0;
   }
 
-  readBytes(n) {
+  readBytes(n: number) {
     const out = this.buffer.slice(this.pos, this.pos + n);
     this.pos += n;
     return out;
@@ -142,6 +142,7 @@ export class OsuParser {
       //       We want to read binary data here, not utf-8 encoded data!
       dbBuffer = await fs.promises.readFile(databasePath + "/osu!.db");
     } catch (err) {
+      console.error(err);
       return fail("Failed to read osu!.db.");
     }
 

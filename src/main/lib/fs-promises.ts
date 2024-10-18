@@ -1,6 +1,6 @@
 import fs from "graceful-fs";
 
-export function access(path, mode: number | undefined = undefined): Promise<boolean> {
+export function access(path: fs.PathLike, mode: number | undefined = undefined): Promise<boolean> {
   return new Promise((resolve) => {
     fs.access(path, mode, (err) => {
       resolve(err === null);
@@ -68,7 +68,7 @@ export function stat(path: string): Promise<fs.Stats> {
   });
 }
 
-export function readFile(path): Promise<string> {
+export function readFile(path: fs.PathOrFileDescriptor): Promise<string> {
   return new Promise((resolve, reject) => {
     fs.readFile(path, { encoding: "utf8" }, (err, data) => {
       if (err !== null) {

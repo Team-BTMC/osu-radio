@@ -12,7 +12,7 @@ import { createSignal, Match, onCleanup, onMount, Switch } from "solid-js";
 export default function App(): JSX.Element {
   const [scene, setScene] = createSignal<Scenes>("");
 
-  const eventHandler = (event) => {
+  const eventHandler = (event: unknown) => {
     console.log(event, event instanceof CustomEvent);
 
     if (!(event instanceof CustomEvent)) {

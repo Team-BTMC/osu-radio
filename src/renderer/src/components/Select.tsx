@@ -15,9 +15,13 @@ type SelectProps = {
 };
 
 const Select: Component<SelectProps> = (props) => {
-  let select;
+  let select: HTMLSelectElement | undefined;
 
   onMount(() => {
+    if (!select) {
+      return;
+    }
+
     props.setValue(select.value);
   });
 
@@ -25,7 +29,7 @@ const Select: Component<SelectProps> = (props) => {
     <select
       class={"button-like select"}
       ref={select}
-      onchange={() => props.setValue(select.value)}
+      onchange={() => select && props.setValue(select.value)}
       disabled={props.disabled}
     >
       <For each={props.options}>

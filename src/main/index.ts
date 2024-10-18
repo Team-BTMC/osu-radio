@@ -1,13 +1,27 @@
-import icon from "../../resources/icon.png?asset";
 import { Router } from "./lib/route-pass/Router";
+import createMenu from "./lib/window/menu";
 import trackBounds, { getBounds, wasMaximized } from "./lib/window/resizer";
 import { main } from "./main";
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
-import { app, BrowserWindow, dialog, globalShortcut } from "electron";
+import { app, BrowserWindow, dialog } from "electron";
 import { join } from "path";
+
+if (!app.requestSingleInstanceLock()) app.quit();
 
 async function createWindow() {
   const [width, height] = getBounds();
+
+  function getIcon(): string {
+    if (process.platform === "win32") {
+      return join(__dirname, "../../build/icon.ico");
+    }
+
+    if (process.platform === "darwin") {
+      return join(__dirname, "../../build/icon.icns");
+    }
+
+    return join(__dirname, "../../build/icon.png");
+  }
 
   const window = new BrowserWindow({
     title: "osu!radio",
@@ -20,7 +34,7 @@ async function createWindow() {
       x: 20,
       y: 20,
     },
-    ...(process.platform === "linux" ? { icon } : {}),
+    icon: getIcon(),
     webPreferences: {
       preload: join(__dirname, "../preload/index.mjs"),
       sandbox: false,
@@ -35,6 +49,14 @@ async function createWindow() {
       height: 30,
     },
     */
+  });
+
+  const menu = createMenu();
+  window.setMenu(menu);
+
+  app.on("second-instance", () => {
+    if (window.isMinimized()) window.restore();
+    window.focus();
   });
 
   window.on("maximize", () => {
@@ -86,15 +108,11 @@ app.whenReady().then(async () => {
   // and ignore CommandOrControl + R in production.
   // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
   app.on("browser-window-created", (_, window) => {
-    optimizer.watchWindowShortcuts(window);
+    optimizer.watchWindowShortcuts(window, {
+      zoom: true,
+      escToCloseWindow: false,
+    });
   });
-
-  // Zoom shortcuts. Adding all three because there were mixed reports
-  // of which one works or not on different platforms.
-  globalShortcut.register('CommandOrControl+=', () => zoom(0.1));
-  globalShortcut.register('CommandOrControl+-', () => zoom(-0.1));
-  globalShortcut.register('CommandOrControl+0', () => zoom());
-  
 
   await createWindow();
 
@@ -112,11 +130,3 @@ app.on("window-all-closed", () => {
     app.quit();
   }
 });
-
-function zoom(factor?: number) {
-  const focusedWindow = BrowserWindow.getFocusedWindow();
-  if (focusedWindow) {
-    const currentZoom = focusedWindow.webContents.getZoomFactor();
-    focusedWindow.webContents.setZoomFactor(factor ? currentZoom + factor : 1);
-  }
-}

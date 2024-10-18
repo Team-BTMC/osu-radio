@@ -1,5 +1,4 @@
 import "../../../assets/css/song/song-context-menu.css";
-import Gradient from "../../Gradient";
 import { Accessor, Component, createEffect, For, onCleanup, onMount, Show, Signal } from "solid-js";
 
 type SongContextMenuProps = {
@@ -11,7 +10,7 @@ type SongContextMenuProps = {
 
 const SongContextMenu: Component<SongContextMenuProps> = (props) => {
   const [show, setShow] = props.show;
-  let menu;
+  let menu: HTMLDivElement | undefined;
 
   const windowContextMenu = (evt: MouseEvent) => {
     const t = evt.target;
@@ -60,10 +59,10 @@ const SongContextMenu: Component<SongContextMenuProps> = (props) => {
 
   return (
     <Show when={show()}>
-      <div class={"song-menu"} ref={menu}>
-        <Gradient classTop={"song-menu-container"}>
+      <div class="absolute z-50 overflow-hidden rounded-md bg-surface shadow-lg" ref={menu}>
+        <div class="bg-gradient-to-b from-black/30 to-transparent">
           <For each={props.children}>{(child) => child}</For>
-        </Gradient>
+        </div>
       </div>
     </Show>
   );

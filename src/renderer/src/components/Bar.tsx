@@ -17,12 +17,12 @@ type BarProps = {
 
 const Bar: Component<BarProps> = (props) => {
   const [fill, setFill] = createSignal(props.fill);
-  let bar, handle;
+  let bar: HTMLDivElement | undefined, handle: HTMLDivElement | undefined;
 
   onMount(() => {
     createEffect(() => {
       const f = fill();
-      bar.style.setProperty("--fill-per", `${clamp(0, 1, f) * 100}%`);
+      bar?.style.setProperty("--fill-per", `${clamp(0, 1, f) * 100}%`);
 
       if (props.setFill !== undefined) {
         props.setFill(clamp(0, 1, f));
@@ -31,7 +31,7 @@ const Bar: Component<BarProps> = (props) => {
   });
 
   const calculateFill = (evt: PointerEvent) => {
-    if (props.disabled === true) {
+    if (props.disabled === true || !bar) {
       return;
     }
 
@@ -50,10 +50,10 @@ const Bar: Component<BarProps> = (props) => {
       return;
     }
 
-    handle.setPointerCapture(evt.pointerId);
+    handle?.setPointerCapture(evt.pointerId);
 
-    handle.addEventListener("pointermove", calculateFill);
-    handle.addEventListener(
+    handle?.addEventListener("pointermove", calculateFill);
+    handle?.addEventListener(
       "pointerup",
       () => handle.removeEventListener("pointermove", calculateFill),
       { once: true },

@@ -15,11 +15,15 @@ type SongImageProps = {
 
 const SongImage: Component<SongImageProps> = (props) => {
   const [src, setSrc] = createSignal(defaultBackground);
-  let image!: HTMLDivElement;
+  let image: HTMLDivElement | undefined;
 
-  const setSource = (evt) => {
+  const setSource = (evt: CustomEventInit<string>) => {
+    if (!evt.detail) {
+      return;
+    }
+
     setSrc(evt.detail);
-    delete image.dataset.eventHandler;
+    delete image?.dataset.eventHandler;
   };
 
   createEffect(async () => {
@@ -32,13 +36,17 @@ const SongImage: Component<SongImageProps> = (props) => {
       return;
     }
 
-    if (image.dataset.eventHandler !== "YEP") {
+    if (image && image.dataset.eventHandler !== "YEP") {
       image.dataset.eventHandler = "YEP";
       image.addEventListener(SET_SOURCE_EVENT, setSource, { once: true });
     }
   });
 
   onMount(async () => {
+    if (!image) {
+      return;
+    }
+
     const group = props.group ?? GLOBAL_GROUP;
     let observer = observers.get(group);
 
@@ -72,14 +80,13 @@ const SongImage: Component<SongImageProps> = (props) => {
   });
 
   onCleanup(() => {
-    image.removeEventListener(SET_SOURCE_EVENT, setSource);
+    image?.removeEventListener(SET_SOURCE_EVENT, setSource);
   });
 
   return (
     <div
       {...props}
       ref={image}
-      class="song-image"
       style={{
         "background-image": `url('${src().replaceAll("'", "\\'")}')`,
       }}

@@ -1,7 +1,7 @@
 import { Router } from "../lib/route-pass/Router";
 import { mainWindow } from "../main";
 
-Router.respond("window::maximize", (_evt) => {
+Router.respond("window::maximize", () => {
   if (mainWindow.isMaximized()) {
     mainWindow.unmaximize();
     return;
@@ -9,7 +9,7 @@ Router.respond("window::maximize", (_evt) => {
   mainWindow.maximize();
 });
 
-Router.respond("window::isMaximized", (_evt) => {
+Router.respond("window::isMaximized", () => {
   try {
     return mainWindow.isMaximized();
   } catch {
@@ -17,10 +17,10 @@ Router.respond("window::isMaximized", (_evt) => {
   }
 });
 
-Router.respond("window::minimize", (_evt) => {
+Router.respond("window::minimize", () => {
   mainWindow.minimize();
 });
 
-Router.respond("window::close", (_evt) => {
+Router.respond("window::close", () => {
   mainWindow.close();
 });

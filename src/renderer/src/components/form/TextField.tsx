@@ -1,4 +1,3 @@
-import "../../assets/css/form/text-field.css";
 import { Component, JSX, onMount, Setter, Signal } from "solid-js";
 
 type TextFieldProps = {
@@ -9,9 +8,13 @@ type TextFieldProps = {
 
 const TextField: Component<TextFieldProps> = (props) => {
   const [value, setValue] = props.value;
-  let input;
+  let input: HTMLInputElement | undefined;
 
   onMount(() => {
+    if (!input) {
+      return;
+    }
+
     if (props.setInput !== undefined) {
       props.setInput(input);
     }
@@ -20,6 +23,10 @@ const TextField: Component<TextFieldProps> = (props) => {
   });
 
   const onInput = () => {
+    if (!input) {
+      return;
+    }
+
     setValue(
       String(input.textContent).replaceAll(
         String.fromCharCode(160), // non-breaking space
@@ -28,11 +35,9 @@ const TextField: Component<TextFieldProps> = (props) => {
     );
   };
 
-  const onPaste = (evt) => {
+  const onPaste = (evt: ClipboardEvent) => {
     const selection = window.getSelection();
-    if (selection === null) {
-      return;
-    }
+    if (selection === null || !evt.clipboardData) return;
 
     evt.stopPropagation();
     evt.preventDefault();
@@ -45,16 +50,20 @@ const TextField: Component<TextFieldProps> = (props) => {
   };
 
   const clear = () => {
+    if (!input) {
+      return;
+    }
+
     input.textContent = "";
     onInput();
     input.focus();
   };
 
   return (
-    <div class="text-field button-like">
+    <div class="button-like flex w-full items-center gap-2 overflow-hidden p-2 focus-within:outline-2 focus-within:transition-none hover:cursor-text">
       {props.children}
       <div
-        class="editable"
+        class="flex-1 overflow-hidden whitespace-nowrap focus:outline-none"
         ref={input}
         onInput={onInput}
         onKeyDown={(evt) => evt.stopPropagation()}
@@ -62,7 +71,13 @@ const TextField: Component<TextFieldProps> = (props) => {
         contenteditable={true}
         spellcheck={false}
       ></div>
-      <button class="icon hint" onClick={clear} title="Clear text input"></button>
+      <button
+        class="mr-1 grid place-items-center bg-transparent p-0 hover:cursor-pointer hover:bg-transparent focus:outline-none"
+        onClick={clear}
+        title="Clear text input"
+      >
+        {/* TODO: Add clear icon */}
+      </button>
     </div>
   );
 };

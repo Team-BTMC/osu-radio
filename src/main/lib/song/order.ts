@@ -1,17 +1,12 @@
-import { Result, Song } from "../../../@types";
-import { fail, ok } from "../rust-like-utils-backend/Result";
+import { Order, Result, Song } from "../../../@types";
+import { ok } from "../rust-like-utils-backend/Result";
 import { averageBPM, msToBPM } from "./average-bpm";
 
-export default function order(ordering: string): Result<(a: Song, b: Song) => number, string> {
-  const [prop, mode] = ordering.split(":");
-  const sortDirection = mode === "asc" ? 1 : -1;
+export default function order(ordering: Order): Result<(a: Song, b: Song) => number, string> {
+  const { option, direction } = ordering;
+  const sortDirection = direction === "asc" ? 1 : -1;
 
-  if (prop === undefined || mode === undefined) {
-    // idk why this is here tbh...
-    return fail(`Bruh, this ordering '${ordering}' won't work... And you should know...`);
-  }
-
-  switch (prop) {
+  switch (option) {
     case "dateAdded":
       return ok((a: Song, b: Song) => {
         return (new Date(b.dateAdded).getTime() - new Date(a.dateAdded).getTime()) * sortDirection;
@@ -21,15 +16,15 @@ export default function order(ordering: string): Result<(a: Song, b: Song) => nu
     case "artist":
     case "creator":
       return ok((a: Song, b: Song) => {
-        if (a[prop] === "") {
+        if (a[option] === "") {
           return 1;
         }
 
-        if (b[prop] === "") {
+        if (b[option] === "") {
           return -1;
         }
 
-        return a[prop].localeCompare(b[prop]) * sortDirection;
+        return a[option].localeCompare(b[option]) * sortDirection;
       });
 
     case "bpm":
@@ -53,11 +48,11 @@ export default function order(ordering: string): Result<(a: Song, b: Song) => nu
 
     default:
       return ok((a: Song, b: Song) => {
-        if (a[prop] === "") {
+        if (a[option] === "") {
           return 1;
         }
 
-        if (b[prop] === "") {
+        if (b[option] === "") {
           return -1;
         }
 
