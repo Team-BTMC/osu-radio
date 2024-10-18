@@ -2,6 +2,7 @@ import { cn } from "../../lib/css.utils";
 import Bar from "../bar/Bar";
 import Dropdown from "../dropdown/Dropdown";
 import { changeAudioDevice, setVolume, volume } from "@renderer/components/song/song.utils";
+import { Volume1Icon, Volume2Icon, VolumeXIcon } from "lucide-solid";
 import { Component, createEffect, createSignal, JSX, Match, onMount, Switch } from "solid-js";
 
 const Settings: Component = () => {
@@ -58,13 +59,13 @@ const GlobalVolumeSetting: Component = () => {
         <div class="flex h-4 w-4 items-center justify-center">
           <Switch>
             <Match when={volume() === 0}>
-              <i class="ri-volume-mute-fill" />
+              <VolumeXIcon />
             </Match>
             <Match when={volume() < 0.5}>
-              <i class="ri-volume-down-fill" />
+              <Volume1Icon />
             </Match>
             <Match when={volume() >= 0.5}>
-              <i class="ri-volume-up-fill" />
+              <Volume2Icon />
             </Match>
           </Switch>
         </div>

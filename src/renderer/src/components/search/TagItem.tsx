@@ -1,4 +1,5 @@
 import "../../assets/css/search/tag-item.css";
+import { XIcon } from "lucide-solid";
 import { Component } from "solid-js";
 
 export type TagItemProps = {
@@ -25,7 +26,7 @@ const TagItem: Component<TagItemProps> = (props) => {
     >
       <span>{props.name}</span>
       <button onClick={() => props.onRemove(props.name)}>
-        <i class="ri-close-fill" />
+        <XIcon size={20} />
       </button>
     </div>
   );
