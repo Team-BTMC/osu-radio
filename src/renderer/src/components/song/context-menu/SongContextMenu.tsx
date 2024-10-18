@@ -1,8 +1,8 @@
 import "../../../assets/css/song/song-context-menu.css";
+import { computePosition, inline, shift } from "@floating-ui/dom";
 import {
   Component,
-  createEffect,
-  createSignal,
+  createEffect, // createSignal,
   For,
   onCleanup,
   onMount,
@@ -17,7 +17,6 @@ type SongContextMenuProps = {
 
 const SongContextMenu: Component<SongContextMenuProps> = (props) => {
   const [show, setShow] = props.show;
-  const [pos, setPos] = createSignal<[number, number]>([0, 0]);
   let menu: HTMLDivElement | undefined;
 
   const windowContextMenu = (evt: MouseEvent) => {
@@ -29,8 +28,22 @@ const SongContextMenu: Component<SongContextMenuProps> = (props) => {
 
     const targetItem = t.closest(".group");
 
-    if (targetItem !== null) {
-      setPos([evt.offsetX + 30, evt.clientY - 52]);
+    if (targetItem !== null && menu !== undefined) {
+      const useCustomCoords = {
+        name: "useCustomCoords",
+        fn() {
+          return { x: evt.offsetX + 30, y: evt.clientY - 52 };
+        },
+      };
+
+      computePosition(targetItem, menu, {
+        middleware: [useCustomCoords, inline(), shift({ crossAxis: true })],
+      }).then(({ x, y }) => {
+        Object.assign(menu.style, {
+          left: `${x}px`,
+          top: `${y}px`,
+        });
+      });
     }
   };
 
@@ -63,11 +76,7 @@ const SongContextMenu: Component<SongContextMenuProps> = (props) => {
 
   return (
     <Show when={show()}>
-      <div
-        class={"absolute z-30 rounded-lg bg-thick-material"}
-        style={{ top: pos()[1] + "px", left: pos()[0] + "px" }}
-        ref={menu}
-      >
+      <div class={"absolute left-0 top-0 z-30 rounded-lg bg-thick-material"} ref={menu}>
         <div class="flex flex-col gap-1 rounded-lg bg-thick-material p-2">
           <For each={props.children}>{(child) => child}</For>
         </div>
