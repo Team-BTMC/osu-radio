@@ -1,13 +1,13 @@
 import { LoadingSceneUpdate } from "../../../../@types";
-import Bar from "../../components/bar/Bar";
 import { clamp } from "../../lib/tungsten/math";
 import "./styles.css";
-import { createSignal, onCleanup, onMount } from "solid-js";
+import Slider from "@renderer/components/slider/Slider";
+import { createMemo, createSignal, onCleanup, onMount } from "solid-js";
 
 export default function LoadingScene() {
   const [title, setTitle] = createSignal("");
   const [hint, setHint] = createSignal("");
-  const [current, setCurrent] = createSignal(0);
+  const [current, setCurrent] = createSignal(0.4);
   const [max, setMax] = createSignal(1);
 
   const update = (u: LoadingSceneUpdate) => {
@@ -22,6 +22,7 @@ export default function LoadingScene() {
     }
   };
 
+  const progressValue = createMemo(() => current() / max());
   onMount(() => {
     window.api.listen("loadingScene::setTitle", setTitle);
     window.api.listen("loadingScene::update", update);
@@ -36,9 +37,11 @@ export default function LoadingScene() {
     <div class="loading-scene">
       <h3 class="loading-scene__title">{title()}</h3>
 
-      <div class="loading-scene__bar">
-        <Bar fill={current() / max()} />
-      </div>
+      <Slider max={1} min={0} value={progressValue}>
+        <Slider.Track class="block h-2.5 w-[420px] overflow-hidden rounded bg-thick-material">
+          <Slider.Range class="block h-full bg-white" />
+        </Slider.Track>
+      </Slider>
 
       <span class="loading-scene__hint">{hint()}</span>
     </div>
