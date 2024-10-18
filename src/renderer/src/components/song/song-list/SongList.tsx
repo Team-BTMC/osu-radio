@@ -10,6 +10,7 @@ import PlayNext from "../context-menu/items/PlayNext";
 import SongItem from "../song-item/SongItem";
 import SongListSearch from "../song-list-search/SongListSearch";
 import { songsSearch } from "./song-list.utils";
+import { PlusIcon } from "lucide-solid";
 import { Component, createEffect, createSignal, onCleanup, onMount, Show } from "solid-js";
 
 export type SongViewProps = {
@@ -118,7 +119,7 @@ const SongList: Component<SongViewProps> = (props) => {
           }}
         >
           <p>Add to playlist</p>
-          <i class="ri-add-line"></i>
+          <PlusIcon />
         </SongContextMenuItem>
       </SongContextMenu>
     </div>

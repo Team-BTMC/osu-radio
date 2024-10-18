@@ -8,6 +8,7 @@ import SongContextMenuItem from "../context-menu/SongContextMenuItem";
 import SongItem from "../song-item/SongItem";
 import { setSongQueueModalOpen } from "./song-queue.utils";
 import Button from "@renderer/components/button/Button";
+import { DeleteIcon, PlusIcon } from "lucide-solid";
 import { Component, createSignal, onCleanup, onMount } from "solid-js";
 
 const SongQueue: Component = () => {
@@ -121,7 +122,7 @@ const SongQueue: Component = () => {
           }}
         >
           <p>Add to playlist</p>
-          <i class="ri-add-line"></i>
+          <PlusIcon />
         </SongContextMenuItem>
 
         <SongContextMenuItem
@@ -130,7 +131,7 @@ const SongQueue: Component = () => {
           }}
         >
           <p>Remove from queue</p>
-          <i class="ri-delete-back-2-line"></i>
+          <DeleteIcon />
         </SongContextMenuItem>
       </SongContextMenu>
     </div>

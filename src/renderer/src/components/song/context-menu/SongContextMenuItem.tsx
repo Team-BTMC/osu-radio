@@ -22,7 +22,7 @@ const SongContextMenuItem: Component<SongContextMenuItemProps> = (props) => {
     <Button
       ref={divAccessor}
       variant={"ghost"}
-      class="flex min-w-56 flex-row justify-between rounded-md bg-thick-material text-left transition-colors duration-200 hover:bg-accent/20"
+      class="flex min-w-56 flex-row items-center justify-between rounded-md bg-thick-material text-left transition-colors duration-200 hover:bg-accent/20"
     >
       {props.children}
     </Button>

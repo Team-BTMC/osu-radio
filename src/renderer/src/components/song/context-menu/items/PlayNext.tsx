@@ -1,5 +1,6 @@
 import { Song } from "../../../../../../@types";
 import SongContextMenuItem from "../SongContextMenuItem";
+import { ListStartIcon } from "lucide-solid";
 import { Component } from "solid-js";
 
 type SongPlayNextProps = {
@@ -16,7 +17,7 @@ const PlayNext: Component<SongPlayNextProps> = (props) => {
       }}
     >
       <p>Play next</p>
-      <i class="ri-menu-add-line"></i>
+      <ListStartIcon />
     </SongContextMenuItem>
   );
 };
