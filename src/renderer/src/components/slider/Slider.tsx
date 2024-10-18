@@ -5,6 +5,7 @@ import SliderTrack from "./SliderTrack";
 import useControllableState from "@renderer/lib/controllable-state";
 import { cn } from "@renderer/lib/css.utils";
 import { linearScale } from "@renderer/lib/linear-scale";
+import { throttle } from "@renderer/lib/throttle";
 import { clamp } from "@renderer/lib/tungsten/math";
 import {
   Accessor,
@@ -160,7 +161,7 @@ const SliderRoot: ParentComponent<Props> = (props) => {
     sliderContext.setValue(sliderContext.max);
   };
 
-  const handleStep = (direction: "left" | "right") => {
+  const [handleStep] = throttle((direction: "left" | "right") => {
     const stepDirection = direction === "left" ? -1 : 1;
     const step = (sliderContext.max / 100) * 5;
     const stepInDirection = step * stepDirection;
@@ -168,7 +169,7 @@ const SliderRoot: ParentComponent<Props> = (props) => {
     const max = sliderContext.max;
     sliderContext.setValue((value) => clamp(min, max, value + stepInDirection));
     sliderContext.thumb()?.focus();
-  };
+  }, 50);
 
   return (
     <SliderContext.Provider value={sliderContext}>
