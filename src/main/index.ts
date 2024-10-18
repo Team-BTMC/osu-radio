@@ -12,17 +12,16 @@ async function createWindow() {
   const [width, height] = getBounds();
 
   function getIcon(): string {
-    if (process.platform === 'win32') {
-      return join(__dirname, '../../build/icon.ico');
+    if (process.platform === "win32") {
+      return join(__dirname, "../../build/icon.ico");
     }
-  
-    if (process.platform === 'darwin') {
-      return join(__dirname, '../../build/icon.icns');
-    }
-  
-    return join(__dirname, '../../build/icon.png');
-  }
 
+    if (process.platform === "darwin") {
+      return join(__dirname, "../../build/icon.icns");
+    }
+
+    return join(__dirname, "../../build/icon.png");
+  }
 
   const window = new BrowserWindow({
     title: "osu!radio",
