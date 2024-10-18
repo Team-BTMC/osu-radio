@@ -1,10 +1,17 @@
 import "../../../assets/css/song/song-context-menu.css";
-import { Accessor, Component, createEffect, For, onCleanup, onMount, Show, Signal } from "solid-js";
+import { computePosition, inline, shift } from "@floating-ui/dom";
+import {
+  Component,
+  createEffect, // createSignal,
+  For,
+  onCleanup,
+  onMount,
+  Show,
+  Signal,
+} from "solid-js";
 
 type SongContextMenuProps = {
   show: Signal<boolean>;
-  coords: Accessor<[number, number]>;
-  container: any;
   children: any;
 };
 
@@ -19,21 +26,25 @@ const SongContextMenu: Component<SongContextMenuProps> = (props) => {
       return;
     }
 
-    const targetItem = t.closest(".song-item");
-    const menuParent = menu?.closest(".song-item");
+    const targetItem = t.closest(".group");
 
-    if (targetItem === menuParent) {
-      evt.stopPropagation();
-      return;
+    if (targetItem !== null && menu !== undefined) {
+      const useCustomCoords = {
+        name: "useCustomCoords",
+        fn() {
+          return { x: evt.offsetX + 30, y: evt.clientY - 52 };
+        },
+      };
+
+      computePosition(targetItem, menu, {
+        middleware: [useCustomCoords, inline(), shift({ crossAxis: true })],
+      }).then(({ x, y }) => {
+        Object.assign(menu.style, {
+          left: `${x}px`,
+          top: `${y}px`,
+        });
+      });
     }
-
-    setShow(false);
-  };
-
-  const calculatePosition = () => {
-    const c = props.coords();
-    menu?.style.setProperty("--x", `${Math.round(c[0])}px`);
-    menu?.style.setProperty("--y", `${Math.round(c[1])}px`);
   };
 
   onMount(() => {
@@ -45,22 +56,28 @@ const SongContextMenu: Component<SongContextMenuProps> = (props) => {
         return;
       }
 
-      calculatePosition();
-      window.addEventListener("click", () => setShow(false), { once: true });
+      window.addEventListener(
+        "click",
+        () => {
+          setShow(false);
+        },
+        { once: true },
+      );
       window.addEventListener("contextmenu", windowContextMenu);
     });
   });
 
   onCleanup(() => {
-    window.removeEventListener("click", () => setShow(false));
+    window.removeEventListener("click", () => {
+      setShow(false);
+    });
     window.removeEventListener("contextmenu", windowContextMenu);
-    menu?.removeEventListener("click", (evt) => evt.stopPropagation());
   });
 
   return (
     <Show when={show()}>
-      <div class="absolute z-50 overflow-hidden rounded-md bg-surface shadow-lg" ref={menu}>
-        <div class="bg-gradient-to-b from-black/30 to-transparent">
+      <div class={"absolute left-0 top-0 z-30 rounded-lg bg-thick-material"} ref={menu}>
+        <div class="flex flex-col gap-1 rounded-lg bg-thick-material p-2">
           <For each={props.children}>{(child) => child}</For>
         </div>
       </div>
@@ -69,22 +86,3 @@ const SongContextMenu: Component<SongContextMenuProps> = (props) => {
 };
 
 export default SongContextMenu;
-
-export function ignoreClickInContextMenu(fn: (evt: MouseEvent) => any): (evt: MouseEvent) => void {
-  return (evt: MouseEvent) => {
-    const t = evt.target;
-
-    if (!(t instanceof HTMLElement)) {
-      fn(evt);
-      return;
-    }
-
-    const menu = t.closest(".song-menu");
-
-    if (menu !== null) {
-      return;
-    }
-
-    fn(evt);
-  };
-}
