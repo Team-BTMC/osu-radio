@@ -103,7 +103,13 @@ const SongControls: Component = () => {
         </Button>
       </div>
       <div class="ml-auto">
-        <Button variant="ghost" size="icon">
+        {/* // TODO - modal or something so the user can select a playlist */}
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => window.api.request("playlist::add", "test", song())}
+          title="Add to playlist"
+        >
           <i class="ri-add-fill" />
         </Button>
       </div>
