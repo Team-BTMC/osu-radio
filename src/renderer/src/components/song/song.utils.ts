@@ -37,14 +37,21 @@ export { duration, setDuration };
 const [timestamp, setTimestamp] = createSignal(0);
 export { timestamp, setTimestamp };
 
+const [valueBeforeMute, setValueBeforeMute] = createSignal<number | undefined>();
+export { valueBeforeMute, setValueBeforeMute };
+
 const [isSeeking, setIsSeeking] = createSignal({
   value: false,
   pausedSeekingStart: false,
 });
 export { isSeeking, setIsSeeking };
 
-const [volume, setVolume] = createSignal<ZeroToOne>(0.3);
-export { volume, setVolume };
+const [volume, _setVolume] = createSignal<ZeroToOne>(0.3);
+export const setVolume = (newValue: ZeroToOne) => {
+  _setVolume(newValue);
+  setValueBeforeMute(undefined);
+};
+export { volume };
 
 let bgPath: Optional<string>;
 
@@ -365,4 +372,16 @@ export const handleSeekEnd = () => {
   if (!pausedSeekingStart) {
     player.play();
   }
+};
+
+export const handleMuteSong = () => {
+  const vBeforeMute = valueBeforeMute();
+  if (typeof vBeforeMute !== "undefined") {
+    _setVolume(vBeforeMute);
+    setValueBeforeMute(undefined);
+    return;
+  }
+
+  setValueBeforeMute(volume());
+  _setVolume(0);
 };

@@ -1,5 +1,14 @@
 import { isSongUndefined } from "../../../lib/song";
-import { isPlaying, next, previous, togglePlay, song, setVolume, volume } from "../song.utils";
+import {
+  isPlaying,
+  next,
+  previous,
+  togglePlay,
+  song,
+  setVolume,
+  volume,
+  handleMuteSong,
+} from "../song.utils";
 import Button from "@renderer/components/button/Button";
 import Slider from "@renderer/components/slider/Slider";
 import { Component, createEffect, createSignal, Match, Show, Switch } from "solid-js";
@@ -104,7 +113,7 @@ const LeftPart = () => {
           }, 320);
         }}
       >
-        <Button size="icon" variant="ghost">
+        <Button size="icon" variant="ghost" onClick={handleMuteSong}>
           <Switch>
             <Match when={volume() === 0}>
               <i class="ri-volume-mute-fill" />
