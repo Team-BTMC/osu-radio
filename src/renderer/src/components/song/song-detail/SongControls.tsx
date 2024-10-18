@@ -1,12 +1,10 @@
 import { isSongUndefined } from "../../../lib/song";
 import { isPlaying, next, previous, togglePlay, song, setVolume, volume } from "../song.utils";
-import IconButton from "@renderer/components/icon-button/IconButton";
+import Button from "@renderer/components/button/Button";
 import Slider from "@renderer/components/slider/Slider";
 import { Component, createEffect, createSignal, Match, Show, Switch } from "solid-js";
 
-type SongControlsProps = {};
-
-const SongControls: Component<SongControlsProps> = () => {
+const SongControls: Component = () => {
   const [disable, setDisable] = createSignal(isSongUndefined(song()));
   const [playHint, setPlayHint] = createSignal("");
 
@@ -27,18 +25,26 @@ const SongControls: Component<SongControlsProps> = () => {
     <div class="flex w-full items-center gap-4">
       <LeftPart />
       <div class="flex flex-1 items-center justify-center gap-6">
-        <IconButton
+        <Button
+          size="icon"
+          variant="ghost"
           onClick={() => window.api.request("queue::shuffle")}
           disabled={disable()}
           title="Shuffle"
         >
           <i class="ri-shuffle-fill" />
-        </IconButton>
+        </Button>
 
         <div class="flex items-center gap-4">
-          <IconButton onClick={() => previous()} disabled={disable()} title="Play previous">
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => previous()}
+            disabled={disable()}
+            title="Play previous"
+          >
             <i class="ri-skip-back-mini-fill" />
-          </IconButton>
+          </Button>
 
           <button
             class="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-2xl text-thick-material"
@@ -51,12 +57,20 @@ const SongControls: Component<SongControlsProps> = () => {
             </Show>
           </button>
 
-          <IconButton onClick={() => next()} disabled={disable()} title="Play next">
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => next()}
+            disabled={disable()}
+            title="Play next"
+          >
             <i class="ri-skip-forward-mini-fill"></i>
-          </IconButton>
+          </Button>
         </div>
 
-        <IconButton
+        <Button
+          variant={"ghost"}
+          size="icon"
           onClick={() => {
             // TODO - implement repeat
           }}
@@ -64,7 +78,7 @@ const SongControls: Component<SongControlsProps> = () => {
           title="Repeat"
         >
           <i class="ri-repeat-2-fill" />
-        </IconButton>
+        </Button>
       </div>
       <RightPart />
     </div>
@@ -90,7 +104,7 @@ const LeftPart = () => {
           }, 320);
         }}
       >
-        <IconButton>
+        <Button size="icon" variant="ghost">
           <Switch>
             <Match when={volume() === 0}>
               <i class="ri-volume-mute-fill" />
@@ -102,7 +116,7 @@ const LeftPart = () => {
               <i class="ri-volume-up-fill" />
             </Match>
           </Switch>
-        </IconButton>
+        </Button>
 
         <Show when={isHoveringVolume()}>
           <Slider
@@ -127,9 +141,9 @@ const LeftPart = () => {
 const RightPart = () => {
   return (
     <div class="flex flex-1 justify-end">
-      <IconButton>
+      <Button size="icon" variant="ghost">
         <i class="ri-add-fill" />
-      </IconButton>
+      </Button>
     </div>
   );
 };

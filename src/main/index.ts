@@ -1,5 +1,5 @@
-import icon from "../../resources/icon.png?asset";
 import { Router } from "./lib/route-pass/Router";
+import createMenu from "./lib/window/menu";
 import trackBounds, { getBounds, wasMaximized } from "./lib/window/resizer";
 import { main } from "./main";
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
@@ -10,6 +10,18 @@ if (!app.requestSingleInstanceLock()) app.quit();
 
 async function createWindow() {
   const [width, height] = getBounds();
+
+  function getIcon(): string {
+    if (process.platform === "win32") {
+      return join(__dirname, "../../build/icon.ico");
+    }
+
+    if (process.platform === "darwin") {
+      return join(__dirname, "../../build/icon.icns");
+    }
+
+    return join(__dirname, "../../build/icon.png");
+  }
 
   const window = new BrowserWindow({
     title: "osu!radio",
@@ -22,7 +34,7 @@ async function createWindow() {
       x: 20,
       y: 20,
     },
-    ...(process.platform === "linux" ? { icon } : {}),
+    icon: getIcon(),
     webPreferences: {
       preload: join(__dirname, "../preload/index.mjs"),
       sandbox: false,
@@ -38,6 +50,9 @@ async function createWindow() {
     },
     */
   });
+
+  const menu = createMenu();
+  window.setMenu(menu);
 
   app.on("second-instance", () => {
     if (window.isMinimized()) window.restore();
@@ -57,21 +72,6 @@ async function createWindow() {
   }
 
   trackBounds(window);
-
-  window.webContents.on("before-input-event", (event, input) => {
-    const modKeyHeld = process.platform === "darwin" ? input.meta : input.control;
-    if (modKeyHeld && ["+", "=", "-", "0"].includes(input.key)) {
-      if (input.key === "+" || input.key === "=") {
-        zoom(window, 0.1);
-      } else if (input.key === "-") {
-        zoom(window, -0.1);
-      } else if (input.key === "0") {
-        zoom(window);
-      }
-
-      event.preventDefault();
-    }
-  });
 
   window.on("ready-to-show", async () => {
     window.show();
@@ -108,7 +108,10 @@ app.whenReady().then(async () => {
   // and ignore CommandOrControl + R in production.
   // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
   app.on("browser-window-created", (_, window) => {
-    optimizer.watchWindowShortcuts(window);
+    optimizer.watchWindowShortcuts(window, {
+      zoom: true,
+      escToCloseWindow: false,
+    });
   });
 
   await createWindow();
@@ -127,10 +130,3 @@ app.on("window-all-closed", () => {
     app.quit();
   }
 });
-
-function zoom(window: BrowserWindow, factor?: number) {
-  const currentZoom = window.webContents.getZoomFactor();
-  const newZoom = factor ? currentZoom + factor : 1;
-  const clampedZoom = Math.max(Math.min(newZoom, 2), 0.5);
-  window.webContents.setZoomFactor(clampedZoom);
-}

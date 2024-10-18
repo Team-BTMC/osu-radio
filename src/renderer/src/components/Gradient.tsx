@@ -1,6 +1,6 @@
 import "../assets/css/gradient.css";
 import Impulse from "../lib/Impulse";
-import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
+import { Component, createEffect, createSignal, JSXElement, onCleanup, onMount } from "solid-js";
 
 export type GradientColors = {
   top: string;
@@ -16,13 +16,17 @@ type GradientProps = {
   classTop?: string;
   classBottom?: string;
   update?: Impulse;
-  children;
+  children: JSXElement;
 };
 
 const Gradient: Component<GradientProps> = (props) => {
-  let bottomLayer;
+  let bottomLayer: HTMLDivElement | undefined;
 
   const calculateBackground = () => {
+    if (!bottomLayer) {
+      return;
+    }
+
     const rect: DOMRect = bottomLayer.getBoundingClientRect();
 
     bottomLayer.style.setProperty("--left", `${Math.round(-rect.left)}px`);
