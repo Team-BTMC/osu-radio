@@ -2,6 +2,7 @@ import "../../assets/css/search/tag-select.css";
 import Gradient from "../Gradient";
 import TextField from "../form/TextField";
 import TagItem from "./TagItem";
+import { TagIcon } from "lucide-solid";
 import { Component, createEffect, createSignal, For, Signal } from "solid-js";
 
 export type Tag = {
@@ -125,7 +126,7 @@ const TagSelect: Component<TagSelectProps> = (props) => {
         disabled={props.disabled}
         title={"Add/Remove tags for searching"}
       >
-        <i class="ri-tag-line" />
+        <TagIcon size={20} />
       </button>
       <dialog ref={dialog} class={"tag-select"}>
         <Gradient classTop={"tag-select-container"}>
