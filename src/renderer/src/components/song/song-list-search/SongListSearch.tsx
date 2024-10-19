@@ -5,6 +5,7 @@ import { setSongsSearch } from "../song-list/song-list.utils";
 import SongListSearchOrderBy from "./SongListSearchOrderBy";
 import Button from "@renderer/components/button/Button";
 import { Input } from "@renderer/components/input/Input";
+import { FilterIcon, SearchIcon } from "lucide-solid";
 import { Accessor, Component, Setter, Signal } from "solid-js";
 
 export type SearchProps = {
@@ -80,11 +81,11 @@ const SongListSearch: Component<SearchProps> = (props) => {
             class="absolute right-3.5 top-1/2 -translate-y-1/2 transform text-subtext"
             for="search_input"
           >
-            <i class="ri-search-2-line" />
+            <SearchIcon size={20} class="opacity-70" />
           </label>
         </div>
         <Button size="square" variant="outlined">
-          <i class="ri-filter-3-fill" />
+          <FilterIcon size={20} />
         </Button>
       </div>
       <div class="mt-3 flex items-center space-x-4">

@@ -8,7 +8,7 @@ import SongImage from "@renderer/components/song/SongImage";
 import SongQueue from "@renderer/components/song/song-queue/SongQueue";
 import { song } from "@renderer/components/song/song.utils";
 import Tabs from "@renderer/components/tabs/Tabs";
-import { Minimize2, Minus, Square, X } from "lucide-solid";
+import { Minimize2Icon, MinusIcon, SidebarIcon, SquareIcon, XIcon } from "lucide-solid";
 import { Accessor, Component, createEffect, createSignal, For, Setter } from "solid-js";
 
 const MainScene: Component = () => {
@@ -64,13 +64,13 @@ const Nav: Component = () => {
       style={os() === "darwin" ? { padding: "0px 0px 0px 95px" } : { padding: "0px 0px 0px 20px" }}
     >
       <Button size="icon" variant="ghost">
-        <i class="ri-sidebar-fold-line"></i>
+        <SidebarIcon />
       </Button>
       <Tabs.List>
         <For each={Object.values(TABS)}>
-          {({ label, value, icon }) => (
+          {({ label, value, Icon }) => (
             <Tabs.Trigger value={value}>
-              <i class={`${icon} ${mainActiveTab() === value ? "text-text" : "text-subtext"}`} />
+              <Icon size={20} />
               <span>{label}</span>
             </Tabs.Trigger>
           )}
@@ -87,7 +87,7 @@ const Nav: Component = () => {
           class="mr-2"
           onClick={toggleSongQueueModalOpen}
         >
-          <i class="ri-stack-fill" />
+          <LayersIcon size={20} />
         </Button>
       </div> */}
       {os() !== "darwin" && <WindowControls maximized={maximized} setMaximized={setMaximized} />}
@@ -102,7 +102,7 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
         onclick={async () => window.api.request("window::minimize")}
         class="nav-window-control"
       >
-        <Minus size={20} />
+        <MinusIcon size={20} />
       </button>
       <button
         onclick={async () => {
@@ -111,13 +111,13 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
         }}
         class="nav-window-control"
       >
-        {props.maximized() ? <Minimize2 size={20} /> : <Square size={18} />}
+        {props.maximized() ? <Minimize2Icon size={20} /> : <SquareIcon size={18} />}
       </button>
       <button
         onclick={async () => window.api.request("window::close")}
         class="nav-window-control close"
       >
-        <X size={20} />
+        <XIcon size={20} />
       </button>
     </div>
   );
