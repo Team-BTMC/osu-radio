@@ -1,8 +1,9 @@
-import { Component, onCleanup } from "solid-js";
+import { Component, JSX, onCleanup } from "solid-js";
 
 type SongContextMenuItemProps = {
   onClick: (event: MouseEvent) => any;
   children: any;
+  class?: JSX.HTMLAttributes<HTMLButtonElement>["class"];
 };
 
 const SongContextMenuItem: Component<SongContextMenuItemProps> = (props) => {
@@ -20,7 +21,10 @@ const SongContextMenuItem: Component<SongContextMenuItemProps> = (props) => {
   return (
     <button
       ref={divAccessor}
-      class="flex flex-row items-center justify-between gap-3 rounded-md bg-thick-material p-2 text-left transition-colors duration-200 hover:bg-accent/20"
+      class={
+        "flex flex-row items-center justify-between gap-3 rounded-md bg-thick-material p-2 text-left transition-colors duration-200 hover:bg-accent/20 " +
+        props.class
+      }
     >
       {props.children}
     </button>
