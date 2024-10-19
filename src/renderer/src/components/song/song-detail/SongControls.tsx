@@ -11,6 +11,18 @@ import {
 } from "../song.utils";
 import Button from "@renderer/components/button/Button";
 import Slider from "@renderer/components/slider/Slider";
+import {
+  CirclePlusIcon,
+  PauseIcon,
+  PlayIcon,
+  RepeatIcon,
+  ShuffleIcon,
+  SkipBackIcon,
+  SkipForwardIcon,
+  Volume1Icon,
+  Volume2Icon,
+  VolumeXIcon,
+} from "lucide-solid";
 import { Component, createEffect, createSignal, Match, Show, Switch } from "solid-js";
 
 const SongControls: Component = () => {
@@ -41,7 +53,7 @@ const SongControls: Component = () => {
           disabled={disable()}
           title="Shuffle"
         >
-          <i class="ri-shuffle-fill" />
+          <ShuffleIcon size={20} />
         </Button>
 
         <div class="flex items-center gap-4">
@@ -52,7 +64,7 @@ const SongControls: Component = () => {
             disabled={disable()}
             title="Play previous"
           >
-            <i class="ri-skip-back-mini-fill" />
+            <SkipBackIcon size={20} />
           </Button>
 
           <button
@@ -61,8 +73,8 @@ const SongControls: Component = () => {
             disabled={disable()}
             title={playHint()}
           >
-            <Show when={!isPlaying()} fallback={<i class="ri-pause-fill" />}>
-              <i class="ri-play-fill" />
+            <Show when={!isPlaying()} fallback={<PauseIcon fill="currentColor" size={20} />}>
+              <PlayIcon fill="currentColor" size={20} />
             </Show>
           </button>
 
@@ -73,7 +85,7 @@ const SongControls: Component = () => {
             disabled={disable()}
             title="Play next"
           >
-            <i class="ri-skip-forward-mini-fill"></i>
+            <SkipForwardIcon size={20} />
           </Button>
         </div>
 
@@ -86,7 +98,7 @@ const SongControls: Component = () => {
           disabled={disable()}
           title="Repeat"
         >
-          <i class="ri-repeat-2-fill" />
+          <RepeatIcon size={20} />
         </Button>
       </div>
       <RightPart />
@@ -116,13 +128,13 @@ const LeftPart = () => {
         <Button size="icon" variant="ghost" onClick={handleMuteSong}>
           <Switch>
             <Match when={volume() === 0}>
-              <i class="ri-volume-mute-fill" />
+              <VolumeXIcon size={20} />
             </Match>
             <Match when={volume() < 0.5}>
-              <i class="ri-volume-down-fill" />
+              <Volume1Icon size={20} />
             </Match>
             <Match when={volume() >= 0.5}>
-              <i class="ri-volume-up-fill" />
+              <Volume2Icon size={20} />
             </Match>
           </Switch>
         </Button>
@@ -151,7 +163,7 @@ const RightPart = () => {
   return (
     <div class="flex flex-1 justify-end">
       <Button size="icon" variant="ghost">
-        <i class="ri-add-fill" />
+        <CirclePlusIcon size={20} />
       </Button>
     </div>
   );
