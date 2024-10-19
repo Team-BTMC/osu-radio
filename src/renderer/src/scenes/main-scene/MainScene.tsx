@@ -1,52 +1,41 @@
 import SongDetail from "../../components/song/song-detail/SongDetail";
 import SongList from "../../components/song/song-list/SongList";
-import { mainActiveTab, setMainActiveTab, Tab, TABS } from "./main.utils";
+import { mainActiveTab, setMainActiveTab, TABS } from "./main.utils";
 import "./styles.css";
 import Button from "@renderer/components/button/Button";
 import Settings from "@renderer/components/settings/Settings";
 import SongImage from "@renderer/components/song/SongImage";
 import SongQueue from "@renderer/components/song/song-queue/SongQueue";
-import {
-  songQueueModalOpen,
-  toggleSongQueueModalOpen,
-} from "@renderer/components/song/song-queue/song-queue.utils";
 import { song } from "@renderer/components/song/song.utils";
+import Tabs from "@renderer/components/tabs/Tabs";
 import { Minimize2, Minus, Square, X } from "lucide-solid";
-import {
-  Accessor,
-  Component,
-  createEffect,
-  createSignal,
-  For,
-  JSXElement,
-  Match,
-  onCleanup,
-  Setter,
-  Show,
-  Switch,
-} from "solid-js";
+import { Accessor, Component, createEffect, createSignal, For, Setter } from "solid-js";
 
 const MainScene: Component = () => {
   return (
-    <div class="main-scene flex h-screen flex-col overflow-hidden">
-      <Nav />
-      <main class="relative flex h-[calc(100vh-52px)]">
-        <TabContent />
-        <div class="flex flex-1 items-center justify-center">
-          <SongDetail />
+    <Tabs value={mainActiveTab} onValueChange={setMainActiveTab}>
+      <div class="main-scene flex h-screen flex-col overflow-hidden">
+        <Nav />
+        <main class="relative flex h-[calc(100vh-58px)]">
+          <TabContent />
+          <div class="flex flex-1 items-center justify-center">
+            <SongDetail />
+          </div>
+
+          <QueueModal />
+        </main>
+
+        <div class="pointer-events-none absolute inset-0 z-[-1]">
+          <SongImage
+            src={song().bg}
+            instantLoad={true}
+            class="h-full w-full bg-cover blur-lg filter"
+          />
         </div>
-
-        <QueueModal />
-      </main>
-
-      <div class="pointer-events-none absolute inset-0 z-[-1] opacity-[0.072]">
-        <SongImage
-          src={song().bg}
-          instantLoad={true}
-          class="h-full w-full bg-cover blur-xl filter"
-        />
       </div>
-    </div>
+
+      <div class="pointer-events-none absolute inset-0 z-[-1] bg-black/90" />
+    </Tabs>
   );
 };
 
@@ -73,14 +62,24 @@ const Nav: Component = () => {
 
   return (
     <nav
-      class="nav"
+      class="flex h-[58px] items-center gap-4 bg-regular-material/50"
       style={os() === "darwin" ? { padding: "0px 0px 0px 95px" } : { padding: "0px 0px 0px 20px" }}
     >
-      <For each={Object.values(TABS)}>
-        {({ label, ...rest }) => <NavItem {...rest}>{label}</NavItem>}
-      </For>
+      <Button size="icon" variant="ghost">
+        <i class="ri-sidebar-fold-line"></i>
+      </Button>
+      <Tabs.List>
+        <For each={Object.values(TABS)}>
+          {({ label, value, icon }) => (
+            <Tabs.Trigger value={value}>
+              <i class={`${icon} ${mainActiveTab() === value ? "text-text" : "text-subtext"}`} />
+              <span>{label}</span>
+            </Tabs.Trigger>
+          )}
+        </For>
+      </Tabs.List>
 
-      <div class="nav__queue ml-auto">
+      {/* <div class="nav__queue ml-auto">
         <Button
           variant="ghost"
           size="icon"
@@ -92,7 +91,7 @@ const Nav: Component = () => {
         >
           <i class="ri-stack-fill" />
         </Button>
-      </div>
+      </div> */}
       {os() !== "darwin" && <WindowControls maximized={maximized} setMaximized={setMaximized} />}
     </nav>
   );
@@ -126,70 +125,19 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
   );
 }
 
-type NavItemProps = Pick<Tab, "value" | "icon"> & {
-  children: JSXElement;
-};
-const NavItem: Component<NavItemProps> = ({ children, value, icon }) => {
-  return (
-    <button
-      class={`nav-item flex items-center gap-4 rounded-sm px-4 py-1 hover:bg-surface ${mainActiveTab() === value ? "bg-surface" : ""}`}
-      onclick={() => setMainActiveTab(value)}
-    >
-      <i class={`${icon} ${mainActiveTab() === value ? "text-text" : "text-subtext"}`} />
-      <span
-        class={`text-base font-semibold ${mainActiveTab() === value ? "text-text" : "text-subtext"}`}
-      >
-        {children}
-      </span>
-    </button>
-  );
-};
-
 const TabContent: Component = () => {
   return (
-    <div class="h-full w-[480px] min-w-[320px] overflow-y-auto border-r border-stroke/10 bg-regular-material shadow-2xl">
-      <Switch fallback={<div>Tab not found</div>}>
-        <Match when={mainActiveTab() === TABS.SONGS.value}>
-          <SongList isAllSongs={true} />
-        </Match>
-        <Match when={mainActiveTab() === TABS.SETTINGS.value}>
-          <Settings />
-        </Match>
-      </Switch>
-    </div>
-  );
-};
-
-const QueueModal: Component = () => {
-  let queueModal: HTMLDivElement | undefined;
-
-  const handleOutsideClick = (event: MouseEvent) => {
-    if (queueModal && !queueModal.contains(event.target as Node)) {
-      toggleSongQueueModalOpen();
-    }
-  };
-
-  createEffect(() => {
-    if (songQueueModalOpen()) {
-      document.addEventListener("mousedown", handleOutsideClick);
-    } else {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    }
-
-    onCleanup(() => {
-      document.removeEventListener("mousedown", handleOutsideClick);
-    });
-  });
-
-  return (
-    <Show when={songQueueModalOpen()}>
-      <div
-        class="queue-modal absolute bottom-0 right-0 top-0 z-20 h-full w-[480px] overflow-y-auto border-l border-stroke shadow-2xl"
-        ref={queueModal}
-      >
+    <div class="h-full w-[480px] min-w-[320px] overflow-y-auto bg-regular-material/50 shadow-2xl">
+      <Tabs.Content value={TABS.SONGS.value}>
+        <SongList isAllSongs={true} />
+      </Tabs.Content>
+      <Tabs.Content value={TABS.SETTINGS.value}>
+        <Settings />
+      </Tabs.Content>
+      <Tabs.Content value={TABS.QUEUE.value}>
         <SongQueue />
-      </div>
-    </Show>
+      </Tabs.Content>
+    </div>
   );
 };
 

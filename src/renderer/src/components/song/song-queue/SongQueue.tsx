@@ -5,8 +5,6 @@ import scrollIfNeeded from "../../../lib/tungsten/scroll-if-needed";
 import InfiniteScroller from "../../InfiniteScroller";
 import SongContextMenuItem from "../context-menu/SongContextMenuItem";
 import SongItem from "../song-item/SongItem";
-import { setSongQueueModalOpen } from "./song-queue.utils";
-import Button from "@renderer/components/button/Button";
 import { Component, createSignal, onCleanup, onMount } from "solid-js";
 
 const SongQueue: Component = () => {
@@ -66,10 +64,6 @@ const SongQueue: Component = () => {
     scrollIfNeeded(element, list);
   };
 
-  const handleCloseButtonClick = () => {
-    setSongQueueModalOpen(false);
-  };
-
   onMount(() => {
     window.api.listen("queue::created", resetListing.pulse.bind(resetListing));
     window.api.listen("queue::songChanged", changeSongHighlight);
@@ -81,12 +75,12 @@ const SongQueue: Component = () => {
   });
 
   return (
-    <div ref={view} class="flex h-full flex-col bg-regular-material backdrop-blur-md">
-      <div class="sticky top-0 z-10 flex items-center justify-between p-5">
-        <h2 class="text-lg font-semibold">Next songs on the queue ({count()})</h2>
-        <Button variant="ghost" onClick={handleCloseButtonClick}>
-          <i class="ri-close-line" />
-        </Button>
+    <div ref={view} class="flex h-full flex-col backdrop-blur-md">
+      <div class="sticky top-0 z-10 flex items-center justify-between px-5 pb-2 pt-5 backdrop-blur-lg">
+        <h2 class="text-sm font-bold">
+          <span>Next songs on the queue</span>
+          <span class="text-subtext"> ({count()})</span>
+        </h2>
       </div>
 
       <div class="flex-grow overflow-y-auto px-4">

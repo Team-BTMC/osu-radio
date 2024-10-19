@@ -86,6 +86,7 @@ export function useRovingFocusGroup(props: Params) {
   };
 
   return {
+    value: currentStopId,
     attrs: {
       ref: (node: HTMLElement) => {
         container = node;
@@ -112,8 +113,13 @@ export function useRovingFocusGroup(props: Params) {
         return currentStopId() === tabStopId;
       });
 
+      const tabIndex = createMemo(() => {
+        return isSelected() ? 0 : -1;
+      });
+
       return {
         isSelected,
+        tabIndex,
         attrs: {
           onKeyUp: handleKeyUp,
           onClick: handleClick,

@@ -74,7 +74,7 @@ const SongList: Component<SongViewProps> = (props) => {
 
   return (
     <div class="flex h-full flex-col">
-      <div class="sticky top-0 z-10">
+      <div class="sticky top-0 z-10 backdrop-blur-lg">
         <SongListSearch tags={tagsSignal} setOrder={setOrder} count={count} error={searchError} />
       </div>
 
