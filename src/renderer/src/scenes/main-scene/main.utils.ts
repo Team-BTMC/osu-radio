@@ -19,8 +19,7 @@ export const TABS = {
     value: "settings",
     Icon: SettingsIcon,
   },
-};
-// satisfies Record<string, Tab>;
+} as const satisfies Record<string, Tab>;
 
-const [mainActiveTab, setMainActiveTab] = createSignal(TABS.SONGS.value);
+const [mainActiveTab, setMainActiveTab] = createSignal<Tab["value"]>(TABS.SONGS.value);
 export { mainActiveTab, setMainActiveTab };
