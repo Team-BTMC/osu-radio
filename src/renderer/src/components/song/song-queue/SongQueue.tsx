@@ -107,12 +107,13 @@ const SongQueue: Component = () => {
               draggable={true}
               onSelect={() => window.api.request("queue::play", s.path)}
               onDrop={onDrop(s)}
-            >
-              <SongContextMenu>
-                <AddToPlaylist path={s.path} />
-                <RemoveFromQueue path={s.path} />
-              </SongContextMenu>
-            </SongItem>
+              contextMenu={
+                <SongContextMenu>
+                  <AddToPlaylist path={s.path} />
+                  <RemoveFromQueue path={s.path} />
+                </SongContextMenu>
+              }
+            ></SongItem>
           )}
         />
       </div>

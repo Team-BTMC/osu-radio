@@ -93,14 +93,19 @@ const SongList: Component<SongViewProps> = (props) => {
           fallback={<div class="py-8 text-center text-text">No songs...</div>}
           builder={(s) => (
             <div>
-              <SongItem song={s} group={group} onSelect={createQueue}>
-                <SongContextMenu>
-                  <Show when={isQueueExist() === true}>
-                    <PlayNext path={s.path} />
-                  </Show>
-                  <AddToPlaylist path={s.path} />
-                </SongContextMenu>
-              </SongItem>
+              <SongItem
+                song={s}
+                group={group}
+                onSelect={createQueue}
+                contextMenu={
+                  <SongContextMenu>
+                    <Show when={isQueueExist() === true}>
+                      <PlayNext path={s.path} />
+                    </Show>
+                    <AddToPlaylist path={s.path} />
+                  </SongContextMenu>
+                }
+              ></SongItem>
             </div>
           )}
         />

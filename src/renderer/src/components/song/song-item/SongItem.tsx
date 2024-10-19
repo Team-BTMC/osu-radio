@@ -5,10 +5,9 @@ import SongImage from "../SongImage";
 import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import { song as selectedSong } from "../song.utils";
 import { flip, offset, shift } from "@floating-ui/dom";
-import Button from "@renderer/components/button/Button";
 import Popover from "@renderer/components/popover/Popover";
 import { EllipsisVerticalIcon } from "lucide-solid";
-import { Component, createSignal, onMount } from "solid-js";
+import { Component, createSignal, JSXElement, onMount } from "solid-js";
 import { Portal } from "solid-js/web";
 
 type SongItemProps = {
@@ -18,7 +17,7 @@ type SongItemProps = {
   onSelect: (songResource: ResourceID) => any;
   draggable?: true;
   onDrop?: (before: Element | null) => any;
-  children?: any;
+  contextMenu: JSXElement;
 };
 
 const SongItem: Component<SongItemProps> = ({
@@ -28,7 +27,7 @@ const SongItem: Component<SongItemProps> = ({
   draggable: isDraggable,
   onDrop,
   selectable,
-  children,
+  contextMenu,
 }) => {
   let item: HTMLDivElement | undefined;
   const [localShow, setLocalShow] = createSignal(false);
@@ -54,7 +53,7 @@ const SongItem: Component<SongItemProps> = ({
     <Popover
       isOpen={localShow}
       onValueChange={setLocalShow}
-      middlewares={[offset({ crossAxis: 30 }), shift({ crossAxis: false }), flip()]}
+      middlewares={[offset({ crossAxis: 30, mainAxis: 10 }), shift({ crossAxis: false }), flip()]}
       placement="right"
       offset={15}
     >
@@ -66,7 +65,7 @@ const SongItem: Component<SongItemProps> = ({
             setLocalShow(false);
           }}
         >
-          {...children}
+          {contextMenu}
         </Popover.Content>
       </Portal>
       <div
@@ -88,7 +87,7 @@ const SongItem: Component<SongItemProps> = ({
           group={group}
         />
 
-        <div class="flex flex-row justify-between rounded-md bg-black/50">
+        <div class="flex flex-row items-center justify-between rounded-md bg-black/50">
           <div class="z-20 flex min-h-[72px] flex-col justify-center overflow-hidden rounded-md p-3">
             <h3 class="text-shadow text-[22px] font-extrabold leading-7 shadow-black/60">
               {song.title}
@@ -96,11 +95,11 @@ const SongItem: Component<SongItemProps> = ({
             <p class="text-base text-subtext">{song.artist}</p>
           </div>
 
-          <Popover.Trigger class="opacity-0 transition-opacity group-hover:opacity-100">
-            <Button variant={"ghost"} size={"icon"} class="z-50 mr-1 rounded-lg">
+          <div class="mr-2 grid aspect-square size-9 place-items-center rounded border-solid border-stroke bg-transparent p-1 text-text hover:bg-surface">
+            <Popover.Trigger class="opacity-0 transition-opacity group-hover:opacity-100">
               <EllipsisVerticalIcon />
-            </Button>
-          </Popover.Trigger>
+            </Popover.Trigger>
+          </div>
         </div>
       </div>
     </Popover>
