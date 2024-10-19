@@ -31,24 +31,20 @@ Router.respond("dir::autoGetOsuDir", () => {
   return none();
 });
 
-let pendingDirRequests: ((dir: string) => void)[] = [];
+type DirSubmitResolve = (value: { dir: string; client: "stable" | "lazer" }) => void;
 
-Router.respond("dir::submit", (_evt, dir) => {
-  // Resolve all pending promises with value from client
-  for (let i = 0; i < pendingDirRequests.length; i++) {
-    pendingDirRequests[i](dir);
+let pendingDirRequest: DirSubmitResolve | undefined = undefined;
+
+Router.respond("dir::submit", (_evt, dir, client) => {
+  if (pendingDirRequest) {
+    pendingDirRequest({ dir: dir, client: client });
+
+    pendingDirRequest = undefined;
   }
-
-  pendingDirRequests = [];
 });
 
-/**
- * Await submitted directory from client. This function works on suspending promise's resolve function in array of
- * pending requests. When user clicks Submit button the directory is passed to all pending resolve functions and the
- * promises are resolved
- */
-export function dirSubmit(): Promise<string> {
+export function dirSubmit(): Promise<{ dir: string; client: "stable" | "lazer" }> {
   return new Promise((resolve) => {
-    pendingDirRequests.push(resolve);
+    pendingDirRequest = resolve;
   });
 }

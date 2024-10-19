@@ -2,11 +2,13 @@ import { AudioSource, ImageSource, ResourceID, Result, Song } from "../../../@ty
 import { access } from "../fs-promises";
 import { fail, ok } from "../rust-like-utils-backend/Result";
 import { assertNever } from "../tungsten/assertNever";
+import { Beatmap, BeatmapSet } from "./LazerTypes";
 import { OsuFile } from "./OsuFile";
 import fs from "graceful-fs";
 import os from "os";
 import path from "path/posix";
 import readline from "readline";
+import Realm from "realm";
 
 const bgFileNameRegex = /.*"(?<!Video.*)(.*)".*/;
 const beatmapSetIDRegex = /([0-9]+) .*/;
@@ -31,9 +33,6 @@ type Table<T> = Map<ResourceID, T>;
 export type DirParseResult = Promise<
   Result<[Table<Song>, Table<AudioSource>, Table<ImageSource>], string>
 >;
-
-// Overriding Buffer prototype because I'm lazy.
-// Should probably get moved to another file, or make a wrapper instead.
 
 class BufferReader {
   buffer: Buffer;
@@ -112,8 +111,97 @@ class BufferReader {
   }
 }
 
+function removeUnoriginalBeatmaps(maps: Beatmap[]): Beatmap[] {
+  const mp3List: string[] = [];
+  const finalMaps: Beatmap[] = [];
+
+  for (const map of maps) {
+    if (mp3List.includes(map.Metadata.AudioFile)) {
+      continue;
+    }
+
+    mp3List.push(map.Metadata.AudioFile);
+    finalMaps.push(map);
+  }
+
+  return finalMaps;
+}
 export class OsuParser {
-  static async parseDatabase(
+  static async parseLazerDatabase(
+    databasePath: string,
+    update?: (i: number, total: number, file: string) => any,
+  ): DirParseResult {
+    const currentDir = databasePath.replaceAll("\\", "/");
+
+    const realm = await Realm.open({ path: currentDir + "/client.realm" });
+    const beatmapSets = realm.objects<BeatmapSet>("BeatmapSet");
+
+    const songTable = new Map<ResourceID, Song>();
+    const audioTable = new Map<ResourceID, AudioSource>();
+    const imageTable = new Map<ResourceID, ImageSource>();
+
+    let i = 0;
+    for (const beatmapSet of beatmapSets) {
+      const beatmaps = removeUnoriginalBeatmaps(beatmapSet.Beatmaps);
+
+      for (const beatmap of beatmaps) {
+        const song: Song = {
+          audio: "",
+          osuFile: "",
+          path: "",
+          ctime: "",
+          dateAdded: beatmapSet.DateAdded,
+          title: beatmap.Metadata.Title,
+          artist: beatmap.Metadata.Artist,
+          creator: beatmap.Metadata.Author.Username,
+          bpm: [],
+          duration: beatmap.Length,
+          diffs: [beatmap.DifficultyName],
+        };
+
+        song.osuFile =
+          currentDir +
+          "/files/" +
+          beatmap.Hash[0] +
+          "/" +
+          beatmap.Hash.substring(0, 2) +
+          "/" +
+          beatmap.Hash;
+
+        const songHash = beatmapSet.Files.find(
+          (file) => file.Filename === beatmap.Metadata.AudioFile,
+        )?.File.Hash as string; // the mp3 should exist, will check if its possible for it to not in lazer
+
+        song.audio =
+          currentDir + "/files/" + songHash[0] + "/" + songHash.substring(0, 2) + "/" + songHash;
+
+        if (beatmap.Metadata.BackgroundFile) {
+          const bgHash = beatmapSet.Files.find(
+            (file) => file.Filename === beatmap.Metadata.BackgroundFile,
+          )?.File.Hash as string;
+
+          song.bg =
+            currentDir + "/files/" + bgHash[0] + "/" + bgHash.substring(0, 2) + "/" + bgHash;
+        }
+
+        songTable.set(song.audio, song);
+        audioTable.set(song.audio, {
+          songID: song.audio,
+          path: song.audio,
+          ctime: String(beatmapSet.DateAdded),
+        });
+
+        if (update) {
+          update(i + 1, beatmapSets.length, song.title);
+          i++;
+        }
+      }
+    }
+
+    return ok([songTable, audioTable, imageTable]);
+  }
+
+  static async parseStableDatabase(
     databasePath: string,
     update?: (i: number, total: number, file: string) => any,
   ): DirParseResult {
