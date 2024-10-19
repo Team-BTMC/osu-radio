@@ -4,7 +4,7 @@ import SongHint from "../SongHint";
 import SongImage from "../SongImage";
 import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import { song as selectedSong } from "../song.utils";
-import { flip, offset } from "@floating-ui/dom";
+import { flip, offset, shift } from "@floating-ui/dom";
 import Button from "@renderer/components/button/Button";
 import Popover from "@renderer/components/popover/Popover";
 import { EllipsisVerticalIcon } from "lucide-solid";
@@ -54,7 +54,7 @@ const SongItem: Component<SongItemProps> = ({
     <Popover
       isOpen={localShow}
       onValueChange={setLocalShow}
-      middlewares={[flip(), offset({ crossAxis: 30 })]}
+      middlewares={[offset({ crossAxis: 30 }), shift({ crossAxis: false }), flip()]}
       placement="right"
       offset={15}
     >

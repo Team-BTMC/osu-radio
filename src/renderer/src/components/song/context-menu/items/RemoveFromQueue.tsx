@@ -16,8 +16,8 @@ const RemoveFromQueue: Component<RemoveFromQueueProps> = (props) => {
         }
       }}
     >
-      <p>Remove from queue</p>
-      <DeleteIcon />
+      <p class="text-red">Remove from queue</p>
+      <DeleteIcon class="text-red" />
     </SongContextMenuItem>
   );
 };
