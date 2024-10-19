@@ -9,8 +9,8 @@ import {
   volume,
   handleMuteSong,
 } from "../song.utils";
-
 import Button from "@renderer/components/button/Button";
+import Slider from "@renderer/components/slider/Slider";
 import {
   CirclePlusIcon,
   PauseIcon,
@@ -23,7 +23,6 @@ import {
   Volume2Icon,
   VolumeXIcon,
 } from "lucide-solid";
-import Slider from "@renderer/components/slider/Slider";
 import { Component, createEffect, createSignal, Match, Show, Switch } from "solid-js";
 
 const SongControls: Component = () => {

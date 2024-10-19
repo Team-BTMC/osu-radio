@@ -1,8 +1,8 @@
 import { cn } from "../../lib/css.utils";
 import Dropdown from "../dropdown/Dropdown";
 import { changeAudioDevice } from "@renderer/components/song/song.utils";
-import { Component, createEffect, createSignal, JSX, onMount } from "solid-js";
 import { GlobeIcon, LucideIcon, Volume2Icon } from "lucide-solid";
+import { Component, createEffect, createSignal, JSX, onMount } from "solid-js";
 
 const Settings: Component = () => {
   return (
