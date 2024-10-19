@@ -39,7 +39,7 @@ export type RequestAPI = {
 
   "dir::select": () => Optional<string>;
   "dir::autoGetOsuDir": () => Optional<string>;
-  "dir::submit": (dir: string) => void;
+  "dir::submit": (dir: string, client: "stable" | "lazer") => void;
 
   "discord::play": (song: Song, duration?: number) => void;
   "discord::pause": (song: Song) => void;

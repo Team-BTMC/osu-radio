@@ -31,7 +31,15 @@ export default function DirSelectScene() {
       return;
     }
 
-    await window.api.request("dir::submit", dir());
+    await window.api.request("dir::submit", dir(), "stable");
+  };
+
+  const submitLazer = async () => {
+    await window.api.request(
+      "dir::submit",
+      "/Users/aychar/Library/Application Support/osu",
+      "lazer",
+    );
   };
 
   const GRADIENT = `radial-gradient(at 1% 75%, hsla(228,61%,67%,0.1) 0px, transparent 50%),
@@ -73,6 +81,9 @@ export default function DirSelectScene() {
         <div class="flex items-end justify-end">
           <Button size="large" onClick={submitDir}>
             <span>Submit</span>
+          </Button>
+          <Button size="large" onClick={submitLazer}>
+            <span>Lazer thing</span>
           </Button>
         </div>
       </div>
