@@ -5,6 +5,7 @@ import "./styles.css";
 import {
   computePosition,
   ComputePositionReturn,
+  Middleware,
   offset,
   OffsetOptions,
   Placement,
@@ -20,6 +21,7 @@ export type Props = {
   defaultProp?: boolean;
   isOpen?: Accessor<boolean>;
   onValueChange?: (newOpen: boolean) => void;
+  middlewares?: Middleware[];
 };
 
 export type Context = ReturnType<typeof useProviderValue>;
@@ -53,10 +55,12 @@ function useProviderValue(props: Props) {
       return;
     }
 
+    const localMiddlewares: Middleware[] = props.middlewares === undefined ? [] : props.middlewares;
+
     computePosition(trigger, content, {
       placement: props.placement,
       strategy: "fixed",
-      middleware: [offset(props.offset)],
+      middleware: [offset(props.offset), ...localMiddlewares],
     }).then(setPosition);
   };
 

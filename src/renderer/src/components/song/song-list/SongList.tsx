@@ -1,16 +1,15 @@
-import { Optional, Order, ResourceID, Song, SongsQueryPayload, Tag } from "../../../../../@types";
+import { Optional, Order, ResourceID, SongsQueryPayload, Tag } from "../../../../../@types";
 import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-types";
 import { namespace } from "../../../App";
 import Impulse from "../../../lib/Impulse";
 import { none, some } from "../../../lib/rust-like-utils-client/Optional";
 import InfiniteScroller from "../../InfiniteScroller";
 import SongContextMenu from "../context-menu/SongContextMenu";
-import SongContextMenuItem from "../context-menu/SongContextMenuItem";
+import AddToPlaylist from "../context-menu/items/AddToPlaylist";
 import PlayNext from "../context-menu/items/PlayNext";
 import SongItem from "../song-item/SongItem";
 import SongListSearch from "../song-list-search/SongListSearch";
 import { songsSearch } from "./song-list.utils";
-import { PlusIcon } from "lucide-solid";
 import { Component, createEffect, createSignal, onCleanup, onMount, Show } from "solid-js";
 
 export type SongViewProps = {
@@ -25,10 +24,7 @@ const SongList: Component<SongViewProps> = (props) => {
 
   const [order, setOrder] = createSignal<Order>({ option: "title", direction: "asc" });
   const [count, setCount] = createSignal(0);
-
-  const showSignal = createSignal(false);
-  const [song, setSong] = createSignal<Song>();
-  const [queryCreated, setQueryCreated] = createSignal(false);
+  const [isQueueExist, setIsQueueExist] = createSignal(false);
 
   const [payload, setPayload] = createSignal<SongsQueryPayload>({
     view: props,
@@ -75,7 +71,7 @@ const SongList: Component<SongViewProps> = (props) => {
       startSong: songResource,
       ...payload(),
     });
-    setQueryCreated(true);
+    setIsQueueExist(true);
   };
 
   const group = namespace.create(true);
@@ -97,31 +93,18 @@ const SongList: Component<SongViewProps> = (props) => {
           fallback={<div class="py-8 text-center text-text">No songs...</div>}
           builder={(s) => (
             <div>
-              <SongItem
-                song={s}
-                group={group}
-                onSelect={createQueue}
-                showSignal={showSignal}
-                setSong={setSong}
-              ></SongItem>
+              <SongItem song={s} group={group} onSelect={createQueue}>
+                <SongContextMenu>
+                  <Show when={isQueueExist() === true}>
+                    <PlayNext path={s.path} />
+                  </Show>
+                  <AddToPlaylist path={s.path} />
+                </SongContextMenu>
+              </SongItem>
             </div>
           )}
         />
       </div>
-      <SongContextMenu show={showSignal}>
-        <Show when={queryCreated() === true}>
-          <PlayNext path={song()?.path} />
-        </Show>
-
-        <SongContextMenuItem
-          onClick={() => {
-            console.log("todo");
-          }}
-        >
-          <p>Add to playlist</p>
-          <PlusIcon />
-        </SongContextMenuItem>
-      </SongContextMenu>
     </div>
   );
 };

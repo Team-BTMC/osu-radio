@@ -3,7 +3,12 @@ import draggable from "../../../lib/draggable/draggable";
 import SongHint from "../SongHint";
 import SongImage from "../SongImage";
 import { song as selectedSong } from "../song.utils";
-import { Component, onMount, Setter, Signal } from "solid-js";
+import { flip, offset } from "@floating-ui/dom";
+import Button from "@renderer/components/button/Button";
+import Popover from "@renderer/components/popover/Popover";
+import { EllipsisVerticalIcon } from "lucide-solid";
+import { Component, createSignal, onMount } from "solid-js";
+import { Portal } from "solid-js/web";
 
 type SongItemProps = {
   song: Song;
@@ -13,8 +18,6 @@ type SongItemProps = {
   draggable?: true;
   onDrop?: (before: Element | null) => any;
   children?: any;
-  showSignal: Signal<boolean>;
-  setSong: Setter<Song | undefined>;
 };
 
 const SongItem: Component<SongItemProps> = ({
@@ -24,15 +27,10 @@ const SongItem: Component<SongItemProps> = ({
   draggable: isDraggable,
   onDrop,
   selectable,
-  showSignal,
-  setSong,
+  children,
 }) => {
   let item: HTMLDivElement | undefined;
-
-  const showMenu = () => {
-    setSong(song);
-    showSignal[1](true);
-  };
+  const [localShow, setLocalShow] = createSignal(false);
 
   onMount(() => {
     if (!item) {
@@ -52,32 +50,58 @@ const SongItem: Component<SongItemProps> = ({
   });
 
   return (
-    <div
-      class="group relative isolate z-20 select-none rounded-md"
-      classList={{
-        "outline outline-2 outline-accent": selectedSong().path === song.path,
-      }}
-      data-active={selectedSong().path === song.path}
-      ref={item}
-      data-url={song.bg}
-      onContextMenu={showMenu}
+    <Popover
+      isOpen={localShow}
+      onValueChange={setLocalShow}
+      middlewares={[flip(), offset({ crossAxis: 30 })]}
+      placement="right"
+      offset={15}
     >
-      <SongImage
-        class="absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-30 group-hover:opacity-90"
+      <Portal>
+        <Popover.Overlay />
+        <Popover.Content
+          onClick={() => {
+            setLocalShow(false);
+          }}
+        >
+          {...children}
+        </Popover.Content>
+      </Portal>
+      <div
+        class="group relative isolate z-20 select-none rounded-md"
         classList={{
-          "opacity-90": selectedSong().path === song.path,
+          "outline outline-2 outline-accent": selectedSong().path === song.path,
         }}
-        src={song.bg}
-        group={group}
-      />
+        data-active={selectedSong().path === song.path}
+        ref={item}
+        data-url={song.bg}
+        onContextMenu={() => setLocalShow(true)}
+      >
+        <SongImage
+          class="absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-30 group-hover:opacity-90"
+          classList={{
+            "opacity-90": selectedSong().path === song.path,
+          }}
+          src={song.bg}
+          group={group}
+        />
 
-      <div class="z-20 flex min-h-[72px] flex-col justify-center overflow-hidden rounded-md bg-black/50 p-3">
-        <h3 class="text-shadow text-[22px] font-extrabold leading-7 shadow-black/60">
-          {song.title}
-        </h3>
-        <p class="text-base text-subtext">{song.artist}</p>
+        <div class="flex flex-row justify-between bg-black/50">
+          <div class="z-20 flex min-h-[72px] flex-col justify-center overflow-hidden rounded-md p-3">
+            <h3 class="text-shadow text-[22px] font-extrabold leading-7 shadow-black/60">
+              {song.title}
+            </h3>
+            <p class="text-base text-subtext">{song.artist}</p>
+          </div>
+
+          <Popover.Trigger class="opacity-0 transition-opacity group-hover:opacity-100">
+            <Button variant={"ghost"} size={"icon"} class="z-50 mr-1 rounded-lg">
+              <EllipsisVerticalIcon />
+            </Button>
+          </Popover.Trigger>
+        </div>
       </div>
-    </div>
+    </Popover>
   );
 };
 

@@ -4,17 +4,15 @@ import Impulse from "../../../lib/Impulse";
 import scrollIfNeeded from "../../../lib/tungsten/scroll-if-needed";
 import InfiniteScroller from "../../InfiniteScroller";
 import SongContextMenu from "../context-menu/SongContextMenu";
-import SongContextMenuItem from "../context-menu/SongContextMenuItem";
+import AddToPlaylist from "../context-menu/items/AddToPlaylist";
+import RemoveFromQueue from "../context-menu/items/RemoveFromQueue";
 import SongItem from "../song-item/SongItem";
 import { setSongQueueModalOpen } from "./song-queue.utils";
 import Button from "@renderer/components/button/Button";
-import { DeleteIcon, PlusIcon } from "lucide-solid";
 import { Component, createSignal, onCleanup, onMount } from "solid-js";
 
 const SongQueue: Component = () => {
   const [count, setCount] = createSignal(0);
-  const showSignal = createSignal(false);
-  const [song, setSong] = createSignal<Song>();
   const resetListing = new Impulse();
   const group = namespace.create(true);
   let view: HTMLDivElement | undefined;
@@ -109,31 +107,15 @@ const SongQueue: Component = () => {
               draggable={true}
               onSelect={() => window.api.request("queue::play", s.path)}
               onDrop={onDrop(s)}
-              showSignal={showSignal}
-              setSong={setSong}
-            ></SongItem>
+            >
+              <SongContextMenu>
+                <AddToPlaylist path={s.path} />
+                <RemoveFromQueue path={s.path} />
+              </SongContextMenu>
+            </SongItem>
           )}
         />
       </div>
-      <SongContextMenu show={showSignal}>
-        <SongContextMenuItem
-          onClick={() => {
-            console.log("todo");
-          }}
-        >
-          <p>Add to playlist</p>
-          <PlusIcon />
-        </SongContextMenuItem>
-
-        <SongContextMenuItem
-          onClick={() => {
-            window.api.request("queue::removeSong", song()?.path);
-          }}
-        >
-          <p>Remove from queue</p>
-          <DeleteIcon />
-        </SongContextMenuItem>
-      </SongContextMenu>
     </div>
   );
 };
