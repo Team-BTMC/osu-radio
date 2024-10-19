@@ -2,16 +2,16 @@ import { cn } from "../../lib/css.utils";
 import Bar from "../bar/Bar";
 import Dropdown from "../dropdown/Dropdown";
 import { changeAudioDevice, setVolume, volume } from "@renderer/components/song/song.utils";
-import { Volume1Icon, Volume2Icon, VolumeXIcon } from "lucide-solid";
+import { GlobeIcon, LucideIcon, Volume1Icon, Volume2Icon, VolumeXIcon } from "lucide-solid";
 import { Component, createEffect, createSignal, JSX, Match, onMount, Switch } from "solid-js";
 
 const Settings: Component = () => {
   return (
     <div class="flex flex-col gap-10 p-8">
-      <SettingsSection title="General" icon="ri-global-line">
+      <SettingsSection title="General" Icon={GlobeIcon}>
         Empty
       </SettingsSection>
-      <SettingsSection title="Audio" icon="ri-volume-up-line">
+      <SettingsSection title="Audio" Icon={Volume2Icon}>
         <AudioDeviceSetting />
         <GlobalVolumeSetting />
       </SettingsSection>
@@ -21,14 +21,14 @@ const Settings: Component = () => {
 
 type SettingsSectionProps = JSX.IntrinsicElements["div"] & {
   title: string;
-  icon: string;
+  Icon: LucideIcon;
 };
 
-const SettingsSection: Component<SettingsSectionProps> = ({ title, icon, children, ...rest }) => {
+const SettingsSection: Component<SettingsSectionProps> = ({ title, Icon, children, ...rest }) => {
   return (
     <div class={cn("flex flex-col gap-6", rest.class)}>
       <div class="flex items-center gap-3">
-        <i class={`text-subtext ${icon}`} />
+        <Icon class="text-text opacity-70" size={16} />
         <h3 class="text-base text-text">{title}</h3>
       </div>
       {children}
