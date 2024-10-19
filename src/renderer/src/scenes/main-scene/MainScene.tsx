@@ -171,13 +171,13 @@ const QueueModal: Component = () => {
 
   createEffect(() => {
     if (songQueueModalOpen()) {
-      document.addEventListener("mousedown", handleOutsideClick);
+      document.addEventListener("click", handleOutsideClick);
     } else {
-      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("click", handleOutsideClick);
     }
 
     onCleanup(() => {
-      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("click", handleOutsideClick);
     });
   });
 

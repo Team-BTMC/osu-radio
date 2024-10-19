@@ -18,3 +18,15 @@ const SongContextMenu: Component<SongContextMenuProps> = (props) => {
 };
 
 export default SongContextMenu;
+
+export function ignoreClickInContextMenu(fn: (evt: MouseEvent) => any): (evt: MouseEvent) => void {
+  return (evt: MouseEvent) => {
+    const t = evt.target;
+
+    if (!(t instanceof HTMLElement)) {
+      return;
+    }
+
+    fn(evt);
+  };
+}

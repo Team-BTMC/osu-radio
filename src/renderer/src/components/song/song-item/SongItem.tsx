@@ -2,6 +2,7 @@ import { ResourceID, Song } from "../../../../../@types";
 import draggable from "../../../lib/draggable/draggable";
 import SongHint from "../SongHint";
 import SongImage from "../SongImage";
+import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import { song as selectedSong } from "../song.utils";
 import { flip, offset } from "@floating-ui/dom";
 import Button from "@renderer/components/button/Button";
@@ -38,7 +39,7 @@ const SongItem: Component<SongItemProps> = ({
     }
 
     draggable(item, {
-      onClick: () => onSelect(song.path),
+      onClick: ignoreClickInContextMenu(() => onSelect(song.path)),
       onDrop: onDrop ?? (() => {}),
       createHint: SongHint,
       useOnlyAsOnClickBinder: !isDraggable || selectedSong().path === song.path,
@@ -86,7 +87,7 @@ const SongItem: Component<SongItemProps> = ({
           group={group}
         />
 
-        <div class="flex flex-row justify-between bg-black/50">
+        <div class="flex flex-row justify-between rounded-md bg-black/50">
           <div class="z-20 flex min-h-[72px] flex-col justify-center overflow-hidden rounded-md p-3">
             <h3 class="text-shadow text-[22px] font-extrabold leading-7 shadow-black/60">
               {song.title}
