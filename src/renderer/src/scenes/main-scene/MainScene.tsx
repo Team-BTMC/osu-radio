@@ -164,8 +164,14 @@ const QueueModal: Component = () => {
   let queueModal: HTMLDivElement | undefined;
 
   const handleOutsideClick = (event: MouseEvent) => {
-    if (queueModal && !queueModal.contains(event.target as Node)) {
-      toggleSongQueueModalOpen();
+    if (event.target instanceof HTMLElement) {
+      if (
+        queueModal &&
+        !queueModal.contains(event.target as Node) &&
+        event.target.closest(".popover-overlay") === null
+      ) {
+        toggleSongQueueModalOpen();
+      }
     }
   };
 

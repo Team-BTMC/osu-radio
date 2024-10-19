@@ -61,7 +61,8 @@ const SongItem: Component<SongItemProps> = ({
       <Portal>
         <Popover.Overlay />
         <Popover.Content
-          onClick={() => {
+          onClick={(e) => {
+            e.stopImmediatePropagation();
             setLocalShow(false);
           }}
         >
