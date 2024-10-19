@@ -3,16 +3,19 @@ import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-
 import { Tag } from "../../search/TagSelect";
 import { setSongsSearch } from "../song-list/song-list.utils";
 import SongListSearchOrderBy from "./SongListSearchOrderBy";
-import { Accessor, Component, Setter, Signal } from "solid-js";
+import SongListSearchTags, { TagMode } from "./SongListSearchTags";
+import { Accessor, Component, createSignal, Setter } from "solid-js";
 
 export type SearchProps = {
-  tags: Signal<Tag[]>;
   count: Accessor<number>;
   error: Accessor<Optional<SearchQueryError>>;
   setOrder: Setter<Order>;
+  setTags: Setter<Tag[]>;
 };
 
 const SongListSearch: Component<SearchProps> = (props) => {
+  const [selectedTags, setSelectedTags] = createSignal(new Map<string, TagMode>());
+
   // const [editable, setEditable] = createSignal<HTMLElement | undefined>();
   // const [doShowError, setDoShowError] = createSignal(false);
   // const [doShowSuggestion, setDoShowSuggestion] = createSignal(false);
@@ -61,6 +64,19 @@ const SongListSearch: Component<SearchProps> = (props) => {
   //   }
   // });
 
+  const handleValueChange = (tags: Map<string, TagMode>) => {
+    setSelectedTags(tags);
+
+    const searchFormattedTags = Array.from(
+      tags.entries(),
+      ([tagName, mode]): Tag => ({
+        name: tagName,
+        isSpecial: mode === "discart",
+      }),
+    );
+    props.setTags(searchFormattedTags);
+  };
+
   return (
     <div class="p-5">
       <div class="relative mb-4">
@@ -83,6 +99,7 @@ const SongListSearch: Component<SearchProps> = (props) => {
 
       <div class="flex items-center space-x-4">
         <SongListSearchOrderBy setOrder={props.setOrder} />
+        <SongListSearchTags value={selectedTags} onValueChange={handleValueChange} />
       </div>
     </div>
   );

@@ -17,8 +17,7 @@ export type SongViewProps = {
 };
 
 const SongList: Component<SongViewProps> = (props) => {
-  const tagsSignal = createSignal<Tag[]>([], { equals: false });
-  const [tags] = tagsSignal;
+  const [tags, setTags] = createSignal<Tag[]>([], { equals: false });
 
   const [order, setOrder] = createSignal<Order>({ option: "title", direction: "asc" });
   const [count, setCount] = createSignal(0);
@@ -75,7 +74,7 @@ const SongList: Component<SongViewProps> = (props) => {
   return (
     <div class="flex h-full flex-col">
       <div class="sticky top-0 z-10">
-        <SongListSearch tags={tagsSignal} setOrder={setOrder} count={count} error={searchError} />
+        <SongListSearch setTags={setTags} setOrder={setOrder} count={count} error={searchError} />
       </div>
 
       <div class="flex-grow overflow-y-auto p-5 py-0">
