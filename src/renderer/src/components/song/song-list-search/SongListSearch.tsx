@@ -3,6 +3,8 @@ import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-
 import { Tag } from "../../search/TagSelect";
 import { setSongsSearch } from "../song-list/song-list.utils";
 import SongListSearchOrderBy from "./SongListSearchOrderBy";
+import Button from "@renderer/components/button/Button";
+import { Input } from "@renderer/components/input/Input";
 import { Accessor, Component, Setter, Signal } from "solid-js";
 
 export type SearchProps = {
@@ -63,25 +65,29 @@ const SongListSearch: Component<SearchProps> = (props) => {
 
   return (
     <div class="p-5">
-      <div class="relative mb-4">
-        <input
-          class="h-10 w-full rounded-full bg-thin-material pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-accent"
-          type="text"
-          id="search_input"
-          placeholder="Type to search songs..."
-          onInput={(e) => {
-            setSongsSearch(e.target.value);
-          }}
-        />
-        <label
-          class="absolute left-3 top-1/2 -translate-y-1/2 transform text-text"
-          for="search_input"
-        >
-          <i class="ri-search-2-line" />
-        </label>
+      <div class="flex gap-2">
+        <div class="relative flex-1">
+          <Input
+            variant="outlined"
+            type="text"
+            id="search_input"
+            placeholder="Type to search songs..."
+            onInput={(e) => {
+              setSongsSearch(e.target.value);
+            }}
+          />
+          <label
+            class="absolute right-3.5 top-1/2 -translate-y-1/2 transform text-subtext"
+            for="search_input"
+          >
+            <i class="ri-search-2-line" />
+          </label>
+        </div>
+        <Button size="square" variant="outlined">
+          <i class="ri-filter-3-fill" />
+        </Button>
       </div>
-
-      <div class="flex items-center space-x-4">
+      <div class="mt-3 flex items-center space-x-4">
         <SongListSearchOrderBy setOrder={props.setOrder} />
       </div>
     </div>

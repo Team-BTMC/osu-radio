@@ -32,7 +32,7 @@ const MainScene: Component = () => {
         </div>
       </div>
 
-      <div class="pointer-events-none absolute inset-0 z-[-1] bg-black/90" />
+      <div class="pointer-events-none absolute inset-0 z-[-1] bg-black/80" />
     </Tabs>
   );
 };
