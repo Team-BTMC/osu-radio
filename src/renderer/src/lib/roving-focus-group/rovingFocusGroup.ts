@@ -35,7 +35,7 @@ export function useRovingFocusGroup(props: Params) {
       (node) => node.getAttribute(ITEM_DATA_ATTR) === currentStopId(),
     );
 
-    let direction = 0;
+    let newIndex = -1;
     switch (event.key) {
       case "ArrowUp":
       case "ArrowLeft": {
@@ -43,7 +43,7 @@ export function useRovingFocusGroup(props: Params) {
           return;
         }
 
-        direction = -1;
+        newIndex = currentlySelectedNodeIndex - 1;
         break;
       }
       case "ArrowDown":
@@ -52,7 +52,19 @@ export function useRovingFocusGroup(props: Params) {
           return;
         }
 
-        direction = 1;
+        newIndex = currentlySelectedNodeIndex + 1;
+        break;
+      }
+
+      case "End":
+      case "PageDown": {
+        newIndex = 0;
+        break;
+      }
+
+      case "Home":
+      case "PageUp": {
+        newIndex = orderedNodes.length - 1;
         break;
       }
 
@@ -60,11 +72,11 @@ export function useRovingFocusGroup(props: Params) {
         break;
     }
 
-    if (direction === 0) {
+    if (newIndex === -1) {
       return;
     }
 
-    const nextFocused = orderedNodes[currentlySelectedNodeIndex + direction];
+    const nextFocused = orderedNodes[newIndex];
     if (!canFocus(nextFocused)) {
       return;
     }
