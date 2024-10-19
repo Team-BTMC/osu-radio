@@ -8,6 +8,8 @@ import PlayNext from "../context-menu/items/PlayNext";
 import SongItem from "../song-item/SongItem";
 import SongListSearch from "../song-list-search/SongListSearch";
 import { songsSearch } from "./song-list.utils";
+import Tabs from "@renderer/components/tabs/Tabs";
+import { TABS } from "@renderer/scenes/main-scene/main.utils";
 import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 
 export type SongViewProps = {
@@ -73,8 +75,8 @@ const SongList: Component<SongViewProps> = (props) => {
   const group = namespace.create(true);
 
   return (
-    <div class="flex h-full flex-col">
-      <div class="sticky top-0 z-10 backdrop-blur-lg">
+    <Tabs.Content value={TABS.SONGS.value} class="flex h-full flex-col">
+      <div class="z-10">
         <SongListSearch tags={tagsSignal} setOrder={setOrder} count={count} error={searchError} />
       </div>
 
@@ -97,7 +99,7 @@ const SongList: Component<SongViewProps> = (props) => {
           )}
         />
       </div>
-    </div>
+    </Tabs.Content>
   );
 };
 

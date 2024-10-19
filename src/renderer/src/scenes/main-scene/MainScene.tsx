@@ -14,7 +14,7 @@ import { Accessor, Component, createEffect, createSignal, For, Setter } from "so
 const MainScene: Component = () => {
   return (
     <Tabs value={mainActiveTab} onValueChange={setMainActiveTab}>
-      <div class="main-scene flex h-screen flex-col overflow-hidden">
+      <div class="main-scene flex h-screen flex-col">
         <Nav />
         <main class="relative flex h-[calc(100vh-58px)]">
           <TabContent />
@@ -125,16 +125,13 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
 
 const TabContent: Component = () => {
   return (
-    <div class="h-full w-[480px] min-w-[320px] overflow-y-auto bg-regular-material/50 shadow-2xl">
-      <Tabs.Content value={TABS.SONGS.value}>
-        <SongList isAllSongs={true} />
-      </Tabs.Content>
+    <div class="h-full w-[480px] min-w-[320px] bg-regular-material/50 shadow-2xl">
+      <SongList isAllSongs={true} />
+
       <Tabs.Content value={TABS.SETTINGS.value}>
         <Settings />
       </Tabs.Content>
-      <Tabs.Content value={TABS.QUEUE.value}>
-        <SongQueue />
-      </Tabs.Content>
+      <SongQueue />
     </div>
   );
 };
