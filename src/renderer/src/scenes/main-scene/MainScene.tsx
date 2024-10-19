@@ -21,8 +21,6 @@ const MainScene: Component = () => {
           <div class="flex flex-1 items-center justify-center">
             <SongDetail />
           </div>
-
-          <QueueModal />
         </main>
 
         <div class="pointer-events-none absolute inset-0 z-[-1]">
