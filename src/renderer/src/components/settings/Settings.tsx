@@ -6,7 +6,7 @@ import { Component, createEffect, createSignal, JSX, onMount } from "solid-js";
 
 const Settings: Component = () => {
   return (
-    <div class="flex flex-col gap-10 p-8">
+    <div class="flex flex-col gap-10 px-5 py-8">
       <SettingsSection title="General" Icon={GlobeIcon}>
         Empty
       </SettingsSection>
