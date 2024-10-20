@@ -78,7 +78,6 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
         </Dropdown.Trigger>
         <Dropdown.List
           onValueChange={(newSelectedOption) => {
-            setIsOpen(false);
             setOption(newSelectedOption as OrderOptions);
             handlerOrderChanged();
           }}
@@ -86,6 +85,7 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
         >
           {orderOptions.map((option) => (
             <Dropdown.Item
+              onSelectedByClick={() => setIsOpen(false)}
               class="px-4 py-2 transition-colors duration-200 hover:bg-accent/20"
               value={option.value}
             >

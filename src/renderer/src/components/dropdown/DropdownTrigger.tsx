@@ -5,9 +5,9 @@ import { Component, JSX } from "solid-js";
 type Props = JSX.IntrinsicElements["button"];
 const DropdownTrigger: Component<Props> = (props) => {
   return (
-    <Popover.Trigger class="flex items-center gap-2 rounded-full border-solid border-stroke px-4 py-0.5 hover:bg-surface">
+    <Popover.Trigger class="focus-visible:ring-ring flex items-center gap-2 rounded-full border-solid border-stroke px-4 py-0.5 hover:bg-surface focus-visible:ring-2 focus-visible:ring-offset-2">
       <ChevronDownIcon size={20} class="text-subtext" />
-      <span class="text-base">{props.children}</span>
+      <span class="text-sm">{props.children}</span>
     </Popover.Trigger>
   );
 };
