@@ -1,5 +1,4 @@
 import { Result } from "../../../../@types";
-import "../../assets/css/notice/notice-container.css";
 import Impulse from "../../lib/Impulse";
 import { fail, ok } from "../../lib/rust-like-utils-client/Result";
 import { TokenNamespace } from "../../lib/tungsten/token";
@@ -95,18 +94,16 @@ const NoticeContainer = () => {
   });
 
   return (
-    <div class={"notice-container-wrapper"} ref={wrapper}>
-      <div class={"notice-container"}>
-        <For each={notices.filter((n) => n.notice.active !== false)}>
-          {(n) => (
-            <Notice
-              notice={n.notice}
-              updateGradient={n.updateGradient}
-              onMount={(e) => observer.observe(e)}
-            />
-          )}
-        </For>
-      </div>
+    <div class="fixed bottom-4 right-4 flex flex-col-reverse gap-2 max-h-[calc(100vh-2rem)] overflow-y-auto">
+      <For each={notices.filter((n) => n.notice.active !== false)}>
+        {(n) => (
+          <Notice
+            notice={n.notice}
+            updateGradient={n.updateGradient}
+            onMount={(e) => observer.observe(e)}
+          />
+        )}
+      </For>
     </div>
   );
 };
