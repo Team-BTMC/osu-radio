@@ -49,7 +49,7 @@ const SongControls: Component<SongControlsProps> = (props) => {
 
   return (
     <div class="flex w-full items-center gap-4" style={{ "--dynamic-color": props.averageColor }}>
-      <LeftPart averageColor={props.averageColor} />
+      <LeftPart/>
       <div class="flex flex-1 items-center justify-center gap-6">
         <Button
           size="icon"
@@ -77,6 +77,7 @@ const SongControls: Component<SongControlsProps> = (props) => {
             onClick={() => togglePlay()}
             disabled={disable()}
             title={playHint()}
+            style={{ "background-color": props.averageColor }}
           >
             <Show when={!isPlaying()} fallback={<PauseIcon fill="currentColor" size={20} />}>
               <PlayIcon fill="currentColor" size={20} />
@@ -112,7 +113,7 @@ const SongControls: Component<SongControlsProps> = (props) => {
 };
 
 // LeftPart component updated to include averageColor prop for styling
-const LeftPart = (props: { averageColor: string }) => {
+const LeftPart = () => {
   const [isHoveringVolume, setIsHoveringVolume] = createSignal(false);
   let isHoverintTimeoutId: NodeJS.Timeout;
 
@@ -152,7 +153,6 @@ const LeftPart = (props: { averageColor: string }) => {
             value={volume}
             onValueChange={setVolume}
             enableWheelSlide
-            style={{ "--bar-fill-color": props.averageColor }}  // Added dynamic color for volume bar
           >
             <Slider.Track class="h-1 flex-1 rounded bg-thick-material">
               <Slider.Range class="block h-1 rounded bg-white" />

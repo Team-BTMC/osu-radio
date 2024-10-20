@@ -32,7 +32,7 @@ const MainScene: Component = () => {
       <Nav />
       <main class="relative flex h-[calc(100vh-52px)]">
         <TabContent />
-        <div class="flex flex-1 items-center justify-center">
+        <div class="flex flex-1 items-center justify-center song-detail-gradient">
           <SongDetail />
         </div>
         <QueueModal />
