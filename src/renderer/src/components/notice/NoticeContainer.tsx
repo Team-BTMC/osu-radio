@@ -17,11 +17,13 @@ export function addNotice(notice: NoticeType): void {
   if (notice.id === undefined) {
     notice.id = namespace.create();
   }
-
   setNotices([
     ...notices,
     {
-      notice,
+      notice: {
+        ...notice,
+        variant: notice.variant || "neutral",
+      },
       visible: false,
     },
   ]);
@@ -78,7 +80,7 @@ window.api.listen("notify", (n: NoticeType) => {
 
 const NoticeContainer = () => {
   return (
-    <div class="fixed right-4 top-16 z-50 flex max-h-[calc(100vh-2rem)] flex-col gap-2 overflow-y-auto">
+    <div class="fixed right-4 top-16 z-50 flex flex-col gap-2 overflow-y-scroll w-96">
       <style>{`@keyframes shrinkWidth {
         from {
           width: 100%;

@@ -7,14 +7,14 @@ import { twMerge } from "tailwind-merge";
 
 const noticeStyles = cva(
   [
-    "group transform overflow-hidden rounded-xl border-1 bg-thick-material p-4 shadow-2xl transition-all duration-300 ease-in-out backdrop-blur-md",
+    "group transform overflow-hidden rounded-xl border border-stroke bg-thick-material p-4 shadow-2xl transition-all duration-300 ease-in-out backdrop-blur-md w-full",
   ],
   {
     variants: {
       variant: {
-        neutral: "border-stroke",
-        success: "border-green/20 bg-gradient-to-l from-green/10",
-        error: "border-red/20 bg-gradient-to-l from-red/10",
+        neutral: "bg-gradient-to-tl from-surface/10 via-transparent",
+        success: "bg-gradient-to-tl from-green/10 via-transparent",
+        error: " bg-gradient-to-tl from-red/10 via-transparent",
       },
     },
     defaultVariants: {
@@ -27,7 +27,7 @@ export type NoticeType = {
   id?: string;
   variant?: "neutral" | "success" | "error";
   title?: string;
-  content?: string;
+  description?: string;
   icon?: JSX.Element;
   active?: boolean;
 };
@@ -80,7 +80,7 @@ const Notice: Component<NoticeProps> = (props) => {
         {props.notice.icon && <div class="mr-3 mt-0.5 flex-shrink-0">{props.notice.icon}</div>}
         <div>
           {props.notice.title && <h3 class="mb-1 text-base font-semibold">{props.notice.title}</h3>}
-          {props.notice.content && <p class="text-sm text-subtext">{props.notice.content}</p>}
+          {props.notice.description && <p class="text-sm text-subtext">{props.notice.description}</p>}
         </div>
       </div>
 
