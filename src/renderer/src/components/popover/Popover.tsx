@@ -5,10 +5,13 @@ import "./styles.css";
 import {
   computePosition,
   ComputePositionReturn,
-  Middleware,
+  flip,
+  FlipOptions,
   offset,
   OffsetOptions,
   Placement,
+  shift,
+  ShiftOptions,
 } from "@floating-ui/dom";
 import useControllableState from "@renderer/lib/controllable-state";
 import { createSignal, createContext, useContext, ParentComponent, Accessor } from "solid-js";
@@ -17,11 +20,12 @@ export const DEFAULT_POPOVER_OPEN = false;
 
 export type Props = {
   offset?: OffsetOptions;
+  flip?: FlipOptions;
+  shift?: ShiftOptions;
   placement?: Placement;
   defaultProp?: boolean;
   isOpen?: Accessor<boolean>;
   onValueChange?: (newOpen: boolean) => void;
-  middlewares?: Middleware[];
 };
 
 export type Context = ReturnType<typeof useProviderValue>;
@@ -55,12 +59,10 @@ function useProviderValue(props: Props) {
       return;
     }
 
-    const localMiddlewares: Middleware[] = props.middlewares === undefined ? [] : props.middlewares;
-
     computePosition(trigger, content, {
       placement: props.placement,
       strategy: "fixed",
-      middleware: [offset(props.offset), ...localMiddlewares],
+      middleware: [offset(props.offset), shift(props.shift), flip(props.flip)],
     }).then(setPosition);
   };
 
