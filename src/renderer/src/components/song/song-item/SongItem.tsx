@@ -30,6 +30,7 @@ const SongItem: Component<SongItemProps> = ({
 }) => {
   let item: HTMLDivElement | undefined;
   const [localShow, setLocalShow] = createSignal(false);
+  const [mousePos, setMousePos] = createSignal<[number, number]>([0, 0]);
 
   onMount(() => {
     if (!item) {
@@ -53,9 +54,10 @@ const SongItem: Component<SongItemProps> = ({
       isOpen={localShow}
       onValueChange={setLocalShow}
       placement="right"
-      offset={{ crossAxis: 20 }}
-      shift={{ crossAxis: false }}
+      offset={{ crossAxis: 5, mainAxis: 5 }}
+      shift={{}}
       flip={{}}
+      mousePos={mousePos}
     >
       <Portal>
         <Popover.Overlay />
@@ -76,7 +78,10 @@ const SongItem: Component<SongItemProps> = ({
         data-active={selectedSong().path === song.path}
         ref={item}
         data-url={song.bg}
-        onContextMenu={() => setLocalShow(true)}
+        onContextMenu={(e) => {
+          setMousePos([e.clientX, e.clientY]);
+          setLocalShow(true);
+        }}
       >
         <SongImage
           class="absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-30 group-hover:opacity-90"
@@ -96,7 +101,10 @@ const SongItem: Component<SongItemProps> = ({
           </div>
 
           <div class="mr-2 grid aspect-square size-9 place-items-center rounded border-solid border-stroke bg-transparent p-1 text-text hover:bg-surface">
-            <Popover.Trigger class="opacity-0 transition-opacity group-hover:opacity-100">
+            <Popover.Trigger
+              class="opacity-0 transition-opacity group-hover:opacity-100"
+              classList={{ "opacity-100": localShow() }}
+            >
               <EllipsisVerticalIcon />
             </Popover.Trigger>
           </div>

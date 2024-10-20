@@ -27,7 +27,7 @@ const SongContextMenuItem: Component<SongContextMenuItemProps> = (props) => {
         "flex flex-row items-center justify-between gap-3 rounded-md bg-thick-material p-2 text-left transition-colors duration-200 hover:cursor-pointer hover:bg-accent/20 " +
         props.class
       }
-      // classList sometimes work sometimes it doesn't, should i use a Switch-Match
+      // classList sometimes work sometimes it doesn't, should i use a Switch-Match ?
       classList={{ "text-subtext/20 hover:bg-inherit hover:cursor-auto": buttonDisabled }}
       disabled={buttonDisabled}
     >

@@ -23,6 +23,7 @@ export type Props = {
   flip?: FlipOptions;
   shift?: ShiftOptions;
   placement?: Placement;
+  mousePos?: Accessor<[number, number]>;
   defaultProp?: boolean;
   isOpen?: Accessor<boolean>;
   onValueChange?: (newOpen: boolean) => void;
@@ -51,6 +52,23 @@ function useProviderValue(props: Props) {
     listenResize();
   };
 
+  let lastMousePos: [number, number];
+  const useCustomCoords = {
+    name: "useCustomCoords",
+    fn() {
+      if (
+        props.mousePos !== undefined &&
+        props.mousePos() !== lastMousePos &&
+        props.mousePos()[0] !== 0 &&
+        props.mousePos()[1] !== 0
+      ) {
+        lastMousePos = props.mousePos();
+        return { x: props.mousePos()[0], y: props.mousePos()[1] };
+      }
+      return {};
+    },
+  };
+
   const listenResize = () => {
     const trigger = triggerRef();
     const content = contentRef();
@@ -62,7 +80,12 @@ function useProviderValue(props: Props) {
     computePosition(trigger, content, {
       placement: props.placement,
       strategy: "fixed",
-      middleware: [offset(props.offset), shift(props.shift), flip(props.flip)],
+      middleware: [
+        props.mousePos !== undefined && useCustomCoords,
+        offset(props.offset),
+        props.shift && shift(props.shift),
+        props.flip && flip(props.flip),
+      ],
     }).then(setPosition);
   };
 
