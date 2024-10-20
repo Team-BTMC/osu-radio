@@ -1,13 +1,13 @@
 import { addNotice } from "../components/notice/NoticeContainer";
 import { Keyboard } from "../lib/Keyboard";
-import { mainActiveTab, TABS } from "@renderer/scenes/main-scene/main.utils";
+import { mainActiveTab, SIDEBAR_PAGES } from "@renderer/scenes/main-scene/main.utils";
 
 Keyboard.register({
   key: "F2",
   onPress: async () => {
     await window.api.request("queue::shuffle");
 
-    if (mainActiveTab() !== TABS.SONGS.value) {
+    if (mainActiveTab() !== SIDEBAR_PAGES.SONGS.value) {
       return;
     }
 

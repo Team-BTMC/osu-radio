@@ -1,35 +1,56 @@
 import SongDetail from "../../components/song/song-detail/SongDetail";
 import SongList from "../../components/song/song-list/SongList";
-import { mainActiveTab, setMainActiveTab, TABS } from "./main.utils";
-import "./styles.css";
+import { mainActiveTab, NAV_ITEMS, setMainActiveTab, SIDEBAR_PAGES } from "./main.utils";
 import Button from "@renderer/components/button/Button";
 import Settings from "@renderer/components/settings/Settings";
 import SongImage from "@renderer/components/song/SongImage";
-import SongQueue from "@renderer/components/song/song-queue/SongQueue";
 import { song } from "@renderer/components/song/song.utils";
 import Tabs from "@renderer/components/tabs/Tabs";
-import { Minimize2Icon, MinusIcon, SidebarIcon, SquareIcon, XIcon } from "lucide-solid";
-import { Accessor, Component, createEffect, createSignal, For, Setter } from "solid-js";
+import {
+  Layers3Icon,
+  Minimize2Icon,
+  MinusIcon,
+  SettingsIcon,
+  SidebarIcon,
+  SquareIcon,
+  XIcon,
+} from "lucide-solid";
+import { Accessor, Component, createEffect, createSignal, For, Setter, Show } from "solid-js";
 
 const MainScene: Component = () => {
   return (
     <Tabs value={mainActiveTab} onValueChange={setMainActiveTab}>
-      <div class="main-scene flex h-screen flex-col">
-        <Nav />
-        <main class="relative flex h-[calc(100vh-58px)]">
-          <TabContent />
-          <div class="flex flex-1 items-center justify-center">
-            <SongDetail />
-          </div>
-        </main>
+      <main class="relative flex h-screen">
+        <TabContent />
+        <div class="relative my-3 mr-3 flex flex-1 items-center justify-center rounded">
+          <SongDetail />
 
-        <div class="pointer-events-none absolute inset-0 z-[-1]">
-          <SongImage
-            src={song().bg}
-            instantLoad={true}
-            class="h-full w-full bg-cover blur-lg filter"
-          />
+          <Button
+            size="square"
+            class="absolute right-2 top-2 z-10 flex items-center gap-2"
+            variant="outlined"
+          >
+            <Layers3Icon size={20} />
+          </Button>
+
+          <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-lg bg-fixed">
+            <SongImage
+              src={song().bg}
+              instantLoad={true}
+              class="h-full w-full bg-cover bg-fixed opacity-20 filter"
+            />
+
+            <div class="pointer-events-none absolute inset-0 bg-black/20 backdrop-blur-lg" />
+          </div>
         </div>
+      </main>
+
+      <div class="pointer-events-none absolute inset-0 z-[-1]">
+        <SongImage
+          src={song().bg}
+          instantLoad={true}
+          class="h-full w-full bg-cover blur-lg filter"
+        />
       </div>
 
       <div class="pointer-events-none absolute inset-0 z-[-1] bg-black/80" />
@@ -60,22 +81,36 @@ const Nav: Component = () => {
 
   return (
     <nav
-      class="flex h-[58px] items-center gap-4 bg-regular-material/50"
-      style={os() === "darwin" ? { padding: "0px 0px 0px 95px" } : { padding: "0px 0px 0px 20px" }}
+      class="flex h-[64px] flex-shrink-0 items-center gap-4"
+      classList={{
+        "pl-[92px]": os() === "darwin",
+        "pl-4": os() !== "darwin",
+      }}
     >
       <Button size="icon" variant="ghost">
         <SidebarIcon />
       </Button>
-      <Tabs.List>
-        <For each={Object.values(TABS)}>
-          {({ label, value, Icon }) => (
-            <Tabs.Trigger value={value}>
-              <Icon size={20} />
-              <span>{label}</span>
-            </Tabs.Trigger>
-          )}
-        </For>
-      </Tabs.List>
+      <Show when={typeof os() !== "undefined"}>
+        <Tabs.List>
+          <For each={NAV_ITEMS}>
+            {({ label, value, Icon }) => (
+              <Tabs.Trigger value={value}>
+                <Icon size={20} />
+                <span>{label}</span>
+              </Tabs.Trigger>
+            )}
+          </For>
+        </Tabs.List>
+      </Show>
+
+      <Button
+        onClick={() => setMainActiveTab(SIDEBAR_PAGES.SETTINGS.value)}
+        class="ml-auto mr-5"
+        size="square"
+        variant={mainActiveTab() === SIDEBAR_PAGES.SETTINGS.value ? "secondary" : "outlined"}
+      >
+        <SettingsIcon size={20} />
+      </Button>
 
       {/* <div class="nav__queue ml-auto">
         <Button
@@ -125,13 +160,17 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
 
 const TabContent: Component = () => {
   return (
-    <div class="h-full w-[480px] min-w-[320px] bg-regular-material/50 shadow-2xl">
+    <div class="flex w-[480px] min-w-[320px] flex-col shadow-2xl">
+      <Nav />
       <SongList isAllSongs={true} />
 
-      <Tabs.Content value={TABS.SETTINGS.value}>
+      {/* <Tabs.Content value={TABS.SETTINGS.value}>
+        <Settings />
+      </Tabs.Content> */}
+      <Tabs.Content value={SIDEBAR_PAGES.SETTINGS.value}>
         <Settings />
       </Tabs.Content>
-      <SongQueue />
+      {/* <SongQueue /> */}
     </div>
   );
 };

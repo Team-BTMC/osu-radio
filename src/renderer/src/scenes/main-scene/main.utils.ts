@@ -8,7 +8,7 @@ export type Tab = {
   Icon: LucideIcon;
 };
 
-export const TABS = {
+export const SIDEBAR_PAGES = {
   SONGS: {
     label: "Songs",
     value: "songs",
@@ -31,5 +31,7 @@ export const TABS = {
   },
 } as const satisfies Record<string, Tab>;
 
-const [mainActiveTab, setMainActiveTab] = createSignal<Tab["value"]>(TABS.SONGS.value);
+export const NAV_ITEMS: Tab[] = [SIDEBAR_PAGES.SONGS, SIDEBAR_PAGES.PLAYLISTS] as const;
+
+const [mainActiveTab, setMainActiveTab] = createSignal<Tab["value"]>(SIDEBAR_PAGES.SONGS.value);
 export { mainActiveTab, setMainActiveTab };

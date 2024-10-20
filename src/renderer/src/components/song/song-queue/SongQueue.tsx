@@ -5,8 +5,6 @@ import scrollIfNeeded from "../../../lib/tungsten/scroll-if-needed";
 import InfiniteScroller from "../../InfiniteScroller";
 import SongContextMenuItem from "../context-menu/SongContextMenuItem";
 import SongItem from "../song-item/SongItem";
-import Tabs from "@renderer/components/tabs/Tabs";
-import { TABS } from "@renderer/scenes/main-scene/main.utils";
 import { Component, createSignal, onCleanup, onMount } from "solid-js";
 
 const SongQueue: Component = () => {
@@ -77,7 +75,7 @@ const SongQueue: Component = () => {
   });
 
   return (
-    <Tabs.Content value={TABS.QUEUE.value} ref={view} class="flex h-full flex-col">
+    <div ref={view} class="flex h-full flex-col">
       <div class="sticky top-0 z-10 flex items-center justify-between px-5 pb-2 pt-5">
         <h2 class="text-sm font-bold">
           <span>Next songs on the queue</span>
@@ -109,7 +107,7 @@ const SongQueue: Component = () => {
           )}
         />
       </div>
-    </Tabs.Content>
+    </div>
   );
 };
 

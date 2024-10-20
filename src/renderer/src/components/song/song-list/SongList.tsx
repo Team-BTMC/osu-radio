@@ -9,7 +9,7 @@ import SongItem from "../song-item/SongItem";
 import SongListSearch from "../song-list-search/SongListSearch";
 import { songsSearch } from "./song-list.utils";
 import Tabs from "@renderer/components/tabs/Tabs";
-import { TABS } from "@renderer/scenes/main-scene/main.utils";
+import { SIDEBAR_PAGES } from "@renderer/scenes/main-scene/main.utils";
 import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 
 export type SongViewProps = {
@@ -75,7 +75,7 @@ const SongList: Component<SongViewProps> = (props) => {
   const group = namespace.create(true);
 
   return (
-    <Tabs.Content value={TABS.SONGS.value} class="flex h-full flex-col">
+    <Tabs.Content value={SIDEBAR_PAGES.SONGS.value}>
       <div class="z-10">
         <SongListSearch tags={tagsSignal} setOrder={setOrder} count={count} error={searchError} />
       </div>
@@ -88,7 +88,7 @@ const SongList: Component<SongViewProps> = (props) => {
           apiInitData={payload()}
           setCount={setCount}
           reset={resetListing}
-          fallback={<div class="py-8 text-center text-text">No songs...</div>}
+          fallback={<div class="py-8 text-center text-lg uppercase text-subtext">No songs</div>}
           builder={(s) => (
             <SongItem song={s} group={group} onSelect={createQueue}>
               <PlayNext path={s.path} />

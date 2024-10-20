@@ -1,20 +1,14 @@
 import { useTabs } from "./Tabs";
-import { Component, createMemo, Show, splitProps } from "solid-js";
-import { JSX } from "solid-js/jsx-runtime";
+import { createMemo, ParentComponent, Show } from "solid-js";
 
-export type Props = JSX.IntrinsicElements["div"] & {
+export type Props = {
   value: string;
 };
-export const TabsContent: Component<Props> = (_props) => {
-  const [props, rest] = splitProps(_props, ["value"]);
+export const TabsContent: ParentComponent<Props> = (props) => {
   const state = useTabs();
   const isSelected = createMemo(() => {
     return state.value() === props.value;
   });
 
-  return (
-    <Show when={isSelected()}>
-      <div {...rest} />
-    </Show>
-  );
+  return <Show when={isSelected()}>{props.children}</Show>;
 };

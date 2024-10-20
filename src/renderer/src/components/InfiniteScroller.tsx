@@ -223,7 +223,7 @@ const InfiniteScroller: Component<InfinityScrollerProps> = (props) => {
   });
 
   return (
-    <div class={"list flex flex-col gap-4 py-4"} ref={container} {...rest}>
+    <div class="flex flex-col gap-4 py-4" ref={container} {...rest}>
       <Show when={show() === true} fallback={props.fallback ?? <div>No items...</div>}>
         <For each={elements()}>{(componentProps) => props.builder(componentProps)}</For>
       </Show>

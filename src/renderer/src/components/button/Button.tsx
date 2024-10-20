@@ -12,7 +12,7 @@ const buttonStyles = cva(
         primary: "bg-text text-thick-material hover:bg-text/80",
         secondary: "bg-surface text-text ring-inset ring-1 ring-stroke hover:bg-surface/40",
         outlined: "bg-transparent border-stroke text-text hover:bg-surface border border-solid",
-        ghost: "rounded-full border-none text-xl hover:bg-surface",
+        ghost: "rounded-full border-none  hover:bg-surface",
         link: "bg-transparent text-text hover:underline text-decoration-2 underline-offset-2",
       },
       size: {
