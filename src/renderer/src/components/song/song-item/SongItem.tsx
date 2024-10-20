@@ -5,6 +5,7 @@ import SongImage from "../SongImage";
 import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import { song as selectedSong } from "../song.utils";
 import { Component, createSignal, onMount } from "solid-js";
+import { useColorExtractor } from "../colorExtractor"; // Import the color hook
 
 type SongItemProps = {
   song: Song;
@@ -20,32 +21,29 @@ const SongItem: Component<SongItemProps> = ({
   group,
   onSelect,
   song,
-  children,
   draggable: isDraggable,
   onDrop,
   selectable,
 }) => {
-  const showSignal = createSignal(false);
-  const [, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
   let item: HTMLDivElement | undefined;
+  const [, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
 
-  const showMenu = (evt: MouseEvent) => {
-    if (children === undefined) {
-      showSignal[1](false);
-      return;
-    }
+  const { extractColorFromImage } = useColorExtractor();
+  const songColor = extractColorFromImage(song);
 
-    setCoords([evt.clientX, evt.clientY]);
-    showSignal[1](true);
-  };
+  // Build gradient style using songColor
+  const gradientStyle = () => ({
+    background: `linear-gradient(to right, ${songColor()}, transparent)`,
+  });
 
   onMount(() => {
-    if (!item) {
-      return;
-    }
+    if (!item) return;
 
+    // Initialize draggable functionality
     draggable(item, {
-      onClick: ignoreClickInContextMenu(() => onSelect(song.path)),
+      onClick: ignoreClickInContextMenu(() => {
+        onSelect(song.path);
+      }),
       onDrop: onDrop ?? (() => {}),
       createHint: SongHint,
       useOnlyAsOnClickBinder: !isDraggable || selectedSong().path === song.path,
@@ -56,6 +54,7 @@ const SongItem: Component<SongItemProps> = ({
     }
   });
 
+
   return (
     <div
       class="group relative isolate select-none rounded-md"
@@ -65,7 +64,8 @@ const SongItem: Component<SongItemProps> = ({
       data-active={selectedSong().path === song.path}
       ref={item}
       data-url={song.bg}
-      onContextMenu={showMenu}
+      onContextMenu={(evt) => setCoords([evt.clientX, evt.clientY])}
+      style={gradientStyle()} // Apply the gradient background using inline styles
     >
       <SongImage
         class="absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-30 group-hover:opacity-90"
@@ -75,7 +75,6 @@ const SongItem: Component<SongItemProps> = ({
         src={song.bg}
         group={group}
       />
-
       <div class="flex min-h-[72px] flex-col justify-center overflow-hidden rounded-md bg-black/50 p-3">
         <h3 class="text-shadow text-[22px] font-extrabold leading-7 shadow-black/60">
           {song.title}

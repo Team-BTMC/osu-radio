@@ -1,4 +1,14 @@
 .main-scene {
+
+  .song-detail-gradient {
+    background-image: linear-gradient(
+      to top right,
+      rgba(var(--extracted-color-rgb), 0.3) 0%,
+      rgba(var(--extracted-color-rgb), 0) 50%
+    );
+    background-blend-mode: overlay;
+  }
+
   .nav {
     display: flex;
     align-items: center;
@@ -60,5 +70,6 @@
       margin-left: auto;
       -webkit-app-region: no-drag;
     }
+
   }
 }
