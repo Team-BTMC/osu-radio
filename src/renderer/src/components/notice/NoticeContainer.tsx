@@ -2,16 +2,19 @@ import { Result } from "../../../../@types";
 import { fail, ok } from "../../lib/rust-like-utils-client/Result";
 import { TokenNamespace } from "../../lib/tungsten/token";
 import Notice, { NoticeType } from "./Notice";
-import { For } from "solid-js";
+import { For, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 
 type NoticeExtended = {
   notice: NoticeType;
   visible: boolean;
+  hovered: boolean;
+  rect: DOMRect | null;
 };
 
 const [notices, setNotices] = createStore<NoticeExtended[]>([]);
 const namespace = new TokenNamespace();
+const [hoveredNotice, setHoveredNotice] = createSignal<string | null>(null);
 
 export function addNotice(notice: NoticeType): void {
   if (notice.id === undefined) {
@@ -25,6 +28,8 @@ export function addNotice(notice: NoticeType): void {
         variant: notice.variant || "neutral",
       },
       visible: false,
+      hovered: false,
+      rect: null,
     },
   ]);
 }
@@ -69,6 +74,8 @@ window.api.listen("notify", (n: NoticeType) => {
     {
       notice: n,
       visible: false,
+      hovered: false,
+      rect: null,
     },
   ]);
 });
@@ -78,19 +85,44 @@ const NoticeContainer = () => {
     hideNotice(id);
   };
 
+  const handleHover = (id: string, isHovering: boolean, rect: DOMRect | null) => {
+    setNotices((notice) => notice.notice.id === id, "hovered", isHovering);
+    setNotices((notice) => notice.notice.id === id, "rect", rect);
+    setHoveredNotice(isHovering ? id : null);
+  };
+
   return (
     <div class="fixed right-4 top-16 z-50 flex w-96 flex-col gap-0">
-      <style>{`@keyframes shrinkWidth {
-        from {
-          width: 100%;
+      <style>{`
+        @keyframes shrinkWidth {
+          from {
+            width: 100%;
+          }
+          to {
+            width: 0%;
+          }
         }
-        to {
-          width: 0%;
-        }
-      }`}</style>
+      `}</style>
       <For each={notices.filter((n) => n.notice.active !== false)}>
         {(n) => (
-          <Notice notice={n.notice} onMount={(e) => observer.observe(e)} onRemove={handleRemove} />
+          <div
+            class={`transition-all duration-300 ease-in-out ${
+              n.hovered ? "z-50" : hoveredNotice() ? "blur-sm" : ""
+            }`}
+            style={{
+              position: n.hovered ? "fixed" : "relative",
+              left: n.hovered && n.rect ? `${n.rect.left}px` : "auto",
+              top: n.hovered && n.rect ? `${n.rect.top - 8}px` : "auto",
+              width: n.hovered && n.rect ? `${n.rect.width}px` : "auto",
+            }}
+          >
+            <Notice
+              notice={n.notice}
+              onMount={(e) => observer.observe(e)}
+              onRemove={handleRemove}
+              onHover={handleHover}
+            />
+          </div>
         )}
       </For>
     </div>

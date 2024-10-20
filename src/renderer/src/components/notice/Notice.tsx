@@ -35,6 +35,7 @@ type NoticeProps = {
   notice: NoticeType;
   onMount: (notice: HTMLElement) => any;
   onRemove: (id: string) => void;
+  onHover: (id: string, isHovering: boolean, rect: DOMRect | null) => void;
 };
 
 const NOTICE_DURATION = 3000; // 3 seconds
@@ -43,6 +44,13 @@ const ANIMATION_DURATION = 300; // 300ms for enter/exit animations
 const Notice: Component<NoticeProps> = (props) => {
   const [isVisible, setIsVisible] = createSignal(false);
   const [isRemoving, setIsRemoving] = createSignal(false);
+  const [isPaused, setIsPaused] = createSignal(false);
+  const [remainingTime, setRemainingTime] = createSignal(NOTICE_DURATION);
+
+  let noticeRef: HTMLDivElement | undefined;
+  let progressBarRef: HTMLDivElement | undefined;
+  let timeoutId: number | NodeJS.Timeout | undefined;
+  let startTime: number;
 
   const removeNotice = () => {
     setIsRemoving(true);
@@ -51,21 +59,64 @@ const Notice: Component<NoticeProps> = (props) => {
     }, ANIMATION_DURATION);
   };
 
+  const updateTimeout = () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    if (remainingTime() > 0) {
+      timeoutId = setTimeout(() => {
+        if (!isPaused()) {
+          removeNotice();
+        }
+      }, remainingTime());
+    }
+  };
+
+  const handleMouseEnter = () => {
+    setIsPaused(true);
+    if (noticeRef) {
+      const rect = noticeRef.getBoundingClientRect();
+      props.onHover(props.notice.id!, true, rect);
+    }
+    if (progressBarRef) {
+      progressBarRef.style.animationPlayState = "paused";
+    }
+    setRemainingTime((prev) => prev - (Date.now() - startTime));
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsPaused(false);
+    props.onHover(props.notice.id!, false, null);
+    if (progressBarRef) {
+      progressBarRef.style.animationPlayState = "running";
+    }
+    startTime = Date.now();
+    updateTimeout();
+  };
+
   onMount(() => {
     setTimeout(() => setIsVisible(true), 50); // Delay to trigger enter animation
-    setTimeout(removeNotice, NOTICE_DURATION);
+    startTime = Date.now();
+    updateTimeout();
   });
 
   return (
     <div
+      ref={noticeRef}
       class={twMerge(
         noticeStyles({ variant: props.notice.variant }),
         "transition-all duration-300 ease-in-out",
         isVisible() ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 blur-sm",
         isRemoving() ? "my-0 max-h-0 py-0 opacity-0 blur-sm" : "my-2 max-h-32",
+        isPaused() ? "z-50" : "z-auto",
       )}
       data-id={props.notice.id}
-      ref={(el) => props.onMount(el)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       <Button
         variant="outlined"
@@ -93,8 +144,8 @@ const Notice: Component<NoticeProps> = (props) => {
           </Show>
         </div>
       </div>
-
       <div
+        ref={progressBarRef}
         class="absolute bottom-0 left-0 h-0.5 rounded-full bg-overlay transition-all ease-linear"
         style={{
           animation: `shrinkWidth ${NOTICE_DURATION}ms linear forwards`,
