@@ -1,6 +1,7 @@
 import SongDetail from "../../components/song/song-detail/SongDetail";
 import SongList from "../../components/song/song-list/SongList";
 import { mainActiveTab, NAV_ITEMS, setMainActiveTab, SIDEBAR_PAGES } from "./main.utils";
+import "./styles.css";
 import Button from "@renderer/components/button/Button";
 import Settings from "@renderer/components/settings/Settings";
 import SongImage from "@renderer/components/song/SongImage";
@@ -15,31 +16,46 @@ import {
   SquareIcon,
   XIcon,
 } from "lucide-solid";
-import { Accessor, Component, createEffect, createSignal, For, Setter, Show } from "solid-js";
+import {
+  Accessor,
+  Component,
+  createEffect,
+  createSignal,
+  For,
+  onMount,
+  Setter,
+  Show,
+} from "solid-js";
+
+const [os, setOs] = createSignal<NodeJS.Platform>();
 
 const MainScene: Component = () => {
+  onMount(async () => {
+    const fetchOS = async () => {
+      return await window.api.request("os::platform");
+    };
+    setOs(await fetchOS());
+  });
+
   return (
     <Tabs value={mainActiveTab} onValueChange={setMainActiveTab}>
-      <main class="relative flex h-screen">
+      <main
+        class="main-scene relative h-screen"
+        classList={{
+          "windows-grid": os() === "win32",
+          "mac-grid": os() === "darwin",
+        }}
+      >
+        <Nav />
         <TabContent />
-        <div class="relative my-3 mr-3 flex flex-1 items-center justify-center rounded">
+        <div class="song relative mb-4 mr-4 mt-2 flex flex-1 items-center justify-center">
           <SongDetail />
-
-          <Button
-            size="square"
-            class="absolute right-2 top-2 z-10 flex items-center gap-2"
-            variant="outlined"
-          >
-            <Layers3Icon size={20} />
-          </Button>
-
-          <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-lg bg-fixed">
+          <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-xl bg-fixed">
             <SongImage
               src={song().bg}
               instantLoad={true}
               class="h-full w-full bg-cover bg-fixed opacity-20 filter"
             />
-
             <div class="pointer-events-none absolute inset-0 bg-black/20 backdrop-blur-lg" />
           </div>
         </div>
@@ -59,21 +75,14 @@ const MainScene: Component = () => {
 };
 
 const Nav: Component = () => {
-  const [os, setOs] = createSignal<NodeJS.Platform>();
   const [maximized, setMaximized] = createSignal<boolean>(false);
 
   createEffect(async () => {
-    const fetchOS = async () => {
-      return await window.api.request("os::platform");
-    };
-
     const fetchMaximized = async () => {
       return await window.api.request("window::isMaximized");
     };
 
-    setOs(await fetchOS());
     setMaximized(await fetchMaximized());
-
     window.api.listen("window::maximizeChange", (maximized: boolean) => {
       setMaximized(maximized);
     });
@@ -81,7 +90,7 @@ const Nav: Component = () => {
 
   return (
     <nav
-      class="flex h-[64px] flex-shrink-0 items-center gap-4"
+      class="nav flex flex-shrink-0 items-center"
       classList={{
         "pl-[92px]": os() === "darwin",
         "pl-4": os() !== "darwin",
@@ -91,7 +100,7 @@ const Nav: Component = () => {
         <SidebarIcon />
       </Button>
       <Show when={typeof os() !== "undefined"}>
-        <Tabs.List>
+        <Tabs.List class="ml-4">
           <For each={NAV_ITEMS}>
             {({ label, value, Icon }) => (
               <Tabs.Trigger value={value}>
@@ -105,11 +114,15 @@ const Nav: Component = () => {
 
       <Button
         onClick={() => setMainActiveTab(SIDEBAR_PAGES.SETTINGS.value)}
-        class="ml-auto mr-5"
+        class="ml-auto"
         size="square"
         variant={mainActiveTab() === SIDEBAR_PAGES.SETTINGS.value ? "secondary" : "outlined"}
       >
         <SettingsIcon size={20} />
+      </Button>
+
+      <Button size="square" variant="outlined">
+        <Layers3Icon size={20} />
       </Button>
 
       {/* <div class="nav__queue ml-auto">
@@ -132,7 +145,7 @@ const Nav: Component = () => {
 
 function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Setter<boolean> }) {
   return (
-    <div class="nav-window-controls">
+    <div>
       <button
         onclick={async () => window.api.request("window::minimize")}
         class="nav-window-control"
@@ -160,8 +173,7 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
 
 const TabContent: Component = () => {
   return (
-    <div class="flex w-[480px] min-w-[320px] flex-col shadow-2xl">
-      <Nav />
+    <div class="sidebar flex w-[480px] min-w-[320px] flex-col shadow-2xl">
       <SongList isAllSongs={true} />
 
       {/* <Tabs.Content value={TABS.SETTINGS.value}>

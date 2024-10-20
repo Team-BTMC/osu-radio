@@ -1,64 +1,28 @@
 .main-scene {
+  display: grid;
+  &.windows-grid {
+    padding-top: 8px;
+    grid-template-areas:
+      "nav     nav"
+      "sidebar song";
+    grid-template-columns: auto 1fr;
+    grid-template-rows: 50px calc(100vh - 58px);
+  }
+
+  &.mac-grid {
+    grid-template-areas:
+      "nav     song"
+      "sidebar song";
+  }
+
   .nav {
-    display: flex;
-    align-items: center;
-    height: 52px;
-    padding: 0px 20px;
-    background: rgba(var(--color-thick-material), 0.95);
-    gap: 4px;
+    grid-area: nav;
     -webkit-app-region: drag;
-
-    .nav-window-controls {
-      height: 100%;
-      display: flex;
-      -webkit-app-region: no-drag;
-      padding-left: 5px;
-    }
-
-    .nav-window-control {
-      width: 45px;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .nav-window-control:hover {
-      background: rgba(var(--color-surface), 0.5);
-    }
-
-    .nav-window-control.close:hover {
-      background: hsl(0, 69%, 50%);
-    }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 4px 16px;
-      border-radius: 8px;
-      /* Will be phased out in new new ui */
-      -webkit-app-region: no-drag;
-
-      &:is(:hover, :focus) {
-        background: rgba(var(--color-surface), 0.2);
-      }
-
-      &[data-selected="true"] {
-        background: var(var(--color-surface), 0.5);
-        .nav-item__icon {
-          color: rgba(var(--color-text), 1);
-        }
-
-        .nav-item__text {
-          color: var(var(--color-text), 1);
-        }
-      }
-    }
-
-    .nav__queue {
-      margin-left: auto;
-      -webkit-app-region: no-drag;
-    }
+  }
+  .song {
+    grid-area: song;
+  }
+  .sidebar {
+    grid-area: sidebar;
   }
 }
