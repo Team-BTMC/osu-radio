@@ -11,15 +11,19 @@ import {
   handleSeekEnd,
 } from "@renderer/components/song/song.utils";
 import { Component, createMemo, Show } from "solid-js";
+import { useSongColor } from "../SongColor"; // Import the color hook
 
 const SongDetail: Component = () => {
+  const { averageColor, handleImageLoad } = useSongColor(); // Use the color hook
+
   return (
-    <div class="flex h-full w-full max-w-[800px] flex-col p-8">
+    <div class="flex h-full w-full max-w-[800px] flex-col p-8" style={{ "--dynamic-color": averageColor() }}>
       <div class="mb-8 grid flex-grow place-items-center">
         <SongImage
           src={song().bg}
           instantLoad={true}
           class="size-80 rounded-lg bg-cover bg-center object-cover shadow-lg"
+          onImageLoad={handleImageLoad} // Pass the image load handler to SongImage
         />
       </div>
 
@@ -29,14 +33,14 @@ const SongDetail: Component = () => {
           <span class="text-lg">{song().artist}</span>
         </div>
 
-        <ProgressBar />
-        <SongControls />
+        <ProgressBar averageColor={averageColor()} /> {/* Pass averageColor to ProgressBar */}
+        <SongControls averageColor={averageColor()} /> {/* Pass averageColor to SongControls */}
       </div>
     </div>
   );
 };
 
-const ProgressBar = () => {
+const ProgressBar = (props: { averageColor: string }) => {
   const currentValue = createMemo(() => {
     return timestamp() / (duration() !== 0 ? duration() : 1);
   });
@@ -51,6 +55,7 @@ const ProgressBar = () => {
       onValueStart={handleSeekStart}
       onValueCommit={handleSeekEnd}
       animate
+      style={{ "--bar-fill-color": props.averageColor }} // Use dynamic color for progress bar
     >
       <Slider.Track class="flex h-7 items-center rounded-xl bg-thick-material p-1">
         <Slider.Range class="block h-5 rounded-l-lg bg-surface" />
