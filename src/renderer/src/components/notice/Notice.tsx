@@ -1,4 +1,3 @@
-
 import Button from "../button/Button";
 import { cva } from "class-variance-authority";
 import { XIcon } from "lucide-solid";
@@ -120,7 +119,7 @@ const Notice: Component<NoticeProps> = (props) => {
         ref={progressBarRef}
         class="absolute bottom-0 left-0 h-0.5 rounded-full bg-overlay transition-all ease-linear"
         style={{
-          "width": `${(timeLeft() / NOTICE_DURATION) * 100}%`,
+          width: `${(timeLeft() / NOTICE_DURATION) * 100}%`,
         }}
       ></div>
     </div>

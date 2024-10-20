@@ -1,4 +1,3 @@
-
 import { Result } from "../../../../@types";
 import { fail, ok } from "../../lib/rust-like-utils-client/Result";
 import { TokenNamespace } from "../../lib/tungsten/token";
@@ -71,7 +70,11 @@ const NoticeContainer = () => {
   };
 
   return (
-    <div class="fixed right-4 top-16 z-50 flex w-96 flex-col gap-0" onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)}>
+    <div
+      class="fixed right-4 top-16 z-50 flex w-96 flex-col gap-0"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       <For each={notices.filter((n) => n.notice.active !== false)}>
         {(n) => (
           <Notice
