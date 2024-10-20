@@ -10,7 +10,7 @@ import PlayNext from "../context-menu/items/PlayNext";
 import SongItem from "../song-item/SongItem";
 import SongListSearch from "../song-list-search/SongListSearch";
 import { songsSearch } from "./song-list.utils";
-import { Component, createEffect, createSignal, onCleanup, onMount, Show } from "solid-js";
+import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 
 export type SongViewProps = {
   isAllSongs?: boolean;
@@ -99,9 +99,7 @@ const SongList: Component<SongViewProps> = (props) => {
                 onSelect={createQueue}
                 contextMenu={
                   <SongContextMenu>
-                    <Show when={isQueueExist() === true}>
-                      <PlayNext path={s.path} />
-                    </Show>
+                    <PlayNext path={s.path} disabled={!isQueueExist()} />
                     <AddToPlaylist path={s.path} />
                   </SongContextMenu>
                 }

@@ -5,6 +5,7 @@ import { Component } from "solid-js";
 
 type SongPlayNextProps = {
   path: Song["path"] | undefined;
+  disabled: boolean;
 };
 
 const PlayNext: Component<SongPlayNextProps> = (props) => {
@@ -15,6 +16,7 @@ const PlayNext: Component<SongPlayNextProps> = (props) => {
           window.api.request("queue::playNext", props.path);
         }
       }}
+      disabled={props.disabled}
     >
       <p>Play next</p>
       <ListStartIcon />

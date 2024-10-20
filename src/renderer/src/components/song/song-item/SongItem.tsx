@@ -53,7 +53,7 @@ const SongItem: Component<SongItemProps> = ({
       isOpen={localShow}
       onValueChange={setLocalShow}
       placement="right"
-      offset={{ crossAxis: 30, mainAxis: 10 }}
+      offset={{ crossAxis: 20 }}
       shift={{ crossAxis: false }}
       flip={{}}
     >
