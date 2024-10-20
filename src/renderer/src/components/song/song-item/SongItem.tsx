@@ -5,6 +5,7 @@ import SongImage from "../SongImage";
 import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import { song as selectedSong } from "../song.utils";
 import { Component, createSignal, onMount } from "solid-js";
+import { useSongColor } from "../SongColor"; // Import the color hook
 
 type SongItemProps = {
   song: Song;
@@ -28,6 +29,8 @@ const SongItem: Component<SongItemProps> = ({
   const showSignal = createSignal(false);
   const [, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
   let item: HTMLDivElement | undefined;
+
+  const { averageColor, handleImageLoad } = useSongColor(); // Use the color extraction
 
   const showMenu = (evt: MouseEvent) => {
     if (children === undefined) {
@@ -66,6 +69,7 @@ const SongItem: Component<SongItemProps> = ({
       ref={item}
       data-url={song.bg}
       onContextMenu={showMenu}
+      style={{ backgroundColor: averageColor() }} // Correctly using camelCase for backgroundColor
     >
       <SongImage
         class="absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-30 group-hover:opacity-90"
@@ -74,6 +78,7 @@ const SongItem: Component<SongItemProps> = ({
         }}
         src={song.bg}
         group={group}
+        onImageLoad={handleImageLoad} // Pass the image load handler for color extraction
       />
 
       <div class="flex min-h-[72px] flex-col justify-center overflow-hidden rounded-md bg-black/50 p-3">
