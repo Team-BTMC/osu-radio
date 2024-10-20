@@ -22,6 +22,7 @@ import {
   JSXElement,
   Match,
   onCleanup,
+  onMount,
   Setter,
   Show,
   Switch,
@@ -55,7 +56,7 @@ const Nav: Component = () => {
   const [os, setOs] = createSignal<NodeJS.Platform>();
   const [maximized, setMaximized] = createSignal<boolean>(false);
 
-  createEffect(async () => {
+  onMount(async () => {
     const fetchOS = async () => {
       return await window.api.request("os::platform");
     };
@@ -66,10 +67,17 @@ const Nav: Component = () => {
 
     setOs(await fetchOS());
     setMaximized(await fetchMaximized());
+  });
 
-    window.api.listen("window::maximizeChange", (maximized: boolean) => {
+  createEffect(() => {
+    const resizeListener = (maximized: boolean) => {
       setMaximized(maximized);
-    });
+    };
+
+    window.api.listen("window::maximizeChange", resizeListener);
+    return () => {
+      window.api.removeListener("window::maximizeChange", resizeListener);
+    };
   });
 
   return (
@@ -103,13 +111,13 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
   return (
     <div class="nav-window-controls">
       <button
-        onclick={async () => window.api.request("window::minimize")}
+        onClick={async () => window.api.request("window::minimize")}
         class="nav-window-control"
       >
         <MinusIcon size={20} />
       </button>
       <button
-        onclick={async () => {
+        onClick={async () => {
           window.api.request("window::maximize");
           props.setMaximized(!props.maximized());
         }}
@@ -118,7 +126,7 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
         {props.maximized() ? <Minimize2Icon size={20} /> : <SquareIcon size={18} />}
       </button>
       <button
-        onclick={async () => window.api.request("window::close")}
+        onClick={async () => window.api.request("window::close")}
         class="nav-window-control close"
       >
         <XIcon size={20} />
@@ -130,19 +138,19 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
 type NavItemProps = Pick<Tab, "value" | "Icon"> & {
   children: JSXElement;
 };
-const NavItem: Component<NavItemProps> = ({ children, value, Icon }) => {
+const NavItem: Component<NavItemProps> = (props) => {
   return (
     <button
-      class={`nav-item flex items-center gap-4 rounded-sm px-4 py-1 hover:bg-surface ${mainActiveTab() === value ? "bg-surface" : ""}`}
-      onclick={() => setMainActiveTab(value)}
+      class={`nav-item flex items-center gap-4 rounded-sm px-4 py-1 hover:bg-surface ${mainActiveTab() === props.value ? "bg-surface" : ""}`}
+      onClick={() => setMainActiveTab(props.value)}
     >
-      <span class={`${mainActiveTab() === value ? "" : "opacity-70"}`}>
-        <Icon size={20} />
+      <span class={`${mainActiveTab() === props.value ? "" : "opacity-70"}`}>
+        <props.Icon size={20} />
       </span>
       <span
-        class={`text-base font-semibold ${mainActiveTab() === value ? "text-text" : "text-subtext"}`}
+        class={`text-base font-semibold ${mainActiveTab() === props.value ? "text-text" : "text-subtext"}`}
       >
-        {children}
+        {props.children}
       </span>
     </button>
   );
