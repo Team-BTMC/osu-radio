@@ -38,7 +38,7 @@ type NoticeProps = {
   isPaused: boolean;
 };
 
-const NOTICE_DURATION = 3000; // 3 seconds
+export const NOTICE_DURATION = 3000; // 3 seconds
 const ANIMATION_DURATION = 300; // 300ms for enter/exit animations
 
 const Notice: Component<NoticeProps> = (props) => {
@@ -117,11 +117,13 @@ const Notice: Component<NoticeProps> = (props) => {
       </div>
       <div
         ref={progressBarRef}
-        class="absolute bottom-0 left-0 h-0.5 rounded-full bg-overlay transition-all ease-linear"
+        class="absolute bottom-0 left-0 h-0.5 rounded-full bg-overlay"
         style={{
           width: `${(timeLeft() / NOTICE_DURATION) * 100}%`,
+          animation: `progress ${NOTICE_DURATION}ms linear`,
+          "animation-play-state": props.isPaused ? "paused" : "running",
         }}
-      ></div>
+      />
     </div>
   );
 };

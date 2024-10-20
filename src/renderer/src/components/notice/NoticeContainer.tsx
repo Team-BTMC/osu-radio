@@ -2,6 +2,7 @@ import { Result } from "../../../../@types";
 import { fail, ok } from "../../lib/rust-like-utils-client/Result";
 import { TokenNamespace } from "../../lib/tungsten/token";
 import Notice, { NoticeType } from "./Notice";
+import { NOTICE_DURATION } from "./Notice";
 import { For, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 
@@ -75,6 +76,12 @@ const NoticeContainer = () => {
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
+      <style>{`
+        @keyframes progress {
+          from { width: 100%; }
+          to { width: 0%; }
+        }
+      `}</style>
       <For each={notices.filter((n) => n.notice.active !== false)}>
         {(n) => (
           <Notice
