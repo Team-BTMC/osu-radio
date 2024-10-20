@@ -86,9 +86,16 @@ const NoticeContainer = () => {
   };
 
   const handleHover = (id: string, isHovering: boolean, rect: DOMRect | null) => {
-    setNotices((notice) => notice.notice.id === id, "hovered", isHovering);
     setNotices((notice) => notice.notice.id === id, "rect", rect);
+    setNotices((notice) => notice.notice.id === id, "hovered", isHovering);
     setHoveredNotice(isHovering ? id : null);
+
+    if (!isHovering) {
+      // Remove the notice after the shooting off animation completes
+      setTimeout(() => {
+        hideNotice(id);
+      }, 300); // Match this with the animation duration
+    }
   };
 
   return (
@@ -109,14 +116,9 @@ const NoticeContainer = () => {
             class={`transition-all duration-300 ease-in-out ${
               n.hovered ? "z-50" : hoveredNotice() ? "blur-sm" : ""
             }`}
-            style={{
-              position: n.hovered ? "fixed" : "relative",
-              left: n.hovered && n.rect ? `${n.rect.left}px` : "auto",
-              top: n.hovered && n.rect ? `${n.rect.top - 8}px` : "auto",
-              width: n.hovered && n.rect ? `${n.rect.width}px` : "auto",
-            }}
           >
             <Notice
+              rect={n.rect}
               notice={n.notice}
               onMount={(e) => observer.observe(e)}
               onRemove={handleRemove}

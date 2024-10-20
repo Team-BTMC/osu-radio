@@ -33,6 +33,7 @@ export type NoticeType = {
 
 type NoticeProps = {
   notice: NoticeType;
+  rect: DOMRect | null;
   onMount: (notice: HTMLElement) => any;
   onRemove: (id: string) => void;
   onHover: (id: string, isHovering: boolean, rect: DOMRect | null) => void;
@@ -46,7 +47,8 @@ const Notice: Component<NoticeProps> = (props) => {
   const [isRemoving, setIsRemoving] = createSignal(false);
   const [isPaused, setIsPaused] = createSignal(false);
   const [remainingTime, setRemainingTime] = createSignal(NOTICE_DURATION);
-
+  const [isShootingOff, setIsShootingOff] = createSignal(false);
+  const [isFixed, setIsFixed] = createSignal(false);
   let noticeRef: HTMLDivElement | undefined;
   let progressBarRef: HTMLDivElement | undefined;
   let timeoutId: number | NodeJS.Timeout | undefined;
@@ -75,6 +77,8 @@ const Notice: Component<NoticeProps> = (props) => {
 
   const handleMouseEnter = () => {
     setIsPaused(true);
+    setIsFixed(true);
+
     if (noticeRef) {
       const rect = noticeRef.getBoundingClientRect();
       props.onHover(props.notice.id!, true, rect);
@@ -90,14 +94,18 @@ const Notice: Component<NoticeProps> = (props) => {
 
   const handleMouseLeave = () => {
     setIsPaused(false);
+    setIsShootingOff(true);
     props.onHover(props.notice.id!, false, null);
     if (progressBarRef) {
       progressBarRef.style.animationPlayState = "running";
     }
     startTime = Date.now();
     updateTimeout();
-  };
 
+    setTimeout(() => {
+      setIsShootingOff(false);
+    }, ANIMATION_DURATION);
+  };
   onMount(() => {
     setTimeout(() => setIsVisible(true), 50); // Delay to trigger enter animation
     startTime = Date.now();
@@ -109,11 +117,19 @@ const Notice: Component<NoticeProps> = (props) => {
       ref={noticeRef}
       class={twMerge(
         noticeStyles({ variant: props.notice.variant }),
-        "transition-all duration-300 ease-in-out",
+        "w-96 transition-all duration-300 ease-in-out",
         isVisible() ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 blur-sm",
-        isRemoving() ? "my-0 max-h-0 py-0 opacity-0 blur-sm" : "my-2 max-h-32",
-        isPaused() ? "z-50" : "z-auto",
+        isRemoving() ? "my-0 max-h-0 -rotate-12 scale-75 py-0 opacity-0 blur-sm" : "my-2 max-h-32",
+        isPaused() ? `z-50` : "z-auto",
+        isShootingOff()
+          ? "my-0 max-h-0 -translate-y-[200%] -rotate-12 scale-75 py-0 opacity-0 blur-sm"
+          : "",
+        isFixed() ? "fixed z-50" : "",
       )}
+      style={{
+        top: isFixed() ? `calc(${props.rect?.top}px - 0.5rem)` : "auto",
+        left: isFixed() ? `${props.rect?.left}px` : "auto",
+      }}
       data-id={props.notice.id}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
