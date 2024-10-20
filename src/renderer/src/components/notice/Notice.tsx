@@ -1,3 +1,4 @@
+
 import Button from "../button/Button";
 import { cva } from "class-variance-authority";
 import { XIcon } from "lucide-solid";
@@ -33,10 +34,9 @@ export type NoticeType = {
 
 type NoticeProps = {
   notice: NoticeType;
-  rect: DOMRect | null;
   onMount: (notice: HTMLElement) => any;
   onRemove: (id: string) => void;
-  onHover: (id: string, isHovering: boolean, rect: DOMRect | null) => void;
+  isPaused: boolean;
 };
 
 const NOTICE_DURATION = 3000; // 3 seconds
@@ -45,14 +45,10 @@ const ANIMATION_DURATION = 300; // 300ms for enter/exit animations
 const Notice: Component<NoticeProps> = (props) => {
   const [isVisible, setIsVisible] = createSignal(false);
   const [isRemoving, setIsRemoving] = createSignal(false);
-  const [isPaused, setIsPaused] = createSignal(false);
-  const [remainingTime, setRemainingTime] = createSignal(NOTICE_DURATION);
-  const [isShootingOff, setIsShootingOff] = createSignal(false);
-  const [isFixed, setIsFixed] = createSignal(false);
+  const [timeLeft, setTimeLeft] = createSignal(NOTICE_DURATION);
   let noticeRef: HTMLDivElement | undefined;
   let progressBarRef: HTMLDivElement | undefined;
-  let timeoutId: number | NodeJS.Timeout | undefined;
-  let startTime: number;
+  let timer: number | NodeJS.Timeout | undefined;
 
   const removeNotice = () => {
     setIsRemoving(true);
@@ -61,55 +57,26 @@ const Notice: Component<NoticeProps> = (props) => {
     }, ANIMATION_DURATION);
   };
 
-  const updateTimeout = () => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-
-    if (remainingTime() > 0) {
-      timeoutId = setTimeout(() => {
-        if (!isPaused()) {
-          removeNotice();
-        }
-      }, remainingTime());
-    }
+  const startDismissTimer = () => {
+    clearTimeout(timer);
+    timer = setInterval(() => {
+      if (!props.isPaused) {
+        setTimeLeft((prev) => {
+          if (prev <= 0) {
+            clearInterval(timer);
+            removeNotice();
+            return 0;
+          }
+          return prev - 10;
+        });
+      }
+    }, 10);
   };
 
-  const handleMouseEnter = () => {
-    setIsPaused(true);
-    setIsFixed(true);
-
-    if (noticeRef) {
-      const rect = noticeRef.getBoundingClientRect();
-      props.onHover(props.notice.id!, true, rect);
-    }
-    if (progressBarRef) {
-      progressBarRef.style.animationPlayState = "paused";
-    }
-    setRemainingTime((prev) => prev - (Date.now() - startTime));
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    setIsPaused(false);
-    setIsShootingOff(true);
-    props.onHover(props.notice.id!, false, null);
-    if (progressBarRef) {
-      progressBarRef.style.animationPlayState = "running";
-    }
-    startTime = Date.now();
-    updateTimeout();
-
-    setTimeout(() => {
-      setIsShootingOff(false);
-    }, ANIMATION_DURATION);
-  };
   onMount(() => {
     setTimeout(() => setIsVisible(true), 50); // Delay to trigger enter animation
-    startTime = Date.now();
-    updateTimeout();
+    startDismissTimer();
+    props.onMount(noticeRef!);
   });
 
   return (
@@ -120,19 +87,8 @@ const Notice: Component<NoticeProps> = (props) => {
         "w-96 transition-all duration-300 ease-in-out",
         isVisible() ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 blur-sm",
         isRemoving() ? "my-0 max-h-0 -rotate-12 scale-75 py-0 opacity-0 blur-sm" : "my-2 max-h-32",
-        isPaused() ? `z-50` : "z-auto",
-        isShootingOff()
-          ? "my-0 max-h-0 -translate-y-[200%] -rotate-12 scale-75 py-0 opacity-0 blur-sm"
-          : "",
-        isFixed() ? "fixed z-50" : "",
       )}
-      style={{
-        top: isFixed() ? `calc(${props.rect?.top}px - 0.5rem)` : "auto",
-        left: isFixed() ? `${props.rect?.left}px` : "auto",
-      }}
       data-id={props.notice.id}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
     >
       <Button
         variant="outlined"
@@ -164,7 +120,7 @@ const Notice: Component<NoticeProps> = (props) => {
         ref={progressBarRef}
         class="absolute bottom-0 left-0 h-0.5 rounded-full bg-overlay transition-all ease-linear"
         style={{
-          animation: `shrinkWidth ${NOTICE_DURATION}ms linear forwards`,
+          "width": `${(timeLeft() / NOTICE_DURATION) * 100}%`,
         }}
       ></div>
     </div>
