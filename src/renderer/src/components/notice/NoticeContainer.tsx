@@ -94,7 +94,18 @@ const NoticeContainer = () => {
   });
 
   return (
-    <div class="fixed bottom-4 right-4 flex flex-col-reverse gap-2 max-h-[calc(100vh-2rem)] overflow-y-auto">
+    <div
+      ref={wrapper}
+      class="fixed right-4 top-4 flex max-h-[calc(100vh-2rem)] flex-col gap-2 overflow-y-auto"
+    >
+      <style>{`@keyframes shrinkWidth {
+        from {
+          width: 100%;
+        }
+        to {
+          width: 0%;
+        }
+      }`}</style>
       <For each={notices.filter((n) => n.notice.active !== false)}>
         {(n) => (
           <Notice

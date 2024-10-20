@@ -1,17 +1,14 @@
-import { Optional } from "../../../../@types";
 import Impulse from "../../lib/Impulse";
-import { none, orDefault, some } from "../../lib/rust-like-utils-client/Optional";
 import Gradient from "../Gradient";
 import { hideNotice } from "./NoticeContainer";
 import { XIcon } from "lucide-solid";
-import { Accessor, Component, createSignal, onMount } from "solid-js";
+import { Component, createSignal } from "solid-js";
 
 export type NoticeType = {
   id?: string;
   class: "notice" | "warning" | "error";
   title: string;
   content: string;
-  timeoutMS?: number;
   active?: boolean;
 };
 
@@ -20,6 +17,8 @@ type NoticeProps = {
   updateGradient: Impulse;
   onMount: (notice: HTMLElement) => any;
 };
+
+const NOTICE_DURATION = 3000; // 3 seconds
 
 const Notice: Component<NoticeProps> = (props) => {
   const [isVisible, setIsVisible] = createSignal(false);
@@ -31,59 +30,42 @@ const Notice: Component<NoticeProps> = (props) => {
       if (action.isError) {
         return;
       }
-      try {
-        pauseDrain();
-      } catch {}
     }, 300); // Wait for fade out animation
   };
-
-  const [drain, setDrainTime, pauseDrain] = createDrainAnimation(
-    props.notice.timeoutMS ?? 3000, // 3 seconds
-    removeNotice,
-  );
 
   const onRef = (notice: HTMLElement) => {
     props.updateGradient.pulse();
     props.onMount(notice);
     setTimeout(() => setIsVisible(true), 50); // Delay to trigger enter animation
+    setTimeout(removeNotice, NOTICE_DURATION);
   };
-
-  onMount(() => {
-    setDrainTime(props.notice.timeoutMS ?? 10_000);
-  });
 
   return (
     <div
       class={`transform transition-all duration-300 ease-in-out ${
-        isVisible() ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
+        isVisible() ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
       }`}
-      onPointerEnter={pauseDrain}
-      onPointerLeave={() => setDrainTime(props.notice.timeoutMS ?? 10_000)}
       data-id={props.notice.id}
       ref={onRef}
     >
       <Gradient update={props.updateGradient}>
-        <div
-          class={`${props.notice.class !== "notice" ? props.notice.class : ""} transition-transform hover:scale-105`}
-        >
-          <div class="content">
-            <div class="head">
-              <h3>{props.notice.title}</h3>
-              <button onClick={removeNotice}>
-                <XIcon size={20} />
-              </button>
-            </div>
+        <div class="relative rounded-lg p-4 shadow-lg transition-transform hover:scale-105">
+          <button
+            onClick={removeNotice}
+            class="absolute left-2 top-2 text-subtext transition-colors hover:text-text"
+          >
+            <XIcon size={20} />
+          </button>
 
-            <p>{props.notice.content}</p>
+          <div class="ml-6">
+            <h3 class="mb-1 text-lg font-semibold">{props.notice.title}</h3>
+            <p class="text-sm text-subtext">{props.notice.content}</p>
           </div>
 
           <div
-            class="timeout"
-            classList={{
-              pause: drain().isNone,
-            }}
+            class="absolute bottom-0 left-0 h-1 bg-accent transition-all ease-linear"
             style={{
-              animation: orDefault(drain(), undefined),
+              animation: `shrinkWidth ${NOTICE_DURATION}ms linear forwards`,
             }}
           ></div>
         </div>
@@ -91,31 +73,5 @@ const Notice: Component<NoticeProps> = (props) => {
     </div>
   );
 };
-
-function createDrainAnimation(
-  timeMS: number,
-  onDrained: () => any,
-): [Accessor<Optional<string>>, (timeMS: number) => any, () => any] {
-  const [get, set] = createSignal<Optional<string>>(some(drainTemplate(timeMS)));
-
-  let timeout = window.setTimeout(onDrained, timeMS);
-
-  return [
-    get,
-    (ms: number) => {
-      set(some(drainTemplate(ms)));
-      clearTimeout(timeout);
-      timeout = window.setTimeout(onDrained, ms);
-    },
-    () => {
-      set(none());
-      clearTimeout(timeout);
-    },
-  ];
-}
-
-function drainTemplate(timeMS: number): string {
-  return `drain-time ${Math.round(timeMS)}ms linear forwards`;
-}
 
 export default Notice;
