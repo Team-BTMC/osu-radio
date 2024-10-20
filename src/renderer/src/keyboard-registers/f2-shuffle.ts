@@ -12,9 +12,31 @@ Keyboard.register({
     }
 
     addNotice({
-      class: "notice",
       title: "Shuffled",
       content: "The current queue has been shuffled.",
+    });
+  },
+});
+
+// testing:
+Keyboard.register({
+  key: "F3",
+  onPress: () => {
+    addNotice({
+      variant: "success",
+      title: "Testing",
+      content: "This is a test notice.",
+    });
+  },
+});
+
+Keyboard.register({
+  key: "F4",
+  onPress: () => {
+    addNotice({
+      variant: "error",
+      title: "Testing",
+      content: "This is a test notice.",
     });
   },
 });
