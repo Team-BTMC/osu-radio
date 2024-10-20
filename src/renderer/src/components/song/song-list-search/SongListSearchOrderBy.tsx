@@ -1,5 +1,6 @@
 import Button from "@renderer/components/button/Button";
 import Dropdown from "@renderer/components/dropdown/Dropdown";
+import { ArrowDownAzIcon, ArrowUpZaIcon } from "lucide-solid";
 import { Component, createMemo, createSignal, For, Match, Setter, Switch } from "solid-js";
 import { OrderDirection, OrderOptions, Order } from "src/@types";
 
@@ -64,10 +65,10 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
       <Button variant={"ghost"} size="icon" onClick={switchDirections}>
         <Switch>
           <Match when={direction() === "asc"}>
-            <i class="ri-sort-asc" />
+            <ArrowDownAzIcon size={20} />
           </Match>
           <Match when={direction() === "desc"}>
-            <i class="ri-sort-desc" />
+            <ArrowUpZaIcon size={20} />
           </Match>
         </Switch>
       </Button>
