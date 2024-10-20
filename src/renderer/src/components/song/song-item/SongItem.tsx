@@ -4,7 +4,7 @@ import SongHint from "../SongHint";
 import SongImage from "../SongImage";
 import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import { song as selectedSong } from "../song.utils";
-import { Component, createSignal, onMount } from "solid-js";
+import { Component, createMemo, onMount } from "solid-js";
 
 type SongItemProps = {
   song: Song;
@@ -16,28 +16,8 @@ type SongItemProps = {
   children?: any;
 };
 
-const SongItem: Component<SongItemProps> = ({
-  group,
-  onSelect,
-  song,
-  children,
-  draggable: isDraggable,
-  onDrop,
-  selectable,
-}) => {
-  const showSignal = createSignal(false);
-  const [, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
+const SongItem: Component<SongItemProps> = (props) => {
   let item: HTMLDivElement | undefined;
-
-  const showMenu = (evt: MouseEvent) => {
-    if (children === undefined) {
-      showSignal[1](false);
-      return;
-    }
-
-    setCoords([evt.clientX, evt.clientY]);
-    showSignal[1](true);
-  };
 
   onMount(() => {
     if (!item) {
@@ -45,42 +25,45 @@ const SongItem: Component<SongItemProps> = ({
     }
 
     draggable(item, {
-      onClick: ignoreClickInContextMenu(() => onSelect(song.path)),
-      onDrop: onDrop ?? (() => {}),
+      onClick: ignoreClickInContextMenu(() => props.onSelect(props.song.path)),
+      onDrop: props.onDrop ?? (() => {}),
       createHint: SongHint,
-      useOnlyAsOnClickBinder: !isDraggable || selectedSong().path === song.path,
+      useOnlyAsOnClickBinder: !props.draggable || selectedSong().path === props.song.path,
     });
 
-    if (selectable === true) {
-      item.dataset.path = song.path;
+    if (props.selectable === true) {
+      item.dataset.path = props.song.path;
     }
+  });
+
+  const isActive = createMemo(() => {
+    return selectedSong().path === props.song.path;
   });
 
   return (
     <div
       class="group relative isolate select-none rounded-md"
       classList={{
-        "outline outline-2 outline-accent": selectedSong().path === song.path,
+        "outline outline-2 outline-accent": isActive(),
       }}
-      data-active={selectedSong().path === song.path}
+      data-active={isActive()}
       ref={item}
-      data-url={song.bg}
-      onContextMenu={showMenu}
+      data-url={props.song.bg}
     >
       <SongImage
         class="absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-30 group-hover:opacity-90"
         classList={{
-          "opacity-90": selectedSong().path === song.path,
+          "opacity-90": isActive(),
         }}
-        src={song.bg}
-        group={group}
+        src={props.song.bg}
+        group={props.group}
       />
 
       <div class="flex min-h-[72px] flex-col justify-center overflow-hidden rounded-md bg-black/50 p-3">
         <h3 class="text-shadow text-[22px] font-extrabold leading-7 shadow-black/60">
-          {song.title}
+          {props.song.title}
         </h3>
-        <p class="text-base text-subtext">{song.artist}</p>
+        <p class="text-base text-subtext">{props.song.artist}</p>
       </div>
     </div>
   );

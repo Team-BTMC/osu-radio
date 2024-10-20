@@ -2,7 +2,7 @@ import { cn } from "../../lib/css.utils";
 import Dropdown from "../dropdown/Dropdown";
 import { changeAudioDevice } from "@renderer/components/song/song.utils";
 import { GlobeIcon, LucideIcon, Volume2Icon } from "lucide-solid";
-import { Component, createEffect, createSignal, JSX, onMount } from "solid-js";
+import { Component, createEffect, createSignal, For, JSX, onMount } from "solid-js";
 
 const Settings: Component = () => {
   return (
@@ -22,14 +22,14 @@ type SettingsSectionProps = JSX.IntrinsicElements["div"] & {
   Icon: LucideIcon;
 };
 
-const SettingsSection: Component<SettingsSectionProps> = ({ title, Icon, children, ...rest }) => {
+const SettingsSection: Component<SettingsSectionProps> = (props) => {
   return (
-    <div class={cn("flex flex-col gap-6", rest.class)}>
+    <div class={cn("flex flex-col gap-6", props.class)}>
       <div class="flex items-center gap-3">
-        <Icon class="text-text opacity-70" size={16} />
-        <h3 class="text-base text-text">{title}</h3>
+        <props.Icon class="text-text opacity-70" size={16} />
+        <h3 class="text-base text-text">{props.title}</h3>
       </div>
-      {children}
+      {props.children}
     </div>
   );
 };
@@ -39,13 +39,13 @@ type SettingProps = JSX.IntrinsicElements["div"] & {
   name: string;
 };
 
-const Setting: Component<SettingProps> = ({ label, name, children, ...rest }) => {
+const Setting: Component<SettingProps> = (props) => {
   return (
-    <div class={cn("flex flex-col gap-2.5", rest.class)}>
-      <label class="text-sm font-semibold text-text" for={name}>
-        {label}
+    <div class={cn("flex flex-col gap-2.5", props.class)}>
+      <label class="text-sm font-semibold text-text" for={props.name}>
+        {props.label}
       </label>
-      {children}
+      {props.children}
     </div>
   );
 };
@@ -85,9 +85,9 @@ const AudioDeviceSetting: Component = () => {
         </Dropdown.SelectTrigger>
 
         <Dropdown.List value={selectedAudioDevice} onValueChange={handleValueChange}>
-          {Array.from(audioDevices().keys()).map((audioDevice) => (
-            <Dropdown.Item value={audioDevice}>{audioDevice}</Dropdown.Item>
-          ))}
+          <For each={Array.from(audioDevices().keys())}>
+            {(audioDevice) => <Dropdown.Item value={audioDevice}>{audioDevice}</Dropdown.Item>}
+          </For>
         </Dropdown.List>
       </Dropdown>
     </Setting>
