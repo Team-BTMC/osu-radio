@@ -48,7 +48,13 @@ const MainScene: Component = () => {
       >
         <Nav />
         <TabContent />
-        <div class="song relative mb-4 mr-4 mt-2 flex flex-1 items-center justify-center">
+        <div
+          class="song relative mb-4 mr-4 flex flex-1 items-center justify-center"
+          classList={{
+            "mt-4": os() === "darwin",
+            "mt-2": os() === "win32",
+          }}
+        >
           <SongDetail />
           <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-xl bg-fixed">
             <SongImage
