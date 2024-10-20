@@ -4,7 +4,10 @@ import SongHint from "../SongHint";
 import SongImage from "../SongImage";
 import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import { song as selectedSong } from "../song.utils";
-import { Component, createSignal, onMount } from "solid-js";
+import Popover from "@renderer/components/popover/Popover";
+import { EllipsisVerticalIcon } from "lucide-solid";
+import { Component, createSignal, JSXElement, onMount } from "solid-js";
+import { Portal } from "solid-js/web";
 
 type SongItemProps = {
   song: Song;
@@ -13,31 +16,21 @@ type SongItemProps = {
   onSelect: (songResource: ResourceID) => any;
   draggable?: true;
   onDrop?: (before: Element | null) => any;
-  children?: any;
+  contextMenu: JSXElement;
 };
 
 const SongItem: Component<SongItemProps> = ({
   group,
   onSelect,
   song,
-  children,
   draggable: isDraggable,
   onDrop,
   selectable,
+  contextMenu,
 }) => {
-  const showSignal = createSignal(false);
-  const [, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
   let item: HTMLDivElement | undefined;
-
-  const showMenu = (evt: MouseEvent) => {
-    if (children === undefined) {
-      showSignal[1](false);
-      return;
-    }
-
-    setCoords([evt.clientX, evt.clientY]);
-    showSignal[1](true);
-  };
+  const [localShow, setLocalShow] = createSignal(false);
+  const [mousePos, setMousePos] = createSignal<[number, number]>([0, 0]);
 
   onMount(() => {
     if (!item) {
@@ -57,32 +50,67 @@ const SongItem: Component<SongItemProps> = ({
   });
 
   return (
-    <div
-      class="group relative isolate select-none rounded-md"
-      classList={{
-        "outline outline-2 outline-accent": selectedSong().path === song.path,
-      }}
-      data-active={selectedSong().path === song.path}
-      ref={item}
-      data-url={song.bg}
-      onContextMenu={showMenu}
+    <Popover
+      isOpen={localShow}
+      onValueChange={setLocalShow}
+      placement="right"
+      offset={{ crossAxis: 5, mainAxis: 5 }}
+      shift={{}}
+      flip={{}}
+      mousePos={mousePos}
     >
-      <SongImage
-        class="absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-30 group-hover:opacity-90"
+      <Portal>
+        <Popover.Overlay />
+        <Popover.Content
+          onClick={(e) => {
+            e.stopImmediatePropagation();
+            setLocalShow(false);
+          }}
+        >
+          {contextMenu}
+        </Popover.Content>
+      </Portal>
+      <div
+        class="group relative isolate z-20 select-none rounded-md"
         classList={{
-          "opacity-90": selectedSong().path === song.path,
+          "outline outline-2 outline-accent": selectedSong().path === song.path,
         }}
-        src={song.bg}
-        group={group}
-      />
+        data-active={selectedSong().path === song.path}
+        ref={item}
+        data-url={song.bg}
+        onContextMenu={(e) => {
+          setMousePos([e.clientX, e.clientY]);
+          setLocalShow(true);
+        }}
+      >
+        <SongImage
+          class="absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-30 group-hover:opacity-90"
+          classList={{
+            "opacity-90": selectedSong().path === song.path,
+          }}
+          src={song.bg}
+          group={group}
+        />
 
-      <div class="flex min-h-[72px] flex-col justify-center overflow-hidden rounded-md bg-black/50 p-3">
-        <h3 class="text-shadow text-[22px] font-extrabold leading-7 shadow-black/60">
-          {song.title}
-        </h3>
-        <p class="text-base text-subtext">{song.artist}</p>
+        <div class="flex flex-row items-center justify-between rounded-md bg-black/50">
+          <div class="z-20 flex min-h-[72px] flex-col justify-center overflow-hidden rounded-md p-3">
+            <h3 class="text-shadow text-[22px] font-extrabold leading-7 shadow-black/60">
+              {song.title}
+            </h3>
+            <p class="text-base text-subtext">{song.artist}</p>
+          </div>
+
+          <div class="mr-2 grid aspect-square size-9 place-items-center rounded border-solid border-stroke bg-transparent p-1 text-text hover:bg-surface">
+            <Popover.Trigger
+              class="opacity-0 transition-opacity group-hover:opacity-100"
+              classList={{ "opacity-100": localShow() }}
+            >
+              <EllipsisVerticalIcon />
+            </Popover.Trigger>
+          </div>
+        </div>
       </div>
-    </div>
+    </Popover>
   );
 };
 
