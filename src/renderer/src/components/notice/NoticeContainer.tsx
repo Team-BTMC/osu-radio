@@ -34,12 +34,7 @@ export function hideNotice(id: string | undefined): Result<void, string> {
     return fail("Passed undefined ID.");
   }
 
-  setNotices(
-    (ex) => ex.notice.id === id,
-    "notice",
-    "active",
-    () => false,
-  );
+  setNotices((notices) => notices.filter((n) => n.notice.id !== id));
 
   return ok(undefined);
 }
@@ -79,8 +74,12 @@ window.api.listen("notify", (n: NoticeType) => {
 });
 
 const NoticeContainer = () => {
+  const handleRemove = (id: string) => {
+    hideNotice(id);
+  };
+
   return (
-    <div class="fixed right-4 top-16 z-50 flex flex-col gap-2 overflow-y-scroll w-96">
+    <div class="fixed right-4 top-16 z-50 flex w-96 flex-col gap-0">
       <style>{`@keyframes shrinkWidth {
         from {
           width: 100%;
@@ -90,7 +89,9 @@ const NoticeContainer = () => {
         }
       }`}</style>
       <For each={notices.filter((n) => n.notice.active !== false)}>
-        {(n) => <Notice notice={n.notice} onMount={(e) => observer.observe(e)} />}
+        {(n) => (
+          <Notice notice={n.notice} onMount={(e) => observer.observe(e)} onRemove={handleRemove} />
+        )}
       </For>
     </div>
   );

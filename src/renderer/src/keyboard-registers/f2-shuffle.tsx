@@ -1,7 +1,7 @@
 import { addNotice } from "../components/notice/NoticeContainer";
 import { Keyboard } from "../lib/Keyboard";
 import { mainActiveTab, TABS } from "@renderer/scenes/main-scene/main.utils";
-import { ShuffleIcon } from 'lucide-solid'
+import { ShuffleIcon } from "lucide-solid";
 
 Keyboard.register({
   key: "F2",
@@ -14,7 +14,7 @@ Keyboard.register({
 
     addNotice({
       title: "Shuffled",
-      icon: <ShuffleIcon size={20}/>,
+      icon: <ShuffleIcon size={20} />,
       description: "The current queue has been shuffled.",
     });
   },
@@ -37,9 +37,10 @@ Keyboard.register({
   onPress: () => {
     addNotice({
       variant: "error",
-      title: "Testing",
+      title: "Error! ",
       icon: <ShuffleIcon size={20} stroke="rgba(var(--color-red))" />,
-      description: "This is a test notice. This is a test notice.This is a test notice.This is a test notice.This is a test notice.This is a test notice.This is a test notice.This is a test notice.This is a test notice.This is a test notice.This is a test notice.This is a test notice.This is a test notice.",
+      description:
+        "This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string.",
     });
   },
 });
