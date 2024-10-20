@@ -1,12 +1,11 @@
-import Impulse from "../../lib/Impulse";
-import Gradient from "../Gradient";
+import Button from "../button/Button";
 import { hideNotice } from "./NoticeContainer";
 import { XIcon } from "lucide-solid";
 import { Component, createSignal } from "solid-js";
 
 export type NoticeType = {
   id?: string;
-  class: "notice" | "warning" | "error";
+  class: "notice" | "success" | "error";
   title: string;
   content: string;
   active?: boolean;
@@ -14,7 +13,6 @@ export type NoticeType = {
 
 type NoticeProps = {
   notice: NoticeType;
-  updateGradient: Impulse;
   onMount: (notice: HTMLElement) => any;
 };
 
@@ -34,7 +32,6 @@ const Notice: Component<NoticeProps> = (props) => {
   };
 
   const onRef = (notice: HTMLElement) => {
-    props.updateGradient.pulse();
     props.onMount(notice);
     setTimeout(() => setIsVisible(true), 50); // Delay to trigger enter animation
     setTimeout(removeNotice, NOTICE_DURATION);
@@ -42,34 +39,32 @@ const Notice: Component<NoticeProps> = (props) => {
 
   return (
     <div
-      class={`transform transition-all duration-300 ease-in-out ${
+      class={`group transform overflow-hidden rounded-xl border border-stroke bg-thick-material p-4 shadow-2xl transition-all duration-300 ease-in-out ${
         isVisible() ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
       }`}
       data-id={props.notice.id}
       ref={onRef}
     >
-      <Gradient update={props.updateGradient}>
-        <div class="relative rounded-lg p-4 shadow-lg transition-transform hover:scale-105">
-          <button
-            onClick={removeNotice}
-            class="absolute left-2 top-2 text-subtext transition-colors hover:text-text"
-          >
-            <XIcon size={20} />
-          </button>
+      <Button
+        variant="outlined"
+        size="icon"
+        onClick={removeNotice}
+        class="absolute right-3 top-3 size-7 p-1 text-subtext opacity-0 group-hover:opacity-100"
+      >
+        <XIcon size={16} />
+      </Button>
 
-          <div class="ml-6">
-            <h3 class="mb-1 text-lg font-semibold">{props.notice.title}</h3>
-            <p class="text-sm text-subtext">{props.notice.content}</p>
-          </div>
+      <div class="mr-6">
+        <h3 class="mb-1 text-lg font-semibold">{props.notice.title}</h3>
+        <p class="text-sm text-subtext">{props.notice.content}</p>
+      </div>
 
-          <div
-            class="absolute bottom-0 left-0 h-1 bg-accent transition-all ease-linear"
-            style={{
-              animation: `shrinkWidth ${NOTICE_DURATION}ms linear forwards`,
-            }}
-          ></div>
-        </div>
-      </Gradient>
+      <div
+        class="absolute bottom-0 left-0 h-0.5 rounded-full bg-accent transition-all ease-linear"
+        style={{
+          animation: `shrinkWidth ${NOTICE_DURATION}ms linear forwards`,
+        }}
+      ></div>
     </div>
   );
 };

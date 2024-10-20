@@ -1,14 +1,12 @@
 import { Result } from "../../../../@types";
-import Impulse from "../../lib/Impulse";
 import { fail, ok } from "../../lib/rust-like-utils-client/Result";
 import { TokenNamespace } from "../../lib/tungsten/token";
 import Notice, { NoticeType } from "./Notice";
-import { For, onMount } from "solid-js";
+import { For } from "solid-js";
 import { createStore } from "solid-js/store";
 
 type NoticeExtended = {
   notice: NoticeType;
-  updateGradient: Impulse;
   visible: boolean;
 };
 
@@ -24,7 +22,6 @@ export function addNotice(notice: NoticeType): void {
     ...notices,
     {
       notice,
-      updateGradient: new Impulse<void>(),
       visible: false,
     },
   ]);
@@ -65,7 +62,7 @@ const observer = new IntersectionObserver((entries) => {
   }
 });
 
-window.api.listen("notify", (n) => {
+window.api.listen("notify", (n: NoticeType) => {
   if (n.id === undefined) {
     n.id = namespace.create();
   }
@@ -74,30 +71,14 @@ window.api.listen("notify", (n) => {
     ...notices,
     {
       notice: n,
-      updateGradient: new Impulse<void>(),
       visible: false,
     },
   ]);
 });
 
 const NoticeContainer = () => {
-  let wrapper: HTMLDivElement | undefined;
-
-  onMount(() => {
-    wrapper?.addEventListener("scroll", () => {
-      for (let i = 0; i < notices.length; i++) {
-        if (notices[i].visible) {
-          notices[i].updateGradient.pulse();
-        }
-      }
-    });
-  });
-
   return (
-    <div
-      ref={wrapper}
-      class="fixed right-4 top-4 flex max-h-[calc(100vh-2rem)] flex-col gap-2 overflow-y-auto"
-    >
+    <div class="fixed right-4 top-16 z-50 flex max-h-[calc(100vh-2rem)] flex-col gap-2 overflow-y-auto">
       <style>{`@keyframes shrinkWidth {
         from {
           width: 100%;
@@ -107,13 +88,7 @@ const NoticeContainer = () => {
         }
       }`}</style>
       <For each={notices.filter((n) => n.notice.active !== false)}>
-        {(n) => (
-          <Notice
-            notice={n.notice}
-            updateGradient={n.updateGradient}
-            onMount={(e) => observer.observe(e)}
-          />
-        )}
+        {(n) => <Notice notice={n.notice} onMount={(e) => observer.observe(e)} />}
       </For>
     </div>
   );

@@ -14,7 +14,7 @@ Keyboard.register({
     addNotice({
       class: "notice",
       title: "Shuffled",
-      content: "Current queue have been shuffled",
+      content: "The current queue has been shuffled.",
     });
   },
 });
