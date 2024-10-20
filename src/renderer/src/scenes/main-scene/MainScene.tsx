@@ -25,6 +25,7 @@ import {
   onMount,
   Setter,
   Show,
+  JSX,
 } from "solid-js";
 
 const [os, setOs] = createSignal<NodeJS.Platform>();
@@ -127,9 +128,9 @@ const Nav: Component = () => {
         <SettingsIcon size={20} />
       </Button>
 
-      <Button size="square" variant="outlined">
-        <Layers3Icon size={20} />
-      </Button>
+      <Show when={os() === "win32"}>
+        <QueueIcon class="ml-2" />
+      </Show>
 
       {/* <div class="nav__queue ml-auto">
         <Button
@@ -149,16 +150,28 @@ const Nav: Component = () => {
   );
 };
 
+const QueueIcon: Component<JSX.IntrinsicElements["button"]> = (props) => {
+  return (
+    <Button size="square" variant="outlined" {...props}>
+      <Layers3Icon size={20} />
+    </Button>
+  );
+};
+
 function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Setter<boolean> }) {
   return (
-    <div>
-      <button
+    <div class="ml-4 mr-2 flex">
+      <Button
+        size="square"
+        variant="ghost"
         onclick={async () => window.api.request("window::minimize")}
         class="nav-window-control"
       >
         <MinusIcon size={20} />
-      </button>
-      <button
+      </Button>
+      <Button
+        size="square"
+        variant="ghost"
         onclick={async () => {
           window.api.request("window::maximize");
           props.setMaximized(!props.maximized());
@@ -166,13 +179,15 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
         class="nav-window-control"
       >
         {props.maximized() ? <Minimize2Icon size={20} /> : <SquareIcon size={18} />}
-      </button>
-      <button
+      </Button>
+      <Button
+        size="square"
+        variant="ghost"
         onclick={async () => window.api.request("window::close")}
         class="nav-window-control close"
       >
         <XIcon size={20} />
-      </button>
+      </Button>
     </div>
   );
 }
