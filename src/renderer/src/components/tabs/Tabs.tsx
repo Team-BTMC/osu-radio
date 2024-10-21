@@ -2,7 +2,7 @@ import { TabsContent } from "./TabsContent";
 import { TabsList } from "./TabsList";
 import TabsTrigger from "./TabsTrigger";
 import { useRovingFocusGroup } from "@renderer/lib/roving-focus-group/rovingFocusGroup";
-import { Accessor, createContext, ParentComponent, useContext } from "solid-js";
+import { Accessor, createContext, ParentComponent, useContext, createSignal } from "solid-js";
 
 const DEFAULT_SELECTED_VALUE = "";
 
@@ -14,11 +14,25 @@ export type Props = {
 export type Context = ReturnType<typeof useProviderValue>;
 
 function useProviderValue(props: Props) {
-  return useRovingFocusGroup({
+  const [activeTabElement, setActiveTabElement] = createSignal<HTMLElement | null>(null);
+  const rovingFocusGroup = useRovingFocusGroup({
     defaultProp: props.defaultValue || DEFAULT_SELECTED_VALUE,
     onChange: props.onValueChange,
     prop: props.value,
   });
+
+  return {
+    ...rovingFocusGroup,
+    activeTabElement,
+    setActiveTabElement,
+    item: (value: string, options?: { onSelectedByClick?: () => void }) => {
+      const itemProps = rovingFocusGroup.item(value, options);
+      return {
+        ...itemProps,
+        setActiveTabElement,
+      };
+    },
+  };
 }
 
 export const TabsContext = createContext<Context>();
