@@ -132,7 +132,7 @@ const Notice: Component<NoticeProps> = (props) => {
             </h3>
           </Show>
           <Show when={props.notice.description}>
-            <p class="overflow-hidden text-ellipsis whitespace-nowrap text-sm text-subtext">
+            <p class="line-clamp-2 text-ellipsis text-sm text-subtext">
               {props.notice.description}
             </p>
           </Show>
