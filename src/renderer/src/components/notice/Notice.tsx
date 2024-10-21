@@ -1,7 +1,7 @@
 import Button from "../button/Button";
 import { cva } from "class-variance-authority";
 import { XIcon } from "lucide-solid";
-import { Component, createSignal, JSX, onMount, Show } from "solid-js";
+import { Component, createEffect, createSignal, JSX, onMount, Show } from "solid-js";
 import { twMerge } from "tailwind-merge";
 
 const noticeStyles = cva(
@@ -38,16 +38,16 @@ type NoticeProps = {
   isPaused: boolean;
 };
 
-export const NOTICE_DURATION = 3000; // 3 seconds
+const NOTICE_DURATION = 3_000; // 3 seconds
 const ANIMATION_DURATION = 300; // 300ms for enter/exit animations
 
 const Notice: Component<NoticeProps> = (props) => {
   const [isVisible, setIsVisible] = createSignal(false);
   const [isRemoving, setIsRemoving] = createSignal(false);
-  const [timeLeft, setTimeLeft] = createSignal(NOTICE_DURATION);
   let noticeRef: HTMLDivElement | undefined;
-  let progressBarRef: HTMLDivElement | undefined;
-  let timer: number | NodeJS.Timeout | undefined;
+  let timeout: NodeJS.Timeout;
+  let startTime: number;
+  let pausedTime: number = 0;
 
   const removeNotice = () => {
     setIsRemoving(true);
@@ -56,26 +56,34 @@ const Notice: Component<NoticeProps> = (props) => {
     }, ANIMATION_DURATION);
   };
 
-  const startDismissTimer = () => {
-    clearTimeout(timer);
-    timer = setInterval(() => {
-      if (!props.isPaused) {
-        setTimeLeft((prev) => {
-          if (prev <= 0) {
-            clearInterval(timer);
-            removeNotice();
-            return 0;
-          }
-          return prev - 10;
-        });
-      }
-    }, 10);
+  const startRemoveTimeout = () => {
+    startTime = Date.now();
+    timeout = setTimeout(removeNotice, NOTICE_DURATION);
+  };
+
+  const pauseRemoveTimeout = () => {
+    clearTimeout(timeout);
+    pausedTime = Date.now() - startTime;
+  };
+
+  const resumeRemoveTimeout = () => {
+    startTime = Date.now() - pausedTime;
+    timeout = setTimeout(removeNotice, NOTICE_DURATION - pausedTime);
   };
 
   onMount(() => {
     setTimeout(() => setIsVisible(true), 50); // Delay to trigger enter animation
-    startDismissTimer();
+    startRemoveTimeout();
     props.onMount(noticeRef!);
+  });
+
+  createEffect(() => {
+    clearTimeout(timeout);
+    if (props.isPaused) {
+      pauseRemoveTimeout();
+    } else {
+      resumeRemoveTimeout();
+    }
   });
 
   return (
@@ -114,16 +122,14 @@ const Notice: Component<NoticeProps> = (props) => {
             </p>
           </Show>
         </div>
+        <div
+          class="absolute bottom-0 left-0 h-0.5 rounded-full bg-overlay"
+          style={{
+            animation: `progress ${NOTICE_DURATION}ms linear`,
+            "animation-play-state": props.isPaused ? "paused" : "running",
+          }}
+        />
       </div>
-      <div
-        ref={progressBarRef}
-        class="absolute bottom-0 left-0 h-0.5 rounded-full bg-overlay"
-        style={{
-          width: `${(timeLeft() / NOTICE_DURATION) * 100}%`,
-          animation: `progress ${NOTICE_DURATION}ms linear`,
-          "animation-play-state": props.isPaused ? "paused" : "running",
-        }}
-      />
     </div>
   );
 };
