@@ -40,6 +40,7 @@ const MainScene: Component = () => {
 
   return (
     <Tabs value={mainActiveTab} onValueChange={setMainActiveTab}>
+      <div class="app-drag fixed left-0 top-0 h-16 w-screen" />
       <main
         class="main-scene relative h-screen"
         classList={{
@@ -49,6 +50,7 @@ const MainScene: Component = () => {
       >
         <Nav />
         <TabContent />
+
         <div
           class="song relative mb-4 mr-4 flex flex-1 items-center justify-center"
           classList={{
@@ -67,7 +69,7 @@ const MainScene: Component = () => {
           </div>
 
           <Show when={os() === "darwin"}>
-            <QueueIcon class="absolute right-2 top-2" />
+            <QueueIcon class="app-no-drag absolute right-2 top-2" />
           </Show>
         </div>
       </main>
@@ -101,7 +103,7 @@ const Nav: Component = () => {
 
   return (
     <nav
-      class="nav flex flex-shrink-0 items-center"
+      class="nav app-drag flex flex-shrink-0 items-center"
       classList={{
         "pl-[92px]": os() === "darwin",
         "pl-4": os() !== "darwin",
@@ -114,7 +116,7 @@ const Nav: Component = () => {
         <Tabs.List class="ml-4">
           <For each={NAV_ITEMS}>
             {({ label, value, Icon }) => (
-              <Tabs.Trigger value={value}>
+              <Tabs.Trigger value={value} class="app-no-drag">
                 <Icon size={20} />
                 <span>{label}</span>
               </Tabs.Trigger>
@@ -125,7 +127,7 @@ const Nav: Component = () => {
 
       <Button
         onClick={() => setMainActiveTab(SIDEBAR_PAGES.SETTINGS.value)}
-        class="ml-auto"
+        class="app-no-drag ml-auto"
         classList={{
           "mr-5": os() === "darwin",
         }}
@@ -136,7 +138,7 @@ const Nav: Component = () => {
       </Button>
 
       <Show when={os() === "win32"}>
-        <QueueIcon class="ml-2" />
+        <QueueIcon class="app-no-drag ml-2" />
       </Show>
 
       {/* <div class="nav__queue ml-auto">

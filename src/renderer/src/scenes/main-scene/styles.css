@@ -19,7 +19,6 @@
 
   .nav {
     grid-area: nav;
-    -webkit-app-region: drag;
   }
   .song {
     grid-area: song;

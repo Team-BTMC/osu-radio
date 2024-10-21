@@ -35,8 +35,6 @@
   --color-thin-material: 0, 0, 0;
 }
 
-/* } */
-
 @font-face {
   font-family: "Nunito";
   src:
@@ -101,4 +99,13 @@ button {
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: rgba(var(--color-surface), 0.7);
+}
+
+@layer utilities {
+  .app-no-drag {
+    -webkit-app-region: no-drag;
+  }
+  .app-drag {
+    -webkit-app-region: drag;
+  }
 }
