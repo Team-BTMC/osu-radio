@@ -14,7 +14,7 @@ import { Component, createMemo, Show } from "solid-js";
 
 const SongDetail: Component = () => {
   return (
-    <div class="z-10 flex h-full w-full max-w-[800px] flex-col p-8">
+    <div class="z-10 flex h-full w-full max-w-[800px] flex-col p-10">
       <div class="mb-8 grid flex-grow place-items-center">
         <SongImage
           src={song().bg}

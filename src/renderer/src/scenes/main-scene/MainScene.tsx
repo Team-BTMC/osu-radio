@@ -9,12 +9,12 @@ import { song } from "@renderer/components/song/song.utils";
 import Tabs from "@renderer/components/tabs/Tabs";
 import {
   Layers3Icon,
-  Minimize2Icon,
   MinusIcon,
   SettingsIcon,
   SidebarIcon,
   SquareIcon,
   XIcon,
+  MaximizeIcon,
 } from "lucide-solid";
 import {
   Accessor,
@@ -29,6 +29,7 @@ import {
 } from "solid-js";
 
 const [os, setOs] = createSignal<NodeJS.Platform>();
+const [active, setActive] = createSignal<boolean>(true);
 
 const MainScene: Component = () => {
   onMount(async () => {
@@ -54,14 +55,14 @@ const MainScene: Component = () => {
         <TabContent />
 
         <div
-          class="song relative mb-4 mr-4 flex flex-1 items-center justify-center rounded-lg"
+          class="song relative mx-4 mb-4 flex flex-1 items-center justify-center rounded-lg"
           classList={{
             "mt-4": os() === "darwin",
             "mt-1": os() === "win32",
           }}
         >
           <SongDetail />
-          <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-xl bg-fixed">
+          <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-xl border-2 border-stroke bg-fixed">
             <SongImage
               src={song().bg}
               instantLoad={true}
@@ -111,7 +112,7 @@ const Nav: Component = () => {
         "pl-4": os() !== "darwin",
       }}
     >
-      <Button size="icon" variant="ghost">
+      <Button size="icon" variant="ghost" class="app-no-drag" onClick={() => setActive((a) => !a)}>
         <SidebarIcon />
       </Button>
       <Show when={typeof os() !== "undefined"}>
@@ -176,7 +177,7 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
         size="square"
         variant="ghost"
         onclick={async () => window.api.request("window::minimize")}
-        class="nav-window-control"
+        class="nav-window-control app-no-drag"
       >
         <MinusIcon size={20} />
       </Button>
@@ -187,15 +188,15 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
           window.api.request("window::maximize");
           props.setMaximized(!props.maximized());
         }}
-        class="nav-window-control"
+        class="nav-window-control app-no-drag"
       >
-        {props.maximized() ? <Minimize2Icon size={20} /> : <SquareIcon size={18} />}
+        {props.maximized() ? <MaximizeIcon size={20} /> : <SquareIcon size={18} />}
       </Button>
       <Button
         size="square"
         variant="ghost"
         onclick={async () => window.api.request("window::close")}
-        class="nav-window-control close"
+        class="nav-window-control close app-no-drag"
       >
         <XIcon size={20} />
       </Button>
@@ -205,7 +206,13 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
 
 const TabContent: Component = () => {
   return (
-    <div class="sidebar flex w-[480px] min-w-[320px] flex-col shadow-2xl">
+    <div
+      class="sidebar relative flex flex-col transition-all"
+      classList={{
+        "w-[480px]": active(),
+        "w-0": !active(),
+      }}
+    >
       <SongList isAllSongs={true} />
 
       {/* <Tabs.Content value={TABS.SETTINGS.value}>

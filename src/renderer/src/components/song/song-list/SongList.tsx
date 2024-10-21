@@ -76,28 +76,30 @@ const SongList: Component<SongViewProps> = (props) => {
 
   return (
     <Tabs.Content value={SIDEBAR_PAGES.SONGS.value}>
-      <div class="z-10">
-        <SongListSearch tags={tagsSignal} setOrder={setOrder} count={count} error={searchError} />
-      </div>
+      <div class="absolute right-0 top-0 flex h-full w-[480px] min-w-[320px] flex-col">
+        <div class="z-10">
+          <SongListSearch tags={tagsSignal} setOrder={setOrder} count={count} error={searchError} />
+        </div>
 
-      <div class="flex-grow overflow-y-auto p-5 py-0">
-        <InfiniteScroller
-          apiKey={"query::songsPool"}
-          apiData={payload()}
-          apiInitKey={"query::songsPool::init"}
-          apiInitData={payload()}
-          setCount={setCount}
-          reset={resetListing}
-          fallback={<div class="py-8 text-center text-lg uppercase text-subtext">No songs</div>}
-          builder={(s) => (
-            <SongItem song={s} group={group} onSelect={createQueue}>
-              <PlayNext path={s.path} />
-              <button class="w-full px-4 py-2 text-left transition-colors duration-200 hover:bg-accent/20">
-                Add to playlist
-              </button>
-            </SongItem>
-          )}
-        />
+        <div class="flex-grow overflow-y-auto p-5 py-0">
+          <InfiniteScroller
+            apiKey={"query::songsPool"}
+            apiData={payload()}
+            apiInitKey={"query::songsPool::init"}
+            apiInitData={payload()}
+            setCount={setCount}
+            reset={resetListing}
+            fallback={<div class="py-8 text-center text-lg uppercase text-subtext">No songs</div>}
+            builder={(s) => (
+              <SongItem song={s} group={group} onSelect={createQueue}>
+                <PlayNext path={s.path} />
+                <button class="w-full px-4 py-2 text-left transition-colors duration-200 hover:bg-accent/20">
+                  Add to playlist
+                </button>
+              </SongItem>
+            )}
+          />
+        </div>
       </div>
     </Tabs.Content>
   );
