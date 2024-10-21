@@ -8,6 +8,7 @@ import ContextMenuBox from "./ContextMenuBox";
 import { getSongImage, renamePlaylist } from "./playlist-item.utils";
 import Button from "@renderer/components/button/Button";
 import Impulse from "@renderer/lib/Impulse";
+import { EllipsisVerticalIcon } from "lucide-solid";
 import { Component, createSignal, Match, Switch } from "solid-js";
 import { Playlist } from "src/@types";
 
@@ -82,7 +83,7 @@ const PlaylistItem: Component<PlaylistItemProps> = (props) => {
               setShowBox(!showBox());
             }}
           >
-            <i class="ri-more-2-line" />
+            <EllipsisVerticalIcon />
           </Button>
         </div>
 

@@ -1,15 +1,28 @@
 import { isSongUndefined } from "../../../lib/song";
-import Bar from "../../bar/Bar";
 import {
   isPlaying,
   next,
   previous,
   togglePlay,
-  localVolume,
-  setLocalVolume,
   song,
+  setVolume,
+  volume,
+  handleMuteSong,
 } from "../song.utils";
 import Button from "@renderer/components/button/Button";
+import Slider from "@renderer/components/slider/Slider";
+import {
+  CirclePlusIcon,
+  PauseIcon,
+  PlayIcon,
+  RepeatIcon,
+  ShuffleIcon,
+  SkipBackIcon,
+  SkipForwardIcon,
+  Volume1Icon,
+  Volume2Icon,
+  VolumeXIcon,
+} from "lucide-solid";
 import { Component, createEffect, createSignal, Match, Show, Switch } from "solid-js";
 
 const SongControls: Component = () => {
@@ -30,65 +43,51 @@ const SongControls: Component = () => {
   createEffect(() => setDisable(isSongUndefined(song())));
 
   return (
-    <div class="grid w-full grid-cols-4 items-center gap-4">
-      <div class="group flex w-max items-center">
-        <Button variant={"ghost"} size="icon">
-          <Switch>
-            <Match when={localVolume() === 0}>
-              <i class="ri-volume-mute-fill" />
-            </Match>
-            <Match when={localVolume() < 0.5}>
-              <i class="ri-volume-down-fill" />
-            </Match>
-            <Match when={localVolume() >= 0.5}>
-              <i class="ri-volume-up-fill" />
-            </Match>
-          </Switch>
-        </Button>
-        <div class="ml-3 w-24 opacity-0 transition-opacity group-hover:opacity-100">
-          <Bar fill={localVolume()} setFill={setLocalVolume} />
-        </div>
-      </div>
-      <div class="col-span-2 col-start-2 flex items-center justify-center gap-4">
+    <div class="flex w-full items-center gap-4">
+      <LeftPart />
+      <div class="flex flex-1 items-center justify-center gap-6">
         <Button
-          variant={"ghost"}
           size="icon"
+          variant="ghost"
           onClick={() => window.api.request("queue::shuffle")}
           disabled={disable()}
           title="Shuffle"
         >
-          <i class="ri-shuffle-fill" />
-        </Button>
-        <Button
-          variant={"ghost"}
-          size="icon"
-          onClick={() => previous()}
-          disabled={disable()}
-          title="Play previous"
-        >
-          <i class="ri-skip-back-mini-fill" />
+          <ShuffleIcon size={20} />
         </Button>
 
-        <button
-          class="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-2xl text-thick-material"
-          onClick={() => togglePlay()}
-          disabled={disable()}
-          title={playHint()}
-        >
-          <Show when={!isPlaying()} fallback={<i class="ri-pause-fill" />}>
-            <i class="ri-play-fill" />
-          </Show>
-        </button>
+        <div class="flex items-center gap-4">
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => previous()}
+            disabled={disable()}
+            title="Play previous"
+          >
+            <SkipBackIcon size={20} />
+          </Button>
 
-        <Button
-          variant={"ghost"}
-          size="icon"
-          onClick={() => next()}
-          disabled={disable()}
-          title="Play next"
-        >
-          <i class="ri-skip-forward-mini-fill"></i>
-        </Button>
+          <button
+            class="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-2xl text-thick-material"
+            onClick={() => togglePlay()}
+            disabled={disable()}
+            title={playHint()}
+          >
+            <Show when={!isPlaying()} fallback={<PauseIcon fill="currentColor" size={20} />}>
+              <PlayIcon fill="currentColor" size={20} />
+            </Show>
+          </button>
+
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={() => next()}
+            disabled={disable()}
+            title="Play next"
+          >
+            <SkipForwardIcon size={20} />
+          </Button>
+        </div>
 
         <Button
           variant={"ghost"}
@@ -99,20 +98,77 @@ const SongControls: Component = () => {
           disabled={disable()}
           title="Repeat"
         >
-          <i class="ri-repeat-2-fill" />
+          <RepeatIcon size={20} />
         </Button>
       </div>
-      <div class="ml-auto">
-        {/* // TODO - modal or something so the user can select a playlist */}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={() => window.api.request("playlist::add", "test", song())}
-          title="Add to playlist"
-        >
-          <i class="ri-add-fill" />
+      <RightPart />
+    </div>
+  );
+};
+
+const LeftPart = () => {
+  const [isHoveringVolume, setIsHoveringVolume] = createSignal(false);
+  let isHoverintTimeoutId: NodeJS.Timeout;
+
+  return (
+    <div class="flex-1">
+      <div
+        class="group flex w-max items-center gap-4"
+        onMouseEnter={() => {
+          clearTimeout(isHoverintTimeoutId);
+          setIsHoveringVolume(true);
+        }}
+        onMouseLeave={() => {
+          // Add a timeout so the volume slider doesn't disappear instantly when the mouse leaves it
+          isHoverintTimeoutId = setTimeout(() => {
+            setIsHoveringVolume(false);
+          }, 320);
+        }}
+      >
+        <Button size="icon" variant="ghost" onClick={handleMuteSong}>
+          <Switch>
+            <Match when={volume() === 0}>
+              <VolumeXIcon size={20} />
+            </Match>
+            <Match when={volume() < 0.5}>
+              <Volume1Icon size={20} />
+            </Match>
+            <Match when={volume() >= 0.5}>
+              <Volume2Icon size={20} />
+            </Match>
+          </Switch>
         </Button>
+
+        <Show when={isHoveringVolume()}>
+          <Slider
+            class="flex h-8 w-28 flex-grow items-center"
+            min={0}
+            max={1}
+            value={volume}
+            onValueChange={setVolume}
+            enableWheelSlide
+          >
+            <Slider.Track class="h-1 flex-1 rounded bg-thick-material">
+              <Slider.Range class="block h-1 rounded bg-white" />
+            </Slider.Track>
+            <Slider.Thumb class="mt-2 block h-4 w-4 rounded-full bg-white" />
+          </Slider>
+        </Show>
       </div>
+    </div>
+  );
+};
+
+const RightPart = () => {
+  return (
+    <div class="flex flex-1 justify-end">
+      <Button
+        size="icon"
+        variant="ghost"
+        onClick={() => window.api.request("playlist::add", "test", song())}
+      >
+        <CirclePlusIcon size={20} />
+      </Button>
     </div>
   );
 };

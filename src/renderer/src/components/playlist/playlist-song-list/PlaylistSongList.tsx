@@ -4,6 +4,7 @@ import { PLAYLIST_SCENE_LIST, setPlaylistActiveScene } from "../playlist-view/pl
 import { namespace } from "@renderer/App";
 import Button from "@renderer/components/button/Button";
 import Impulse from "@renderer/lib/Impulse";
+import { ArrowLeftIcon, PencilIcon, Trash2Icon } from "lucide-solid";
 import { Component, createSignal, Match, onCleanup, onMount, Switch } from "solid-js";
 import { PlaylistSongsQueryPayload, ResourceID, Song } from "src/@types";
 
@@ -64,10 +65,10 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
         <div class="flex flex-row items-center gap-5 text-xl font-medium">
           <Button
             variant={"ghost"}
+            size={"icon"}
             onClick={() => setPlaylistActiveScene(PLAYLIST_SCENE_LIST)}
-            class="text-xl"
           >
-            <i class="ri-arrow-left-line text-overlay"></i>
+            <ArrowLeftIcon class="text-overlay" />
           </Button>
           {/* <Switch fallback={""}>
             <Match when={editMode() === true}>
@@ -96,7 +97,7 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
             setEditMode(!editMode());
           }}
         >
-          <i class="ri-edit-line text-xl" />
+          <PencilIcon class="size-5" />
         </Button>
       </div>
       <div>
@@ -126,7 +127,7 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
                     class="ml-3 w-10 rounded-lg"
                     onClick={() => deleteSong(props.playlistName, s)}
                   >
-                    <i class="ri-delete-bin-line text-lg text-rose-300" />
+                    <Trash2Icon class="text-red" />
                   </Button>
                 </Match>
               </Switch>

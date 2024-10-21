@@ -4,7 +4,9 @@ import PlaylistItem from "../playlist-item/PlaylistItem";
 import { namespace } from "@renderer/App";
 import Button from "@renderer/components/button/Button";
 import Impulse from "@renderer/lib/Impulse";
+import { PlusIcon, SearchIcon } from "lucide-solid";
 import { Component, createSignal, Match, onCleanup, onMount, Switch } from "solid-js";
+import { twMerge } from "tailwind-merge";
 
 const PlaylistList: Component = () => {
   // const [playlistSearch, setPlaylistSearch] = createSignal("");
@@ -41,25 +43,15 @@ const PlaylistList: Component = () => {
               //   setPlaylistSearch(e.target.value);
               // }}
             />
-            {/* this whole switch-match only for -translate-y-[], classlist doesn't work, if there's a better way pls tell me */}
-            <Switch>
-              <Match when={showCreateBox() === true}>
-                <label
-                  class="absolute top-1/2 -translate-x-8 -translate-y-[139px] transform text-xl text-text"
-                  for="search_input"
-                >
-                  <i class="ri-search-line" />
-                </label>
-              </Match>
-              <Match when={showCreateBox() === false}>
-                <label
-                  class="absolute top-1/2 -translate-x-8 -translate-y-[26px] transform text-xl text-text"
-                  for="search_input"
-                >
-                  <i class="ri-search-line" />
-                </label>
-              </Match>
-            </Switch>
+            <label
+              class={twMerge(
+                "absolute top-1/2 -translate-x-8 -translate-y-[22px] transform text-xl text-text",
+                showCreateBox() && "-translate-y-[126px]",
+              )}
+              for="search_input"
+            >
+              <SearchIcon size={20} />
+            </label>
           </div>
           <div class="ml-3">
             {/* // TODO: fix button misaligning when the scrollbar appears */}
@@ -72,7 +64,7 @@ const PlaylistList: Component = () => {
               variant={showCreateBox() ? "accent" : "ghost"}
               size={"icon"}
             >
-              <i class="ri-add-fill" />
+              <PlusIcon />
             </Button>
           </div>
         </div>

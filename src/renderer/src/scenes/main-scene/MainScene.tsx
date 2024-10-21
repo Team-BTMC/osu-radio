@@ -12,7 +12,7 @@ import {
   toggleSongQueueModalOpen,
 } from "@renderer/components/song/song-queue/song-queue.utils";
 import { song } from "@renderer/components/song/song.utils";
-import { Minimize2, Minus, Square, X } from "lucide-solid";
+import { LayersIcon, Minimize2Icon, MinusIcon, SquareIcon, XIcon } from "lucide-solid";
 import {
   Accessor,
   Component,
@@ -22,6 +22,7 @@ import {
   JSXElement,
   Match,
   onCleanup,
+  onMount,
   Setter,
   Show,
   Switch,
@@ -36,7 +37,6 @@ const MainScene: Component = () => {
         <div class="flex flex-1 items-center justify-center">
           <SongDetail />
         </div>
-
         <QueueModal />
       </main>
 
@@ -55,7 +55,7 @@ const Nav: Component = () => {
   const [os, setOs] = createSignal<NodeJS.Platform>();
   const [maximized, setMaximized] = createSignal<boolean>(false);
 
-  createEffect(async () => {
+  onMount(async () => {
     const fetchOS = async () => {
       return await window.api.request("os::platform");
     };
@@ -66,10 +66,17 @@ const Nav: Component = () => {
 
     setOs(await fetchOS());
     setMaximized(await fetchMaximized());
+  });
 
-    window.api.listen("window::maximizeChange", (maximized: boolean) => {
+  createEffect(() => {
+    const resizeListener = (maximized: boolean) => {
       setMaximized(maximized);
-    });
+    };
+
+    window.api.listen("window::maximizeChange", resizeListener);
+    return () => {
+      window.api.removeListener("window::maximizeChange", resizeListener);
+    };
   });
 
   return (
@@ -91,7 +98,7 @@ const Nav: Component = () => {
           class="mr-2"
           onClick={toggleSongQueueModalOpen}
         >
-          <i class="ri-stack-fill" />
+          <LayersIcon size={20} />
         </Button>
       </div>
       {os() !== "darwin" && <WindowControls maximized={maximized} setMaximized={setMaximized} />}
@@ -103,44 +110,46 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
   return (
     <div class="nav-window-controls">
       <button
-        onclick={async () => window.api.request("window::minimize")}
+        onClick={async () => window.api.request("window::minimize")}
         class="nav-window-control"
       >
-        <Minus size={20} />
+        <MinusIcon size={20} />
       </button>
       <button
-        onclick={async () => {
+        onClick={async () => {
           window.api.request("window::maximize");
           props.setMaximized(!props.maximized());
         }}
         class="nav-window-control"
       >
-        {props.maximized() ? <Minimize2 size={20} /> : <Square size={18} />}
+        {props.maximized() ? <Minimize2Icon size={20} /> : <SquareIcon size={18} />}
       </button>
       <button
-        onclick={async () => window.api.request("window::close")}
+        onClick={async () => window.api.request("window::close")}
         class="nav-window-control close"
       >
-        <X size={20} />
+        <XIcon size={20} />
       </button>
     </div>
   );
 }
 
-type NavItemProps = Pick<Tab, "value" | "icon"> & {
+type NavItemProps = Pick<Tab, "value" | "Icon"> & {
   children: JSXElement;
 };
-const NavItem: Component<NavItemProps> = ({ children, value, icon }) => {
+const NavItem: Component<NavItemProps> = (props) => {
   return (
     <button
-      class={`nav-item flex items-center gap-4 rounded-sm px-4 py-1 hover:bg-surface ${mainActiveTab() === value ? "bg-surface" : ""}`}
-      onclick={() => setMainActiveTab(value)}
+      class={`nav-item flex items-center gap-4 rounded-sm px-4 py-1 hover:bg-surface ${mainActiveTab() === props.value ? "bg-surface" : ""}`}
+      onClick={() => setMainActiveTab(props.value)}
     >
-      <i class={`${icon} ${mainActiveTab() === value ? "text-text" : "text-subtext"}`} />
+      <span class={`${mainActiveTab() === props.value ? "" : "opacity-70"}`}>
+        <props.Icon size={20} />
+      </span>
       <span
-        class={`text-base font-semibold ${mainActiveTab() === value ? "text-text" : "text-subtext"}`}
+        class={`text-base font-semibold ${mainActiveTab() === props.value ? "text-text" : "text-subtext"}`}
       >
-        {children}
+        {props.children}
       </span>
     </button>
   );

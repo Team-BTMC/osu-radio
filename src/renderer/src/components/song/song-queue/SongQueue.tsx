@@ -7,6 +7,7 @@ import SongContextMenuItem from "../context-menu/SongContextMenuItem";
 import SongItem from "../song-item/SongItem";
 import { setSongQueueModalOpen } from "./song-queue.utils";
 import Button from "@renderer/components/button/Button";
+import { XIcon } from "lucide-solid";
 import { Component, createSignal, onCleanup, onMount } from "solid-js";
 
 const SongQueue: Component = () => {
@@ -84,8 +85,8 @@ const SongQueue: Component = () => {
     <div ref={view} class="flex h-full flex-col bg-regular-material backdrop-blur-md">
       <div class="sticky top-0 z-10 flex items-center justify-between p-5">
         <h2 class="text-lg font-semibold">Next songs on the queue ({count()})</h2>
-        <Button variant="ghost" onClick={handleCloseButtonClick}>
-          <i class="ri-close-line" />
+        <Button variant="ghost" size="icon" onClick={handleCloseButtonClick}>
+          <XIcon size={20} />
         </Button>
       </div>
 

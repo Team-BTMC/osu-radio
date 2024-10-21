@@ -2,8 +2,8 @@ import { Optional } from "../../../../@types";
 import "../../assets/css/notice/notice.css";
 import Impulse from "../../lib/Impulse";
 import { none, orDefault, some } from "../../lib/rust-like-utils-client/Optional";
-import Gradient from "../Gradient";
 import { hideNotice } from "./NoticeContainer";
+import { XIcon } from "lucide-solid";
 import { Accessor, Component, createSignal } from "solid-js";
 
 export type NoticeType = {
@@ -31,7 +31,9 @@ const Notice: Component<NoticeProps> = (props) => {
 
     try {
       pauseDrain();
-    } catch {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const [drain, setDrainTime, pauseDrain] = createDrainAnimation(
@@ -52,30 +54,28 @@ const Notice: Component<NoticeProps> = (props) => {
       data-id={props.notice.id}
       ref={onRef}
     >
-      <Gradient update={props.updateGradient}>
-        <div class={"notice " + (props.notice.class !== "notice" ? props.notice.class : "")}>
-          <div class="content">
-            <div class="head">
-              <h3>{props.notice.title}</h3>
-              <button onClick={removeNotice}>
-                <i class="ri-close-line" />
-              </button>
-            </div>
-
-            <p>{props.notice.content}</p>
+      <div class={"notice " + (props.notice.class !== "notice" ? props.notice.class : "")}>
+        <div class="content">
+          <div class="head">
+            <h3>{props.notice.title}</h3>
+            <button onClick={removeNotice}>
+              <XIcon size={20} />
+            </button>
           </div>
 
-          <div
-            class="timeout"
-            classList={{
-              pause: drain().isNone,
-            }}
-            style={{
-              animation: orDefault(drain(), undefined),
-            }}
-          ></div>
+          <p>{props.notice.content}</p>
         </div>
-      </Gradient>
+
+        <div
+          class="timeout"
+          classList={{
+            pause: drain().isNone,
+          }}
+          style={{
+            animation: orDefault(drain(), undefined),
+          }}
+        ></div>
+      </div>
     </div>
   );
 };

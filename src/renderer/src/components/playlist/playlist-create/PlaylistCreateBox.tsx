@@ -1,6 +1,7 @@
 import Button from "@renderer/components/button/Button";
 import SongImage from "@renderer/components/song/SongImage";
 import Impulse from "@renderer/lib/Impulse";
+import { XIcon } from "lucide-solid";
 import { Component, createSignal, Setter } from "solid-js";
 
 export type PlaylistCreateBoxProps = {
@@ -26,8 +27,8 @@ const PlaylistCreateBox: Component<PlaylistCreateBoxProps> = (props) => {
     <div class="mb-6 rounded-xl bg-thick-material">
       <div class="flex flex-row items-center justify-between p-4">
         <h3 class="text-xl">Create a new playlist</h3>
-        <Button variant={"ghost"} onClick={() => props.isOpen(false)}>
-          <i class="ri-close-line text-xl text-accent" />
+        <Button variant={"ghost"} size={"icon"} onClick={() => props.isOpen(false)}>
+          <XIcon />
         </Button>
       </div>
       <div class="m-4 mt-0 flex flex-row">

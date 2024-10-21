@@ -1,28 +1,30 @@
+import type { LucideIcon } from "lucide-solid";
+import { ListMusicIcon, MusicIcon, SettingsIcon } from "lucide-solid";
 import { createSignal } from "solid-js";
 
 export type Tab = {
   label: string;
   value: string;
-  icon: string;
+  Icon: LucideIcon;
 };
 
 export const TABS = {
   SONGS: {
     label: "Songs",
     value: "songs",
-    icon: "ri-music-fill",
+    Icon: MusicIcon,
   },
   PLAYLISTS: {
     label: "Playlists",
     value: "playlists",
-    icon: "ri-play-list-fill",
+    Icon: ListMusicIcon,
   },
   SETTINGS: {
     label: "Settings",
     value: "settings",
-    icon: "ri-settings-4-fill",
+    Icon: SettingsIcon,
   },
-} satisfies Record<string, Tab>;
+} as const satisfies Record<string, Tab>;
 
-const [mainActiveTab, setMainActiveTab] = createSignal(TABS.SONGS.value);
+const [mainActiveTab, setMainActiveTab] = createSignal<Tab["value"]>(TABS.SONGS.value);
 export { mainActiveTab, setMainActiveTab };

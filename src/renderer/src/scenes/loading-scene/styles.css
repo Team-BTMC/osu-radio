@@ -14,12 +14,6 @@
     padding-bottom: 40px;
   }
 
-  .loading-scene__bar {
-    height: 12px;
-    width: 100%;
-    max-width: 420px;
-  }
-
   .loading-scene__hint {
     color: var(--text-500);
   }
