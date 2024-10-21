@@ -1,5 +1,5 @@
 import useControllableState from "../controllable-state";
-import { Accessor, createMemo } from "solid-js";
+import { Accessor, createMemo, createSignal } from "solid-js";
 
 const ITEM_DATA_ATTR = "data-item";
 const DEFAULT_SELECTED_VALUE = "";
@@ -23,11 +23,16 @@ type Params = {
 };
 export function useRovingFocusGroup(props: Params) {
   let container!: HTMLElement;
+  const [hasMounted, setHasMounted] = createSignal(false);
   const [currentStopId, setCurrentStopId] = useControllableState({
     defaultProp: props.defaultProp || DEFAULT_SELECTED_VALUE,
     onChange: props.onChange,
     prop: props.prop,
   });
+
+  const onListmounted = () => {
+    setHasMounted(true);
+  };
 
   const handleKeyUp = (event: KeyboardEvent) => {
     const orderedNodes = Array.from(container.querySelectorAll(`[${ITEM_DATA_ATTR}]`));
@@ -85,7 +90,23 @@ export function useRovingFocusGroup(props: Params) {
     setCurrentStopId(nextFocused.getAttribute(ITEM_DATA_ATTR)!);
   };
 
+  const currentlyActiveTab = createMemo(() => {
+    if (!hasMounted()) {
+      return;
+    }
+
+    const stopId = currentStopId();
+    const orderedNodes = Array.from(container?.querySelectorAll(`[${ITEM_DATA_ATTR}]`) ?? []);
+    if (!orderedNodes) {
+      return;
+    }
+
+    return orderedNodes.find((node) => node.getAttribute(ITEM_DATA_ATTR) === stopId);
+  });
+
   return {
+    currentlyActiveTab,
+    onListmounted,
     value: currentStopId,
     attrs: {
       ref: (node: HTMLElement) => {

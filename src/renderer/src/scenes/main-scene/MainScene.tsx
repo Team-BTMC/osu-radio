@@ -124,6 +124,8 @@ const Nav: Component = () => {
               </Tabs.Trigger>
             )}
           </For>
+
+          <Tabs.Indicator />
         </Tabs.List>
       </Show>
 
@@ -143,19 +145,6 @@ const Nav: Component = () => {
         <QueueIcon class="app-no-drag ml-2" />
       </Show>
 
-      {/* <div class="nav__queue ml-auto">
-        <Button
-          variant="ghost"
-          size="icon"
-          classList={{
-            "text-text": songQueueModalOpen(),
-          }}
-          class="mr-2"
-          onClick={toggleSongQueueModalOpen}
-        >
-          <LayersIcon size={20} />
-        </Button>
-      </div> */}
       {os() !== "darwin" && <WindowControls maximized={maximized} setMaximized={setMaximized} />}
     </nav>
   );
