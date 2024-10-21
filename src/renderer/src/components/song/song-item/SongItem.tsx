@@ -8,6 +8,7 @@ import Popover from "@renderer/components/popover/Popover";
 import { EllipsisVerticalIcon } from "lucide-solid";
 import { Component, createSignal, JSXElement, onMount, createMemo } from "solid-js";
 import { Portal } from "solid-js/web";
+import { twMerge } from "tailwind-merge";
 
 type SongItemProps = {
   song: Song;
@@ -80,10 +81,10 @@ const SongItem: Component<SongItemProps> = (props) => {
         }}
       >
         <SongImage
-          class="absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-30 group-hover:opacity-90"
-          classList={{
-            "opacity-90": isActive(),
-          }}
+          class={twMerge(
+            "absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-30 group-hover:opacity-90",
+            isActive() && "opacity-90",
+          )}
           src={props.song.bg}
           group={props.group}
         />
@@ -98,8 +99,10 @@ const SongItem: Component<SongItemProps> = (props) => {
 
           <div class="mr-2 grid aspect-square size-9 place-items-center rounded border-solid border-stroke bg-transparent p-1 text-text hover:bg-surface">
             <Popover.Trigger
-              class="opacity-0 transition-opacity group-hover:opacity-100"
-              classList={{ "opacity-100": localShow() }}
+              class={twMerge(
+                "opacity-0 transition-opacity group-hover:opacity-100",
+                localShow() && "opacity-100",
+              )}
             >
               <EllipsisVerticalIcon />
             </Popover.Trigger>

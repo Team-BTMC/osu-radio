@@ -1,4 +1,5 @@
 import { Component, JSX, onCleanup } from "solid-js";
+import { twMerge } from "tailwind-merge";
 
 type SongContextMenuItemProps = {
   onClick: (event: MouseEvent) => any;
@@ -23,12 +24,11 @@ const SongContextMenuItem: Component<SongContextMenuItemProps> = (props) => {
   return (
     <button
       ref={divAccessor}
-      class={
-        "flex flex-row items-center justify-between gap-3 rounded-md bg-thick-material p-2 text-left transition-colors duration-200 hover:cursor-pointer hover:bg-accent/20 " +
-        props.class
-      }
-      // classList sometimes work sometimes it doesn't, should i use a Switch-Match ?
-      classList={{ "text-subtext/20 hover:bg-inherit hover:cursor-auto": buttonDisabled }}
+      class={twMerge(
+        "flex flex-row items-center justify-between gap-3 rounded-md bg-thick-material p-2 text-left transition-colors duration-200 hover:cursor-pointer hover:bg-accent/20",
+        props.class,
+        buttonDisabled && "text-subtext/20 hover:cursor-auto hover:bg-inherit",
+      )}
       disabled={buttonDisabled}
     >
       {props.children}
