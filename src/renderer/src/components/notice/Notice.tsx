@@ -95,14 +95,13 @@ const Notice: Component<NoticeProps> = (props) => {
       ref={noticeRef}
       class={twMerge(
         bgStyle({ variant: props.notice.variant }),
-        "group relative w-96 transform overflow-hidden rounded-xl border border-stroke bg-thick-material p-4 shadow-2xl backdrop-blur-md transition-all duration-300 ease-in-out",
-        `after:absolute after:inset-0 after:-z-20 after:size-16 after:rounded-full after:blur-2xl after:content-['']`,
-        `before:absolute before:inset-[1px] before:-z-10 before:rounded-[10px] before:bg-thick-material before:content-['']`,
+        `after:absolute after:inset-0 after:-z-20 after:size-20 after:rounded-full after:blur-2xl after:content-['']`,
+        `before:absolute before:inset-0.5 before:-z-10 before:rounded-[10px] before:bg-thick-material before:content-['']`,
+        "group relative w-96 transform overflow-hidden rounded-xl bg-thick-material p-4 shadow-2xl ring-2 ring-inset ring-stroke backdrop-blur-md duration-300 ease-in-out",
         isVisible() ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 blur-sm",
         isRemoving()
           ? "my-0 h-0 max-h-0 min-h-0 -rotate-12 scale-75 py-0 opacity-0 blur-sm"
           : "my-2 min-h-20",
-        "bg-thick-material",
       )}
       data-id={props.notice.id}
     >
@@ -110,7 +109,7 @@ const Notice: Component<NoticeProps> = (props) => {
         variant="outlined"
         size="icon"
         onClick={removeNotice}
-        class="absolute right-3 top-3 size-5 p-1 text-subtext opacity-0 transition-all group-hover:opacity-100"
+        class="absolute right-3 top-3 size-5 p-1 text-subtext opacity-0 transition-opacity duration-150 group-hover:opacity-100"
       >
         <XIcon size={16} />
       </Button>
