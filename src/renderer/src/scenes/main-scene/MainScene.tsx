@@ -57,7 +57,7 @@ const MainScene: Component = () => {
           }}
         >
           <SongDetail />
-          <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-xl bg-fixed">
+          <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-xl border-2 border-stroke bg-fixed">
             <SongImage
               src={song().bg}
               instantLoad={true}
@@ -65,6 +65,10 @@ const MainScene: Component = () => {
             />
             <div class="pointer-events-none absolute inset-0 bg-black/20 backdrop-blur-lg" />
           </div>
+
+          <Show when={os() === "darwin"}>
+            <QueueIcon class="absolute right-2 top-2" />
+          </Show>
         </div>
       </main>
 
@@ -122,6 +126,9 @@ const Nav: Component = () => {
       <Button
         onClick={() => setMainActiveTab(SIDEBAR_PAGES.SETTINGS.value)}
         class="ml-auto"
+        classList={{
+          "mr-5": os() === "darwin",
+        }}
         size="square"
         variant={mainActiveTab() === SIDEBAR_PAGES.SETTINGS.value ? "secondary" : "outlined"}
       >
