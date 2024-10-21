@@ -6,7 +6,7 @@ import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import { song as selectedSong } from "../song.utils";
 import Popover from "@renderer/components/popover/Popover";
 import { EllipsisVerticalIcon } from "lucide-solid";
-import { Component, createSignal, JSXElement, onMount } from "solid-js";
+import { Component, createSignal, JSXElement, onMount, createMemo } from "solid-js";
 import { Portal } from "solid-js/web";
 
 type SongItemProps = {
@@ -19,15 +19,7 @@ type SongItemProps = {
   contextMenu: JSXElement;
 };
 
-const SongItem: Component<SongItemProps> = ({
-  group,
-  onSelect,
-  song,
-  draggable: isDraggable,
-  onDrop,
-  selectable,
-  contextMenu,
-}) => {
+const SongItem: Component<SongItemProps> = (props) => {
   let item: HTMLDivElement | undefined;
   const [localShow, setLocalShow] = createSignal(false);
   const [mousePos, setMousePos] = createSignal<[number, number]>([0, 0]);
@@ -38,15 +30,19 @@ const SongItem: Component<SongItemProps> = ({
     }
 
     draggable(item, {
-      onClick: ignoreClickInContextMenu(() => onSelect(song.path)),
-      onDrop: onDrop ?? (() => {}),
+      onClick: ignoreClickInContextMenu(() => props.onSelect(props.song.path)),
+      onDrop: props.onDrop ?? (() => {}),
       createHint: SongHint,
-      useOnlyAsOnClickBinder: !isDraggable || selectedSong().path === song.path,
+      useOnlyAsOnClickBinder: !props.draggable || selectedSong().path === props.song.path,
     });
 
-    if (selectable === true) {
-      item.dataset.path = song.path;
+    if (props.selectable === true) {
+      item.dataset.path = props.song.path;
     }
+  });
+
+  const isActive = createMemo(() => {
+    return selectedSong().path === props.song.path;
   });
 
   return (
@@ -67,17 +63,17 @@ const SongItem: Component<SongItemProps> = ({
             setLocalShow(false);
           }}
         >
-          {contextMenu}
+          {props.contextMenu}
         </Popover.Content>
       </Portal>
       <div
         class="group relative isolate z-20 select-none rounded-md"
         classList={{
-          "outline outline-2 outline-accent": selectedSong().path === song.path,
+          "outline outline-2 outline-accent": isActive(),
         }}
-        data-active={selectedSong().path === song.path}
+        data-active={isActive()}
         ref={item}
-        data-url={song.bg}
+        data-url={props.song.bg}
         onContextMenu={(e) => {
           setMousePos([e.clientX, e.clientY]);
           setLocalShow(true);
@@ -86,18 +82,18 @@ const SongItem: Component<SongItemProps> = ({
         <SongImage
           class="absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-30 group-hover:opacity-90"
           classList={{
-            "opacity-90": selectedSong().path === song.path,
+            "opacity-90": isActive(),
           }}
-          src={song.bg}
-          group={group}
+          src={props.song.bg}
+          group={props.group}
         />
 
         <div class="flex flex-row items-center justify-between rounded-md bg-black/50">
           <div class="z-20 flex min-h-[72px] flex-col justify-center overflow-hidden rounded-md p-3">
             <h3 class="text-shadow text-[22px] font-extrabold leading-7 shadow-black/60">
-              {song.title}
+              {props.song.title}
             </h3>
-            <p class="text-base text-subtext">{song.artist}</p>
+            <p class="text-base text-subtext">{props.song.artist}</p>
           </div>
 
           <div class="mr-2 grid aspect-square size-9 place-items-center rounded border-solid border-stroke bg-transparent p-1 text-text hover:bg-surface">
