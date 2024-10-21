@@ -57,7 +57,7 @@ const MainScene: Component = () => {
           }}
         >
           <SongDetail />
-          <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-xl border-2 border-stroke bg-fixed">
+          <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-xl bg-fixed">
             <SongImage
               src={song().bg}
               instantLoad={true}
@@ -80,7 +80,7 @@ const MainScene: Component = () => {
         />
       </div>
 
-      <div class="pointer-events-none absolute inset-0 z-[-1] bg-black/80" />
+      <div class="pointer-events-none absolute inset-0 z-[-1] bg-black/90" />
     </Tabs>
   );
 };
