@@ -4,23 +4,31 @@ import { XIcon } from "lucide-solid";
 import { Component, createEffect, createSignal, JSX, onMount, Show } from "solid-js";
 import { twMerge } from "tailwind-merge";
 
-const noticeStyles = cva(
-  [
-    "group w-full transform overflow-hidden rounded-xl border border-stroke bg-thick-material p-4 shadow-2xl backdrop-blur-md transition-all duration-300 ease-in-out",
-  ],
-  {
-    variants: {
-      variant: {
-        neutral: "bg-gradient-to-tl from-surface/10 via-transparent",
-        success: "bg-gradient-to-tl from-green/10 via-transparent",
-        error: " bg-gradient-to-tl from-red/10 via-transparent",
-      },
-    },
-    defaultVariants: {
-      variant: "neutral",
+const progressStyles = cva(["absolute bottom-0 left-0 h-0.5 rounded-full"], {
+  variants: {
+    variant: {
+      success: "bg-green",
+      neutral: "bg-subtext",
+      error: "bg-red",
     },
   },
-);
+  defaultVariants: {
+    variant: "neutral",
+  },
+});
+
+const IconStyles = cva(["mr-3 mt-0.5 flex-shrink-0"], {
+  variants: {
+    variant: {
+      success: "text-green",
+      neutral: "text-subtext",
+      error: "text-red",
+    },
+  },
+  defaultVariants: {
+    variant: "neutral",
+  },
+});
 
 export type NoticeType = {
   id?: string;
@@ -86,8 +94,7 @@ const Notice: Component<NoticeProps> = (props) => {
     <div
       ref={noticeRef}
       class={twMerge(
-        noticeStyles({ variant: props.notice.variant }),
-        "w-96 transition-all duration-300 ease-in-out",
+        "group w-96 transform overflow-hidden rounded-xl border border-stroke bg-thick-material p-4 shadow-2xl backdrop-blur-md transition-all duration-300 ease-in-out",
         isVisible() ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 blur-sm",
         isRemoving()
           ? "my-0 h-0 max-h-0 min-h-0 -rotate-12 scale-75 py-0 opacity-0 blur-sm"
@@ -106,7 +113,7 @@ const Notice: Component<NoticeProps> = (props) => {
 
       <div class="mr-6 flex items-start">
         <Show when={props.notice.icon}>
-          <div class="mr-3 mt-0.5 flex-shrink-0">{props.notice.icon}</div>
+          <div class={IconStyles({ variant: props.notice.variant })}>{props.notice.icon}</div>
         </Show>
         <div class="overflow-hidden">
           <Show when={props.notice.title}>
@@ -121,7 +128,7 @@ const Notice: Component<NoticeProps> = (props) => {
           </Show>
         </div>
         <div
-          class="absolute bottom-0 left-0 h-0.5 rounded-full bg-overlay"
+          class={progressStyles({ variant: props.notice.variant })}
           style={{
             animation: `progress ${NOTICE_DURATION}ms linear`,
             "animation-play-state": props.isPaused ? "paused" : "running",

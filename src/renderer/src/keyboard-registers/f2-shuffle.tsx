@@ -26,8 +26,9 @@ Keyboard.register({
   onPress: () => {
     addNotice({
       variant: "success",
-      title: "Testing",
+      title: "Testing success",
       description: "This is a test notice.",
+      icon: <ShuffleIcon size={20} />,
     });
   },
 });
@@ -37,8 +38,8 @@ Keyboard.register({
   onPress: () => {
     addNotice({
       variant: "error",
-      title: "Error! ",
-      icon: <ShuffleIcon size={20} stroke="rgba(var(--color-red))" />,
+      title: "Error! with icon color override",
+      icon: <ShuffleIcon size={20} stroke="#5DA5FF" />,
       description:
         "This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string.",
     });
