@@ -65,7 +65,7 @@ const SongListSearch: Component<SearchProps> = (props) => {
   // });
 
   return (
-    <div class="px-5 pb-2 pt-3">
+    <div class="px-5 pb-2 pt-1">
       <div class="flex gap-2">
         <div class="relative flex-1">
           <Input

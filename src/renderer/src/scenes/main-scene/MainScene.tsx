@@ -54,10 +54,10 @@ const MainScene: Component = () => {
         <TabContent />
 
         <div
-          class="song relative mb-4 mr-4 flex flex-1 items-center justify-center"
+          class="song relative mb-4 mr-4 flex flex-1 items-center justify-center rounded-lg"
           classList={{
             "mt-4": os() === "darwin",
-            "mt-2": os() === "win32",
+            "mt-1": os() === "win32",
           }}
         >
           <SongDetail />

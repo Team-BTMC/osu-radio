@@ -1,12 +1,12 @@
 .main-scene {
   display: grid;
   &.windows-grid {
-    padding-top: 8px;
+    padding-top: 4px;
     grid-template-areas:
       "nav     nav"
       "sidebar song";
     grid-template-columns: auto 1fr;
-    grid-template-rows: 50px calc(100vh - 58px);
+    grid-template-rows: 50px calc(100vh - 54px);
   }
 
   &.mac-grid {
