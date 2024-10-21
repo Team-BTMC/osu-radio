@@ -6,7 +6,7 @@ import { twMerge } from "tailwind-merge";
 
 const noticeStyles = cva(
   [
-    "group transform overflow-hidden rounded-xl border border-stroke bg-thick-material p-4 shadow-2xl transition-all duration-300 ease-in-out backdrop-blur-md w-full",
+    "group w-full transform overflow-hidden rounded-xl border border-stroke bg-thick-material p-4 shadow-2xl backdrop-blur-md transition-all duration-300 ease-in-out",
   ],
   {
     variants: {
@@ -28,12 +28,10 @@ export type NoticeType = {
   title?: string;
   description?: string;
   icon?: JSX.Element;
-  active?: boolean;
 };
 
 type NoticeProps = {
   notice: NoticeType;
-  onMount: (notice: HTMLElement) => any;
   onRemove: (id: string) => void;
   isPaused: boolean;
 };
@@ -62,7 +60,6 @@ const Notice: Component<NoticeProps> = (props) => {
   };
 
   const pauseRemoveTimeout = () => {
-    clearTimeout(timeout);
     pausedTime = Date.now() - startTime;
   };
 
@@ -74,7 +71,6 @@ const Notice: Component<NoticeProps> = (props) => {
   onMount(() => {
     setTimeout(() => setIsVisible(true), 50); // Delay to trigger enter animation
     startRemoveTimeout();
-    props.onMount(noticeRef!);
   });
 
   createEffect(() => {
@@ -93,7 +89,9 @@ const Notice: Component<NoticeProps> = (props) => {
         noticeStyles({ variant: props.notice.variant }),
         "w-96 transition-all duration-300 ease-in-out",
         isVisible() ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 blur-sm",
-        isRemoving() ? "my-0 max-h-0 -rotate-12 scale-75 py-0 opacity-0 blur-sm" : "my-2 max-h-32",
+        isRemoving()
+          ? "my-0 h-0 max-h-0 min-h-0 -rotate-12 scale-75 py-0 opacity-0 blur-sm"
+          : "my-2 min-h-20",
       )}
       data-id={props.notice.id}
     >
