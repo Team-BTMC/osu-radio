@@ -9,7 +9,7 @@ import { getSongImage, renamePlaylist } from "./playlist-item.utils";
 import Button from "@renderer/components/button/Button";
 import Impulse from "@renderer/lib/Impulse";
 import { EllipsisVerticalIcon } from "lucide-solid";
-import { Component, createSignal, Match, Switch } from "solid-js";
+import { Component, createSignal, Match, Show, Switch } from "solid-js";
 import { Playlist } from "src/@types";
 
 export type PlaylistItemProps = {
@@ -88,11 +88,9 @@ const PlaylistItem: Component<PlaylistItemProps> = (props) => {
         </div>
 
         <div class="fixed left-[460px] mt-7">
-          <Switch>
-            <Match when={showBox() === true}>
-              <ContextMenuBox playlistItem={props} editSignal={setEditMode} />
-            </Match>
-          </Switch>
+          <Show when={showBox() === true}>
+            <ContextMenuBox playlistItem={props} editSignal={setEditMode} />
+          </Show>
         </div>
       </div>
     </div>

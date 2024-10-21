@@ -5,7 +5,7 @@ import { namespace } from "@renderer/App";
 import Button from "@renderer/components/button/Button";
 import Impulse from "@renderer/lib/Impulse";
 import { PlusIcon, SearchIcon } from "lucide-solid";
-import { Component, createSignal, Match, onCleanup, onMount, Switch } from "solid-js";
+import { Component, createSignal, onCleanup, onMount, Show } from "solid-js";
 import { twMerge } from "tailwind-merge";
 
 const PlaylistList: Component = () => {
@@ -59,7 +59,6 @@ const PlaylistList: Component = () => {
               onClick={() => {
                 setShowCreateBox(!showCreateBox());
               }}
-              // bg-accent doesn't work for some reason
               class="rounded-lg text-xl"
               variant={showCreateBox() ? "accent" : "ghost"}
               size={"icon"}
@@ -68,11 +67,9 @@ const PlaylistList: Component = () => {
             </Button>
           </div>
         </div>
-        <Switch fallback={""}>
-          <Match when={showCreateBox() === true}>
-            <PlaylistCreateBox group={group} isOpen={setShowCreateBox} reset={resetListing} />
-          </Match>
-        </Switch>
+        <Show when={showCreateBox() === true}>
+          <PlaylistCreateBox group={group} isOpen={setShowCreateBox} reset={resetListing} />
+        </Show>
       </div>
 
       <div class="flex flex-grow overflow-auto">
