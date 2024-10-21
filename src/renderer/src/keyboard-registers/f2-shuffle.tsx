@@ -39,7 +39,7 @@ Keyboard.register({
     addNotice({
       variant: "error",
       title: "Error! with icon color override",
-      icon: <ShuffleIcon size={20} stroke="#5DA5FF" />,
+      icon: <ShuffleIcon size={20} />,
       description:
         "This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string.",
     });
