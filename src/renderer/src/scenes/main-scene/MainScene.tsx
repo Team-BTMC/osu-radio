@@ -40,7 +40,9 @@ const MainScene: Component = () => {
 
   return (
     <Tabs value={mainActiveTab} onValueChange={setMainActiveTab}>
-      <div class="app-drag fixed left-0 top-0 h-16 w-screen" />
+      <Show when={os() === "darwin"}>
+        <div class="app-drag fixed left-0 top-0 h-16 w-screen" />
+      </Show>
       <main
         class="main-scene relative h-screen"
         classList={{
