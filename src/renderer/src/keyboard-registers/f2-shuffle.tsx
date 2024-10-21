@@ -19,29 +19,3 @@ Keyboard.register({
     });
   },
 });
-
-// testing:
-Keyboard.register({
-  key: "F3",
-  onPress: () => {
-    addNotice({
-      variant: "success",
-      title: "Testing success",
-      description: "This is a test notice.",
-      icon: <ShuffleIcon size={20} />,
-    });
-  },
-});
-
-Keyboard.register({
-  key: "F4",
-  onPress: () => {
-    addNotice({
-      variant: "error",
-      title: "Error! with icon color override",
-      icon: <ShuffleIcon size={20} />,
-      description:
-        "This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string. This is a long string.",
-    });
-  },
-});
