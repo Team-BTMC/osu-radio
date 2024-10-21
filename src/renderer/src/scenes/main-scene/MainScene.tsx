@@ -55,22 +55,20 @@ const MainScene: Component = () => {
         <TabContent />
 
         <div
-          class="song relative mx-4 mb-4 flex flex-1 items-center justify-center rounded-lg"
+          class="song relative flex flex-1 items-center justify-center"
           classList={{
-            "mt-4": os() === "darwin",
+            "m-2 rounded-3xl": os() === "darwin",
             "mt-1": os() === "win32",
           }}
         >
           <SongDetail />
-          <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-xl border-2 border-stroke bg-fixed">
+          <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-lg shadow-2xl ring-2 ring-inset ring-stroke">
             <SongImage
               src={song().bg}
               instantLoad={true}
-              class="h-full w-full bg-cover bg-fixed opacity-20 filter"
+              class="absolute inset-0 scale-110 bg-cover bg-fixed opacity-20 blur-lg filter"
             />
-            <div class="pointer-events-none absolute inset-0 bg-black/20 backdrop-blur-lg" />
           </div>
-
           <Show when={os() === "darwin"}>
             <QueueIcon class="app-no-drag absolute right-2 top-2" />
           </Show>
