@@ -3,6 +3,7 @@ import SongList from "../../components/song/song-list/SongList";
 import { mainActiveTab, setMainActiveTab, Tab, TABS } from "./main.utils";
 import "./styles.css";
 import Button from "@renderer/components/button/Button";
+import NoticeContainer from "@renderer/components/notice/NoticeContainer";
 import Settings from "@renderer/components/settings/Settings";
 import SongImage from "@renderer/components/song/SongImage";
 import SongQueue from "@renderer/components/song/song-queue/SongQueue";
@@ -30,6 +31,7 @@ import {
 const MainScene: Component = () => {
   return (
     <div class="main-scene flex h-screen flex-col overflow-hidden">
+      <NoticeContainer />
       <Nav />
       <main class="relative flex h-[calc(100vh-52px)]">
         <TabContent />
