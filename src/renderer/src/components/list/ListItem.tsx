@@ -7,6 +7,7 @@ export type Props = JSX.IntrinsicElements["button"] & {
 };
 const ListItem: Component<Props> = (props) => {
   const state = useList();
+
   return (
     <button
       data-selected={state.selectedValue() === props.value}

@@ -46,7 +46,7 @@ const ProgressBar = () => {
       class="mt-4 block"
       min={0}
       max={1}
-      value={currentValue}
+      value={currentValue()}
       onValueChange={seek}
       onValueStart={handleSeekStart}
       onValueCommit={handleSeekEnd}

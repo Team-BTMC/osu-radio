@@ -144,7 +144,7 @@ const LeftPart = () => {
             class="flex h-8 w-28 flex-grow items-center"
             min={0}
             max={1}
-            value={volume}
+            value={volume()}
             onValueChange={setVolume}
             enableWheelSlide
           >

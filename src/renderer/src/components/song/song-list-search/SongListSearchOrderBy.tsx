@@ -72,7 +72,7 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
           </Match>
         </Switch>
       </Button>
-      <Dropdown isOpen={isOpen} onValueChange={setIsOpen}>
+      <Dropdown isOpen={isOpen()} onValueChange={setIsOpen}>
         <Dropdown.Trigger class="rounded-md bg-thin-material px-3 py-1">
           {optionLabel()}
         </Dropdown.Trigger>
@@ -82,7 +82,7 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
             setOption(newSelectedOption as OrderOptions);
             handlerOrderChanged();
           }}
-          value={option}
+          value={option()}
         >
           <For each={orderOptions}>
             {(option) => (
