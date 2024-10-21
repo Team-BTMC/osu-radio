@@ -93,20 +93,19 @@ Router.respond("query::playlistNames", () => {
 });
 
 Router.respond("query::playlists", (_evt, request) => {
-  const playlists = Object.keys(Storage.getTable("playlists").getStruct());
+  const playlistNames = Object.keys(Storage.getTable("playlists").getStruct());
 
-  //todo: there has to be a better way to do this
-  const p = Storage.getTable("playlists");
+  const playlists = Storage.getTable("playlists");
   const playlistsInfo: Playlist[] = [];
-  playlists.forEach((v) => {
-    const plist = p.get(v);
+  playlistNames.forEach((name) => {
+    const plist = playlists.get(name);
 
     if (plist.isNone) {
       return;
     }
 
     playlistsInfo.push({
-      name: v,
+      name: name,
       count: plist.value.count,
       length: plist.value.length,
       songs: plist.value.songs,
