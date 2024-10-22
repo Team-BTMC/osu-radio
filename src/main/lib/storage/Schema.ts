@@ -1,10 +1,10 @@
 import { int, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const songsTable = sqliteTable("songs",{
-  audio: text().notNull(),
+  audio: text().notNull().primaryKey,
   OsuFile: text().notNull().unique(),
   path: text().notNull,
-  ctime: text(),
+  ctime: int(),
   dateAdded: text().notNull,
   title:text().notNull,
   artist: text().notNull(),
@@ -19,3 +19,9 @@ export const songsTable = sqliteTable("songs",{
   tags: text({mode:'json'}),
   bg: text().notNull(),
 } )
+
+export const audioTable = sqliteTable("audio", {
+  songID: text().notNull().unique(),
+  path: text().notNull().unique().primaryKey(),
+  ctime: int().notNull()
+})
