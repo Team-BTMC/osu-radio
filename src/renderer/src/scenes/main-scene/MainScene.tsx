@@ -84,6 +84,17 @@ const MainScene: Component = () => {
       </div>
 
       <div class="pointer-events-none absolute inset-0 z-[-1] bg-black/90" />
+
+      <Show when={os() === "darwin"}>
+        <Button
+          size="icon"
+          variant="ghost"
+          class="app-no-drag fixed left-[92px] top-[22px] z-20"
+          onClick={() => setActive((a) => !a)}
+        >
+          <SidebarIcon />
+        </Button>
+      </Show>
     </Tabs>
   );
 };
@@ -103,46 +114,54 @@ const Nav: Component = () => {
   });
 
   return (
-    <nav
-      class="nav app-drag flex flex-shrink-0 items-center"
-      classList={{
-        "pl-[92px]": os() === "darwin",
-        "pl-4": os() !== "darwin",
-      }}
-    >
-      <Button size="icon" variant="ghost" class="app-no-drag" onClick={() => setActive((a) => !a)}>
-        <SidebarIcon />
-      </Button>
-      <Show when={typeof os() !== "undefined"}>
-        <Tabs.List class="ml-4">
-          <For each={NAV_ITEMS}>
-            {({ label, value, Icon }) => (
-              <Tabs.Trigger value={value} class="app-no-drag">
-                <Icon size={20} />
-                <span>{label}</span>
-              </Tabs.Trigger>
-            )}
-          </For>
-        </Tabs.List>
-      </Show>
-
-      <Button
-        onClick={() => setMainActiveTab(SIDEBAR_PAGES.SETTINGS.value)}
-        class="app-no-drag ml-auto"
+    <div class="nav app-drag relative flex items-center">
+      <nav
+        class="absolute right-0 top-4 flex w-[480px] flex-1 flex-shrink-0 items-center"
         classList={{
-          "mr-5": os() === "darwin",
+          "pl-[124px]": os() === "darwin",
+          "pl-4": os() !== "darwin",
         }}
-        size="square"
-        variant={mainActiveTab() === SIDEBAR_PAGES.SETTINGS.value ? "secondary" : "outlined"}
       >
-        <SettingsIcon size={20} />
-      </Button>
+        <Show when={os() === "win32"}>
+          <Button
+            size="icon"
+            variant="ghost"
+            class="app-no-drag"
+            onClick={() => setActive((a) => !a)}
+          >
+            <SidebarIcon />
+          </Button>
+        </Show>
+        <Show when={typeof os() !== "undefined"}>
+          <Tabs.List class="ml-3">
+            <For each={NAV_ITEMS}>
+              {({ label, value, Icon }) => (
+                <Tabs.Trigger value={value} class="app-no-drag">
+                  <Icon size={20} />
+                  <span>{label}</span>
+                </Tabs.Trigger>
+              )}
+            </For>
+          </Tabs.List>
+        </Show>
 
-      <Show when={os() === "win32"}>
-        <QueueIcon class="app-no-drag ml-2" />
-      </Show>
+        <Button
+          onClick={() => setMainActiveTab(SIDEBAR_PAGES.SETTINGS.value)}
+          class="app-no-drag ml-auto"
+          classList={{
+            "mr-5": os() === "darwin",
+          }}
+          size="square"
+          variant={mainActiveTab() === SIDEBAR_PAGES.SETTINGS.value ? "secondary" : "outlined"}
+        >
+          <SettingsIcon size={20} />
+        </Button>
 
-      {/* <div class="nav__queue ml-auto">
+        <Show when={os() === "win32"}>
+          <QueueIcon class="app-no-drag ml-2" />
+        </Show>
+
+        {/* <div class="nav__queue ml-auto">
         <Button
           variant="ghost"
           size="icon"
@@ -155,8 +174,9 @@ const Nav: Component = () => {
           <LayersIcon size={20} />
         </Button>
       </div> */}
-      {os() !== "darwin" && <WindowControls maximized={maximized} setMaximized={setMaximized} />}
-    </nav>
+        {os() !== "darwin" && <WindowControls maximized={maximized} setMaximized={setMaximized} />}
+      </nav>
+    </div>
   );
 };
 

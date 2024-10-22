@@ -32,7 +32,7 @@ async function createWindow() {
     titleBarStyle: "hidden",
     trafficLightPosition: {
       x: 20,
-      y: 24,
+      y: 28,
     },
     icon: getIcon(),
     webPreferences: {

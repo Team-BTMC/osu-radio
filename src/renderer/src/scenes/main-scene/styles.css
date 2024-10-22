@@ -14,7 +14,7 @@
       "nav     song"
       "sidebar song";
     grid-template-columns: auto 1fr;
-    grid-template-rows: 64px calc(100vh - 64px);
+    grid-template-rows: 68px calc(100vh - 68px);
   }
 
   .nav {
