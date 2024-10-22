@@ -23,7 +23,7 @@ export type Props = {
   flip?: FlipOptions;
   shift?: ShiftOptions;
   placement?: Placement;
-  mousePos?: Accessor<[number, number]>;
+  mousePos?: Accessor<[number, number]>; // [x, y]
   defaultProp?: boolean;
   isOpen?: Accessor<boolean>;
   onValueChange?: (newOpen: boolean) => void;
@@ -63,7 +63,7 @@ function useProviderValue(props: Props) {
         props.mousePos()[1] !== 0
       ) {
         lastMousePos = props.mousePos();
-        return { x: props.mousePos()[0], y: props.mousePos()[1] };
+        return { x: lastMousePos[0], y: lastMousePos[1] };
       }
       return {};
     },
