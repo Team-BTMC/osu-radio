@@ -163,9 +163,17 @@ const Notice: Component<NoticeProps> = (props) => {
             </p>
           </Show>
         </div>
+      </div>
+
+      <div
+        class="absolute inset-0 m-px overflow-hidden"
+        style={{
+          "border-radius": "13px",
+        }}
+      >
         <div
           class={twMerge(
-            "absolute bottom-0.5 left-0 h-1 rounded-full",
+            "absolute bottom-px left-0 h-1 rounded-full",
             bgStyle({ variant: props.notice.variant }),
           )}
           style={{
