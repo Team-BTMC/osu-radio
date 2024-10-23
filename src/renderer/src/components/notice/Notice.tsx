@@ -1,7 +1,8 @@
 import Button from "../button/Button";
 import { cva } from "class-variance-authority";
 import { XIcon } from "lucide-solid";
-import { Component, createEffect, createSignal, JSX, onMount, Show } from "solid-js";
+import { Component, createEffect, createMemo, createSignal, JSX, onMount, Show } from "solid-js";
+import { DOMElement } from "solid-js/jsx-runtime";
 import { twMerge } from "tailwind-merge";
 
 const bgStyle = cva([], {
@@ -45,10 +46,8 @@ type NoticeProps = {
 };
 
 const NOTICE_DURATION = 3_000; // 3 seconds
-const ANIMATION_DURATION = 300; // 300ms for enter/exit animations
 
 const Notice: Component<NoticeProps> = (props) => {
-  const [isVisible, setIsVisible] = createSignal(false);
   const [isRemoving, setIsRemoving] = createSignal(false);
   let noticeRef: HTMLDivElement | undefined;
   let timeout: NodeJS.Timeout;
@@ -57,9 +56,6 @@ const Notice: Component<NoticeProps> = (props) => {
 
   const removeNotice = () => {
     setIsRemoving(true);
-    setTimeout(() => {
-      props.onRemove(props.notice.id!);
-    }, ANIMATION_DURATION);
   };
 
   const startRemoveTimeout = () => {
@@ -77,7 +73,6 @@ const Notice: Component<NoticeProps> = (props) => {
   };
 
   onMount(() => {
-    setTimeout(() => setIsVisible(true), 50); // Delay to trigger enter animation
     startRemoveTimeout();
   });
 
@@ -90,26 +85,57 @@ const Notice: Component<NoticeProps> = (props) => {
     }
   });
 
+  const handleAnimationEnd = (
+    event: AnimationEvent & {
+      currentTarget: HTMLDivElement;
+      target: DOMElement;
+    },
+  ) => {
+    // Validates if the animation finidhed on the current element
+    if (event.target !== event.currentTarget) {
+      return;
+    }
+
+    if (!isRemoving()) {
+      return;
+    }
+
+    props.onRemove(props.notice.id!);
+  };
+
+  const removingClasses = createMemo(() => {
+    if (isRemoving()) {
+      return "my-0 h-0 max-h-0 min-h-0 -rotate-12 scale-75 py-0 opacity-0 blur-sm";
+    }
+
+    return "my-2 min-h-20";
+  });
+
   return (
     <div
       ref={noticeRef}
+      onAnimationEnd={handleAnimationEnd}
       class={twMerge(
+        // Background
         bgStyle({ variant: props.notice.variant }),
-        `after:absolute after:inset-0 after:-z-20 after:size-20 after:rounded-full after:blur-2xl after:content-['']`,
-        `before:absolute before:inset-0.5 before:-z-10 before:rounded-[10px] before:bg-thick-material before:content-['']`,
+        // General
         "group relative w-96 transform overflow-hidden rounded-xl bg-thick-material p-4 shadow-2xl ring-2 ring-inset ring-stroke backdrop-blur-md duration-300 ease-in-out",
-        isVisible() ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0 blur-sm",
-        isRemoving()
-          ? "my-0 h-0 max-h-0 min-h-0 -rotate-12 scale-75 py-0 opacity-0 blur-sm"
-          : "my-2 min-h-20",
+        // After
+        `after:absolute after:inset-0 after:-z-20 after:size-20 after:rounded-full after:blur-2xl after:content-['']`,
+        // Before
+        `before:absolute before:inset-0.5 before:-z-10 before:rounded-[10px] before:bg-thick-material before:content-['']`,
+        // Enter animation
+        "animate-notice-slide-in",
+        // Removing
+        removingClasses(),
       )}
       data-id={props.notice.id}
     >
       <Button
-        variant="outlined"
+        variant="ghost"
         size="icon"
         onClick={removeNotice}
-        class="absolute right-3 top-3 size-5 p-1 text-subtext opacity-0 transition-opacity duration-150 group-hover:opacity-100"
+        class="absolute right-4 top-4 size-5 p-1 text-subtext opacity-0 transition-opacity duration-150 group-hover:opacity-100"
       >
         <XIcon size={16} />
       </Button>
@@ -139,7 +165,7 @@ const Notice: Component<NoticeProps> = (props) => {
         </div>
         <div
           class={twMerge(
-            "absolute bottom-0 left-0 h-0.5 rounded-full",
+            "absolute bottom-0.5 left-0 h-1 rounded-full",
             bgStyle({ variant: props.notice.variant }),
           )}
           style={{
