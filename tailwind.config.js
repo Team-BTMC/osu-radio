@@ -1,17 +1,15 @@
 /** @type {import('tailwindcss').Config} */
+import { noticeAnimations } from "./src/renderer/src/components/notice/noticeAnimations";
 
 export default {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       keyframes: {
-        "notice-slide-in": {
-          "0%": { transform: "translateY(-100%)", filter: "blur(4px)", opacity: 0 },
-          "100%": { transform: "translateX(0)", opacity: 1 },
-        },
+        ...noticeAnimations.keyframes,
       },
       animation: {
-        "notice-slide-in": "notice-slide-in 300ms cubic-bezier(0.4, 0, 0.2, 1)",
+        ...noticeAnimations.animation,
       },
       colors: {
         transparent: "transparent",

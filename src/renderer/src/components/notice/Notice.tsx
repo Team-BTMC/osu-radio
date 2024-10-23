@@ -105,9 +105,8 @@ const Notice: Component<NoticeProps> = (props) => {
 
   const removingClasses = createMemo(() => {
     if (isRemoving()) {
-      return "my-0 h-0 max-h-0 min-h-0 -rotate-12 scale-75 py-0 opacity-0 blur-sm";
+      return "animate-notice-slide-out";
     }
-
     return "my-2 min-h-20";
   });
 
