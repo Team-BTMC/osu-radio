@@ -4,6 +4,15 @@ export default {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      keyframes: {
+        "notice-slide-in": {
+          "0%": { transform: "translateY(-100%)", filter: "blur(4px)", opacity: 0 },
+          "100%": { transform: "translateX(0)", opacity: 1 },
+        },
+      },
+      animation: {
+        "notice-slide-in": "notice-slide-in 300ms cubic-bezier(0.4, 0, 0.2, 1)",
+      },
       colors: {
         transparent: "transparent",
         "thick-material": "rgba(var(--color-thick-material), 0.9)",
