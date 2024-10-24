@@ -1,14 +1,14 @@
+import fs from "graceful-fs";
+import os from "os";
+import path from "path/posix";
+import readline from "readline";
+import Realm from "realm";
 import { AudioSource, ImageSource, ResourceID, Result, Song } from "../../../@types";
 import { access } from "../fs-promises";
 import { fail, ok } from "../rust-like-utils-backend/Result";
 import { assertNever } from "../tungsten/assertNever";
 import { Beatmap, BeatmapSet } from "./LazerTypes";
 import { OsuFile } from "./OsuFile";
-import fs from "graceful-fs";
-import os from "os";
-import path from "path/posix";
-import readline from "readline";
-import Realm from "realm";
 
 const bgFileNameRegex = /.*"(?<!Video.*)(.*)".*/;
 const beatmapSetIDRegex = /([0-9]+) .*/;
@@ -111,6 +111,7 @@ class BufferReader {
   }
 }
 
+// TODO: Add all diffs of same song to beatmap
 function removeUnoriginalBeatmaps(maps: Beatmap[]): Beatmap[] {
   const mp3List: string[] = [];
   const finalMaps: Beatmap[] = [];
@@ -175,6 +176,12 @@ export class OsuParser {
         song.audio =
           currentDir + "/files/" + songHash[0] + "/" + songHash.substring(0, 2) + "/" + songHash;
 
+        /* Note: in lots of places throughout the application, it relies on the song.path parameter, which in the
+        stable parser is the path of the folder that holds all the files. This folder doesn't exist in lazer's
+        file structure, so for now I'm just passing the audio location as the path parameter. In initial testing
+        this doesn't seem to break anything but just leaving this note in case it does */
+        song.path = song.audio;
+
         if (beatmap.Metadata.BackgroundFile) {
           const bgHash = beatmapSet.Files.find(
             (file) => file.Filename === beatmap.Metadata.BackgroundFile,
@@ -183,6 +190,8 @@ export class OsuParser {
           song.bg =
             currentDir + "/files/" + bgHash[0] + "/" + bgHash.substring(0, 2) + "/" + bgHash;
         }
+
+        song.beatmapSetID = beatmapSet.OnlineID;
 
         songTable.set(song.audio, song);
         audioTable.set(song.audio, {
