@@ -175,20 +175,26 @@ const QueueModal: Component = () => {
   let queueModal: HTMLDivElement | undefined;
 
   const handleOutsideClick = (event: MouseEvent) => {
-    if (queueModal && !queueModal.contains(event.target as Node)) {
-      toggleSongQueueModalOpen();
+    if (event.target instanceof HTMLElement) {
+      if (
+        queueModal &&
+        !queueModal.contains(event.target as Node) &&
+        event.target.closest(".popover-overlay") === null
+      ) {
+        toggleSongQueueModalOpen();
+      }
     }
   };
 
   createEffect(() => {
     if (songQueueModalOpen()) {
-      document.addEventListener("mousedown", handleOutsideClick);
+      document.addEventListener("click", handleOutsideClick);
     } else {
-      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("click", handleOutsideClick);
     }
 
     onCleanup(() => {
-      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("click", handleOutsideClick);
     });
   });
 
