@@ -18,40 +18,31 @@ type SongItemProps = {
   children?: any;
 };
 
-const SongItem: Component<SongItemProps> = ({
-  group,
-  onSelect,
-  song,
-  draggable: isDraggable,
-  onDrop,
-  selectable,
-}) => {
+const SongItem: Component<SongItemProps> = (props) => {
   let item: HTMLDivElement | undefined;
   const [, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
 
   const { extractColorFromImage } = useColorExtractor();
-  const { primaryColor, secondaryColor, processImage } = extractColorFromImage(song);
+  const { primaryColor, secondaryColor, processImage } = extractColorFromImage(props.song);
 
   onMount(() => {
     if (!item) return;
 
     // Initialize draggable functionality
     draggable(item, {
-      onClick: ignoreClickInContextMenu(() => {
-        onSelect(song.path);
-      }),
-      onDrop: onDrop ?? (() => {}),
+      onClick: ignoreClickInContextMenu(() => props.onSelect(props.song.path)),
+      onDrop: props.onDrop ?? (() => {}),
       createHint: SongHint,
-      useOnlyAsOnClickBinder: !isDraggable || selectedSong().path === song.path,
+      useOnlyAsOnClickBinder: !props.draggable || selectedSong().path === props.song.path,
     });
 
-    if (selectable === true) {
-      item.dataset.path = song.path;
+    if (props.selectable === true) {
+      item.dataset.path = props.song.path;
     }
   });
 
   const isSelected = createMemo(() => {
-    return selectedSong().audio === song.audio;
+    return selectedSong().audio === props.song.audio;
   });
 
   const borderColor = createMemo(() => {
@@ -90,13 +81,13 @@ const SongItem: Component<SongItemProps> = ({
       <div
         class="group relative isolate select-none rounded-lg"
         ref={item}
-        data-url={song.bg}
+        data-url={props.song.bg}
         onContextMenu={(evt) => setCoords([evt.clientX, evt.clientY])}
       >
         <SongImage
           class={`absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat`}
-          src={song.bg}
-          group={group}
+          src={props.song.bg}
+          group={props.group}
           onImageLoaded={processImage}
         />
         <div
@@ -105,8 +96,8 @@ const SongItem: Component<SongItemProps> = ({
             background: backgrund(),
           }}
         >
-          <h3 class="text-shadow text-[22px] font-extrabold leading-7">{song.title}</h3>
-          <p class="text-base text-subtext">{song.artist}</p>
+          <h3 class="text-shadow text-[22px] font-extrabold leading-7">{props.song.title}</h3>
+          <p class="text-base text-subtext">{props.song.artist}</p>
         </div>
       </div>
     </div>
