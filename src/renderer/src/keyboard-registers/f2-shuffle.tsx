@@ -1,6 +1,7 @@
 import { addNotice } from "../components/notice/NoticeContainer";
 import { Keyboard } from "../lib/Keyboard";
 import { mainActiveTab, TABS } from "@renderer/scenes/main-scene/main.utils";
+import { ShuffleIcon } from "lucide-solid";
 
 Keyboard.register({
   key: "F2",
@@ -12,9 +13,9 @@ Keyboard.register({
     }
 
     addNotice({
-      class: "notice",
       title: "Shuffled",
-      content: "Current queue have been shuffled",
+      icon: <ShuffleIcon size={20} />,
+      description: "The current queue has been shuffled.",
     });
   },
 });
