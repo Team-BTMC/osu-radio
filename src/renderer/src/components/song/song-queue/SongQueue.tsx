@@ -3,7 +3,9 @@ import { namespace } from "../../../App";
 import Impulse from "../../../lib/Impulse";
 import scrollIfNeeded from "../../../lib/tungsten/scroll-if-needed";
 import InfiniteScroller from "../../InfiniteScroller";
-import SongContextMenuItem from "../context-menu/SongContextMenuItem";
+import SongContextMenu from "../context-menu/SongContextMenu";
+import AddToPlaylist from "../context-menu/items/AddToPlaylist";
+import RemoveFromQueue from "../context-menu/items/RemoveFromQueue";
 import SongItem from "../song-item/SongItem";
 import { setSongQueueModalOpen } from "./song-queue.utils";
 import Button from "@renderer/components/button/Button";
@@ -106,11 +108,13 @@ const SongQueue: Component = () => {
               draggable={true}
               onSelect={() => window.api.request("queue::play", s.path)}
               onDrop={onDrop(s)}
-            >
-              <SongContextMenuItem onClick={() => window.api.request("queue::removeSong", s.path)}>
-                Remove from queue
-              </SongContextMenuItem>
-            </SongItem>
+              contextMenu={
+                <SongContextMenu>
+                  <AddToPlaylist path={s.path} />
+                  <RemoveFromQueue path={s.path} />
+                </SongContextMenu>
+              }
+            ></SongItem>
           )}
         />
       </div>
