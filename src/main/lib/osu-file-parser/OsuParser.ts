@@ -418,7 +418,7 @@ export class OsuParser {
         const osuFilePath = path.join(songsFolderPath, folder, osu_filename);
         song.osuFile = osuFilePath;
         song.audio = audioFilePath;
-        song.path = songsFolderPath + "/" + folder;
+        song.path = path.join(songsFolderPath, folder);
 
         // Check if the song has already been processed, and add the diff name to the existing song if so
         const existingSong = songTable.get(audioFilePath);
