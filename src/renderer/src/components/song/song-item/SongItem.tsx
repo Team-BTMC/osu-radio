@@ -24,7 +24,6 @@ const SongItem: Component<SongItemProps> = (props) => {
   let item: HTMLDivElement | undefined;
   const [localShow, setLocalShow] = createSignal(false);
   const [mousePos, setMousePos] = createSignal<[number, number]>([0, 0]);
-  const [hideTrigger, setHideTrigger] = createSignal(false);
 
   onMount(() => {
     if (!item) {
@@ -63,7 +62,6 @@ const SongItem: Component<SongItemProps> = (props) => {
           onClick={(e) => {
             e.stopImmediatePropagation();
             setLocalShow(false);
-            setHideTrigger(false);
           }}
         >
           {props.contextMenu}
@@ -80,7 +78,6 @@ const SongItem: Component<SongItemProps> = (props) => {
         onContextMenu={(e) => {
           setMousePos([e.clientX, e.clientY]);
           setLocalShow(true);
-          setHideTrigger(true);
         }}
       >
         <SongImage
@@ -104,7 +101,7 @@ const SongItem: Component<SongItemProps> = (props) => {
             <Popover.Trigger
               class={twMerge(
                 "opacity-0 transition-opacity group-hover:opacity-100",
-                localShow() && !hideTrigger() && "opacity-100",
+                localShow() && "opacity-100",
               )}
             >
               <EllipsisVerticalIcon />
