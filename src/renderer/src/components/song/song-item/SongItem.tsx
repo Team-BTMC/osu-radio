@@ -6,7 +6,11 @@ import { useColorExtractor } from "../color-extractor";
 import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import { song as selectedSong } from "../song.utils";
 import { transparentize } from "polished";
-import { Component, createMemo, createSignal, onMount } from "solid-js";
+import Popover from "@renderer/components/popover/Popover";
+import { EllipsisVerticalIcon } from "lucide-solid";
+import { Component, createSignal, JSXElement, onMount, createMemo } from "solid-js";
+import { Portal } from "solid-js/web";
+import { twMerge } from "tailwind-merge";
 
 type SongItemProps = {
   song: Song;
@@ -15,7 +19,7 @@ type SongItemProps = {
   onSelect: (songResource: ResourceID) => any;
   draggable?: true;
   onDrop?: (before: Element | null) => any;
-  children?: any;
+  contextMenu: JSXElement;
 };
 
 const SongItem: Component<SongItemProps> = (props) => {
@@ -24,6 +28,8 @@ const SongItem: Component<SongItemProps> = (props) => {
 
   const { extractColorFromImage } = useColorExtractor();
   const { primaryColor, secondaryColor, processImage } = extractColorFromImage(props.song);
+  const [localShow, setLocalShow] = createSignal(false);
+  const [mousePos, setMousePos] = createSignal<[number, number]>([0, 0]);
 
   onMount(() => {
     if (!item) return;
@@ -69,38 +75,75 @@ const SongItem: Component<SongItemProps> = (props) => {
   });
 
   return (
-    <div
-      class="min-h-[72px] rounded-lg py-0.5 pl-1.5 pr-0.5 transition-colors"
-      classList={{
-        "shadow-glow-blue": isSelected(),
-      }}
-      style={{
-        background: borderColor(),
-      }}
+    <Popover
+      isOpen={localShow}
+      onValueChange={setLocalShow}
+      placement="right"
+      offset={{ crossAxis: 5, mainAxis: 5 }}
+      shift={{}}
+      flip={{}}
+      mousePos={mousePos}
     >
-      <div
-        class="group relative isolate select-none rounded-lg"
-        ref={item}
-        data-url={props.song.bg}
-        onContextMenu={(evt) => setCoords([evt.clientX, evt.clientY])}
-      >
-        <SongImage
-          class={`absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat`}
-          src={props.song.bg}
-          group={props.group}
-          onImageLoaded={processImage}
-        />
-        <div
-          class="flex flex-col justify-center overflow-hidden rounded-md p-3"
-          style={{
-            background: backgrund(),
+      <Portal>
+        <Popover.Overlay />
+        <Popover.Content
+          onClick={(e) => {
+            e.stopImmediatePropagation();
+            setLocalShow(false);
           }}
         >
-          <h3 class="text-shadow text-[22px] font-extrabold leading-7">{props.song.title}</h3>
-          <p class="text-base text-subtext">{props.song.artist}</p>
+          {props.contextMenu}
+        </Popover.Content>
+      </Portal>
+      <div
+        class="min-h-[72px] rounded-lg py-0.5 pl-1.5 pr-0.5 transition-colors"
+        classList={{
+          "shadow-glow-blue": isSelected(),
+        }}
+        style={{
+          background: borderColor(),
+        }}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          setMousePos([e.clientX, e.clientY]);
+          setLocalShow(true);
+        }}
+      >
+        <div
+          class="group relative isolate select-none rounded-lg"
+          ref={item}
+          data-url={props.song.bg}
+          onContextMenu={(evt) => setCoords([evt.clientX, evt.clientY])}
+        >
+          <SongImage
+            class={`absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat`}
+            src={props.song.bg}
+            group={props.group}
+            onImageLoaded={processImage}
+          />
+          <div
+            class="flex flex-col justify-center overflow-hidden rounded-md p-3"
+            style={{
+              background: backgrund(),
+            }}
+          >
+            <h3 class="text-shadow text-[22px] font-extrabold leading-7">{props.song.title}</h3>
+            <p class="text-base text-subtext">{props.song.artist}</p>
+          </div>
+
+          <div class="absolute right-2 top-1/2 -translate-y-1/2 grid aspect-square size-9 place-items-center rounded border-solid border-stroke bg-transparent p-1 text-text hover:bg-surface">
+            <Popover.Trigger
+              class={twMerge(
+                "opacity-0 transition-opacity group-hover:opacity-100",
+                localShow() && "opacity-100",
+              )}
+            >
+              <EllipsisVerticalIcon />
+            </Popover.Trigger>
+          </div>
         </div>
       </div>
-    </div>
+    </Popover>
   );
 };
 
