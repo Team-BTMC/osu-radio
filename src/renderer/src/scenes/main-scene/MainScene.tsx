@@ -3,6 +3,7 @@ import SongList from "../../components/song/song-list/SongList";
 import { mainActiveTab, setMainActiveTab, Tab, TABS } from "./main.utils";
 import "./styles.css";
 import Button from "@renderer/components/button/Button";
+import PlaylistView from "@renderer/components/playlist/playlist-view/PlaylistView";
 import NoticeContainer from "@renderer/components/notice/NoticeContainer";
 import Settings from "@renderer/components/settings/Settings";
 import SongImage from "@renderer/components/song/SongImage";
@@ -162,6 +163,9 @@ const TabContent: Component = () => {
       <Switch fallback={<div>Tab not found</div>}>
         <Match when={mainActiveTab() === TABS.SONGS.value}>
           <SongList isAllSongs={true} />
+        </Match>
+        <Match when={mainActiveTab() === TABS.PLAYLISTS.value}>
+          <PlaylistView />
         </Match>
         <Match when={mainActiveTab() === TABS.SETTINGS.value}>
           <Settings />

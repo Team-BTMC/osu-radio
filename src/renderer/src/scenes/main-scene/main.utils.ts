@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-solid";
-import { MusicIcon, SettingsIcon } from "lucide-solid";
+import { ListMusicIcon, MusicIcon, SettingsIcon } from "lucide-solid";
 import { createSignal } from "solid-js";
 
 export type Tab = {
@@ -13,6 +13,11 @@ export const TABS = {
     label: "Songs",
     value: "songs",
     Icon: MusicIcon,
+  },
+  PLAYLISTS: {
+    label: "Playlists",
+    value: "playlists",
+    Icon: ListMusicIcon,
   },
   SETTINGS: {
     label: "Settings",

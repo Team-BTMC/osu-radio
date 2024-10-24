@@ -42,7 +42,7 @@ const SongItem: Component<SongItemProps> = (props) => {
 
   return (
     <div
-      class="group relative isolate select-none rounded-md"
+      class="group relative isolate w-full select-none rounded-md"
       classList={{
         "outline outline-2 outline-accent": isActive(),
       }}
