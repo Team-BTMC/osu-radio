@@ -52,7 +52,7 @@ const ProgressBar = () => {
       onValueCommit={handleSeekEnd}
       animate
     >
-      <Slider.Track class="flex h-7 items-center rounded-xl bg-thick-material p-1">
+      <Slider.Track class="flex h-7 items-center rounded-xl border border-stroke/5 bg-thick-material p-1">
         <Slider.Range class="block h-5 rounded-l-lg bg-surface" />
       </Slider.Track>
       <Slider.Thumb class="-mt-0.5 block h-8 w-1.5 rounded-lg bg-white" />

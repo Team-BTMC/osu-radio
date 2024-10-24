@@ -7,15 +7,7 @@ import Settings from "@renderer/components/settings/Settings";
 import SongImage from "@renderer/components/song/SongImage";
 import { song } from "@renderer/components/song/song.utils";
 import Tabs from "@renderer/components/tabs/Tabs";
-import {
-  Layers3Icon,
-  MinusIcon,
-  SettingsIcon,
-  SidebarIcon,
-  SquareIcon,
-  XIcon,
-  MaximizeIcon,
-} from "lucide-solid";
+import { Layers3Icon, MinusIcon, SettingsIcon, SidebarIcon, SquareIcon, XIcon } from "lucide-solid";
 import {
   Accessor,
   Component,
@@ -58,7 +50,7 @@ const MainScene: Component = () => {
           class="song relative flex flex-1 items-center justify-center"
           classList={{
             "m-2 rounded-3xl": os() === "darwin",
-            "mt-1": os() === "win32",
+            "mt-1 m-2": os() === "win32",
           }}
         >
           <SongDetail />
@@ -208,7 +200,7 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
         }}
         class="nav-window-control app-no-drag"
       >
-        {props.maximized() ? <MaximizeIcon size={20} /> : <SquareIcon size={18} />}
+        <SquareIcon size={18} />
       </Button>
       <Button
         size="square"
