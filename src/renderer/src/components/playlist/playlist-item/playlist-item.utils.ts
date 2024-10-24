@@ -1,5 +1,7 @@
+import { addNotice } from "@renderer/components/notice/NoticeContainer";
 import { PlaylistItemProps } from "./PlaylistItem";
 import { Playlist } from "src/@types";
+import { BadgeCheckIcon } from "lucide-solid";
 
 export function getSongImage(playlist: Playlist) {
   const songs = playlist.songs;
@@ -14,6 +16,12 @@ export function deletePlaylist(e: Event, props: PlaylistItemProps) {
   e.stopPropagation();
   window.api.request("playlist::delete", props.playlist.name);
   props.reset.pulse();
+  addNotice({
+    variant: "success",
+    title: "Playlist deleted",
+    description: "Playlist " + props.playlist.name + " successfully deleted!",
+    icon: BadgeCheckIcon({ size: 20 }),
+  });
 }
 
 // function formatPlaylistTime(seconds: number) {
@@ -35,5 +43,11 @@ export const renamePlaylist = async (oldName: string, newName: string) => {
   }
 
   await window.api.request("playlist::rename", oldName, newName);
+  addNotice({
+    title: "Renamed playlist",
+    description: "Playlist renamed successfully!",
+    variant: "success",
+    icon: BadgeCheckIcon({ size: 20 }),
+  });
   // reset.pulse();
 };

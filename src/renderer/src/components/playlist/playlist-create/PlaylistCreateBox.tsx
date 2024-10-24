@@ -1,7 +1,8 @@
 import Button from "@renderer/components/button/Button";
+import { addNotice } from "@renderer/components/notice/NoticeContainer";
 import SongImage from "@renderer/components/song/SongImage";
 import Impulse from "@renderer/lib/Impulse";
-import { XIcon } from "lucide-solid";
+import { BadgeCheckIcon, XIcon } from "lucide-solid";
 import { Component, createSignal, Setter } from "solid-js";
 
 export type PlaylistCreateBoxProps = {
@@ -14,13 +15,21 @@ const PlaylistCreateBox: Component<PlaylistCreateBoxProps> = (props) => {
 
   const createPlaylist = () => {
     // last check is probably unnecessary
-    if (playlistName().length === 0 || playlistName() === undefined || playlistName() === "") {
+    const name = playlistName().trim();
+    if (name.length === 0 || name === undefined || name === "") {
       return;
     }
-    window.api.request("playlist::create", playlistName().trim());
+    window.api.request("playlist::create", name);
     setPlaylistName("");
     props.reset.pulse();
     props.isOpen(false);
+
+    addNotice({
+      title: "Playlist created",
+      description: "The playlist " + name + " has been successfully created!",
+      variant: "success",
+      icon: <BadgeCheckIcon size={20} />,
+    });
   };
 
   return (

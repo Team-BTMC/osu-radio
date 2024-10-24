@@ -10,8 +10,10 @@ import {
   handleMuteSong,
 } from "../song.utils";
 import Button from "@renderer/components/button/Button";
+import { addNotice } from "@renderer/components/notice/NoticeContainer";
 import Slider from "@renderer/components/slider/Slider";
 import {
+  BadgeCheckIcon,
   CirclePlusIcon,
   PauseIcon,
   PlayIcon,
@@ -165,7 +167,15 @@ const RightPart = () => {
       <Button
         size="icon"
         variant="ghost"
-        onClick={() => window.api.request("playlist::add", "test", song())}
+        onClick={() => {
+          window.api.request("playlist::add", "test", song());
+          addNotice({
+            title: "Song added",
+            description: "Successfully added song to playlist!",
+            variant: "success",
+            icon: <BadgeCheckIcon size={20} />,
+          });
+        }}
       >
         <CirclePlusIcon size={20} />
       </Button>
