@@ -1,108 +1,188 @@
-import { Optional } from "../../../../@types";
-import "../../assets/css/notice/notice.css";
-import Impulse from "../../lib/Impulse";
-import { none, orDefault, some } from "../../lib/rust-like-utils-client/Optional";
-import Gradient from "../Gradient";
-import { hideNotice } from "./NoticeContainer";
-import { Accessor, Component, createSignal } from "solid-js";
+import Button from "../button/Button";
+import { cva } from "class-variance-authority";
+import { XIcon } from "lucide-solid";
+import { Component, createEffect, createMemo, createSignal, JSX, onMount, Show } from "solid-js";
+import { DOMElement } from "solid-js/jsx-runtime";
+import { twMerge } from "tailwind-merge";
+
+const bgStyle = cva([], {
+  variants: {
+    variant: {
+      success: "bg-green after:bg-green",
+      neutral: "bg-overlay after:bg-overlay",
+      error: "bg-red after:bg-red",
+    },
+  },
+  defaultVariants: {
+    variant: "neutral",
+  },
+});
+
+const textStyle = cva([], {
+  variants: {
+    variant: {
+      success: "text-green",
+      neutral: "text-subtext",
+      error: "text-red",
+    },
+  },
+  defaultVariants: {
+    variant: "neutral",
+  },
+});
 
 export type NoticeType = {
   id?: string;
-  class: "notice" | "warning" | "error";
-  title: string;
-  content: string;
-  timeoutMS?: number;
-  active?: boolean;
+  variant?: "neutral" | "success" | "error";
+  title?: string;
+  description?: string;
+  icon?: JSX.Element;
 };
 
 type NoticeProps = {
   notice: NoticeType;
-  updateGradient: Impulse;
-  onMount: (notice: HTMLElement) => any;
+  onRemove: (id: string) => void;
+  isPaused: boolean;
 };
 
-const Notice: Component<NoticeProps> = (props) => {
-  const removeNotice = () => {
-    const action = hideNotice(props.notice.id);
+const NOTICE_DURATION = 3_000; // 3 seconds
 
-    if (action.isError) {
+const Notice: Component<NoticeProps> = (props) => {
+  const [isRemoving, setIsRemoving] = createSignal(false);
+  let noticeRef: HTMLDivElement | undefined;
+  let timeout: NodeJS.Timeout;
+  let startTime: number;
+  let pausedTime: number = 0;
+
+  const removeNotice = () => {
+    setIsRemoving(true);
+  };
+
+  const startRemoveTimeout = () => {
+    startTime = Date.now();
+    timeout = setTimeout(removeNotice, NOTICE_DURATION);
+  };
+
+  const pauseRemoveTimeout = () => {
+    pausedTime = Date.now() - startTime;
+  };
+
+  const resumeRemoveTimeout = () => {
+    startTime = Date.now() - pausedTime;
+    timeout = setTimeout(removeNotice, NOTICE_DURATION - pausedTime);
+  };
+
+  onMount(() => {
+    startRemoveTimeout();
+  });
+
+  createEffect(() => {
+    clearTimeout(timeout);
+    if (props.isPaused) {
+      pauseRemoveTimeout();
+    } else {
+      resumeRemoveTimeout();
+    }
+  });
+
+  const handleAnimationEnd = (
+    event: AnimationEvent & {
+      currentTarget: HTMLDivElement;
+      target: DOMElement;
+    },
+  ) => {
+    // Validates if the animation finidhed on the current element
+    if (event.target !== event.currentTarget) {
       return;
     }
 
-    try {
-      pauseDrain();
-    } catch {}
+    if (!isRemoving()) {
+      return;
+    }
+
+    props.onRemove(props.notice.id!);
   };
 
-  const [drain, setDrainTime, pauseDrain] = createDrainAnimation(
-    props.notice.timeoutMS ?? 10_000,
-    removeNotice,
-  );
-
-  const onRef = (notice: HTMLElement) => {
-    props.updateGradient.pulse();
-    props.onMount(notice);
-  };
+  const removingClasses = createMemo(() => {
+    if (isRemoving()) {
+      return "animate-notice-slide-out";
+    }
+    return "my-2 min-h-20";
+  });
 
   return (
     <div
-      class={"notice-wrapper"}
-      onPointerEnter={pauseDrain}
-      onPointerLeave={() => setDrainTime(props.notice.timeoutMS ?? 10_000)}
+      ref={noticeRef}
+      onAnimationEnd={handleAnimationEnd}
+      class={twMerge(
+        // Background
+        bgStyle({ variant: props.notice.variant }),
+        // General
+        "group relative w-96 transform overflow-hidden rounded-xl bg-thick-material p-4 shadow-2xl ring-2 ring-inset ring-stroke backdrop-blur-md duration-300 ease-in-out",
+        // After
+        `after:absolute after:inset-0 after:-z-20 after:size-20 after:rounded-full after:blur-2xl after:content-['']`,
+        // Before
+        `before:absolute before:inset-0.5 before:-z-10 before:rounded-[10px] before:bg-thick-material before:content-['']`,
+        // Enter animation
+        "animate-notice-slide-in",
+        // Removing
+        removingClasses(),
+      )}
       data-id={props.notice.id}
-      ref={onRef}
     >
-      <Gradient update={props.updateGradient}>
-        <div class={"notice " + (props.notice.class !== "notice" ? props.notice.class : "")}>
-          <div class="content">
-            <div class="head">
-              <h3>{props.notice.title}</h3>
-              <button onClick={removeNotice}>
-                <i class="ri-close-line" />
-              </button>
-            </div>
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={removeNotice}
+        class="absolute right-4 top-4 size-5 p-1 text-subtext opacity-0 transition-opacity duration-150 group-hover:opacity-100"
+      >
+        <XIcon size={16} />
+      </Button>
 
-            <p>{props.notice.content}</p>
-          </div>
-
+      <div class="mr-6 flex items-start">
+        <Show when={props.notice.icon}>
           <div
-            class="timeout"
-            classList={{
-              pause: drain().isNone,
-            }}
-            style={{
-              animation: orDefault(drain(), undefined),
-            }}
-          ></div>
+            class={twMerge(
+              "mr-3 mt-0.5 flex-shrink-0",
+              textStyle({ variant: props.notice.variant }),
+            )}
+          >
+            {props.notice.icon}
+          </div>
+        </Show>
+        <div class="overflow-hidden">
+          <Show when={props.notice.title}>
+            <h3 class="mb-1 overflow-hidden text-ellipsis whitespace-nowrap text-base font-semibold">
+              {props.notice.title}
+            </h3>
+          </Show>
+          <Show when={props.notice.description}>
+            <p class="line-clamp-2 text-ellipsis text-sm text-subtext">
+              {props.notice.description}
+            </p>
+          </Show>
         </div>
-      </Gradient>
+      </div>
+
+      <div
+        class="absolute inset-0 m-px overflow-hidden pointer-events-none"
+        style={{
+          "border-radius": "13px",
+        }}
+      >
+        <div
+          class={twMerge(
+            "absolute bottom-px left-0 h-1 rounded-full",
+            bgStyle({ variant: props.notice.variant }),
+          )}
+          style={{
+            animation: `progress ${NOTICE_DURATION}ms linear`,
+            "animation-play-state": props.isPaused ? "paused" : "running",
+          }}
+        />
+      </div>
     </div>
   );
 };
-
-function createDrainAnimation(
-  timeMS: number,
-  onDrained: () => any,
-): [Accessor<Optional<string>>, (timeMS: number) => any, () => any] {
-  const [get, set] = createSignal<Optional<string>>(some(drainTemplate(timeMS)));
-
-  let timeout = window.setTimeout(onDrained, timeMS);
-
-  return [
-    get,
-    (ms: number) => {
-      set(some(drainTemplate(ms)));
-      timeout = window.setTimeout(onDrained, ms);
-    },
-    () => {
-      set(none());
-      clearTimeout(timeout);
-    },
-  ];
-}
-
-function drainTemplate(timeMS: number): string {
-  return `drain-time ${Math.round(timeMS)}ms linear forwards`;
-}
 
 export default Notice;
