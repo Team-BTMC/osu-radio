@@ -1,21 +1,24 @@
+import osuLazerLogo from "@renderer/assets/osu-lazer-logo.png";
 import osuStableLogo from "@renderer/assets/osu-stable-logo.png";
 import Button from "@renderer/components/button/Button";
-import { createSignal, onMount } from "solid-js";
+import { Accessor, createSignal, onMount, Setter } from "solid-js";
+import { OsuDirectory } from "src/main/router/dir-router";
 
 export default function DirSelectScene() {
-  const [dir, setDir] = createSignal("");
+  const [dirs, setDirs] = createSignal<OsuDirectory[]>([]);
+  const [selectedDir, setSelectedDir] = createSignal<OsuDirectory>({ version: "none", path: "" });
 
-  onMount(() => {
-    autodetectDir();
+  onMount(async () => {
+    await autodetectDir();
   });
 
   const autodetectDir = async () => {
-    const autoGetDir = await window.api.request("dir::autoGetOsuDir");
+    const autoGetDir = await window.api.request("dir::autoGetOsuDirs");
     if (autoGetDir.isNone) {
       return;
     }
 
-    setDir(autoGetDir.value);
+    setDirs(autoGetDir.value);
   };
 
   const selectDir = async () => {
@@ -24,23 +27,16 @@ export default function DirSelectScene() {
       return;
     }
 
-    setDir(opt.value);
+    setDirs((dirs) => [...dirs, opt.value]);
+    setSelectedDir(opt.value);
   };
 
   const submitDir = async () => {
-    if (dir() === "") {
+    if (selectedDir().version === "none") {
       return;
     }
 
-    await window.api.request("dir::submit", dir(), "stable");
-  };
-
-  const submitLazer = async () => {
-    await window.api.request(
-      "dir::submit",
-      "/Users/aychar/Library/Application Support/osu",
-      "lazer",
-    );
+    await window.api.request("dir::submit", selectedDir());
   };
 
   const GRADIENT = `radial-gradient(at 1% 75%, hsla(228,61%,67%,0.1) 0px, transparent 50%),
@@ -58,13 +54,20 @@ export default function DirSelectScene() {
 
         <div class="flex flex-col gap-4">
           <div class="flex flex-col gap-1.5">
-            <label class="text-md font-bold text-text">
-              These instalations were automatically detected:
-            </label>
-            <InstallationCard />
-            <InstallationCard />
+            <label class="text-md font-bold text-text">Select an osu! installation:</label>
+            {dirs().length > 0 ? (
+              dirs().map((dir) => (
+                <InstallationCard
+                  directory={dir}
+                  selectedDir={selectedDir}
+                  setSelectedDir={setSelectedDir}
+                />
+              ))
+            ) : (
+              <p>No directories found</p>
+            )}
             <div class="flex justify-between">
-              <Button>Select a different folder</Button>
+              <Button onClick={selectDir}>Select a different installation</Button>
               <p class="pt-1 text-sm text-subtext">You can always change this in settings.</p>
             </div>
           </div>
@@ -74,26 +77,35 @@ export default function DirSelectScene() {
           <Button size="large" onClick={submitDir}>
             <span>Submit</span>
           </Button>
-          <Button size="large" onClick={submitLazer}>
-            <span>Lazer thing</span>
-          </Button>
         </div>
       </div>
     </div>
   );
 }
 
-function InstallationCard() {
+function InstallationCard(props: {
+  directory: OsuDirectory;
+  selectedDir: Accessor<OsuDirectory>;
+  setSelectedDir: Setter<OsuDirectory>;
+}) {
   return (
-    <div class="w-full rounded-xl border border-white/5 bg-[#333333] h-[72px] p-3 flex items-center select-none">
-      <img src={osuStableLogo} class="w-[52px] h-[52px]" alt="" />
+    <div
+      class={`w-full rounded-xl border border-white/5 h-[72px] p-3 flex items-center select-none hover:cursor-pointer bg-[#333333] ${props.selectedDir() === props.directory ? "bg-[#333333]" : "bg-regular-material"}`}
+      onClick={() => props.setSelectedDir(props.directory)}
+    >
+      <img
+        src={props.directory.version === "stable" ? osuStableLogo : osuLazerLogo}
+        class="w-[52px] h-[52px]"
+        alt=""
+      />
       <div class="flex flex-col pl-4 gap-1">
-        <p class="font-bold">C:\Users\tnixc\AppData\Local\osu!</p>
+        <p class="font-bold">{props.directory.path}</p>
         <div class="flex items-center gap-3">
-          <div class="font-bold text-xs bg-pink-400 w-20 h-5 flex items-center justify-center rounded-full">
-            STABLE
+          <div
+            class={`font-bold text-xs w-20 h-5 flex items-center justify-center rounded-full ${props.directory.version === "stable" ? "bg-pink-400" : "bg-teal-400"}`}
+          >
+            {props.directory.version.toUpperCase()}
           </div>
-          <p class="text-gray-300 text-sm">5324 Beatmaps</p>
         </div>
       </div>
     </div>

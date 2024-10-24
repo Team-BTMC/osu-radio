@@ -1,3 +1,4 @@
+import { BrowserWindow } from "electron";
 import { DirParseResult, OsuParser } from "./lib/osu-file-parser/OsuParser";
 import { Router } from "./lib/route-pass/Router";
 import { orDefault } from "./lib/rust-like-utils-backend/Optional";
@@ -7,7 +8,6 @@ import { throttle } from "./lib/throttle";
 import { dirSubmit } from "./router/dir-router";
 import { showError } from "./router/error-router";
 import "./router/import";
-import { BrowserWindow } from "electron";
 
 export let mainWindow: BrowserWindow;
 
@@ -68,10 +68,10 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
       });
     }, UPDATE_DELAY_MS);
 
-    if (dirData.client == "stable") {
-      tables = await OsuParser.parseStableDatabase(dirData.dir, update);
+    if (dirData.version == "stable") {
+      tables = await OsuParser.parseStableDatabase(dirData.path, update);
     } else {
-      tables = await OsuParser.parseLazerDatabase(dirData.dir, update);
+      tables = await OsuParser.parseLazerDatabase(dirData.path, update);
     }
     // Cancel ongoing throttled update, so it does not look bad when it finishes and afterward the update overwrites
     // finished state
@@ -86,14 +86,14 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
     if (tables.value[SONGS].size === 0) {
       await showError(
         mainWindow,
-        `No songs found in folder: ${dirData.dir}. Please make sure this is the directory where you have all your songs saved.`,
+        `No songs found in folder: ${dirData.path}. Please make sure this is the directory where you have all your songs saved.`,
       );
       // Try again
       continue;
     }
 
     // All went smoothly. Save osu directory and continue with import procedure
-    settings.write("osuSongsDir", dirData.dir);
+    settings.write("osuSongsDir", dirData.path);
     break;
   }
 
