@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-import { noticeAnimations } from "./src/renderer/src/components/notice/noticeAnimations";
+import { noticeAnimations } from "./src/renderer/src/components/notice/NoticeAnimations";
 
 export default {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
