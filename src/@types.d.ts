@@ -237,15 +237,6 @@ export type SongViewProps = {
   playlist?: string;
 };
 
-export type NoticeType = {
-  id?: string;
-  class: "notice" | "warning" | "error";
-  title: string;
-  content: string;
-  timeoutMS?: number;
-  active?: boolean;
-};
-
 export type InfiniteScrollerRequest = {
   index: number;
   init: number;

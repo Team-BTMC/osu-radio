@@ -1,9 +1,16 @@
 /** @type {import('tailwindcss').Config} */
+import { noticeAnimations } from "./src/renderer/src/components/notice/noticeAnimations";
 
 export default {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      keyframes: {
+        ...noticeAnimations.keyframes,
+      },
+      animation: {
+        ...noticeAnimations.animation,
+      },
       colors: {
         transparent: "transparent",
         "thick-material": "rgba(var(--color-thick-material), 0.9)",
