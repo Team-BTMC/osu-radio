@@ -30,7 +30,7 @@ Router.respond("dir::select", () => {
 });
 
 function getStoragePath(iniPath: string) {
-  const firstLine = fs.readFileSync(iniPath, "utf-8").split("=")[0];
+  const firstLine = fs.readFileSync(iniPath, "utf-8").split("=")[1];
   return firstLine.trim();
 }
 
