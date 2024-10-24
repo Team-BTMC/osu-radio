@@ -1,6 +1,6 @@
 import formatTime from "../../../lib/time-formatter";
 import SongImage from "../SongImage";
-import { useColorExtractor } from "../colorExtractor";
+import { useColorExtractor } from "../color-extractor";
 import SongControls from "./SongControls";
 import Slider from "@renderer/components/slider/Slider";
 import {
@@ -24,6 +24,7 @@ const SongDetail: Component = () => {
         <SongImage
           src={song().bg}
           instantLoad={true}
+          onImageLoaded={colorData().processImage}
           class="size-80 rounded-lg bg-cover bg-center object-cover shadow-lg"
         />
       </div>

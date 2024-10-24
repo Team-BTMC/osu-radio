@@ -1,4 +1,3 @@
-import { setGradientColors } from "../Gradient";
 import { extractColors } from "extract-colors";
 import { lighten, darken, getContrast, parseToHsl, hslToColorString } from "polished";
 import { Accessor, createSignal } from "solid-js";
@@ -12,40 +11,57 @@ const AREA_WEIGHT = 0.3;
 type UseColorExtractorResult = {
   primaryColor: Accessor<string | undefined>;
   secondaryColor: Accessor<string | undefined>;
+  processImage(src: string): void;
 };
 
 export function useColorExtractor() {
   const extractColorFromImage = (song: Song): UseColorExtractorResult => {
-    const songId = song.audio;
+    const [primaryColor, setPrimartColor] = createSignal<string | undefined>(song.primaryColor);
+    const [secondaryColor, setSecondaryColor] = createSignal<string | undefined>(
+      song.secondaryColor,
+    );
 
-    // State
-    const [primaryColor, setPrimartColor] = createSignal<string>();
-    const [secondaryColor, setSecondaryColor] = createSignal<string>();
+    const processImage = async (src: string) => {
+      if (primaryColor() || secondaryColor()) {
+        return;
+      }
 
-    // Check if color already exists
-    if (song.primaryColor && song.secondaryColor) {
-      document.documentElement.style.setProperty(
-        "--extracted-color-rgb",
-        hexToRgb(song.primaryColor),
-      );
-      setPrimartColor(song.primaryColor);
-      setSecondaryColor(song.secondaryColor);
-      return { primaryColor, secondaryColor };
-    }
+      try {
+        const colors = await extractColorsFromImage(src);
+        console.log("colors", colors);
+        if (!colors.primaryColor || !colors.secondaryColor) {
+          return;
+        }
 
-    if (!song.bg) {
-      console.error("No background image found for color extraction.");
-      setPrimartColor("gray");
-      return { primaryColor, secondaryColor };
-    }
+        setPrimartColor(colors.primaryColor);
+        setSecondaryColor(colors.secondaryColor);
 
-    const img = new Image();
-    img.crossOrigin = "Anonymous";
-    img.src = `file://${song.bg}`;
+        await window.api.request(
+          "save::songColors",
+          colors.primaryColor,
+          colors.secondaryColor,
+          song.audio,
+        );
+      } catch (err) {
+        console.error("Error extracting color:", err);
+      }
+    };
 
+    return { primaryColor, secondaryColor, processImage };
+  };
+
+  return { extractColorFromImage };
+}
+
+type ExtractColorsFromImageResult = { primaryColor: string; secondaryColor: string };
+function extractColorsFromImage(src: string): Promise<ExtractColorsFromImageResult> {
+  const img = new Image();
+  img.crossOrigin = "Anonymous";
+  img.src = src;
+
+  return new Promise((resolve, reject) => {
     img.onload = async () => {
       try {
-        console.log("calculating", songId);
         const colors = await extractColors(img.src);
 
         const validColors = colors.filter((color) => {
@@ -61,7 +77,7 @@ export function useColorExtractor() {
           return scoreB - scoreA;
         });
 
-        let songPrimaryColor = sortedColors[0]?.hex || "gray";
+        let primaryColor = sortedColors[0]?.hex || "gray";
 
         // Find the first valid color that meets contrast and vibrancy thresholds
         for (const color of sortedColors) {
@@ -70,48 +86,29 @@ export function useColorExtractor() {
             contrast >= MIN_CONTRAST_RATIO &&
             getVibrancy(parseToHsl(color.hex)) >= MIN_VIBRANCY_THRESHOLD
           ) {
-            songPrimaryColor = color.hex;
+            primaryColor = color.hex;
             break;
           }
         }
 
-        songPrimaryColor = alterUnappealingColor(songPrimaryColor);
+        primaryColor = alterUnappealingColor(primaryColor);
 
         // Improve contrast if necessary
-        if (getContrast(songPrimaryColor, "#FFFFFF") < MIN_CONTRAST_RATIO) {
-          songPrimaryColor = improveContrast(songPrimaryColor);
+        if (getContrast(primaryColor, "#FFFFFF") < MIN_CONTRAST_RATIO) {
+          primaryColor = improveContrast(primaryColor);
         }
 
-        const { lightness } = parseToHsl(songPrimaryColor);
-        const songSecondaryColor =
-          lightness < 0.2 ? lighten(0.1, songPrimaryColor) : darken(0.1, songPrimaryColor);
+        const { lightness } = parseToHsl(primaryColor);
+        const secondaryColor =
+          lightness < 0.2 ? lighten(0.1, primaryColor) : darken(0.1, primaryColor);
 
-        setPrimartColor(songPrimaryColor);
-        setSecondaryColor(songSecondaryColor);
-
-        document.documentElement.style.setProperty(
-          "--extracted-color-rgb",
-          hexToRgb(songPrimaryColor),
-        );
-
-        // Set gradient colors if needed
-        setGradientColors({
-          top: songPrimaryColor,
-          bottom: lighten(0.2, songPrimaryColor),
-        });
-
-        await window.api.request("save::songColors", songPrimaryColor, songSecondaryColor, songId);
+        document.documentElement.style.setProperty("--extracted-color-rgb", hexToRgb(primaryColor));
+        resolve({ primaryColor, secondaryColor });
       } catch (err) {
-        console.error("Error extracting color:", err);
-        setPrimartColor(undefined);
-        setSecondaryColor(undefined);
+        reject(err);
       }
     };
-
-    return { primaryColor, secondaryColor };
-  };
-
-  return { extractColorFromImage };
+  });
 }
 
 // Helper function to improve contrast by darkening the color

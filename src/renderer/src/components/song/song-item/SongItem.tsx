@@ -2,7 +2,7 @@ import { ResourceID, Song } from "../../../../../@types";
 import draggable from "../../../lib/draggable/draggable";
 import SongHint from "../SongHint";
 import SongImage from "../SongImage";
-import { useColorExtractor } from "../colorExtractor";
+import { useColorExtractor } from "../color-extractor";
 import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import { song as selectedSong } from "../song.utils";
 import { transparentize } from "polished";
@@ -30,7 +30,7 @@ const SongItem: Component<SongItemProps> = ({
   const [, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
 
   const { extractColorFromImage } = useColorExtractor();
-  const { primaryColor, secondaryColor } = extractColorFromImage(song);
+  const { primaryColor, secondaryColor, processImage } = extractColorFromImage(song);
 
   onMount(() => {
     if (!item) return;
@@ -97,6 +97,7 @@ const SongItem: Component<SongItemProps> = ({
           class={`absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat`}
           src={song.bg}
           group={group}
+          onImageLoaded={processImage}
         />
         <div
           class="flex flex-col justify-center overflow-hidden rounded-md p-3"

@@ -1,16 +1,11 @@
 import "../assets/css/gradient.css";
 import Impulse from "../lib/Impulse";
-import { Component, createEffect, createSignal, JSXElement, onCleanup, onMount } from "solid-js";
+import { Component, JSXElement, onCleanup, onMount } from "solid-js";
 
 export type GradientColors = {
   top: string;
   bottom: string;
 };
-
-export const [gradientColors, setGradientColors] = createSignal<GradientColors>({
-  top: "dodgerblue",
-  bottom: "crimson",
-});
 
 type GradientProps = {
   classTop?: string;
@@ -50,13 +45,6 @@ const Gradient: Component<GradientProps> = (props) => {
 
   onCleanup(() => {
     window.removeEventListener("resize", calculateBackground);
-  });
-
-  createEffect(() => {
-    const colors = gradientColors();
-
-    document.documentElement.style.setProperty("--circle-0", colors.top);
-    document.documentElement.style.setProperty("--circle-1", colors.bottom);
   });
 
   return (
