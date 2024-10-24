@@ -166,28 +166,26 @@ export class OsuParser {
               diffs: [beatmap.DifficultyName],
             };
 
-            song.osuFile =
-              currentDir +
-              "/files/" +
-              beatmap.Hash[0] +
-              "/" +
-              beatmap.Hash.substring(0, 2) +
-              "/" +
-              beatmap.Hash;
+            song.osuFile = path.join(
+              currentDir,
+              "files",
+              beatmap.Hash[0],
+              beatmap.Hash.substring(0, 2),
+              beatmap.Hash,
+            );
 
             const songHash = beatmapSet.Files.find(
               (file) => file.Filename.toLowerCase() === beatmap.Metadata.AudioFile.toLowerCase(),
             )?.File.Hash;
 
             if (songHash) {
-              song.audio =
-                currentDir +
-                "/files/" +
-                songHash[0] +
-                "/" +
-                songHash.substring(0, 2) +
-                "/" +
-                songHash;
+              song.audio = path.join(
+                currentDir,
+                "files",
+                songHash[0],
+                songHash.substring(0, 2),
+                songHash,
+              );
             }
 
             /* Note: in lots of places throughout the application, it relies on the song.path parameter, which in the
@@ -201,8 +199,7 @@ export class OsuParser {
             )?.File.Hash;
 
             if (bgHash) {
-              song.bg =
-                currentDir + "/files/" + bgHash[0] + "/" + bgHash.substring(0, 2) + "/" + bgHash;
+              song.bg = path.join(currentDir, "files", bgHash[0], bgHash.substring(0, 2), bgHash);
             }
 
             song.beatmapSetID = beatmapSet.OnlineID;
@@ -417,8 +414,8 @@ export class OsuParser {
         db.readInt(); // last edit time
         db.readByte(); // mania scroll speed
 
-        const audioFilePath = songsFolderPath + "/" + folder + "/" + audio_filename;
-        const osuFilePath = songsFolderPath + "/" + folder + "/" + osu_filename;
+        const audioFilePath = path.join(songsFolderPath, folder, audio_filename);
+        const osuFilePath = path.join(songsFolderPath, folder, osu_filename);
         song.osuFile = osuFilePath;
         song.audio = audioFilePath;
         song.path = songsFolderPath + "/" + folder;
@@ -437,7 +434,9 @@ export class OsuParser {
         }
 
         const bgSrc = osuFile.value.props.get("bgSrc");
-        song.bg = songsFolderPath + "/" + folder + "/" + bgSrc;
+        if (bgSrc) {
+          song.bg = path.join(songsFolderPath, folder, bgSrc);
+        }
 
         if (song.audio != last_audio_filepath) {
           songTable.set(song.audio, song);
