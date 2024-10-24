@@ -2,8 +2,10 @@ import { ResourceID, Song } from "../../../../../@types";
 import draggable from "../../../lib/draggable/draggable";
 import SongHint from "../SongHint";
 import SongImage from "../SongImage";
+import { useColorExtractor } from "../color-extractor";
 import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import { song as selectedSong } from "../song.utils";
+import { transparentize } from "polished";
 import Popover from "@renderer/components/popover/Popover";
 import { EllipsisVerticalIcon } from "lucide-solid";
 import { Component, createSignal, JSXElement, onMount, createMemo } from "solid-js";
@@ -22,14 +24,17 @@ type SongItemProps = {
 
 const SongItem: Component<SongItemProps> = (props) => {
   let item: HTMLDivElement | undefined;
+  const [, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
+
+  const { extractColorFromImage } = useColorExtractor();
+  const { primaryColor, secondaryColor, processImage } = extractColorFromImage(props.song);
   const [localShow, setLocalShow] = createSignal(false);
   const [mousePos, setMousePos] = createSignal<[number, number]>([0, 0]);
 
   onMount(() => {
-    if (!item) {
-      return;
-    }
+    if (!item) return;
 
+    // Initialize draggable functionality
     draggable(item, {
       onClick: ignoreClickInContextMenu(() => props.onSelect(props.song.path)),
       onDrop: props.onDrop ?? (() => {}),
@@ -42,8 +47,31 @@ const SongItem: Component<SongItemProps> = (props) => {
     }
   });
 
-  const isActive = createMemo(() => {
-    return selectedSong().path === props.song.path;
+  const isSelected = createMemo(() => {
+    return selectedSong().audio === props.song.audio;
+  });
+
+  const borderColor = createMemo(() => {
+    const color = secondaryColor();
+    if (isSelected()) {
+      return "#ffffff";
+    }
+
+    if (typeof color === "undefined") {
+      return "rgba(var(--color-thick-material))";
+    }
+
+    return color;
+  });
+
+  const backgrund = createMemo(() => {
+    const color = primaryColor();
+    if (!color) {
+      return "rgba(0, 0, 0, 0.72)";
+    }
+
+    const lowerAlpha = transparentize(0.9);
+    return `linear-gradient(to right, ${color}, ${lowerAlpha(color)})`;
   });
 
   return (
@@ -68,36 +96,42 @@ const SongItem: Component<SongItemProps> = (props) => {
         </Popover.Content>
       </Portal>
       <div
-        class="group relative isolate z-20 select-none rounded-md"
+        class="min-h-[72px] rounded-lg py-0.5 pl-1.5 pr-0.5 transition-colors"
         classList={{
-          "outline outline-2 outline-accent": isActive(),
+          "shadow-glow-blue": isSelected(),
         }}
-        data-active={isActive()}
-        ref={item}
-        data-url={props.song.bg}
+        style={{
+          background: borderColor(),
+        }}
         onContextMenu={(e) => {
+          e.preventDefault();
           setMousePos([e.clientX, e.clientY]);
           setLocalShow(true);
         }}
       >
-        <SongImage
-          class={twMerge(
-            "absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-30 group-hover:opacity-90",
-            isActive() && "opacity-90",
-          )}
-          src={props.song.bg}
-          group={props.group}
-        />
-
-        <div class="flex flex-row items-center justify-between rounded-md bg-black/50">
-          <div class="z-20 flex min-h-[72px] flex-col justify-center overflow-hidden rounded-md p-3">
-            <h3 class="text-shadow text-[22px] font-extrabold leading-7 shadow-black/60">
-              {props.song.title}
-            </h3>
+        <div
+          class="group relative isolate select-none rounded-lg"
+          ref={item}
+          data-url={props.song.bg}
+          onContextMenu={(evt) => setCoords([evt.clientX, evt.clientY])}
+        >
+          <SongImage
+            class={`absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat`}
+            src={props.song.bg}
+            group={props.group}
+            onImageLoaded={processImage}
+          />
+          <div
+            class="flex flex-col justify-center overflow-hidden rounded-md p-3"
+            style={{
+              background: backgrund(),
+            }}
+          >
+            <h3 class="text-shadow text-[22px] font-extrabold leading-7">{props.song.title}</h3>
             <p class="text-base text-subtext">{props.song.artist}</p>
           </div>
 
-          <div class="mr-2 grid aspect-square size-9 place-items-center rounded border-solid border-stroke bg-transparent p-1 text-text hover:bg-surface">
+          <div class="absolute right-2 top-1/2 -translate-y-1/2 grid aspect-square size-9 place-items-center rounded border-solid border-stroke bg-transparent p-1 text-text hover:bg-surface">
             <Popover.Trigger
               class={twMerge(
                 "opacity-0 transition-opacity group-hover:opacity-100",
