@@ -62,8 +62,10 @@ Router.respond("dir::autoGetOsuDirs", () => {
       });
     }
 
-    if (process.env.HOME != undefined && fs.existsSync(path.join(process.env.HOME, "osu"))) {
-      dirs.push({ version: "lazer", path: path.join(process.env.HOME, "osu") });
+    const homePath = process.env.XDG_DATA_HOME ?? `${process.env.HOME}/.local/share`;
+
+    if (homePath != undefined && fs.existsSync(path.join(homePath, "osu"))) {
+      dirs.push({ version: "lazer", path: path.join(homePath, "osu") });
     }
 
     if (dirs.length > 0) {

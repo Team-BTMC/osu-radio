@@ -37,7 +37,7 @@
     "graceful-fs": "^4.2.11",
     "lucide-solid": "^0.452.0",
     "node-addon-api": "^8.2.1",
-    "realm": "^12.13.1",
+    "realm": "~12.6.2",
     "remixicon": "^4.3.0",
     "sharp": "^0.33.5",
     "solid-focus-trap": "^0.1.7",

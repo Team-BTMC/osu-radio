@@ -134,7 +134,11 @@ export class OsuParser {
   ): DirParseResult {
     const currentDir = databasePath.replaceAll("\\", "/");
 
-    const realm = await Realm.open({ path: currentDir + "/client.realm" });
+    const realm = await Realm.open({
+      path: currentDir + "/client.realm",
+      readOnly: true,
+      schemaVersion: 23,
+    });
     const beatmapSets = realm.objects<BeatmapSet>("BeatmapSet");
 
     const songTable = new Map<ResourceID, Song>();
@@ -143,67 +147,81 @@ export class OsuParser {
 
     let i = 0;
     for (const beatmapSet of beatmapSets) {
-      const beatmaps = removeUnoriginalBeatmaps(beatmapSet.Beatmaps);
+      try {
+        const beatmaps = removeUnoriginalBeatmaps(beatmapSet.Beatmaps);
 
-      for (const beatmap of beatmaps) {
-        const song: Song = {
-          audio: "",
-          osuFile: "",
-          path: "",
-          ctime: "",
-          dateAdded: beatmapSet.DateAdded,
-          title: beatmap.Metadata.Title,
-          artist: beatmap.Metadata.Artist,
-          creator: beatmap.Metadata.Author.Username,
-          bpm: [],
-          duration: beatmap.Length,
-          diffs: [beatmap.DifficultyName],
-        };
+        for (const beatmap of beatmaps) {
+          try {
+            const song: Song = {
+              audio: "",
+              osuFile: "",
+              path: "",
+              ctime: "",
+              dateAdded: beatmapSet.DateAdded,
+              title: beatmap.Metadata.Title,
+              artist: beatmap.Metadata.Artist,
+              creator: beatmap.Metadata.Author.Username,
+              bpm: [],
+              duration: beatmap.Length,
+              diffs: [beatmap.DifficultyName],
+            };
 
-        song.osuFile =
-          currentDir +
-          "/files/" +
-          beatmap.Hash[0] +
-          "/" +
-          beatmap.Hash.substring(0, 2) +
-          "/" +
-          beatmap.Hash;
+            song.osuFile =
+              currentDir +
+              "/files/" +
+              beatmap.Hash[0] +
+              "/" +
+              beatmap.Hash.substring(0, 2) +
+              "/" +
+              beatmap.Hash;
 
-        const songHash = beatmapSet.Files.find(
-          (file) => file.Filename === beatmap.Metadata.AudioFile,
-        )?.File.Hash as string; // the mp3 should exist, will check if its possible for it to not in lazer
+            const songHash = beatmapSet.Files.find(
+              (file) => file.Filename === beatmap.Metadata.AudioFile,
+            )?.File.Hash as string; // the mp3 should exist, will check if its possible for it to not in lazer
 
-        song.audio =
-          currentDir + "/files/" + songHash[0] + "/" + songHash.substring(0, 2) + "/" + songHash;
+            song.audio =
+              currentDir +
+              "/files/" +
+              songHash[0] +
+              "/" +
+              songHash.substring(0, 2) +
+              "/" +
+              songHash;
 
-        /* Note: in lots of places throughout the application, it relies on the song.path parameter, which in the
+            /* Note: in lots of places throughout the application, it relies on the song.path parameter, which in the
         stable parser is the path of the folder that holds all the files. This folder doesn't exist in lazer's
         file structure, so for now I'm just passing the audio location as the path parameter. In initial testing
         this doesn't seem to break anything but just leaving this note in case it does */
-        song.path = song.audio;
+            song.path = song.audio;
 
-        if (beatmap.Metadata.BackgroundFile) {
-          const bgHash = beatmapSet.Files.find(
-            (file) => file.Filename === beatmap.Metadata.BackgroundFile,
-          )?.File.Hash as string;
+            if (beatmap.Metadata.BackgroundFile) {
+              const bgHash = beatmapSet.Files.find(
+                (file) => file.Filename === beatmap.Metadata.BackgroundFile,
+              )?.File.Hash as string;
 
-          song.bg =
-            currentDir + "/files/" + bgHash[0] + "/" + bgHash.substring(0, 2) + "/" + bgHash;
+              song.bg =
+                currentDir + "/files/" + bgHash[0] + "/" + bgHash.substring(0, 2) + "/" + bgHash;
+            }
+
+            song.beatmapSetID = beatmapSet.OnlineID;
+
+            songTable.set(song.audio, song);
+            audioTable.set(song.audio, {
+              songID: song.audio,
+              path: song.audio,
+              ctime: String(beatmapSet.DateAdded),
+            });
+
+            if (update) {
+              update(i + 1, beatmapSets.length, song.title);
+              i++;
+            }
+          } catch (err) {
+            console.error("Error while parsing beatmap: ", err);
+          }
         }
-
-        song.beatmapSetID = beatmapSet.OnlineID;
-
-        songTable.set(song.audio, song);
-        audioTable.set(song.audio, {
-          songID: song.audio,
-          path: song.audio,
-          ctime: String(beatmapSet.DateAdded),
-        });
-
-        if (update) {
-          update(i + 1, beatmapSets.length, song.title);
-          i++;
-        }
+      } catch (err) {
+        console.error("Error while parsing beatmapset: ", err);
       }
     }
 
