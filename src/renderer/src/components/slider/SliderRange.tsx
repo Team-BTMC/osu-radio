@@ -14,16 +14,11 @@ const SliderRange: Component<JSX.IntrinsicElements["span"]> = (props) => {
         "pointer-events": "none",
         "transition-property": "width",
       },
-      props.style
+      props.style,
     );
   });
 
-  return (
-    <span
-      {...props}
-      style={computedStyle()}
-    />
-  );
+  return <span {...props} style={computedStyle()} />;
 };
 
 export default SliderRange;
