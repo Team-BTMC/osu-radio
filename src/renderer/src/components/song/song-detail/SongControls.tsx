@@ -47,6 +47,9 @@ const SongControls: Component<SongControlsProps> = (props) => {
 
   createEffect(() => setDisable(isSongUndefined(song())));
 
+  // Check if there's a valid averageColor
+  const isValidAverageColor = () => !!props.averageColor && props.averageColor !== "white";
+
   return (
     <div class="flex w-full items-center gap-4" style={{ "--dynamic-color": props.averageColor }}>
       <LeftPart/>
@@ -77,10 +80,14 @@ const SongControls: Component<SongControlsProps> = (props) => {
             onClick={() => togglePlay()}
             disabled={disable()}
             title={playHint()}
-            style={{ "background-color": props.averageColor }}
+            style={{
+              "background-color": props.averageColor, // Use the average color as background
+              "border": isValidAverageColor() ? "none" : "", // Remove border if valid color
+              "color": isValidAverageColor() ? "white" : "currentColor", // Set text color to white if valid color
+            }}
           >
-            <Show when={!isPlaying()} fallback={<PauseIcon fill="currentColor" size={20} />}>
-              <PlayIcon fill="currentColor" size={20} />
+            <Show when={!isPlaying()} fallback={<PauseIcon fill="white" size={20} />}>
+              <PlayIcon fill="white" size={20} />
             </Show>
           </button>
 

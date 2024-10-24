@@ -29,12 +29,7 @@ const SongItem: Component<SongItemProps> = ({
   const [, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
 
   const { extractColorFromImage } = useColorExtractor();
-  const songColor = extractColorFromImage(song);
-
-  // Build gradient style using songColor
-  const gradientStyle = () => ({
-    background: `linear-gradient(to right, ${songColor()}, transparent)`,
-  });
+  const { songColor, borderColor } = extractColorFromImage(song);
 
   onMount(() => {
     if (!item) return;
@@ -54,24 +49,22 @@ const SongItem: Component<SongItemProps> = ({
     }
   });
 
-
   return (
     <div
-      class="group relative isolate select-none rounded-md"
-      classList={{
-        "outline outline-2 outline-accent": selectedSong().path === song.path,
-      }}
+      class={`relative isolate select-none rounded-md group ${selectedSong().path === song.path ? "outline outline-2" : ""}`}
       data-active={selectedSong().path === song.path}
       ref={item}
       data-url={song.bg}
       onContextMenu={(evt) => setCoords([evt.clientX, evt.clientY])}
-      style={gradientStyle()} // Apply the gradient background using inline styles
+      style={{
+        border: `2px solid ${borderColor()}`, // Default border color
+        "border-left": selectedSong().path === song.path ? "5px solid white" : `5px solid ${borderColor()}`, // Thicker left border for 3D effect and white when selected
+        background: `linear-gradient(to right, ${songColor()}, rgba(255, 255, 255, 1))`, // Gradient background from songColor to white
+        "box-shadow": selectedSong().path === song.path ? `0 0 15px 3px ${songColor()}` : "none", // Glow effect only on selected song
+      }}
     >
       <SongImage
-        class="absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-30 group-hover:opacity-90"
-        classList={{
-          "opacity-90": selectedSong().path === song.path,
-        }}
+        class={`absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-50 transition-opacity group-hover:opacity-90 ${selectedSong().path === song.path ? "opacity-90" : ""}`}
         src={song.bg}
         group={group}
       />

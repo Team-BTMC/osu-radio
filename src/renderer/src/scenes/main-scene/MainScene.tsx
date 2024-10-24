@@ -38,7 +38,7 @@ const MainScene: Component = () => {
         <QueueModal />
       </main>
 
-      <div class="pointer-events-none absolute inset-0 z-[-1] opacity-[0.072]">
+      <div class="pointer-events-none absolute inset-0 z-[-1] opacity-[0.12]">
         <SongImage
           src={song().bg}
           instantLoad={true}

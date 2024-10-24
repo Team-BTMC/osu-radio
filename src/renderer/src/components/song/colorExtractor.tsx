@@ -19,11 +19,11 @@ const AREA_WEIGHT = 0.3;
 
 const colorCache = new Map<
   string,
-  { color: string; signal: Accessor<string>; setter: Setter<string> }
+  { color: string; borderColor: string; signal: Accessor<string>; setter: Setter<string> }
 >();
 
 export function useColorExtractor() {
-  const extractColorFromImage = (song: Song): Accessor<string> => {
+  const extractColorFromImage = (song: Song): { songColor: Accessor<string>, borderColor: Accessor<string> } => {
     const songId = song.path;
 
     // Check the cache first
@@ -31,19 +31,20 @@ export function useColorExtractor() {
       const cached = colorCache.get(songId)!;
       song.color = cached.color; // Ensure song.color is set
       document.documentElement.style.setProperty('--extracted-color-rgb', hexToRgb(cached.color));
-      return cached.signal;
+      return { songColor: cached.signal, borderColor: () => cached.borderColor };
     }
 
-    // Create a signal for this song's color
+    // Create a signal for this song's color and border color
     const [songColor, setSongColor] = createSignal<string>("gray");
+    const [borderColor, setBorderColor] = createSignal<string>("gray");
 
-    // Store in cache immediately with default color
-    colorCache.set(songId, { color: "gray", signal: songColor, setter: setSongColor });
+    // Store in cache immediately with default colors
+    colorCache.set(songId, { color: "gray", borderColor: "gray", signal: songColor, setter: setSongColor });
 
     if (!song.bg) {
       console.error("No background image found for color extraction.");
       setSongColor("gray");
-      return songColor;
+      return { songColor, borderColor };
     }
 
     const img = new Image();
@@ -87,10 +88,15 @@ export function useColorExtractor() {
             selectedColor = improveContrast(selectedColor);
           }
 
+          // Darken the color for the border
+          const darkenedBorderColor = darken(0.1, selectedColor);
+
           // Update the cache and song object
           song.color = selectedColor;
           setSongColor(selectedColor);
-          colorCache.set(songId, { color: selectedColor, signal: songColor, setter: setSongColor });
+          setBorderColor(darkenedBorderColor);
+
+          colorCache.set(songId, { color: selectedColor, borderColor: darkenedBorderColor, signal: songColor, setter: setSongColor });
 
           document.documentElement.style.setProperty('--extracted-color-rgb', hexToRgb(selectedColor));
 
@@ -103,10 +109,11 @@ export function useColorExtractor() {
         .catch((err) => {
           console.error("Error extracting color:", err);
           setSongColor("gray");
+          setBorderColor("gray");
         });
     };
 
-    return songColor;
+    return { songColor, borderColor };
   };
 
   return { extractColorFromImage };
