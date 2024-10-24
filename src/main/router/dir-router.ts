@@ -29,6 +29,11 @@ Router.respond("dir::select", () => {
   }
 });
 
+function getStoragePath(iniPath: string) {
+  const firstLine = fs.readFileSync(iniPath, "utf-8").split("=")[0];
+  return firstLine.trim();
+}
+
 Router.respond("dir::autoGetOsuDirs", () => {
   if (process.platform === "win32") {
     const dirs: OsuDirectory[] = [];
@@ -41,7 +46,12 @@ Router.respond("dir::autoGetOsuDirs", () => {
     }
 
     if (process.env.APPDATA != undefined && fs.existsSync(path.join(process.env.APPDATA, "osu"))) {
-      dirs.push({ version: "lazer", path: path.join(process.env.APPDATA, "osu") });
+      if (fs.existsSync(path.join(process.env.APPDATA, "osu", "client.realm"))) {
+        dirs.push({ version: "lazer", path: path.join(process.env.APPDATA, "osu") });
+      } else if (fs.existsSync(path.join(process.env.APPDATA, "osu", "storage.ini"))) {
+        const p = getStoragePath(path.join(process.env.APPDATA, "osu", "storage.ini"));
+        dirs.push({ version: "lazer", path: p });
+      }
     }
 
     if (dirs.length > 0) {
@@ -61,7 +71,12 @@ Router.respond("dir::autoGetOsuDirs", () => {
     }
 
     if (homePath != undefined && fs.existsSync(path.join(homePath, "osu"))) {
-      dirs.push({ version: "lazer", path: path.join(homePath, "osu") });
+      if (fs.existsSync(path.join(homePath, "osu", "client.realm"))) {
+        dirs.push({ version: "lazer", path: path.join(homePath, "osu") });
+      } else if (fs.existsSync(path.join(homePath, "osu", "storage.ini"))) {
+        const p = getStoragePath(path.join(homePath, "osu", "storage.ini"));
+        dirs.push({ version: "lazer", path: p });
+      }
     }
 
     if (dirs.length > 0) {
@@ -70,15 +85,27 @@ Router.respond("dir::autoGetOsuDirs", () => {
       return none();
     }
   } else if (process.platform === "darwin" && process.env.HOME) {
-    if (fs.existsSync(path.join(process.env.HOME, "Library", "Application Support", "osu"))) {
+    if (
+      fs.existsSync(
+        path.join(process.env.HOME, "Library", "Application Support", "osu", "client.realm"),
+      )
+    ) {
       return some([
         {
           version: "lazer",
           path: path.join(process.env.HOME, "Library", "Application Support", "osu"),
         },
       ]);
+    } else if (
+      fs.existsSync(
+        path.join(process.env.HOME, "Library", "Application Support", "osu", "storage.ini"),
+      )
+    ) {
+      const p = getStoragePath(
+        path.join(process.env.HOME, "Library", "Application Support", "osu", "storage.ini"),
+      );
+      return some([{ version: "lazer", path: p }]);
     }
-
     return none();
   }
   return none();
