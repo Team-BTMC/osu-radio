@@ -176,29 +176,31 @@ export class OsuParser {
               beatmap.Hash;
 
             const songHash = beatmapSet.Files.find(
-              (file) => file.Filename === beatmap.Metadata.AudioFile,
-            )?.File.Hash as string; // the mp3 should exist, will check if its possible for it to not in lazer
+              (file) => file.Filename.toLowerCase() === beatmap.Metadata.AudioFile.toLowerCase(),
+            )?.File.Hash;
 
-            song.audio =
-              currentDir +
-              "/files/" +
-              songHash[0] +
-              "/" +
-              songHash.substring(0, 2) +
-              "/" +
-              songHash;
+            if (songHash) {
+              song.audio =
+                currentDir +
+                "/files/" +
+                songHash[0] +
+                "/" +
+                songHash.substring(0, 2) +
+                "/" +
+                songHash;
+            }
 
             /* Note: in lots of places throughout the application, it relies on the song.path parameter, which in the
-        stable parser is the path of the folder that holds all the files. This folder doesn't exist in lazer's
-        file structure, so for now I'm just passing the audio location as the path parameter. In initial testing
-        this doesn't seem to break anything but just leaving this note in case it does */
+            stable parser is the path of the folder that holds all the files. This folder doesn't exist in lazer's
+            file structure, so for now I'm just passing the audio location as the path parameter. In initial testing
+            this doesn't seem to break anything but just leaving this note in case it does */
             song.path = song.audio;
 
-            if (beatmap.Metadata.BackgroundFile) {
-              const bgHash = beatmapSet.Files.find(
-                (file) => file.Filename === beatmap.Metadata.BackgroundFile,
-              )?.File.Hash as string;
+            const bgHash = beatmapSet.Files.find(
+              (file) => file.Filename === beatmap.Metadata.BackgroundFile,
+            )?.File.Hash;
 
+            if (bgHash) {
               song.bg =
                 currentDir + "/files/" + bgHash[0] + "/" + bgHash.substring(0, 2) + "/" + bgHash;
             }

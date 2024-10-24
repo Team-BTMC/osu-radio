@@ -51,18 +51,14 @@ Router.respond("dir::autoGetOsuDirs", () => {
     }
   } else if (process.platform === "linux") {
     const dirs: OsuDirectory[] = [];
+    const homePath = process.env.XDG_DATA_HOME ?? `${process.env.HOME}/.local/share`;
 
-    if (
-      process.env.XDG_DATA_HOME != undefined &&
-      fs.existsSync(path.join(process.env.XDG_DATA_HOME, "osu-wine", "osu!"))
-    ) {
+    if (homePath != undefined && fs.existsSync(path.join(homePath, "osu-wine", "osu!"))) {
       dirs.push({
         version: "stable",
-        path: path.join(process.env.XDG_DATA_HOME, "osu-wine", "osu!"),
+        path: path.join(homePath, "osu-wine", "osu!"),
       });
     }
-
-    const homePath = process.env.XDG_DATA_HOME ?? `${process.env.HOME}/.local/share`;
 
     if (homePath != undefined && fs.existsSync(path.join(homePath, "osu"))) {
       dirs.push({ version: "lazer", path: path.join(homePath, "osu") });
