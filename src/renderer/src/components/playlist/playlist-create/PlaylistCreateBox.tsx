@@ -2,8 +2,9 @@ import Button from "@renderer/components/button/Button";
 import { addNotice } from "@renderer/components/notice/NoticeContainer";
 import SongImage from "@renderer/components/song/SongImage";
 import Impulse from "@renderer/lib/Impulse";
-import { BadgeCheckIcon, XIcon } from "lucide-solid";
+import { CircleCheckIcon, XIcon } from "lucide-solid";
 import { Component, createSignal, Setter } from "solid-js";
+import { noticeError } from "../playlist.utils";
 
 export type PlaylistCreateBoxProps = {
   group: string;
@@ -13,13 +14,18 @@ export type PlaylistCreateBoxProps = {
 const PlaylistCreateBox: Component<PlaylistCreateBoxProps> = (props) => {
   const [playlistName, setPlaylistName] = createSignal("");
 
-  const createPlaylist = () => {
+  const createPlaylist = async () => {
     // last check is probably unnecessary
     const name = playlistName().trim();
     if (name.length === 0 || name === undefined || name === "") {
       return;
     }
-    window.api.request("playlist::create", name);
+    const result = await window.api.request("playlist::create", name);
+    if (result.isError) {
+      noticeError(result.error);
+      return;
+    }
+
     setPlaylistName("");
     props.reset.pulse();
     props.isOpen(false);
@@ -28,7 +34,7 @@ const PlaylistCreateBox: Component<PlaylistCreateBoxProps> = (props) => {
       title: "Playlist created",
       description: "The playlist " + name + " has been successfully created!",
       variant: "success",
-      icon: <BadgeCheckIcon size={20} />,
+      icon: <CircleCheckIcon size={20} />,
     });
   };
 
@@ -58,12 +64,13 @@ const PlaylistCreateBox: Component<PlaylistCreateBoxProps> = (props) => {
               setPlaylistName(e.target.value);
             }}
           />
-          <button
-            class="mb-6 flex h-9 w-full flex-row items-center justify-center rounded-lg bg-accent font-semibold text-black"
+          <Button
+            class="text-center cursor-pointer"
+            variant={"primary"}
             onClick={() => createPlaylist()}
           >
             Create
-          </button>
+          </Button>
         </div>
       </div>
     </div>

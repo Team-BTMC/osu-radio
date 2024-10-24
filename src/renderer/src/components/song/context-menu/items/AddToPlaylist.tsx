@@ -3,6 +3,7 @@ import { Song } from "../../../../../../@types";
 import SongContextMenuItem from "../SongContextMenuItem";
 import { Component, createSignal, Show } from "solid-js";
 import { BadgeCheckIcon } from "lucide-solid";
+import { noticeError } from "@renderer/components/playlist/playlist.utils";
 
 type SongAddToPlaylistNextProps = {
   song: Song;
@@ -19,8 +20,12 @@ const AddToPlaylist: Component<SongAddToPlaylistNextProps> = (props) => {
     setShow(false);
   });
 
-  const addToPlaylist = () => {
-    window.api.request("playlist::add", "test", props.song);
+  const addToPlaylist = async () => {
+    const result = await window.api.request("playlist::add", "test", props.song);
+    if (result.isError) {
+      noticeError(result.error);
+      return;
+    }
     addNotice({
       title: "Song added",
       description: "Successfully added song to playlist!",

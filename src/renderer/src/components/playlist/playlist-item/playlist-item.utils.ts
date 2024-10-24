@@ -2,6 +2,7 @@ import { addNotice } from "@renderer/components/notice/NoticeContainer";
 import { PlaylistItemProps } from "./PlaylistItem";
 import { Playlist } from "src/@types";
 import { BadgeCheckIcon } from "lucide-solid";
+import { noticeError } from "../playlist.utils";
 
 export function getSongImage(playlist: Playlist) {
   const songs = playlist.songs;
@@ -42,7 +43,12 @@ export const renamePlaylist = async (oldName: string, newName: string) => {
     return;
   }
 
-  await window.api.request("playlist::rename", oldName, newName);
+  const result = await window.api.request("playlist::rename", oldName, newName);
+  if (result.isError) {
+    noticeError(result.error);
+    return;
+  }
+
   addNotice({
     title: "Renamed playlist",
     description: "Playlist renamed successfully!",

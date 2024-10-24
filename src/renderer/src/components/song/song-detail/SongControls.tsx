@@ -11,6 +11,7 @@ import {
 } from "../song.utils";
 import Button from "@renderer/components/button/Button";
 import { addNotice } from "@renderer/components/notice/NoticeContainer";
+import { noticeError } from "@renderer/components/playlist/playlist.utils";
 import Slider from "@renderer/components/slider/Slider";
 import {
   BadgeCheckIcon,
@@ -167,8 +168,12 @@ const RightPart = () => {
       <Button
         size="icon"
         variant="ghost"
-        onClick={() => {
-          window.api.request("playlist::add", "test", song());
+        onClick={async () => {
+          const result = await window.api.request("playlist::add", "test", song());
+          if (result.isError) {
+            noticeError(result.error);
+            return;
+          }
           addNotice({
             title: "Song added",
             description: "Successfully added song to playlist!",

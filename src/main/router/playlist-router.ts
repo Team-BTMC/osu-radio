@@ -1,6 +1,7 @@
 import { Playlist } from "../../@types";
 import { Router } from "../lib/route-pass/Router";
 import { none, some } from "../lib/rust-like-utils-backend/Optional";
+import { fail, ok } from "../lib/rust-like-utils-backend/Result";
 import { Storage } from "../lib/storage/Storage";
 import errorIgnored from "../lib/tungsten/errorIgnored";
 import { mainWindow } from "../main";
@@ -12,7 +13,7 @@ Router.respond("playlist::add", async (_evt, playlistName, song) => {
   const playlist = playlists.get(playlistName);
 
   if (playlist.isNone) {
-    return;
+    return fail("Playlist does not exist");
   }
 
   playlist.value.songs.push(song);
@@ -21,14 +22,23 @@ Router.respond("playlist::add", async (_evt, playlistName, song) => {
   playlists.write(playlistName, playlist.value);
   await Router.dispatch(mainWindow, "playlist::resetList").catch(errorIgnored);
   await Router.dispatch(mainWindow, "playlist::resetSongList").catch(errorIgnored);
+
+  return ok({});
 });
 
 Router.respond("playlist::create", (_evt, name) => {
-  console.log("create playlist " + name);
-  //todo: check if playlist already exists
+  // console.log("create playlist " + name);
   const playlists = Storage.getTable("playlists");
+  const playlistNames = Object.keys(playlists.getStruct());
+
+  if (playlistNames.includes(name)) {
+    return fail("Playlist already exists");
+  }
+
   const empty = { name: name, count: 0, length: 0, songs: [] };
   playlists.write(name, empty);
+
+  return ok({});
 });
 
 Router.respond("playlist::delete", (_evt, name) => {
@@ -43,7 +53,7 @@ Router.respond("playlist::remove", async (_evt, playlistName, song) => {
   const playlist = playlists.get(playlistName);
 
   if (playlist.isNone) {
-    return;
+    return fail("Playlist does not exist");
   }
 
   // i assume that audio is the primary key
@@ -55,7 +65,9 @@ Router.respond("playlist::remove", async (_evt, playlistName, song) => {
     playlist.value.length = playlist.value.length - song.duration;
     playlists.write(playlistName, playlist.value);
     await Router.dispatch(mainWindow, "playlist::resetSongList").catch(errorIgnored);
+    return ok({});
   }
+  return fail("Song not found in playlist");
 });
 
 Router.respond("playlist::rename", (_evt, oldName, newName) => {
@@ -64,13 +76,20 @@ Router.respond("playlist::rename", (_evt, oldName, newName) => {
   const oldPlaylist = playlists.get(oldName);
 
   if (oldPlaylist.isNone) {
-    return;
+    return fail("Playlist does not exist");
+  }
+
+  const playlistNames = Object.keys(playlists.getStruct());
+
+  if (playlistNames.includes(newName)) {
+    return fail("Playlist already exists");
   }
 
   oldPlaylist.value.name = newName;
-  //todo: check if the new name is already used
   playlists.write(newName, oldPlaylist.value);
   playlists.delete(oldName);
+
+  return ok({});
 });
 
 Router.respond("query::playlists::init", () => {

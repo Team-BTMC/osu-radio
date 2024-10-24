@@ -7,6 +7,7 @@ import Impulse from "@renderer/lib/Impulse";
 import { ArrowLeftIcon, PencilIcon, Trash2Icon } from "lucide-solid";
 import { Component, createSignal, Match, onCleanup, onMount, Switch } from "solid-js";
 import { PlaylistSongsQueryPayload, ResourceID, Song } from "src/@types";
+import { noticeError } from "../playlist.utils";
 
 type PlaylistSongListProps = {
   playlistName: string;
@@ -44,7 +45,11 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
   };
 
   const deleteSong = async (playlistName: string, song: Song) => {
-    await window.api.request("playlist::remove", playlistName, song);
+    const result = await window.api.request("playlist::remove", playlistName, song);
+    if (result.isError) {
+      noticeError(result.error);
+      return;
+    }
   };
 
   // const renamePlaylist = async (newName: string) => {
