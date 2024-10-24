@@ -2,10 +2,11 @@ import { ResourceID, Song } from "../../../../../@types";
 import draggable from "../../../lib/draggable/draggable";
 import SongHint from "../SongHint";
 import SongImage from "../SongImage";
+import { useColorExtractor } from "../colorExtractor";
 import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import { song as selectedSong } from "../song.utils";
-import { Component, createSignal, onMount } from "solid-js";
-import { useColorExtractor } from "../colorExtractor"; // Import the color hook
+import { transparentize } from "polished";
+import { Component, createMemo, createSignal, onMount } from "solid-js";
 
 type SongItemProps = {
   song: Song;
@@ -29,7 +30,7 @@ const SongItem: Component<SongItemProps> = ({
   const [, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
 
   const { extractColorFromImage } = useColorExtractor();
-  const { songColor, borderColor } = extractColorFromImage(song);
+  const { primaryColor, secondaryColor } = extractColorFromImage(song);
 
   onMount(() => {
     if (!item) return;
@@ -49,30 +50,63 @@ const SongItem: Component<SongItemProps> = ({
     }
   });
 
+  const isSelected = createMemo(() => {
+    return selectedSong().audio === song.audio;
+  });
+
+  const borderColor = createMemo(() => {
+    const color = secondaryColor();
+    if (isSelected()) {
+      return "#ffffff";
+    }
+
+    if (typeof color === "undefined") {
+      return "rgba(var(--color-thick-material))";
+    }
+
+    return color;
+  });
+
+  const backgrund = createMemo(() => {
+    const color = primaryColor();
+    if (!color) {
+      return "rgba(0, 0, 0, 0.72)";
+    }
+
+    const lowerAlpha = transparentize(0.9);
+    return `linear-gradient(to right, ${color}, ${lowerAlpha(color)})`;
+  });
+
   return (
     <div
-      class={`relative isolate select-none rounded-md group ${selectedSong().path === song.path ? "outline outline-2" : ""}`}
-      data-active={selectedSong().path === song.path}
-      ref={item}
-      data-url={song.bg}
-      onContextMenu={(evt) => setCoords([evt.clientX, evt.clientY])}
+      class="min-h-[72px] rounded-lg py-0.5 pl-1.5 pr-0.5 transition-colors"
+      classList={{
+        "shadow-glow-blue": isSelected(),
+      }}
       style={{
-        border: `2px solid ${borderColor()}`, // Default border color
-        "border-left": selectedSong().path === song.path ? "5px solid white" : `5px solid ${borderColor()}`, // Thicker left border for 3D effect and white when selected
-        background: `linear-gradient(to right, ${songColor()}, rgba(255, 255, 255, 1))`, // Gradient background from songColor to white
-        "box-shadow": selectedSong().path === song.path ? `0 0 15px 3px ${songColor()}` : "none", // Glow effect only on selected song
+        background: borderColor(),
       }}
     >
-      <SongImage
-        class={`absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-50 transition-opacity group-hover:opacity-90 ${selectedSong().path === song.path ? "opacity-90" : ""}`}
-        src={song.bg}
-        group={group}
-      />
-      <div class="flex min-h-[72px] flex-col justify-center overflow-hidden rounded-md bg-black/50 p-3">
-        <h3 class="text-shadow text-[22px] font-extrabold leading-7 shadow-black/60">
-          {song.title}
-        </h3>
-        <p class="text-base text-subtext">{song.artist}</p>
+      <div
+        class="group relative isolate select-none rounded-lg"
+        ref={item}
+        data-url={song.bg}
+        onContextMenu={(evt) => setCoords([evt.clientX, evt.clientY])}
+      >
+        <SongImage
+          class={`absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat`}
+          src={song.bg}
+          group={group}
+        />
+        <div
+          class="flex flex-col justify-center overflow-hidden rounded-md p-3"
+          style={{
+            background: backgrund(),
+          }}
+        >
+          <h3 class="text-shadow text-[22px] font-extrabold leading-7">{song.title}</h3>
+          <p class="text-base text-subtext">{song.artist}</p>
+        </div>
       </div>
     </div>
   );

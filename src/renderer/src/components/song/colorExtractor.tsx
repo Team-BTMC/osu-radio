@@ -1,119 +1,114 @@
-import { Accessor, createSignal, Setter } from "solid-js";
+import { setGradientColors } from "../Gradient";
 import { extractColors } from "extract-colors";
 import { lighten, darken, getContrast, parseToHsl, hslToColorString } from "polished";
-import { setGradientColors } from "../Gradient";
-
-export type Song = {
-  title: string;
-  artist: string;
-  bg?: string;
-  duration: number;
-  path: string;
-  color?: string; // Optional color property to store extracted color
-};
+import { Accessor, createSignal } from "solid-js";
+import { Song } from "src/@types";
 
 const MIN_CONTRAST_RATIO = 4.5;
 const MIN_VIBRANCY_THRESHOLD = 0.3;
 const VIBRANCY_WEIGHT = 0.7;
 const AREA_WEIGHT = 0.3;
 
-const colorCache = new Map<
-  string,
-  { color: string; borderColor: string; signal: Accessor<string>; setter: Setter<string> }
->();
+type UseColorExtractorResult = {
+  primaryColor: Accessor<string | undefined>;
+  secondaryColor: Accessor<string | undefined>;
+};
 
 export function useColorExtractor() {
-  const extractColorFromImage = (song: Song): { songColor: Accessor<string>, borderColor: Accessor<string> } => {
-    const songId = song.path;
+  const extractColorFromImage = (song: Song): UseColorExtractorResult => {
+    const songId = song.audio;
 
-    // Check the cache first
-    if (colorCache.has(songId)) {
-      const cached = colorCache.get(songId)!;
-      song.color = cached.color; // Ensure song.color is set
-      document.documentElement.style.setProperty('--extracted-color-rgb', hexToRgb(cached.color));
-      return { songColor: cached.signal, borderColor: () => cached.borderColor };
+    // State
+    const [primaryColor, setPrimartColor] = createSignal<string>();
+    const [secondaryColor, setSecondaryColor] = createSignal<string>();
+
+    // Check if color already exists
+    if (song.primaryColor && song.secondaryColor) {
+      document.documentElement.style.setProperty(
+        "--extracted-color-rgb",
+        hexToRgb(song.primaryColor),
+      );
+      setPrimartColor(song.primaryColor);
+      setSecondaryColor(song.secondaryColor);
+      return { primaryColor, secondaryColor };
     }
-
-    // Create a signal for this song's color and border color
-    const [songColor, setSongColor] = createSignal<string>("gray");
-    const [borderColor, setBorderColor] = createSignal<string>("gray");
-
-    // Store in cache immediately with default colors
-    colorCache.set(songId, { color: "gray", borderColor: "gray", signal: songColor, setter: setSongColor });
 
     if (!song.bg) {
       console.error("No background image found for color extraction.");
-      setSongColor("gray");
-      return { songColor, borderColor };
+      setPrimartColor("gray");
+      return { primaryColor, secondaryColor };
     }
 
     const img = new Image();
     img.crossOrigin = "Anonymous";
-    img.src = song.bg;
+    img.src = `file://${song.bg}`;
 
-    img.onload = () => {
-      extractColors(img.src)
-        .then((colors) => {
-          const validColors = colors.filter((color) => {
-            const hsl = parseToHsl(color.hex);
-            return hsl.lightness > 0.1 && hsl.lightness < 0.9;
-          });
+    img.onload = async () => {
+      try {
+        console.log("calculating", songId);
+        const colors = await extractColors(img.src);
 
-          const sortedColors = validColors.sort((a, b) => {
-            const vibrancyA = getVibrancy(parseToHsl(a.hex));
-            const vibrancyB = getVibrancy(parseToHsl(b.hex));
-            const scoreA = vibrancyA * VIBRANCY_WEIGHT + a.area * AREA_WEIGHT;
-            const scoreB = vibrancyB * VIBRANCY_WEIGHT + b.area * AREA_WEIGHT;
-            return scoreB - scoreA;
-          });
-
-          let selectedColor = sortedColors[0]?.hex || "gray";
-
-          // Find the first valid color that meets contrast and vibrancy thresholds
-          for (const color of sortedColors) {
-            const contrast = getContrast(color.hex, "#FFFFFF");
-            if (
-              contrast >= MIN_CONTRAST_RATIO &&
-              getVibrancy(parseToHsl(color.hex)) >= MIN_VIBRANCY_THRESHOLD
-            ) {
-              selectedColor = color.hex;
-              break;
-            }
-          }
-
-          selectedColor = alterUnappealingColor(selectedColor);
-
-          // Improve contrast if necessary
-          if (getContrast(selectedColor, "#FFFFFF") < MIN_CONTRAST_RATIO) {
-            selectedColor = improveContrast(selectedColor);
-          }
-
-          // Darken the color for the border
-          const darkenedBorderColor = darken(0.1, selectedColor);
-
-          // Update the cache and song object
-          song.color = selectedColor;
-          setSongColor(selectedColor);
-          setBorderColor(darkenedBorderColor);
-
-          colorCache.set(songId, { color: selectedColor, borderColor: darkenedBorderColor, signal: songColor, setter: setSongColor });
-
-          document.documentElement.style.setProperty('--extracted-color-rgb', hexToRgb(selectedColor));
-
-          // Set gradient colors if needed
-          setGradientColors({
-            top: selectedColor,
-            bottom: lighten(0.2, selectedColor),
-          });
-        })
-        .catch((err) => {
-          console.error("Error extracting color:", err);
-          setSongColor("gray");
-          setBorderColor("gray");
+        const validColors = colors.filter((color) => {
+          const hsl = parseToHsl(color.hex);
+          return hsl.lightness > 0.1 && hsl.lightness < 0.9;
         });
+
+        const sortedColors = validColors.sort((a, b) => {
+          const vibrancyA = getVibrancy(parseToHsl(a.hex));
+          const vibrancyB = getVibrancy(parseToHsl(b.hex));
+          const scoreA = vibrancyA * VIBRANCY_WEIGHT + a.area * AREA_WEIGHT;
+          const scoreB = vibrancyB * VIBRANCY_WEIGHT + b.area * AREA_WEIGHT;
+          return scoreB - scoreA;
+        });
+
+        let songPrimaryColor = sortedColors[0]?.hex || "gray";
+
+        // Find the first valid color that meets contrast and vibrancy thresholds
+        for (const color of sortedColors) {
+          const contrast = getContrast(color.hex, "#FFFFFF");
+          if (
+            contrast >= MIN_CONTRAST_RATIO &&
+            getVibrancy(parseToHsl(color.hex)) >= MIN_VIBRANCY_THRESHOLD
+          ) {
+            songPrimaryColor = color.hex;
+            break;
+          }
+        }
+
+        songPrimaryColor = alterUnappealingColor(songPrimaryColor);
+
+        // Improve contrast if necessary
+        if (getContrast(songPrimaryColor, "#FFFFFF") < MIN_CONTRAST_RATIO) {
+          songPrimaryColor = improveContrast(songPrimaryColor);
+        }
+
+        const { lightness } = parseToHsl(songPrimaryColor);
+        const songSecondaryColor =
+          lightness < 0.2 ? lighten(0.1, songPrimaryColor) : darken(0.1, songPrimaryColor);
+
+        setPrimartColor(songPrimaryColor);
+        setSecondaryColor(songSecondaryColor);
+
+        document.documentElement.style.setProperty(
+          "--extracted-color-rgb",
+          hexToRgb(songPrimaryColor),
+        );
+
+        // Set gradient colors if needed
+        setGradientColors({
+          top: songPrimaryColor,
+          bottom: lighten(0.2, songPrimaryColor),
+        });
+
+        await window.api.request("save::songColors", songPrimaryColor, songSecondaryColor, songId);
+      } catch (err) {
+        console.error("Error extracting color:", err);
+        setPrimartColor(undefined);
+        setSecondaryColor(undefined);
+      }
     };
 
-    return { songColor, borderColor };
+    return { primaryColor, secondaryColor };
   };
 
   return { extractColorFromImage };
@@ -158,10 +153,21 @@ function alterUnappealingColor(color: string): string {
   }
   // Alter tan to a more appealing golden color
   if (hue >= 35 && hue <= 50 && lightness > 0.7 && saturation < 0.5) {
-    return hslToColorString({ hue: randomizeHue(100, 190), saturation: saturation + 0.5, lightness: lightness - 0.2 });
+    return hslToColorString({
+      hue: randomizeHue(100, 190),
+      saturation: saturation + 0.5,
+      lightness: lightness - 0.2,
+    });
   }
   // Alter grayish brown
-  if (hue >= 20 && hue <= 30 && saturation >= 0.3 && saturation <= 0.5 && lightness >= 0.2 && lightness <= 0.5) {
+  if (
+    hue >= 20 &&
+    hue <= 30 &&
+    saturation >= 0.3 &&
+    saturation <= 0.5 &&
+    lightness >= 0.2 &&
+    lightness <= 0.5
+  ) {
     return hslToColorString({ hue: 75, saturation: saturation + 0.3, lightness: lightness + 0.3 });
   }
   // Alter muted purple

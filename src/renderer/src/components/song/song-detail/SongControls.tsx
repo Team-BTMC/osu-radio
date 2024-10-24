@@ -27,7 +27,7 @@ import { Component, createEffect, createSignal, Match, Show, Switch } from "soli
 
 // Add a prop to accept the averageColor
 type SongControlsProps = {
-  averageColor: string;
+  averageColor?: string;
 };
 
 const SongControls: Component<SongControlsProps> = (props) => {
@@ -47,12 +47,9 @@ const SongControls: Component<SongControlsProps> = (props) => {
 
   createEffect(() => setDisable(isSongUndefined(song())));
 
-  // Check if there's a valid averageColor
-  const isValidAverageColor = () => !!props.averageColor && props.averageColor !== "white";
-
   return (
     <div class="flex w-full items-center gap-4" style={{ "--dynamic-color": props.averageColor }}>
-      <LeftPart/>
+      <LeftPart />
       <div class="flex flex-1 items-center justify-center gap-6">
         <Button
           size="icon"
@@ -76,14 +73,12 @@ const SongControls: Component<SongControlsProps> = (props) => {
           </Button>
 
           <button
-            class="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-2xl text-thick-material"
+            class="flex h-12 w-12 items-center justify-center rounded-full border border-solid border-stroke bg-surface text-2xl text-thick-material text-white"
             onClick={() => togglePlay()}
             disabled={disable()}
             title={playHint()}
             style={{
               "background-color": props.averageColor, // Use the average color as background
-              "border": isValidAverageColor() ? "none" : "", // Remove border if valid color
-              "color": isValidAverageColor() ? "white" : "currentColor", // Set text color to white if valid color
             }}
           >
             <Show when={!isPlaying()} fallback={<PauseIcon fill="white" size={20} />}>
