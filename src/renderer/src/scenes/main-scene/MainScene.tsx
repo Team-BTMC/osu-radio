@@ -3,6 +3,7 @@ import SongList from "../../components/song/song-list/SongList";
 import { mainActiveTab, NAV_ITEMS, setMainActiveTab, SIDEBAR_PAGES } from "./main.utils";
 import "./styles.css";
 import Button from "@renderer/components/button/Button";
+import NoticeContainer from "@renderer/components/notice/NoticeContainer";
 import Settings from "@renderer/components/settings/Settings";
 import SongImage from "@renderer/components/song/SongImage";
 import { song } from "@renderer/components/song/song.utils";
@@ -32,77 +33,85 @@ const MainScene: Component = () => {
   });
 
   return (
-    <Tabs value={mainActiveTab} onValueChange={setMainActiveTab}>
-      <Show when={os() === "darwin"}>
-        <div class="app-drag fixed left-0 top-0 h-16 w-screen" />
-      </Show>
-      <main
-        class="main-scene relative h-screen"
-        classList={{
-          "windows-grid": os() === "win32",
-          "mac-grid": os() === "darwin",
-        }}
-      >
-        <Nav />
-        <TabContent />
-
-        <div
-          class="song relative flex flex-1 items-center justify-center"
+    <>
+      <NoticeContainer />
+      <Tabs value={mainActiveTab} onValueChange={setMainActiveTab}>
+        <Show when={os() === "darwin"}>
+          <div class="app-drag fixed left-0 top-0 h-16 w-screen" />
+        </Show>
+        <main
+          class="main-scene relative h-screen"
           classList={{
-            "m-2 rounded-3xl": os() === "darwin",
-            "mt-1 m-2": os() === "win32",
+            "windows-grid": os() === "win32",
+            "mac-grid": os() === "darwin",
           }}
         >
-          <SongDetail />
-          <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-lg shadow-2xl ring-2 ring-inset ring-stroke">
-            <SongImage
-              src={song().bg}
-              instantLoad={true}
-              class="absolute inset-0 scale-110 bg-cover bg-fixed opacity-20 blur-lg filter"
-            />
+          <Nav />
+          <TabContent />
+
+          <div
+            class="song relative flex flex-1 items-center justify-center"
+            classList={{
+              "m-2 rounded-3xl": os() === "darwin",
+              "mt-1 m-2": os() === "win32",
+            }}
+          >
+            <SongDetail />
+            <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-lg shadow-2xl ring-2 ring-inset ring-stroke">
+              <SongImage
+                src={song().bg}
+                instantLoad={true}
+                class="absolute inset-0 scale-110 bg-cover bg-fixed opacity-20 blur-lg filter"
+              />
+            </div>
+            <Show when={os() === "darwin"}>
+              <QueueIcon class="app-no-drag absolute right-2 top-2" />
+            </Show>
           </div>
-          <Show when={os() === "darwin"}>
-            <QueueIcon class="app-no-drag absolute right-2 top-2" />
-          </Show>
+        </main>
+
+        <div class="pointer-events-none absolute inset-0 z-[-1]">
+          <SongImage
+            src={song().bg}
+            instantLoad={true}
+            class="h-full w-full bg-cover blur-lg filter"
+          />
         </div>
-      </main>
 
-      <div class="pointer-events-none absolute inset-0 z-[-1]">
-        <SongImage
-          src={song().bg}
-          instantLoad={true}
-          class="h-full w-full bg-cover blur-lg filter"
-        />
-      </div>
+        <div class="pointer-events-none absolute inset-0 z-[-1] bg-black/90" />
 
-      <div class="pointer-events-none absolute inset-0 z-[-1] bg-black/90" />
-
-      <Show when={os() === "darwin"}>
-        <Button
-          size="icon"
-          variant="ghost"
-          class="app-no-drag fixed left-[92px] top-[22px] z-20"
-          onClick={() => setActive((a) => !a)}
-        >
-          <SidebarIcon />
-        </Button>
-      </Show>
-    </Tabs>
+        <Show when={os() === "darwin"}>
+          <Button
+            size="icon"
+            variant="ghost"
+            class="app-no-drag fixed left-[92px] top-[22px] z-20"
+            onClick={() => setActive((a) => !a)}
+          >
+            <SidebarIcon />
+          </Button>
+        </Show>
+      </Tabs>
+    </>
   );
 };
 
 const Nav: Component = () => {
   const [maximized, setMaximized] = createSignal<boolean>(false);
 
-  createEffect(async () => {
-    const fetchMaximized = async () => {
-      return await window.api.request("window::isMaximized");
+  onMount(async () => {
+    const isMaximized = await window.api.request("window::isMaximized");
+    setMaximized(isMaximized);
+  });
+
+  createEffect(() => {
+    const resizeListener = (maximized: boolean) => {
+      setMaximized(maximized);
     };
 
-    setMaximized(await fetchMaximized());
-    window.api.listen("window::maximizeChange", (maximized: boolean) => {
-      setMaximized(maximized);
-    });
+    window.api.listen("window::maximizeChange", resizeListener);
+    return () => {
+      window.api.removeListener("window::maximizeChange", resizeListener);
+    };
   });
 
   return (

@@ -1,6 +1,5 @@
-import { Optional, Order } from "../../../../../@types";
+import { Optional, Order, Tag } from "../../../../../@types";
 import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-types";
-import { Tag } from "../../search/TagSelect";
 import { setSongsSearch } from "../song-list/song-list.utils";
 import SongListSearchOrderBy from "./SongListSearchOrderBy";
 import Button from "@renderer/components/button/Button";

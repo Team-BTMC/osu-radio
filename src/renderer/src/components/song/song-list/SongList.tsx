@@ -4,6 +4,8 @@ import { namespace } from "../../../App";
 import Impulse from "../../../lib/Impulse";
 import { none, some } from "../../../lib/rust-like-utils-client/Optional";
 import InfiniteScroller from "../../InfiniteScroller";
+import SongContextMenu from "../context-menu/SongContextMenu";
+import AddToPlaylist from "../context-menu/items/AddToPlaylist";
 import PlayNext from "../context-menu/items/PlayNext";
 import SongItem from "../song-item/SongItem";
 import SongListSearch from "../song-list-search/SongListSearch";
@@ -18,17 +20,19 @@ export type SongViewProps = {
   playlist?: string;
 };
 
-const SongList: Component<SongViewProps> = (props) => {
-  const tagsSignal = createSignal<Tag[]>([], { equals: false });
-  const [tags] = tagsSignal;
+const DEFAULT_TAGS_VALUE: Tag[] = [];
+const DEFAULT_ORDER_VALUE: Order = { option: "title", direction: "asc" };
 
-  const [order, setOrder] = createSignal<Order>({ option: "title", direction: "asc" });
+const SongList: Component<SongViewProps> = (props) => {
+  const tagsSignal = createSignal(DEFAULT_TAGS_VALUE, { equals: false });
+  const [order, setOrder] = createSignal(DEFAULT_ORDER_VALUE);
   const [count, setCount] = createSignal(0);
+  const [isQueueExist, setIsQueueExist] = createSignal(false);
 
   const [payload, setPayload] = createSignal<SongsQueryPayload>({
     view: props,
-    order: order(),
-    tags: tags(),
+    order: DEFAULT_ORDER_VALUE,
+    tags: DEFAULT_TAGS_VALUE,
   });
 
   const [searchError, setSearchError] = createSignal<Optional<SearchQueryError>>(none(), {
@@ -38,7 +42,7 @@ const SongList: Component<SongViewProps> = (props) => {
 
   const searchSongs = async () => {
     const o = order();
-    const t = tags();
+    const t = tagsSignal[0]();
     const parsedQuery = await window.api.request("parse::search", songsSearch());
 
     if (parsedQuery.type === "error") {
@@ -70,6 +74,7 @@ const SongList: Component<SongViewProps> = (props) => {
       startSong: songResource,
       ...payload(),
     });
+    setIsQueueExist(true);
   };
 
   const group = namespace.create(true);
@@ -91,12 +96,19 @@ const SongList: Component<SongViewProps> = (props) => {
             reset={resetListing}
             fallback={<div class="py-8 text-center text-lg uppercase text-subtext">No songs</div>}
             builder={(s) => (
-              <SongItem song={s} group={group} onSelect={createQueue}>
-                <PlayNext path={s.path} />
-                <button class="w-full px-4 py-2 text-left transition-colors duration-200 hover:bg-accent/20">
-                  Add to playlist
-                </button>
-              </SongItem>
+              <div>
+                <SongItem
+                  song={s}
+                  group={group}
+                  onSelect={createQueue}
+                  contextMenu={
+                    <SongContextMenu>
+                      <PlayNext path={s.path} disabled={!isQueueExist()} />
+                      <AddToPlaylist path={s.path} />
+                    </SongContextMenu>
+                  }
+                />
+              </div>
             )}
           />
         </div>

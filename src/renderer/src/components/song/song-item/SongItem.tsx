@@ -2,9 +2,15 @@ import { ResourceID, Song } from "../../../../../@types";
 import draggable from "../../../lib/draggable/draggable";
 import SongHint from "../SongHint";
 import SongImage from "../SongImage";
+import { useColorExtractor } from "../color-extractor";
 import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import { song as selectedSong } from "../song.utils";
-import { Component, createSignal, onMount } from "solid-js";
+import { transparentize } from "polished";
+import Popover from "@renderer/components/popover/Popover";
+import { EllipsisVerticalIcon } from "lucide-solid";
+import { Component, createSignal, JSXElement, onMount, createMemo } from "solid-js";
+import { Portal } from "solid-js/web";
+import { twMerge } from "tailwind-merge";
 
 type SongItemProps = {
   song: Song;
@@ -13,76 +19,131 @@ type SongItemProps = {
   onSelect: (songResource: ResourceID) => any;
   draggable?: true;
   onDrop?: (before: Element | null) => any;
-  children?: any;
+  contextMenu: JSXElement;
 };
 
-const SongItem: Component<SongItemProps> = ({
-  group,
-  onSelect,
-  song,
-  children,
-  draggable: isDraggable,
-  onDrop,
-  selectable,
-}) => {
-  const showSignal = createSignal(false);
-  const [, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
+const SongItem: Component<SongItemProps> = (props) => {
   let item: HTMLDivElement | undefined;
+  const [, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
 
-  const showMenu = (evt: MouseEvent) => {
-    if (children === undefined) {
-      showSignal[1](false);
-      return;
-    }
-
-    setCoords([evt.clientX, evt.clientY]);
-    showSignal[1](true);
-  };
+  const { extractColorFromImage } = useColorExtractor();
+  const { primaryColor, secondaryColor, processImage } = extractColorFromImage(props.song);
+  const [localShow, setLocalShow] = createSignal(false);
+  const [mousePos, setMousePos] = createSignal<[number, number]>([0, 0]);
 
   onMount(() => {
-    if (!item) {
-      return;
-    }
+    if (!item) return;
 
+    // Initialize draggable functionality
     draggable(item, {
-      onClick: ignoreClickInContextMenu(() => onSelect(song.path)),
-      onDrop: onDrop ?? (() => {}),
+      onClick: ignoreClickInContextMenu(() => props.onSelect(props.song.path)),
+      onDrop: props.onDrop ?? (() => {}),
       createHint: SongHint,
-      useOnlyAsOnClickBinder: !isDraggable || selectedSong().path === song.path,
+      useOnlyAsOnClickBinder: !props.draggable || selectedSong().path === props.song.path,
     });
 
-    if (selectable === true) {
-      item.dataset.path = song.path;
+    if (props.selectable === true) {
+      item.dataset.path = props.song.path;
     }
   });
 
-  return (
-    <div
-      class="group relative isolate select-none rounded-md"
-      classList={{
-        "outline outline-2 outline-accent": selectedSong().path === song.path,
-      }}
-      data-active={selectedSong().path === song.path}
-      ref={item}
-      data-url={song.bg}
-      onContextMenu={showMenu}
-    >
-      <SongImage
-        class="absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat opacity-30 group-hover:opacity-90"
-        classList={{
-          "opacity-90": selectedSong().path === song.path,
-        }}
-        src={song.bg}
-        group={group}
-      />
+  const isSelected = createMemo(() => {
+    return selectedSong().audio === props.song.audio;
+  });
 
-      <div class="flex min-h-[72px] flex-col justify-center overflow-hidden rounded-md bg-black/50 p-3">
-        <h3 class="text-shadow text-[22px] font-extrabold leading-7 shadow-black/60">
-          {song.title}
-        </h3>
-        <p class="text-base text-subtext">{song.artist}</p>
+  const borderColor = createMemo(() => {
+    const color = secondaryColor();
+    if (isSelected()) {
+      return "#ffffff";
+    }
+
+    if (typeof color === "undefined") {
+      return "rgba(var(--color-thick-material))";
+    }
+
+    return color;
+  });
+
+  const backgrund = createMemo(() => {
+    const color = primaryColor();
+    if (!color) {
+      return "rgba(0, 0, 0, 0.72)";
+    }
+
+    const lowerAlpha = transparentize(0.9);
+    return `linear-gradient(to right, ${color}, ${lowerAlpha(color)})`;
+  });
+
+  return (
+    <Popover
+      isOpen={localShow}
+      onValueChange={setLocalShow}
+      placement="right"
+      offset={{ crossAxis: 5, mainAxis: 5 }}
+      shift={{}}
+      flip={{}}
+      mousePos={mousePos}
+    >
+      <Portal>
+        <Popover.Overlay />
+        <Popover.Content
+          onClick={(e) => {
+            e.stopImmediatePropagation();
+            setLocalShow(false);
+          }}
+        >
+          {props.contextMenu}
+        </Popover.Content>
+      </Portal>
+      <div
+        class="min-h-[72px] rounded-lg py-0.5 pl-1.5 pr-0.5 transition-colors"
+        classList={{
+          "shadow-glow-blue": isSelected(),
+        }}
+        style={{
+          background: borderColor(),
+        }}
+        onContextMenu={(e) => {
+          e.preventDefault();
+          setMousePos([e.clientX, e.clientY]);
+          setLocalShow(true);
+        }}
+      >
+        <div
+          class="group relative isolate select-none rounded-lg"
+          ref={item}
+          data-url={props.song.bg}
+          onContextMenu={(evt) => setCoords([evt.clientX, evt.clientY])}
+        >
+          <SongImage
+            class={`absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat`}
+            src={props.song.bg}
+            group={props.group}
+            onImageLoaded={processImage}
+          />
+          <div
+            class="flex flex-col justify-center overflow-hidden rounded-md p-3"
+            style={{
+              background: backgrund(),
+            }}
+          >
+            <h3 class="text-shadow text-[22px] font-extrabold leading-7">{props.song.title}</h3>
+            <p class="text-base text-subtext">{props.song.artist}</p>
+          </div>
+
+          <div class="absolute right-2 top-1/2 -translate-y-1/2 grid aspect-square size-9 place-items-center rounded border-solid border-stroke bg-transparent p-1 text-text hover:bg-surface">
+            <Popover.Trigger
+              class={twMerge(
+                "opacity-0 transition-opacity group-hover:opacity-100",
+                localShow() && "opacity-100",
+              )}
+            >
+              <EllipsisVerticalIcon />
+            </Popover.Trigger>
+          </div>
+        </div>
       </div>
-    </div>
+    </Popover>
   );
 };
 

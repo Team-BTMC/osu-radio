@@ -35,7 +35,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Run Eslint
-        run: npm run lint:check
+        run: npm run lint
 
   format:
     timeout-minutes: 10

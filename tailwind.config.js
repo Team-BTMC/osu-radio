@@ -1,9 +1,16 @@
 /** @type {import('tailwindcss').Config} */
+import { noticeAnimations } from "./src/renderer/src/components/notice/NoticeAnimations";
 
 export default {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      keyframes: {
+        ...noticeAnimations.keyframes,
+      },
+      animation: {
+        ...noticeAnimations.animation,
+      },
       colors: {
         transparent: "transparent",
         "thick-material": "rgba(var(--color-thick-material), 0.9)",
@@ -18,6 +25,9 @@ export default {
         black: "rgba(var(--color-black))",
         red: "rgba(var(--color-red))",
         green: "rgba(var(--color-green))",
+      },
+      boxShadow: {
+        "glow-blue": "0px 0px 10px #4EBFFF, 0px 0px 28px rgba(78, 191, 255, 0.72)",
       },
     },
   },
