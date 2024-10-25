@@ -35,13 +35,13 @@ const MainScene: Component = () => {
       <Nav />
       <main class="relative flex h-[calc(100vh-52px)]">
         <TabContent />
-        <div class="flex flex-1 items-center justify-center">
+        <div class="flex flex-1 items-center justify-center song-detail-gradient">
           <SongDetail />
         </div>
         <QueueModal />
       </main>
 
-      <div class="pointer-events-none absolute inset-0 z-[-1] opacity-[0.072]">
+      <div class="pointer-events-none absolute inset-0 z-[-1] opacity-[0.12]">
         <SongImage
           src={song().bg}
           instantLoad={true}
