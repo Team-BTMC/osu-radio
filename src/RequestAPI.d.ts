@@ -42,7 +42,7 @@ export type RequestAPI = {
   "dir::autoGetOsuDirs": () => Optional<OsuDirectory[]>;
   "dir::submit": (dir: OsuDirectory) => void;
 
-  "discord::play": (song: Song, length?: number, duration?: number) => void;
+  "discord::play": (song: Song, length: number, duration: number) => void;
   "discord::pause": (song: Song) => void;
 
   "error::dismissed": () => void;
