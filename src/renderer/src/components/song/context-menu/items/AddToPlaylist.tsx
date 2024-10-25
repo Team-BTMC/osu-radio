@@ -1,25 +1,15 @@
 import { addNotice } from "@renderer/components/notice/NoticeContainer";
 import { Song } from "../../../../../../@types";
 import SongContextMenuItem from "../SongContextMenuItem";
-import { Component, createSignal, Show } from "solid-js";
-import { BadgeCheckIcon } from "lucide-solid";
+import { Component } from "solid-js";
+import { BadgeCheckIcon, PlusIcon } from "lucide-solid";
 import { noticeError } from "@renderer/components/playlist/playlist.utils";
 
-type SongAddToPlaylistNextProps = {
+type AddToPlaylistProps = {
   song: Song;
 };
 
-const AddToPlaylist: Component<SongAddToPlaylistNextProps> = (props) => {
-  const [show, setShow] = createSignal(false);
-
-  window.api.listen("queue::created", () => {
-    setShow(true);
-  });
-
-  window.api.listen("queue::destroyed", () => {
-    setShow(false);
-  });
-
+const AddToPlaylist: Component<AddToPlaylistProps> = (props) => {
   const addToPlaylist = async () => {
     const result = await window.api.request("playlist::add", "test", props.song);
     if (result.isError) {
@@ -35,9 +25,14 @@ const AddToPlaylist: Component<SongAddToPlaylistNextProps> = (props) => {
   };
 
   return (
-    <Show when={show()}>
-      <SongContextMenuItem onClick={() => addToPlaylist()}>Add to Playlist</SongContextMenuItem>
-    </Show>
+    <SongContextMenuItem
+      onClick={() => {
+        addToPlaylist();
+      }}
+    >
+      <p>Add to Playlist</p>
+      <PlusIcon />
+    </SongContextMenuItem>
   );
 };
 

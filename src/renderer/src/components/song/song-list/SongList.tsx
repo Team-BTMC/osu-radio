@@ -106,7 +106,7 @@ const SongList: Component<SongViewProps> = (props) => {
                 contextMenu={
                   <SongContextMenu>
                     <PlayNext path={s.path} disabled={!isQueueExist()} />
-                    <AddToPlaylist path={s.path} />
+                    <AddToPlaylist song={s} />
                   </SongContextMenu>
                 }
               ></SongItem>

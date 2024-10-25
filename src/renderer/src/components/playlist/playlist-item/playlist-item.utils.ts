@@ -1,8 +1,8 @@
 import { addNotice } from "@renderer/components/notice/NoticeContainer";
-import { PlaylistItemProps } from "./PlaylistItem";
 import { Playlist } from "src/@types";
 import { BadgeCheckIcon } from "lucide-solid";
 import { noticeError } from "../playlist.utils";
+import Impulse from "@renderer/lib/Impulse";
 
 export function getSongImage(playlist: Playlist) {
   const songs = playlist.songs;
@@ -13,30 +13,17 @@ export function getSongImage(playlist: Playlist) {
   }
 }
 
-export function deletePlaylist(e: Event, props: PlaylistItemProps) {
-  e.stopPropagation();
-  window.api.request("playlist::delete", props.playlist.name);
-  props.reset.pulse();
+export function deletePlaylist(name: string, reset: Impulse) {
+  window.api.request("playlist::delete", name);
+  reset.pulse();
   addNotice({
     variant: "success",
     title: "Playlist deleted",
-    description: "Playlist " + props.playlist.name + " successfully deleted!",
+    description: "Playlist " + name + " successfully deleted!",
     icon: BadgeCheckIcon({ size: 20 }),
   });
 }
 
-// function formatPlaylistTime(seconds: number) {
-//   let minutes = 0;
-//   let hours = 0;
-//   if (seconds > 60) {
-//     minutes = Math.floor(seconds / 60);
-//     if (minutes > 60) {
-//       hours = Math.floor(minutes / 60);
-//     }
-//   }
-
-//   return hours + " hours " + minutes + " minutes";
-// }
 export const renamePlaylist = async (oldName: string, newName: string) => {
   newName = newName.trim();
   if (newName === undefined || newName === "" || newName === oldName) {
@@ -55,5 +42,4 @@ export const renamePlaylist = async (oldName: string, newName: string) => {
     variant: "success",
     icon: BadgeCheckIcon({ size: 20 }),
   });
-  // reset.pulse();
 };

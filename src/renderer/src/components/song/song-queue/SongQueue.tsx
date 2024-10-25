@@ -110,7 +110,7 @@ const SongQueue: Component = () => {
               onDrop={onDrop(s)}
               contextMenu={
                 <SongContextMenu>
-                  <AddToPlaylist path={s.path} />
+                  <AddToPlaylist song={s} />
                   <RemoveFromQueue path={s.path} />
                 </SongContextMenu>
               }

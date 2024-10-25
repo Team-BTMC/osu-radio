@@ -96,7 +96,7 @@ const SongItem: Component<SongItemProps> = (props) => {
         </Popover.Content>
       </Portal>
       <div
-        class="min-h-[72px] rounded-lg py-0.5 pl-1.5 pr-0.5 transition-colors"
+        class="min-h-[72px] rounded-lg py-0.5 pl-1.5 pr-0.5 transition-colors w-full"
         classList={{
           "shadow-glow-blue": isSelected(),
         }}

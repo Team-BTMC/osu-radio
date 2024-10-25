@@ -5,32 +5,31 @@ import { namespace } from "@renderer/App";
 import Button from "@renderer/components/button/Button";
 import Impulse from "@renderer/lib/Impulse";
 import { ArrowLeftIcon, PencilIcon, Trash2Icon } from "lucide-solid";
-import { Component, createSignal, Match, onCleanup, onMount, Switch } from "solid-js";
+import { Component, createSignal, onCleanup, onMount, Show } from "solid-js";
 import { PlaylistSongsQueryPayload, ResourceID, Song } from "src/@types";
 import { noticeError } from "../playlist.utils";
+import SongContextMenu from "@renderer/components/song/context-menu/SongContextMenu";
+import PlayNext from "@renderer/components/song/context-menu/items/PlayNext";
+import AddToPlaylist from "@renderer/components/song/context-menu/items/AddToPlaylist";
 
 type PlaylistSongListProps = {
   playlistName: string;
 };
 
-// let localPlaylistName: string;
-
 const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
   const group = namespace.create(true);
-  // const [playlistName, setPlaylistName] = createSignal("");
 
   const [payload] = createSignal<PlaylistSongsQueryPayload>({
     playlistName: props.playlistName,
   });
 
   const [editMode, setEditMode] = createSignal(false);
+  const [isQueueExist, setIsQueueExist] = createSignal(false);
 
   const reset = new Impulse();
 
   onMount(() => {
     window.api.listen("playlist::resetSongList", reset.pulse.bind(reset));
-    // localPlaylistName = props.playlistName;
-    // setPayload({ playlistName: localPlaylistName });
   });
   onCleanup(() => window.api.removeListener("playlist::resetSongList", reset.pulse.bind(reset)));
 
@@ -42,6 +41,7 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
       tags: [],
       view: { playlist: props.playlistName },
     });
+    setIsQueueExist(true);
   };
 
   const deleteSong = async (playlistName: string, song: Song) => {
@@ -51,18 +51,6 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
       return;
     }
   };
-
-  // const renamePlaylist = async (newName: string) => {
-  //   newName = newName.trim();
-  //   if (newName === undefined || newName === "" || newName === localPlaylistName) {
-  //     return;
-  //   }
-
-  //   await window.api.request("playlist::rename", localPlaylistName, newName);
-  //   localPlaylistName = newName;
-  //   setPayload({ playlistName: localPlaylistName });
-  //   reset.pulse();
-  // };
 
   return (
     <div class="mx-5 my-6">
@@ -75,22 +63,6 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
           >
             <ArrowLeftIcon class="text-overlay" />
           </Button>
-          {/* <Switch fallback={""}>
-            <Match when={editMode() === true}>
-              <input
-                class="h-10 rounded-full border border-stroke bg-transparent pl-4 pr-4 focus:outline-none focus:ring-2 focus:ring-accent"
-                type="text"
-                id="playlist_name"
-                value={localPlaylistName}
-                onInput={(e) => {
-                  setPlaylistName(e.target.value);
-                }}
-              />
-            </Match>
-            <Match when={editMode() === false}>
-              <h3 class="text-xl">{localPlaylistName}</h3>
-            </Match>
-          </Switch> */}
           <h3 class="text-xl">{props.playlistName}</h3>
         </div>
         <Button
@@ -98,7 +70,6 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
           size={"icon"}
           class="rounded-lg"
           onClick={() => {
-            // await renamePlaylist(playlistName());
             setEditMode(!editMode());
           }}
         >
@@ -122,20 +93,24 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
                 selectable={true}
                 draggable={true}
                 onSelect={createQueue}
+                contextMenu={
+                  <SongContextMenu>
+                    <PlayNext path={s.path} disabled={!isQueueExist()} />
+                    <AddToPlaylist song={s} />
+                  </SongContextMenu>
+                }
               ></SongItem>
-              <Switch fallback={""}>
-                <Match when={editMode() === true}>
-                  <Button
-                    variant={"ghost"}
-                    size={"icon"}
-                    // this needs to be slightly larger for some reason (probably margin)
-                    class="ml-3 w-10 rounded-lg"
-                    onClick={() => deleteSong(props.playlistName, s)}
-                  >
-                    <Trash2Icon class="text-red" />
-                  </Button>
-                </Match>
-              </Switch>
+              <Show when={editMode() === true}>
+                <Button
+                  variant={"ghost"}
+                  size={"icon"}
+                  // this needs to be slightly larger for some reason (probably margin)
+                  class="ml-3 w-10 rounded-lg"
+                  onClick={() => deleteSong(props.playlistName, s)}
+                >
+                  <Trash2Icon class="text-red" />
+                </Button>
+              </Show>
             </div>
           )}
         />
