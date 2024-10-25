@@ -10,11 +10,9 @@ import {
   handleMuteSong,
 } from "../song.utils";
 import Button from "@renderer/components/button/Button";
-import { addNotice } from "@renderer/components/notice/NoticeContainer";
-import { noticeError } from "@renderer/components/playlist/playlist.utils";
+import Popover from "@renderer/components/popover/Popover";
 import Slider from "@renderer/components/slider/Slider";
 import {
-  BadgeCheckIcon,
   CirclePlusIcon,
   PauseIcon,
   PlayIcon,
@@ -27,6 +25,8 @@ import {
   VolumeXIcon,
 } from "lucide-solid";
 import { Component, createEffect, createSignal, Match, Show, Switch } from "solid-js";
+import SongContextMenu from "../context-menu/SongContextMenu";
+import AddToPlaylist from "../context-menu/items/AddToPlaylist";
 
 // Add a prop to accept the averageColor
 type SongControlsProps = {
@@ -173,25 +173,19 @@ const LeftPart = () => {
 const RightPart = () => {
   return (
     <div class="flex flex-1 justify-end">
-      <Button
-        size="icon"
-        variant="ghost"
-        onClick={async () => {
-          const result = await window.api.request("playlist::add", "test", song());
-          if (result.isError) {
-            noticeError(result.error);
-            return;
-          }
-          addNotice({
-            title: "Song added",
-            description: "Successfully added song to playlist!",
-            variant: "success",
-            icon: <BadgeCheckIcon size={20} />,
-          });
-        }}
-      >
-        <CirclePlusIcon size={20} />
-      </Button>
+      <Popover flip={{}} shift={{}}>
+        <Popover.Overlay />
+        <Popover.Content>
+          <SongContextMenu>
+            <AddToPlaylist song={song()} />
+          </SongContextMenu>
+        </Popover.Content>
+        <Popover.Trigger>
+          <Button size="icon" variant="ghost" title="Add to playlist">
+            <CirclePlusIcon size={20} />
+          </Button>
+        </Popover.Trigger>
+      </Popover>
     </div>
   );
 };

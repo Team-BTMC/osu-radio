@@ -1,38 +1,54 @@
-import { addNotice } from "@renderer/components/notice/NoticeContainer";
 import { Song } from "../../../../../../@types";
 import SongContextMenuItem from "../SongContextMenuItem";
-import { Component } from "solid-js";
-import { BadgeCheckIcon, PlusIcon } from "lucide-solid";
-import { noticeError } from "@renderer/components/playlist/playlist.utils";
+import { Component, createSignal, onMount } from "solid-js";
+import { ChevronRightIcon } from "lucide-solid";
+import Popover from "@renderer/components/popover/Popover";
+import PlaylistChooser from "./PlaylistChooser";
+import SongContextMenu from "../SongContextMenu";
 
 type AddToPlaylistProps = {
   song: Song;
 };
 
 const AddToPlaylist: Component<AddToPlaylistProps> = (props) => {
-  const addToPlaylist = async () => {
-    const result = await window.api.request("playlist::add", "test", props.song);
-    if (result.isError) {
-      noticeError(result.error);
+  const [playlistNames, setPlaylistNames] = createSignal<string[]>([]);
+  const [showChooser, setShowChooser] = createSignal<boolean>(false);
+
+  onMount(async () => {
+    const playlists = await window.api.request("query::playlistNames");
+    if (playlists.isNone) {
       return;
     }
-    addNotice({
-      title: "Song added",
-      description: "Successfully added song to playlist!",
-      variant: "success",
-      icon: <BadgeCheckIcon size={20} />,
-    });
-  };
+
+    setPlaylistNames(playlists.value.playlistNames);
+  });
 
   return (
-    <SongContextMenuItem
-      onClick={() => {
-        addToPlaylist();
-      }}
+    <Popover
+      isOpen={showChooser}
+      onValueChange={setShowChooser}
+      flip={{}}
+      shift={{}}
+      offset={10}
+      placement="right"
     >
-      <p>Add to Playlist</p>
-      <PlusIcon />
-    </SongContextMenuItem>
+      <Popover.Content>
+        <SongContextMenu>
+          <PlaylistChooser playlistNames={playlistNames()} song={props.song} />
+        </SongContextMenu>
+      </Popover.Content>
+      <Popover.Trigger>
+        <SongContextMenuItem
+          onClick={() => {}}
+          onHover={() => {
+            setShowChooser(true);
+          }}
+        >
+          <p>Add to Playlist</p>
+          <ChevronRightIcon />
+        </SongContextMenuItem>
+      </Popover.Trigger>
+    </Popover>
   );
 };
 

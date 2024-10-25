@@ -1,17 +1,25 @@
 import "../../../assets/css/song/song-context-menu.css";
-import { Component, For } from "solid-js";
+import { Component, For, JSX } from "solid-js";
 
 type SongContextMenuProps = {
-  children: any;
+  children: JSX.Element | JSX.Element[];
 };
 
 const SongContextMenu: Component<SongContextMenuProps> = (props) => {
   let menu: HTMLDivElement | undefined;
 
   return (
-    <div class="z-30 min-w-48 rounded-xl border border-stroke bg-thick-material" ref={menu}>
-      <div class="flex flex-col gap-1 rounded-xl bg-thick-material p-3">
-        <For each={props.children}>{(child) => child}</For>
+    <div
+      class="z-30 min-w-48 rounded-xl border border-stroke bg-thick-material max-h-screen overflow-y-scroll [scrollbar-width:none]"
+      ref={menu}
+    >
+      <div class="flex flex-col gap-1 rounded-xl bg-thick-material p-2">
+        <For
+          fallback={<div>asdasd</div>}
+          each={Array.isArray(props.children) ? props.children : [props.children]}
+        >
+          {(child) => child}
+        </For>
       </div>
     </div>
   );
