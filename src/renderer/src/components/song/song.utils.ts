@@ -29,16 +29,16 @@ const [media, setMedia] = createSignal<URL>();
 export { media, setMedia };
 
 const [song, setSong] = createSignal<Song>(DEFAULT_SONG);
-export { song, setSong };
+export { setSong, song };
 
 const [duration, setDuration] = createSignal(0);
 export { duration, setDuration };
 
 const [timestamp, setTimestamp] = createSignal(0);
-export { timestamp, setTimestamp };
+export { setTimestamp, timestamp };
 
 const [valueBeforeMute, setValueBeforeMute] = createSignal<number | undefined>();
-export { valueBeforeMute, setValueBeforeMute };
+export { setValueBeforeMute, valueBeforeMute };
 
 const [isSeeking, setIsSeeking] = createSignal({
   value: false,
@@ -108,7 +108,7 @@ export async function play(): Promise<void> {
   }
 
   const currentSong = song();
-  await window.api.request("discord::play", currentSong, player.currentTime);
+
   document.title = `${currentSong.artist} - ${currentSong.title}`;
 
   const m = media();
@@ -117,6 +117,16 @@ export async function play(): Promise<void> {
   }
 
   await player.play().catch((reason) => console.error(reason));
+
+  const waitForDuration = async (): Promise<number> => {
+    while (isNaN(player.duration)) {
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    }
+    return player.duration;
+  };
+  const duration = await waitForDuration();
+  await window.api.request("discord::play", currentSong, duration, player.currentTime);
+
   setIsPlaying(true);
 
   await setMediaSession(currentSong);
@@ -293,7 +303,6 @@ window.api.listen("queue::songChanged", async (s) => {
 
   setMedia(new URL(resource.value));
   setSong(s);
-  await window.api.request("discord::play", s);
   await play();
 });
 
@@ -314,9 +323,6 @@ player.addEventListener("loadedmetadata", () => {
 player.addEventListener("timeupdate", async () => {
   setTimestamp(player.currentTime);
   const currentSong = song();
-
-  // Discord
-  await window.api.request("discord::play", currentSong, player.currentTime);
 
   // Media session
   setMediaSessionPosition();
@@ -370,7 +376,7 @@ export const handleSeekEnd = () => {
   }
 
   if (!pausedSeekingStart) {
-    player.play();
+    play();
   }
 };
 
