@@ -14,14 +14,14 @@ import {
   createEffect,
   createSignal,
   For,
+  JSX,
   onMount,
   Setter,
   Show,
-  JSX,
 } from "solid-js";
 
 const [os, setOs] = createSignal<NodeJS.Platform>();
-const [active, setActive] = createSignal<boolean>(true);
+export const [active, setActive] = createSignal<boolean>(true);
 
 const MainScene: Component = () => {
   onMount(async () => {
