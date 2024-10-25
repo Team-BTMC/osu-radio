@@ -160,10 +160,10 @@ export class OsuParser {
               dateAdded: beatmapSet.DateAdded,
               title: beatmap.Metadata.Title,
               artist: beatmap.Metadata.Artist,
-              creator: beatmap.Metadata.Author.Username,
+              creator: beatmap.Metadata.Author?.Username ?? "No Creator",
               bpm: [],
               duration: beatmap.Length,
-              diffs: [beatmap.DifficultyName],
+              diffs: [beatmap.DifficultyName ?? "Unknown difficulty"],
             };
 
             song.osuFile = path.join(
