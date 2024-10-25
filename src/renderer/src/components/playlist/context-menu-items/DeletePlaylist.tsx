@@ -1,8 +1,8 @@
 import SongContextMenuItem from "@renderer/components/song/context-menu/SongContextMenuItem";
-import { DeleteIcon } from "lucide-solid";
+import { ListXIcon } from "lucide-solid";
 import { Component } from "solid-js";
-import { deletePlaylist } from "../playlist-item/playlist-item.utils";
 import Impulse from "@renderer/lib/Impulse";
+import { deletePlaylist } from "../playlist.utils";
 
 type DeletePlaylistProps = {
   name: string;
@@ -18,7 +18,7 @@ const DeletePlaylist: Component<DeletePlaylistProps> = (props) => {
       class="hover:bg-red/20"
     >
       <p class="text-red">Delete playlist</p>
-      <DeleteIcon class="text-red" size={20} />
+      <ListXIcon class="text-red" size={20} />
     </SongContextMenuItem>
   );
 };

@@ -9,7 +9,6 @@ import { Component, createSignal, onCleanup, onMount, Show } from "solid-js";
 import { twMerge } from "tailwind-merge";
 
 const PlaylistList: Component = () => {
-  // const [playlistSearch, setPlaylistSearch] = createSignal("");
   const [, setCount] = createSignal(0);
   const resetListing = new Impulse();
   const [showCreateBox, setShowCreateBox] = createSignal(false);
@@ -23,14 +22,6 @@ const PlaylistList: Component = () => {
 
   return (
     <div class="flex h-full flex-col">
-      {/* <Search
-        query={querySignal}
-        tags={tagsSignal}
-        setOrder={setOrder}
-        count={count}
-        error={searchError}
-      />
-      */}
       <div class="z-1 sticky top-0 mx-5 mt-6 flex flex-col">
         <div class="mb-6 flex w-full flex-row items-center">
           <div class="mr-2 h-11 w-full rounded-lg border border-stroke">
@@ -39,9 +30,6 @@ const PlaylistList: Component = () => {
               type="text"
               id="search_input"
               placeholder="Search in your playlists... (WIP)"
-              // onInput={(e) => {
-              //   setPlaylistSearch(e.target.value);
-              // }}
             />
             <label
               class={twMerge(

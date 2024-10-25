@@ -5,7 +5,7 @@ import {
   PLAYLIST_SCENE_LIST,
   playlistActiveScene,
   activePlaylistName,
-} from "./playlist-view.utils";
+} from "../playlist.utils";
 import { Component, Match, Switch } from "solid-js";
 
 const PlaylistView: Component = () => {

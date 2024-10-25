@@ -3,8 +3,8 @@ import {
   PLAYLIST_SCENE_SONGS,
   setActivePlaylistName,
   setPlaylistActiveScene,
-} from "../playlist-view/playlist-view.utils";
-import { getSongImage, renamePlaylist } from "./playlist-item.utils";
+} from "../playlist.utils";
+import { getSongImage } from "./playlist-item.utils";
 import Popover from "@renderer/components/popover/Popover";
 import SongContextMenu, {
   ignoreClickInContextMenu,
@@ -18,6 +18,7 @@ import { twMerge } from "tailwind-merge";
 import DeletePlaylist from "../context-menu-items/DeletePlaylist";
 import RenamePlaylist from "../context-menu-items/RenamePlaylist";
 import draggable from "@renderer/lib/draggable/draggable";
+import { renamePlaylist } from "../playlist.utils";
 
 export type PlaylistItemProps = {
   playlist: Playlist;

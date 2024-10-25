@@ -27,7 +27,6 @@ Router.respond("playlist::add", async (_evt, playlistName, song) => {
 });
 
 Router.respond("playlist::create", (_evt, name) => {
-  // console.log("create playlist " + name);
   const playlists = Storage.getTable("playlists");
   const playlistNames = Object.keys(playlists.getStruct());
 
@@ -42,13 +41,11 @@ Router.respond("playlist::create", (_evt, name) => {
 });
 
 Router.respond("playlist::delete", (_evt, name) => {
-  console.log("delete playlist " + name);
   const playlists = Storage.getTable("playlists");
   playlists.delete(name);
 });
 
 Router.respond("playlist::remove", async (_evt, playlistName, song) => {
-  console.log("delete " + song.title + " from " + playlistName);
   const playlists = Storage.getTable("playlists");
   const playlist = playlists.get(playlistName);
 
@@ -71,7 +68,6 @@ Router.respond("playlist::remove", async (_evt, playlistName, song) => {
 });
 
 Router.respond("playlist::rename", (_evt, oldName, newName) => {
-  console.log("rename from " + oldName + " to " + newName);
   const playlists = Storage.getTable("playlists");
   const oldPlaylist = playlists.get(oldName);
 

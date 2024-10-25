@@ -1,16 +1,15 @@
 import InfiniteScroller from "../../InfiniteScroller";
 import SongItem from "../../song/song-item/SongItem";
-import { PLAYLIST_SCENE_LIST, setPlaylistActiveScene } from "../playlist-view/playlist-view.utils";
 import { namespace } from "@renderer/App";
 import Button from "@renderer/components/button/Button";
 import Impulse from "@renderer/lib/Impulse";
 import { ArrowLeftIcon, PencilIcon, Trash2Icon } from "lucide-solid";
 import { Component, createSignal, onCleanup, onMount, Show } from "solid-js";
-import { PlaylistSongsQueryPayload, ResourceID, Song } from "src/@types";
-import { noticeError } from "../playlist.utils";
+import { PlaylistSongsQueryPayload, ResourceID } from "src/@types";
 import SongContextMenu from "@renderer/components/song/context-menu/SongContextMenu";
 import PlayNext from "@renderer/components/song/context-menu/items/PlayNext";
-import AddToPlaylist from "@renderer/components/song/context-menu/items/AddToPlaylist";
+import RemoveFromPlaylist from "../context-menu-items/RemoveFromPlaylist";
+import { deleteSong, PLAYLIST_SCENE_LIST, setPlaylistActiveScene } from "../playlist.utils";
 
 type PlaylistSongListProps = {
   playlistName: string;
@@ -33,7 +32,6 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
   });
   onCleanup(() => window.api.removeListener("playlist::resetSongList", reset.pulse.bind(reset)));
 
-  //todo move these to a .utils.ts file
   const createQueue = async (songResource: ResourceID) => {
     await window.api.request("queue::create", {
       startSong: songResource,
@@ -41,15 +39,8 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
       tags: [],
       view: { playlist: props.playlistName },
     });
+    // todo: check if a queue already exists
     setIsQueueExist(true);
-  };
-
-  const deleteSong = async (playlistName: string, song: Song) => {
-    const result = await window.api.request("playlist::remove", playlistName, song);
-    if (result.isError) {
-      noticeError(result.error);
-      return;
-    }
   };
 
   return (
@@ -96,7 +87,7 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
                 contextMenu={
                   <SongContextMenu>
                     <PlayNext path={s.path} disabled={!isQueueExist()} />
-                    <AddToPlaylist song={s} />
+                    <RemoveFromPlaylist playlistName={props.playlistName} song={s} />
                   </SongContextMenu>
                 }
               ></SongItem>
@@ -106,7 +97,7 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
                   size={"icon"}
                   // this needs to be slightly larger for some reason (probably margin)
                   class="ml-3 w-10 rounded-lg"
-                  onClick={() => deleteSong(props.playlistName, s)}
+                  onClick={async () => await deleteSong(props.playlistName, s)}
                 >
                   <Trash2Icon class="text-red" />
                 </Button>
