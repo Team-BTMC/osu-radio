@@ -1,4 +1,4 @@
-import "../../../assets/css/song/song-context-menu.css";
+import "./SongContextMenu.css";
 import { Component, For } from "solid-js";
 
 type SongContextMenuProps = {
