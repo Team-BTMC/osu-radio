@@ -38,7 +38,9 @@ const SongContextMenuItem: Component<SongContextMenuItemProps> = (props) => {
       )}
       disabled={buttonDisabled}
     >
-      <div class="flex flex-row items-center justify-between w-full p-2">{props.children}</div>
+      <div class="flex flex-row items-center justify-between w-full p-2 gap-2">
+        {props.children}
+      </div>
     </button>
   );
 };

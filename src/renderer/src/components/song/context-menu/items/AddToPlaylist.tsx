@@ -39,7 +39,9 @@ const AddToPlaylist: Component<AddToPlaylistProps> = (props) => {
       </Popover.Content>
       <Popover.Trigger>
         <SongContextMenuItem
-          onClick={() => {}}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
           onHover={() => {
             setShowChooser(true);
           }}
