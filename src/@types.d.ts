@@ -77,6 +77,10 @@ export type Song = {
   tags?: string[];
 
   diffs: string[];
+
+  // Colors
+  primaryColor?: string;
+  secondaryColor?: string;
 } & Resource;
 
 // Serialization is in JSON that's why properties are only single letter
@@ -122,6 +126,7 @@ export type TableMap = {
   audio: { [key: ResourceID]: AudioSource };
   images: { [key: ResourceID]: ImageSource };
   playlists: { [key: string]: Playlist };
+  colors: { [key: ResourceID]: ColorsSource };
   settings: Settings;
   system: System;
 };

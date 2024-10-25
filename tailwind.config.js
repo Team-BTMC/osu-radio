@@ -26,6 +26,9 @@ export default {
         red: "rgba(var(--color-red))",
         green: "rgba(var(--color-green))",
       },
+      boxShadow: {
+        "glow-blue": "0px 0px 10px #4EBFFF, 0px 0px 28px rgba(78, 191, 255, 0.72)",
+      },
     },
   },
   variants: {

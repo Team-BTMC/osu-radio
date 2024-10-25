@@ -10,5 +10,6 @@ import "./playlist-router";
 import "./queue-router";
 import "./resource-router";
 import "./settings-router";
+import "./song-color-router";
 import "./songs-pool-router";
 import "./window-router";

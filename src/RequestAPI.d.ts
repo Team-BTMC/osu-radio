@@ -88,5 +88,7 @@ export type RequestAPI = {
 
   "save::localVolume": (volume: number, song: ResourceID) => void;
 
+  "save::songColors": (primaryColor: string, secondaryColor: string, song: ResourceID) => void;
+
   "dev::storeLocation": () => string;
 };
