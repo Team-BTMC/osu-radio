@@ -73,7 +73,7 @@ const SongControls: Component<SongControlsProps> = (props) => {
           </Button>
 
           <button
-            class="flex h-12 w-12 items-center justify-center rounded-full border border-solid border-stroke bg-surface text-2xl text-thick-material text-white"
+            class="flex h-12 w-12 items-center justify-center rounded-full border border-solid border-stroke bg-surface text-2xl text-thick-material text-white shadow-lg"
             onClick={() => togglePlay()}
             disabled={disable()}
             title={playHint()}
