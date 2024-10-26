@@ -31,8 +31,8 @@ const SongDetail: Component = () => {
 
       <div class="w-full max-w-[800px] space-y-4">
         <div class="song-detail__texts">
-          <h2 class="text-2xl font-bold">{song().title}</h2>
-          <span class="text-lg">{song().artist}</span>
+          <h2 class="text-2xl font-bold select-text">{song().title}</h2>
+          <span class="text-lg select-text">{song().artist}</span>
         </div>
 
         <ProgressBar averageColor={colorData().primaryColor()} />
