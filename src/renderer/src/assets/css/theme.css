@@ -1,0 +1,25 @@
+:root {
+  /* Thick material - rgb(13, 13, 13) - opacity 0.9 */
+  --color-thick-material: 13, 13, 13;
+  /* Regular material - rgb(23, 23, 23) - opacity 0.8 */
+  --color-regular-material: 23, 23, 23;
+  /* Thin material - rgb(0, 0, 0) - opacity 0.5 */
+  --color-thin-material: 0, 0, 0;
+  /* Text - rgb(239, 241, 245) - opacity 1 */
+  --color-text: 239, 241, 245;
+  /* Subtext - rgb(200, 200, 200) - opacity 1 */
+  --color-subtext: 200, 200, 200; /* Stroke - rgb(242, 244, 252) - opacity 0.1 */
+  --color-stroke: 242, 244, 252;
+  /* Overlay - rgb(119, 121, 122) - opacity 1 */
+  --color-overlay: 119, 121, 122;
+  /* Surface - rgb(132, 137, 143) - opacity 0.2 */
+  --color-surface: 132, 137, 143;
+  /* Black - rgb(0, 0, 0) - opacity 1 */
+  --color-black: 0, 0, 0;
+  /* Red - rgb(237, 102, 102) - opacity 1 */
+  --color-red: 237, 102, 102;
+  /* Green - rgb(120, 204, 50) - opacity 1 */
+  --color-green: 120, 204, 50;
+}
+
+
