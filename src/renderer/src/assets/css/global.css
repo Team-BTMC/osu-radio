@@ -4,8 +4,7 @@
 
 @font-face {
   font-family: "Nunito";
-  src:
-    url("@renderer/assets/fonts/Nunito-Variable.ttf") format("truetype");
+  src: url("@renderer/assets/fonts/Nunito-Variable.ttf") format("truetype");
   font-weight: 100 900;
   font-style: normal;
 }
