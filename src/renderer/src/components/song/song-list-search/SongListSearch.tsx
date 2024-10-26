@@ -65,7 +65,7 @@ const SongListSearch: Component<SearchProps> = (props) => {
     <div class="p-5">
       <div class="relative mb-4">
         <input
-          class="h-10 w-full rounded-full bg-thin-material pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-accent"
+          class="h-10 w-full rounded-full bg-thin-material pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-overlay"
           type="text"
           id="search_input"
           placeholder="Type to search songs..."

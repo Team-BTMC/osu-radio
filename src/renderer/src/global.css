@@ -10,7 +10,6 @@
   --color-subtext: 26, 26, 26;
   --color-stroke: 0, 0, 0;
   --color-overlay: 200, 200, 200;
-  --color-accent: 77, 77, 87;
   --color-surface: 180, 180, 180;
   --color-black: 255, 255, 255;
   --color-red: 211, 47, 47;
@@ -22,17 +21,17 @@
 :root {
   /* Dark theme */
   --color-thick-material: 13, 13, 13;
-  --color-regular-material: 18, 18, 18;
+  --color-regular-material: 23, 23, 23;
+  --color-thin-material: 0, 0, 0;
   --color-text: 239, 241, 245;
-  --color-subtext: 239, 241, 245;
+  --color-subtext: 200, 200, 200;
+  /* subtext: rgba(119, 121, 130, 1) */
   --color-stroke: 242, 244, 252;
-  --color-overlay: 161, 162, 171;
-  --color-accent: 255, 255, 255;
+  --color-overlay: 119, 121, 122;
   --color-surface: 132, 137, 143;
-  --color-black: 14, 14, 14;
+  --color-black: 0, 0, 0;
   --color-red: 237, 102, 102;
   --color-green: 120, 204, 50;
-  --color-thin-material: 0, 0, 0;
 }
 
 /* } */
