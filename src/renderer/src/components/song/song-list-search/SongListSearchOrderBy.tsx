@@ -42,7 +42,6 @@ type OrderSelectProps = {
 };
 
 const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
-  const [isOpen, setIsOpen] = createSignal(false);
   const [option, setOption] = createSignal<OrderOptions>("title");
   const [direction, setDirection] = createSignal<OrderDirection>("asc");
 
@@ -72,13 +71,12 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
           </Match>
         </Switch>
       </Button>
-      <Dropdown isOpen={isOpen()} onValueChange={setIsOpen}>
+      <Dropdown>
         <Dropdown.Trigger class="rounded-md bg-thin-material px-3 py-1">
           {optionLabel()}
         </Dropdown.Trigger>
         <Dropdown.List
           onValueChange={(newSelectedOption) => {
-            setIsOpen(false);
             setOption(newSelectedOption as OrderOptions);
             handlerOrderChanged();
           }}
