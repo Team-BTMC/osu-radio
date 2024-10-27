@@ -36,7 +36,10 @@ const SongDetail: Component = () => {
         </div>
 
         <ProgressBar averageColor={colorData().primaryColor()} />
-        <SongControls averageColor={colorData().primaryColor()} />
+        <SongControls
+          secondatyColor={colorData().secondaryColor()}
+          averageColor={colorData().primaryColor()}
+        />
       </div>
     </div>
   );

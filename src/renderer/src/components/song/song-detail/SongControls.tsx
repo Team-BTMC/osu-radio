@@ -27,7 +27,8 @@ import { Component, createMemo, createSignal, Match, Show, Switch } from "solid-
 
 // Add a prop to accept the averageColor
 type SongControlsProps = {
-  averageColor?: string;
+  averageColor: string | undefined;
+  secondatyColor: string | undefined;
 };
 
 const SongControls: Component<SongControlsProps> = (props) => {

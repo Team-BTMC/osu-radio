@@ -7,23 +7,26 @@ type Props = JSX.IntrinsicElements["div"];
 export const TabsIndicator: Component<Props> = (props) => {
   const state = useTabs();
   const style = createMemo((): JSX.CSSProperties => {
-    const currentNode = state.currentlyActiveTab()?.getBoundingClientRect();
-    if (!currentNode) {
+    const activeElement = state.currentlyActiveElement();
+    if (typeof activeElement === "undefined") {
       return {};
     }
 
+    const { width, height } = activeElement.getBoundingClientRect();
     return {
-      width: `${currentNode.width}px`,
-      height: `${currentNode.height}px`,
-      top: `${currentNode.top}px`,
-      left: `${currentNode.left}px`,
+      position: "absolute",
+      "transition-property": "left, width, height",
+      top: `${activeElement.offsetTop}px`,
+      left: `${activeElement.offsetLeft}px`,
+      width: `${width}px`,
+      height: `${height}px`,
     };
   });
 
   return (
     <div
       {...props}
-      class={cn("fixed rounded-lg bg-surface transition-all", props.class)}
+      class={cn("fixed rounded-lg bg-surface transition", props.class)}
       style={style()}
     />
   );

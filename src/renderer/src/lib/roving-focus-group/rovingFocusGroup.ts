@@ -90,7 +90,7 @@ export function useRovingFocusGroup(props: Params) {
     setCurrentStopId(nextFocused.getAttribute(ITEM_DATA_ATTR)!);
   };
 
-  const currentlyActiveTab = createMemo(() => {
+  const currentlyActiveElement = createMemo(() => {
     if (!hasMounted()) {
       return;
     }
@@ -101,11 +101,11 @@ export function useRovingFocusGroup(props: Params) {
       return;
     }
 
-    return orderedNodes.find((node) => node.getAttribute(ITEM_DATA_ATTR) === stopId);
+    return orderedNodes.find((node) => node.getAttribute(ITEM_DATA_ATTR) === stopId) as HTMLElement;
   });
 
   return {
-    currentlyActiveTab,
+    currentlyActiveElement,
     onListmounted,
     value: currentStopId,
     attrs: {

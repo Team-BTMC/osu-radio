@@ -142,6 +142,8 @@ const Nav: Component = () => {
                 </Tabs.Trigger>
               )}
             </For>
+
+            <Tabs.Indicator />
           </Tabs.List>
         </Show>
 
