@@ -11,6 +11,7 @@ import { EllipsisVerticalIcon } from "lucide-solid";
 import { Component, createSignal, JSXElement, onMount, createMemo } from "solid-js";
 import { Portal } from "solid-js/web";
 import { twMerge } from "tailwind-merge";
+import Button from "@renderer/components/button/Button";
 
 type SongItemProps = {
   song: Song;
@@ -129,20 +130,23 @@ const SongItem: Component<SongItemProps> = (props) => {
               "transition-property": "padding",
             }}
           >
-            <h3 class="text-shadow text-[22px] font-extrabold leading-7">{props.song.title}</h3>
-            <p class="text-base text-subtext">{props.song.artist}</p>
+            <h3 class="drop-shadow-md text-[22px] font-[740] leading-7">{props.song.title}</h3>
+            <p class="text-base text-subtext drop-shadow-sm">{props.song.artist}</p>
           </div>
 
-          <div class="absolute right-2 top-1/2 -translate-y-1/2 grid aspect-square size-9 place-items-center rounded border-solid border-stroke bg-transparent p-1 text-text group-hover:bg-surface">
-            <Popover.Trigger
+          <Popover.Anchor>
+            <Button
+              onClick={(e) => e.stopPropagation()}
               class={twMerge(
-                "opacity-0 transition-opacity group-hover:opacity-100",
+                "absolute right-2 top-1/2 -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100 p-1 z-10",
                 localShow() && "opacity-100",
               )}
+              variant="secondary"
+              size="icon"
             >
               <EllipsisVerticalIcon />
-            </Popover.Trigger>
-          </div>
+            </Button>
+          </Popover.Anchor>
         </div>
       </div>
     </Popover>

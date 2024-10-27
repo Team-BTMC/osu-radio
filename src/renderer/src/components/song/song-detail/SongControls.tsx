@@ -70,7 +70,7 @@ const SongControls: Component<SongControlsProps> = (props) => {
           </Button>
 
           <button
-            class="flex h-12 w-12 items-center justify-center rounded-full border border-solid border-stroke bg-surface text-2xl text-thick-material text-white transition-all active:scale-95 focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2"
+            class="flex h-12 w-12 items-center justify-center rounded-full ring-1 ring-stroke bg-surface text-2xl text-thick-material text-white transition-all active:scale-95 focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 shadow-lg"
             onClick={() => togglePlay()}
             disabled={disable()}
             title={playHint()}
@@ -164,7 +164,7 @@ const LeftPart = () => {
             onValueChange={setVolume}
             enableWheelSlide
           >
-            <Slider.Track class="h-1 flex-1 rounded bg-thick-material border border-stroke">
+            <Slider.Track class="h-1 flex-1 rounded bg-thick-material ring-1 ring-stroke">
               <Slider.Range class="block h-1 rounded bg-white" />
             </Slider.Track>
             <Slider.Thumb

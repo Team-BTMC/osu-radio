@@ -25,14 +25,14 @@ const SongDetail: Component = () => {
           src={song().bg}
           instantLoad={true}
           onImageLoaded={colorData().processImage}
-          class="size-80 rounded-lg bg-cover bg-center object-cover shadow-lg"
+          class="size-80 rounded-lg bg-cover bg-center object-cover shadow-lg ring-2 ring-stroke ring-inset"
         />
       </div>
 
       <div class="w-full max-w-[800px] space-y-4">
         <div class="song-detail__texts">
-          <h2 class="text-2xl font-bold">{song().title}</h2>
-          <span class="text-lg">{song().artist}</span>
+          <h2 class="text-2xl font-bold select-text">{song().title}</h2>
+          <span class="text-lg select-text">{song().artist}</span>
         </div>
 
         <ProgressBar averageColor={colorData().primaryColor()} />
@@ -64,7 +64,7 @@ const ProgressBar = (props: ProgressBarProps) => {
     >
       <Slider.Track class="flex h-7 items-center rounded-xl border border-stroke bg-thick-material p-1">
         <Slider.Range
-          class="block h-5 rounded-l-lg border border-stroke bg-surface"
+          class="block h-5 rounded-l-lg ring-inset ring-1 ring-stroke bg-surface shadow-[inset_-20px_0_10px_-10px_#00000033]"
           style={{
             "background-color": props.averageColor,
           }}
