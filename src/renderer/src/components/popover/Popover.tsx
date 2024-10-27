@@ -5,9 +5,13 @@ import "./styles.css";
 import {
   computePosition,
   ComputePositionReturn,
+  flip,
+  FlipOptions,
   offset,
   OffsetOptions,
   Placement,
+  shift,
+  ShiftOptions,
 } from "@floating-ui/dom";
 import createControllableSignal from "@renderer/lib/controllable-signal";
 import { createSignal, createContext, useContext, ParentComponent } from "solid-js";
@@ -16,7 +20,10 @@ export const DEFAULT_POPOVER_OPEN = false;
 
 export type Props = {
   offset?: OffsetOptions;
+  flip?: FlipOptions;
+  shift?: ShiftOptions;
   placement?: Placement;
+  mousePos?: Accessor<[number, number]>; // [x, y]
   defaultProp?: boolean;
   isOpen?: boolean;
   onValueChange?: (newOpen: boolean) => void;
@@ -45,6 +52,23 @@ function useProviderValue(props: Props) {
     listenResize();
   };
 
+  let lastMousePos: [number, number];
+  const useCustomCoords = {
+    name: "useCustomCoords",
+    fn() {
+      if (
+        props.mousePos !== undefined &&
+        props.mousePos() !== lastMousePos &&
+        props.mousePos()[0] !== 0 &&
+        props.mousePos()[1] !== 0
+      ) {
+        lastMousePos = props.mousePos();
+        return { x: lastMousePos[0], y: lastMousePos[1] };
+      }
+      return {};
+    },
+  };
+
   const listenResize = () => {
     const trigger = triggerRef();
     const content = contentRef();
@@ -56,7 +80,12 @@ function useProviderValue(props: Props) {
     computePosition(trigger, content, {
       placement: props.placement,
       strategy: "fixed",
-      middleware: [offset(props.offset)],
+      middleware: [
+        props.mousePos !== undefined && useCustomCoords,
+        offset(props.offset),
+        props.shift && shift(props.shift),
+        props.flip && flip(props.flip),
+      ],
     }).then(setPosition);
   };
 

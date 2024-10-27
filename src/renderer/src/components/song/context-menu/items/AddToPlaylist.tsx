@@ -1,27 +1,25 @@
 import { Song } from "../../../../../../@types";
 import SongContextMenuItem from "../SongContextMenuItem";
-import { ListStartIcon } from "lucide-solid";
+import { PlusIcon } from "lucide-solid";
 import { Component } from "solid-js";
 
-type SongPlayNextProps = {
+type AddToPlaylistProps = {
   path: Song["path"] | undefined;
-  disabled: boolean;
 };
 
-const PlayNext: Component<SongPlayNextProps> = (props) => {
+const AddToPlaylist: Component<AddToPlaylistProps> = (props) => {
   return (
     <SongContextMenuItem
       onClick={() => {
         if (props.path !== undefined && props.path !== "") {
-          window.api.request("queue::playNext", props.path);
+          console.log("TODO: add " + props.path + " to playlist");
         }
       }}
-      disabled={props.disabled}
     >
-      <p>Play next</p>
-      <ListStartIcon size={20} />
+      <p>Add to Playlist</p>
+      <PlusIcon size={20} />
     </SongContextMenuItem>
   );
 };
 
-export default PlayNext;
+export default AddToPlaylist;
