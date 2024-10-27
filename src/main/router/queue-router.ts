@@ -1,4 +1,4 @@
-import { Optional, QueueCreatePayload, QueueView, Result, Song, SongIndex } from "../../@types";
+import { Optional, QueueCreatePayload, QueueView, Result, Song, SongIndex } from "@types";
 import { Router } from "../lib/route-pass/Router";
 import { none, some } from "../lib/rust-like-utils-backend/Optional";
 import { fail, ok } from "../lib/rust-like-utils-backend/Result";

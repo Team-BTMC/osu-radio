@@ -1,4 +1,4 @@
-import { Result } from "../../../@types";
+import { Result } from "@types";
 import { fail, ok } from "../rust-like-utils-backend/Result";
 import fs from "fs";
 import path from "path";

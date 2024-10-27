@@ -1,4 +1,4 @@
-import type { APIFunction, Packet } from "../../../@types";
+import type { APIFunction, Packet } from "@types";
 import { ListenAPI } from "../../../ListenAPI";
 import { RequestAPI } from "../../../RequestAPI";
 import { assertNever } from "../tungsten/assertNever";

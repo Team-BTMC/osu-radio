@@ -1,4 +1,4 @@
-import { LoadingSceneUpdate } from "../../../../@types";
+import { LoadingSceneUpdate } from "@types";
 import { clamp } from "../../lib/tungsten/math";
 import "./styles.css";
 import Slider from "@renderer/components/slider/Slider";

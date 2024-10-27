@@ -1,4 +1,4 @@
-import { Optional, Order, ResourceID, SongsQueryPayload, Tag } from "../../../../../@types";
+import { Optional, Order, ResourceID, SongsQueryPayload, Tag } from "@types";
 import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-types";
 import { namespace } from "../../../App";
 import Impulse from "../../../lib/Impulse";

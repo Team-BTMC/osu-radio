@@ -7,9 +7,8 @@
     "types": ["electron-vite/node"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@types": ["src/@types.d.ts"],
-      "@main/*": ["src/main/*"]
+      "@/*": ["src/main/*"],
+      "@types": ["src/@types.d.ts"]
     }
   }
 }

@@ -1,4 +1,4 @@
-import { OsuSearchAbleProperties, SongIndex, SongsQueryPayload, Tag } from "../../../@types";
+import { OsuSearchAbleProperties, SongIndex, SongsQueryPayload, Tag } from "@types";
 import { assertNever } from "../tungsten/assertNever";
 
 export function filter(indexes: SongIndex[], query: SongsQueryPayload): SongIndex[] {

@@ -1,4 +1,4 @@
-import { Song, SongIndex } from "../../../@types";
+import { Song, SongIndex } from "@types";
 import { Storage } from "../storage/Storage";
 
 export function* indexMapper(indexes: SongIndex[]): Generator<Song> {

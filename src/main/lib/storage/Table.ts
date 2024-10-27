@@ -1,4 +1,4 @@
-import { Optional } from "../../../@types";
+import { Optional } from "@types";
 import { none, some } from "../rust-like-utils-backend/Optional";
 import fs from "fs";
 

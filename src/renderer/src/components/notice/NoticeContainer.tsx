@@ -1,4 +1,4 @@
-import { Result } from "../../../../@types";
+import { Result } from "@types";
 import { fail, ok } from "../../lib/rust-like-utils-client/Result";
 import { TokenNamespace } from "../../lib/tungsten/token";
 import Notice, { NoticeType } from "./Notice";

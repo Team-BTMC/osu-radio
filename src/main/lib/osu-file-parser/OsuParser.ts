@@ -1,4 +1,4 @@
-import { AudioSource, ImageSource, ResourceID, Result, Song } from "../../../@types";
+import { AudioSource, ImageSource, ResourceID, Result, Song } from "@types";
 import { access } from "../fs-promises";
 import { fail, ok } from "../rust-like-utils-backend/Result";
 import { assertNever } from "../tungsten/assertNever";

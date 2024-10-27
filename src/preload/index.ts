@@ -1,4 +1,4 @@
-import type { APIListener, Packet, PacketType } from "../@types";
+import type { APIListener, Packet, PacketType } from "@types";
 import { ListenAPI } from "../ListenAPI";
 import { RequestAPI } from "../RequestAPI";
 import { contextBridge, ipcRenderer } from "electron";

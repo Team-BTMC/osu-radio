@@ -1,4 +1,4 @@
-import { Song } from "../../../../../@types";
+import { Song } from "@types";
 import { namespace } from "../../../App";
 import Impulse from "../../../lib/Impulse";
 import scrollIfNeeded from "../../../lib/tungsten/scroll-if-needed";

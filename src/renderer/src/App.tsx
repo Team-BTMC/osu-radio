@@ -1,4 +1,4 @@
-import { Scenes } from "../../@types";
+import { Scenes } from "@types";
 import "./keyboard-registers/initialize";
 import { TokenNamespace } from "./lib/tungsten/token";
 import ErrorScene from "./scenes/ErrorScene";

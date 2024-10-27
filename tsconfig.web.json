@@ -12,10 +12,8 @@
     "jsxImportSource": "solid-js",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@types": ["src/@types.d.ts"],
-      "@main/*": ["src/main/*"],
-      "@renderer/*": ["src/renderer/src/*"]
+      "@/*": ["src/renderer/src/*"],
+      "@types": ["src/@types.d.ts"]
     }
   }
 }

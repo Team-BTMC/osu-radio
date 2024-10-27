@@ -1,4 +1,4 @@
-import { AudioSource, ResourceID } from "../../@types";
+import { AudioSource, ResourceID } from "@types";
 import { delay } from "../lib/delay-backend";
 import { Router } from "../lib/route-pass/Router";
 import { Storage } from "../lib/storage/Storage";

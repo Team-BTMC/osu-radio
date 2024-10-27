@@ -1,4 +1,4 @@
-import { Optional, Order, Tag } from "../../../../../@types";
+import { Optional, Order, Tag } from "@types";
 import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-types";
 import { setSongsSearch } from "../song-list/song-list.utils";
 import SongListSearchOrderBy from "./SongListSearchOrderBy";

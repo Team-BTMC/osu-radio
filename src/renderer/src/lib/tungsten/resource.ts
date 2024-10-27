@@ -1,4 +1,4 @@
-import { ResourceID } from "../../../../@types";
+import { ResourceID } from "@types";
 
 export async function getResourcePath(id: ResourceID | undefined): Promise<string> {
   const result = await window.api.request("resource::getPath", id);

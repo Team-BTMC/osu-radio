@@ -1,4 +1,4 @@
-import { ResourceID, Song } from "../../../../../@types";
+import { ResourceID, Song } from "@types";
 import draggable from "../../../lib/draggable/draggable";
 import SongHint from "../SongHint";
 import SongImage from "../SongImage";

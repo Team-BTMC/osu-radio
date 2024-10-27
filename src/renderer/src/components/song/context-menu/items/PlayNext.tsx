@@ -1,4 +1,4 @@
-import { Song } from "../../../../../../@types";
+import { Song } from "@types";
 import SongContextMenuItem from "../SongContextMenuItem";
 import { ListStartIcon } from "lucide-solid";
 import { Component } from "solid-js";

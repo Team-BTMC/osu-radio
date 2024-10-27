@@ -1,4 +1,4 @@
-import { Order, Result, Song } from "../../../@types";
+import { Order, Result, Song } from "@types";
 import { ok } from "../rust-like-utils-backend/Result";
 import { averageBPM, msToBPM } from "./average-bpm";
 

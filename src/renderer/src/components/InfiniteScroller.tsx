@@ -1,4 +1,4 @@
-import { OmitPropsWithoutReturnType, Optional } from "../../../@types";
+import { OmitPropsWithoutReturnType, Optional } from "@types";
 import { RequestAPI } from "../../../RequestAPI";
 import Impulse from "../lib/Impulse";
 import {
