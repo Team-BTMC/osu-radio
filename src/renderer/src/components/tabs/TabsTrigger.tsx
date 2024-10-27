@@ -22,9 +22,6 @@ const TabsTrigger: Component<Props> = (_props) => {
         "ring-offset-background focus-visible:ring-ring z-10 flex h-8 items-center gap-2 rounded-lg px-3 text-subtext focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
         props.class,
       )}
-      classList={{
-        "bg-surface text-text": isSelected(),
-      }}
     />
   );
 };

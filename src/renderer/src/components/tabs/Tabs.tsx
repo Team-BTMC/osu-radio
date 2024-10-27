@@ -1,4 +1,5 @@
 import { TabsContent } from "./TabsContent";
+import { TabsIndicator } from "./TabsIndicator";
 import { TabsList } from "./TabsList";
 import TabsTrigger from "./TabsTrigger";
 import { useRovingFocusGroup } from "@renderer/lib/roving-focus-group/rovingFocusGroup";
@@ -39,6 +40,7 @@ const Tabs = Object.assign(TabsRoot, {
   Trigger: TabsTrigger,
   List: TabsList,
   Content: TabsContent,
+  Indicator: TabsIndicator,
 });
 
 export default Tabs;
