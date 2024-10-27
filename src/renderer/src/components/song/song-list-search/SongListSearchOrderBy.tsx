@@ -1,8 +1,8 @@
-import Button from "@renderer/components/button/Button";
-import Dropdown from "@renderer/components/dropdown/Dropdown";
-import { ArrowDownAzIcon, ArrowUpZaIcon } from "lucide-solid";
+import List from "@renderer/components/list/List";
+import { SortAsc, SortDesc } from "lucide-solid";
 import { Component, createMemo, createSignal, For, Match, Setter, Switch } from "solid-js";
 import { OrderDirection, OrderOptions, Order } from "src/@types";
+import FilterOption from "./FilterOption";
 
 type OrderOption = {
   text: string;
@@ -61,22 +61,33 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
   });
 
   return (
-    <div class="flex items-center space-x-3">
-      <Button variant={"ghost"} size="icon" onClick={switchDirections}>
-        <Switch>
-          <Match when={direction() === "asc"}>
-            <ArrowDownAzIcon size={20} />
-          </Match>
-          <Match when={direction() === "desc"}>
-            <ArrowUpZaIcon size={20} />
-          </Match>
-        </Switch>
-      </Button>
-      <Dropdown isOpen={isOpen} onValueChange={setIsOpen}>
-        <Dropdown.Trigger class="rounded-md bg-thin-material px-3 py-1">
-          {optionLabel()}
-        </Dropdown.Trigger>
-        <Dropdown.List
+    <FilterOption
+      class="flex-shrink-0"
+      popoverProps={{
+        isOpen,
+        onValueChange: setIsOpen,
+      }}
+    >
+      <FilterOption.Label>Sort by</FilterOption.Label>
+      <FilterOption.List>
+        <FilterOption.Item class="text-subtext" onClick={switchDirections}>
+          <div class="p-0.5">
+            <Switch>
+              <Match when={direction() === "asc"}>
+                <SortAsc size={16} />
+              </Match>
+              <Match when={direction() === "desc"}>
+                <SortDesc size={16} />
+              </Match>
+            </Switch>
+          </div>
+        </FilterOption.Item>
+        <div class="h-4 w-px bg-stroke" />
+        <FilterOption.Trigger>{optionLabel()}</FilterOption.Trigger>
+      </FilterOption.List>
+
+      <FilterOption.Content class="w-48">
+        <List
           onValueChange={(newSelectedOption) => {
             setOption(newSelectedOption as OrderOptions);
             handlerOrderChanged();
@@ -85,18 +96,14 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
         >
           <For each={orderOptions}>
             {(option) => (
-              <Dropdown.Item
-                onSelectedByClick={() => setIsOpen(false)}
-                class="px-4 py-2 transition-colors duration-200 hover:bg-accent/20"
-                value={option.value}
-              >
+              <List.Item onSelectedByClick={() => setIsOpen(false)} value={option.value}>
                 {option.text}
-              </Dropdown.Item>
+              </List.Item>
             )}
           </For>
-        </Dropdown.List>
-      </Dropdown>
-    </div>
+        </List>
+      </FilterOption.Content>
+    </FilterOption>
   );
 };
 

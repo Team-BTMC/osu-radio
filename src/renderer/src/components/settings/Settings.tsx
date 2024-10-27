@@ -1,8 +1,8 @@
 import { cn } from "../../lib/css.utils";
-import Dropdown from "../dropdown/Dropdown";
 import { changeAudioDevice } from "@renderer/components/song/song.utils";
 import { GlobeIcon, LucideIcon, Volume2Icon } from "lucide-solid";
 import { Component, createEffect, createSignal, For, JSX, onMount } from "solid-js";
+import Select from "../select/Select";
 
 const Settings: Component = () => {
   return (
@@ -78,26 +78,26 @@ const AudioDeviceSetting: Component = () => {
 
   return (
     <Setting name="audio-device" label="Choose audio device">
-      <Dropdown isOpen={isPopoverOpen} onValueChange={setIsPopoverOpen}>
-        <Dropdown.SelectTrigger class="w-full rounded border border-stroke bg-surface px-2 py-1 text-text hover:bg-red focus:outline-none focus:ring-2 focus:ring-accent">
+      <Select isOpen={isPopoverOpen} onValueChange={setIsPopoverOpen}>
+        <Select.Trigger class="w-full rounded border border-stroke bg-surface px-2 py-1 text-text hover:bg-red focus:outline-none focus:ring-2 focus:ring-accent">
           {selectedAudioDevice() || "No device selected"}
-        </Dropdown.SelectTrigger>
+        </Select.Trigger>
 
-        <Dropdown.List value={selectedAudioDevice} onValueChange={handleValueChange}>
+        <Select.Content value={selectedAudioDevice} onValueChange={handleValueChange}>
           <For each={Array.from(audioDevices().keys())}>
             {(audioDevice) => (
-              <Dropdown.Item
+              <Select.Option
                 onSelectedByClick={() => {
                   setIsPopoverOpen(false);
                 }}
                 value={audioDevice}
               >
                 {audioDevice}
-              </Dropdown.Item>
+              </Select.Option>
             )}
           </For>
-        </Dropdown.List>
-      </Dropdown>
+        </Select.Content>
+      </Select>
     </Setting>
   );
 };

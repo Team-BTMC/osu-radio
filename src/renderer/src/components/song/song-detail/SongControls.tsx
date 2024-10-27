@@ -28,11 +28,13 @@ import { Component, createEffect, createSignal, Match, Show, Switch } from "soli
 // Add a prop to accept the averageColor
 type SongControlsProps = {
   averageColor?: string;
+  secondatyColor?: string;
 };
 
 const SongControls: Component<SongControlsProps> = (props) => {
   const [disable, setDisable] = createSignal(isSongUndefined(song()));
   const [playHint, setPlayHint] = createSignal("");
+  const [isHovering, setIsHovering] = createSignal(false);
 
   createEffect(() => {
     const disabled = disable();
@@ -73,12 +75,15 @@ const SongControls: Component<SongControlsProps> = (props) => {
           </Button>
 
           <button
-            class="flex h-12 w-12 items-center justify-center rounded-full border border-solid border-stroke bg-surface text-2xl text-thick-material text-white"
+            class="flex h-12 w-12 items-center justify-center rounded-full border border-solid border-stroke bg-surface text-2xl text-thick-material text-white transition-all active:scale-95 focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2"
             onClick={() => togglePlay()}
             disabled={disable()}
             title={playHint()}
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
             style={{
-              "background-color": props.averageColor, // Use the average color as background
+              "background-color": isHovering() ? props.secondatyColor : props.averageColor,
+              "--secondary-color": props.secondatyColor,
             }}
           >
             <Show when={!isPlaying()} fallback={<PauseIcon fill="white" size={20} />}>
@@ -119,21 +124,30 @@ const LeftPart = () => {
   const [isHoveringVolume, setIsHoveringVolume] = createSignal(false);
   let isHoverintTimeoutId: NodeJS.Timeout;
 
+  const showVolumeSlider = () => {
+    clearTimeout(isHoverintTimeoutId);
+    setIsHoveringVolume(true);
+  };
+  const hideVolumeSlider = () => {
+    isHoverintTimeoutId = setTimeout(() => {
+      setIsHoveringVolume(false);
+    }, 320);
+  };
+
   return (
     <div class="flex-1">
       <div
         class="group flex w-max items-center gap-4"
-        onMouseEnter={() => {
-          clearTimeout(isHoverintTimeoutId);
-          setIsHoveringVolume(true);
-        }}
-        onMouseLeave={() => {
-          isHoverintTimeoutId = setTimeout(() => {
-            setIsHoveringVolume(false);
-          }, 320);
-        }}
+        onMouseEnter={showVolumeSlider}
+        onMouseLeave={hideVolumeSlider}
       >
-        <Button size="icon" variant="ghost" onClick={handleMuteSong}>
+        <Button
+          size="icon"
+          variant="ghost"
+          onClick={handleMuteSong}
+          onFocus={showVolumeSlider}
+          onBlur={hideVolumeSlider}
+        >
           <Switch>
             <Match when={volume() === 0}>
               <VolumeXIcon size={20} />
@@ -156,10 +170,14 @@ const LeftPart = () => {
             onValueChange={setVolume}
             enableWheelSlide
           >
-            <Slider.Track class="h-1 flex-1 rounded bg-thick-material">
+            <Slider.Track class="h-1 flex-1 rounded bg-thick-material outline outline-stroke">
               <Slider.Range class="block h-1 rounded bg-white" />
             </Slider.Track>
-            <Slider.Thumb class="mt-2 block h-4 w-4 rounded-full bg-white" />
+            <Slider.Thumb
+              onFocus={showVolumeSlider}
+              onBlur={hideVolumeSlider}
+              class="mt-2 block h-4 w-4 rounded-full bg-white"
+            />
           </Slider>
         </Show>
       </div>

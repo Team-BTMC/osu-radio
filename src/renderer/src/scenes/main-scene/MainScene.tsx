@@ -61,7 +61,7 @@ const MainScene: Component = () => {
               <SongImage
                 src={song().bg}
                 instantLoad={true}
-                class="absolute inset-0 scale-110 bg-cover bg-fixed opacity-20 blur-lg filter"
+                class="absolute inset-0 bg-cover bg-fixed bg-left-top opacity-30 blur-lg filter"
               />
             </div>
             <Show when={os() === "darwin"}>
@@ -74,7 +74,7 @@ const MainScene: Component = () => {
           <SongImage
             src={song().bg}
             instantLoad={true}
-            class="h-full w-full bg-cover blur-lg filter"
+            class="h-full w-full bg-cover bg-fixed bg-center blur-lg filter"
           />
         </div>
 
@@ -150,7 +150,7 @@ const Nav: Component = () => {
           onClick={() => setMainActiveTab(SIDEBAR_PAGES.SETTINGS.value)}
           class="app-no-drag ml-auto"
           classList={{
-            "mr-5": os() === "darwin",
+            "pr-5": os() === "darwin",
           }}
           size="square"
           variant={mainActiveTab() === SIDEBAR_PAGES.SETTINGS.value ? "secondary" : "outlined"}
@@ -203,7 +203,7 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
       <Button
         size="square"
         variant="ghost"
-        onclick={async () => {
+        onClick={async () => {
           window.api.request("window::maximize");
           props.setMaximized(!props.maximized());
         }}
@@ -214,7 +214,7 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
       <Button
         size="square"
         variant="ghost"
-        onclick={async () => window.api.request("window::close")}
+        onClick={async () => window.api.request("window::close")}
         class="nav-window-control close app-no-drag"
       >
         <XIcon size={20} />
@@ -233,10 +233,6 @@ const TabContent: Component = () => {
       }}
     >
       <SongList isAllSongs={true} />
-
-      {/* <Tabs.Content value={TABS.SETTINGS.value}>
-        <Settings />
-      </Tabs.Content> */}
       <Tabs.Content value={SIDEBAR_PAGES.SETTINGS.value}>
         <Settings />
       </Tabs.Content>

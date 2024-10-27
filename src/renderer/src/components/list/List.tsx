@@ -27,7 +27,7 @@ const ListRoot: ParentComponent<Props> = (_props) => {
   const value = useProviderValue(props);
   return (
     <ListContext.Provider value={value}>
-      <div {...rest} {...value.attrs}>
+      <div {...rest} {...value.attrs} class="flex flex-col gap-1">
         {props.children}
       </div>
     </ListContext.Provider>

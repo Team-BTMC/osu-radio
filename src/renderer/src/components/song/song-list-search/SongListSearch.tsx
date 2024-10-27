@@ -4,8 +4,9 @@ import { setSongsSearch } from "../song-list/song-list.utils";
 import SongListSearchOrderBy from "./SongListSearchOrderBy";
 import Button from "@renderer/components/button/Button";
 import { Input } from "@renderer/components/input/Input";
-import { FilterIcon, SearchIcon } from "lucide-solid";
-import { Accessor, Component, Setter, Signal } from "solid-js";
+import { FilterIcon, SearchIcon, FilterXIcon } from "lucide-solid";
+import { Accessor, Component, createSignal, Match, Setter, Signal, Switch } from "solid-js";
+import { SongListSearchTags } from "./SongListSearchTags";
 
 export type SearchProps = {
   tags: Signal<Tag[]>;
@@ -15,6 +16,8 @@ export type SearchProps = {
 };
 
 const SongListSearch: Component<SearchProps> = (props) => {
+  const [filterExpanded, setFilterExpanded] = createSignal(false);
+
   // const [editable, setEditable] = createSignal<HTMLElement | undefined>();
   // const [doShowError, setDoShowError] = createSignal(false);
   // const [doShowSuggestion, setDoShowSuggestion] = createSignal(false);
@@ -83,12 +86,32 @@ const SongListSearch: Component<SearchProps> = (props) => {
             <SearchIcon size={20} class="opacity-70" />
           </label>
         </div>
-        <Button size="square" variant="outlined">
-          <FilterIcon size={20} />
+        <Button
+          onClick={() => setFilterExpanded((e) => !e)}
+          size="square"
+          variant={filterExpanded() ? "secondary" : "outlined"}
+        >
+          <Switch>
+            <Match when={filterExpanded()}>
+              <FilterXIcon size={20} />
+            </Match>
+            <Match when={!filterExpanded()}>
+              <FilterIcon size={20} />
+            </Match>
+          </Switch>
         </Button>
       </div>
-      <div class="mt-3 flex items-center space-x-4">
-        <SongListSearchOrderBy setOrder={props.setOrder} />
+      <div
+        class="overflow-hidden transition-all"
+        classList={{
+          "h-0": !filterExpanded(),
+          "h-[46px]": filterExpanded(),
+        }}
+      >
+        <div class="mt-2 flex flex-nowrap items-center gap-2 overflow-y-auto">
+          <SongListSearchOrderBy setOrder={props.setOrder} />
+          <SongListSearchTags />
+        </div>
       </div>
     </div>
   );

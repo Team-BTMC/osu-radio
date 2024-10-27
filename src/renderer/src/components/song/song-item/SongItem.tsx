@@ -96,12 +96,13 @@ const SongItem: Component<SongItemProps> = (props) => {
         </Popover.Content>
       </Portal>
       <div
-        class="min-h-[72px] rounded-lg py-0.5 pl-1.5 pr-0.5 transition-colors"
+        class="min-h-[72px] rounded-lg py-0.5 pl-1.5 pr-0.5 transition-colors hover:pl-2 active:pl-0.5"
         classList={{
           "shadow-glow-blue": isSelected(),
         }}
         style={{
           background: borderColor(),
+          "transition-property": "padding",
         }}
         onContextMenu={(e) => {
           e.preventDefault();
@@ -122,9 +123,10 @@ const SongItem: Component<SongItemProps> = (props) => {
             onImageLoaded={processImage}
           />
           <div
-            class="flex flex-col justify-center overflow-hidden rounded-md p-3"
+            class="flex flex-col justify-center overflow-hidden rounded-md p-3 hover:pl-2.5 active:pl-4 transition-transform"
             style={{
               background: backgrund(),
+              "transition-property": "padding",
             }}
           >
             <h3 class="text-shadow text-[22px] font-extrabold leading-7">{props.song.title}</h3>
