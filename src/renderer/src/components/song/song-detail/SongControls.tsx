@@ -156,7 +156,7 @@ const LeftPart = () => {
             onValueChange={setVolume}
             enableWheelSlide
           >
-            <Slider.Track class="h-1 flex-1 rounded bg-thick-material">
+            <Slider.Track class="h-1 flex-1 rounded bg-thick-material ring-1 ring-stroke">
               <Slider.Range class="block h-1 rounded bg-white" />
             </Slider.Track>
             <Slider.Thumb class="mt-2 block h-4 w-4 rounded-full bg-white" />
