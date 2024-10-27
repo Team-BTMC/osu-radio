@@ -4,6 +4,12 @@
   "compilerOptions": {
     "noImplicitAny": true,
     "composite": true,
-    "types": ["electron-vite/node"]
+    "types": ["electron-vite/node"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@types": ["src/@types.d.ts"],
+      "@main/*": ["src/main/*"]
+    }
   }
 }
