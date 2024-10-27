@@ -1,5 +1,5 @@
 import { Song, SongIndex } from "@types";
-import { Storage } from "../storage/Storage";
+import { Storage } from "@/lib/storage/Storage";
 
 export function* indexMapper(indexes: SongIndex[]): Generator<Song> {
   for (let i = 0; i < indexes.length; i++) {

@@ -1,5 +1,5 @@
-import { Router } from "../lib/route-pass/Router";
-import { Storage } from "../lib/storage/Storage";
+import { Router } from "@/lib/route-pass/Router";
+import { Storage } from "@/lib/storage/Storage";
 
 Router.respond("save::songColors", (_evt, primaryColor, secondaryColor, songID) => {
   const song = Storage.getTable("songs").get(songID);

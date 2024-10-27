@@ -6,7 +6,7 @@ import { useColorExtractor } from "../color-extractor";
 import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import { song as selectedSong } from "../song.utils";
 import { transparentize } from "polished";
-import Popover from "@renderer/components/popover/Popover";
+import Popover from "@/components/popover/Popover";
 import { EllipsisVerticalIcon } from "lucide-solid";
 import { Component, createSignal, JSXElement, onMount, createMemo } from "solid-js";
 import { Portal } from "solid-js/web";

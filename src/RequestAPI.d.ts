@@ -13,8 +13,8 @@ import type {
   Song,
   SongsQueryPayload,
 } from "./@types";
-import type { SearchQuery } from "./main/lib/search-parser/@search-types";
-import type { ConfigError, ConfigSuccess } from "./main/lib/template-parser/parser/TemplateParser";
+import type { SearchQuery } from "./ma@/lib/search-parser/@search-types";
+import type { ConfigError, ConfigSuccess } from "./ma@/lib/template-parser/parser/TemplateParser";
 
 export type RequestAPI = {
   "resource::get": (

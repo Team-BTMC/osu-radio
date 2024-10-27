@@ -1,6 +1,6 @@
 import { cn } from "../../lib/css.utils";
 import Dropdown from "../dropdown/Dropdown";
-import { changeAudioDevice } from "@renderer/components/song/song.utils";
+import { changeAudioDevice } from "@/components/song/song.utils";
 import { GlobeIcon, LucideIcon, Volume2Icon } from "lucide-solid";
 import { Component, createEffect, createSignal, For, JSX, onMount } from "solid-js";
 

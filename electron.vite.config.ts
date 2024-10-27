@@ -8,6 +8,7 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin()],
     resolve: {
       alias: {
+        "@src": resolve("src"),
         "@": resolve("src/main"),
         "@types": resolve("src/@types.d.ts"),
       },

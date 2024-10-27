@@ -1,5 +1,5 @@
 import { createSignal, onCleanup, onMount } from "solid-js";
-import Button from "@renderer/components/button/Button";
+import Button from "@/components/button/Button";
 export default function ErrorScene() {
   const [msg, setMsg] = createSignal("");
 

@@ -1,9 +1,9 @@
-import { Router } from "../lib/route-pass/Router";
-import { none, some } from "../lib/rust-like-utils-backend/Optional";
-import { filter } from "../lib/song/filter";
-import { indexMapper } from "../lib/song/indexMapper";
-import order from "../lib/song/order";
-import { Storage } from "../lib/storage/Storage";
+import { Router } from "@/lib/route-pass/Router";
+import { none, some } from "@/lib/rust-like-utils-backend/Optional";
+import { filter } from "@/lib/song/filter";
+import { indexMapper } from "@/lib/song/indexMapper";
+import order from "@/lib/song/order";
+import { Storage } from "@/lib/storage/Storage";
 
 Router.respond("query::songsPool::init", (_evt, payload) => {
   const indexes = Storage.getTable("system").get("indexes");

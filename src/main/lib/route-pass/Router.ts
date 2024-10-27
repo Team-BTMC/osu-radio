@@ -1,8 +1,8 @@
 import type { APIFunction, Packet } from "@types";
-import { ListenAPI } from "../../../ListenAPI";
-import { RequestAPI } from "../../../RequestAPI";
-import { assertNever } from "../tungsten/assertNever";
-import { TokenNamespace } from "../tungsten/token";
+import { ListenAPI } from "src/ListenAPI";
+import { RequestAPI } from "src/RequestAPI";
+import { assertNever } from "@/lib/tungsten/assertNever";
+import { TokenNamespace } from "@/lib/tungsten/token";
 import { cratePacket } from "./Packet";
 import { BrowserWindow, ipcMain } from "electron";
 

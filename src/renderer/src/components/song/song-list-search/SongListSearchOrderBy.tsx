@@ -1,5 +1,5 @@
-import Button from "@renderer/components/button/Button";
-import Dropdown from "@renderer/components/dropdown/Dropdown";
+import Button from "@/components/button/Button";
+import Dropdown from "@/components/dropdown/Dropdown";
 import { ArrowDownAzIcon, ArrowUpZaIcon } from "lucide-solid";
 import { Component, createMemo, createSignal, For, Match, Setter, Switch } from "solid-js";
 import { OrderDirection, OrderOptions, Order } from "src/@types";

@@ -8,7 +8,7 @@ import AddToPlaylist from "../context-menu/items/AddToPlaylist";
 import RemoveFromQueue from "../context-menu/items/RemoveFromQueue";
 import SongItem from "../song-item/SongItem";
 import { setSongQueueModalOpen } from "./song-queue.utils";
-import Button from "@renderer/components/button/Button";
+import Button from "@/components/button/Button";
 import { XIcon } from "lucide-solid";
 import { Component, createSignal, onCleanup, onMount } from "solid-js";
 

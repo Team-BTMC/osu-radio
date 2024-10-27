@@ -1,7 +1,7 @@
 import { AudioSource, ImageSource, ResourceID, Result, Song } from "@types";
-import { access } from "../fs-promises";
-import { fail, ok } from "../rust-like-utils-backend/Result";
-import { assertNever } from "../tungsten/assertNever";
+import { access } from "@/lib/fs-promises";
+import { fail, ok } from "@/lib/rust-like-utils-backend/Result";
+import { assertNever } from "@/lib/tungsten/assertNever";
 import { OsuFile } from "./OsuFile";
 import fs from "graceful-fs";
 import os from "os";

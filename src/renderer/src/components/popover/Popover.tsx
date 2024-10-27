@@ -13,7 +13,7 @@ import {
   shift,
   ShiftOptions,
 } from "@floating-ui/dom";
-import useControllableState from "@renderer/lib/controllable-state";
+import useControllableState from "@/lib/controllable-state";
 import { createSignal, createContext, useContext, ParentComponent, Accessor } from "solid-js";
 
 export const DEFAULT_POPOVER_OPEN = false;

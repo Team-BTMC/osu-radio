@@ -1,5 +1,5 @@
-import { Router } from "../lib/route-pass/Router";
-import { mainWindow } from "../main";
+import { Router } from "@/lib/route-pass/Router";
+import { mainWindow } from "@/main";
 
 Router.respond("window::maximize", () => {
   if (mainWindow.isMaximized()) {

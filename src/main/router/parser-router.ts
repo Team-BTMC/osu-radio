@@ -1,8 +1,8 @@
-import { Router } from "../lib/route-pass/Router";
-import { SearchParser } from "../lib/search-parser/SearchParser";
-import { defaultRelationSymbols, num, set, text, time } from "../lib/search-parser/validators";
-import { TemplateParser } from "../lib/template-parser/parser/TemplateParser";
-import templateIdentifiers from "../lib/template-parser/template-identifiers";
+import { Router } from "@/lib/route-pass/Router";
+import { SearchParser } from "@/lib/search-parser/SearchParser";
+import { defaultRelationSymbols, num, set, text, time } from "@/lib/search-parser/validators";
+import { TemplateParser } from "@/lib/template-parser/parser/TemplateParser";
+import templateIdentifiers from "@/lib/template-parser/template-identifiers";
 
 /**
  * Examples of valid search queries:

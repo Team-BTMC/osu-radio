@@ -1,4 +1,4 @@
-import { Router } from "../lib/route-pass/Router";
+import { Router } from "@/lib/route-pass/Router";
 import { BrowserWindow } from "electron";
 
 let pending: (() => void)[] = [];

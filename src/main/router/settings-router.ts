@@ -1,5 +1,5 @@
-import { Router } from "../lib/route-pass/Router";
-import { Storage } from "../lib/storage/Storage";
+import { Router } from "@/lib/route-pass/Router";
+import { Storage } from "@/lib/storage/Storage";
 import os from "os";
 
 Router.respond("settings::get", (_evt, key) => {

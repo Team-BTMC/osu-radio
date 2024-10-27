@@ -9,8 +9,8 @@ import {
   volume,
   handleMuteSong,
 } from "../song.utils";
-import Button from "@renderer/components/button/Button";
-import Slider from "@renderer/components/slider/Slider";
+import Button from "@/components/button/Button";
+import Slider from "@/components/slider/Slider";
 import {
   CirclePlusIcon,
   PauseIcon,

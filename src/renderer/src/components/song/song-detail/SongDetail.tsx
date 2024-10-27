@@ -2,7 +2,7 @@ import formatTime from "../../../lib/time-formatter";
 import SongImage from "../SongImage";
 import { useColorExtractor } from "../color-extractor";
 import SongControls from "./SongControls";
-import Slider from "@renderer/components/slider/Slider";
+import Slider from "@/components/slider/Slider";
 import {
   seek,
   duration,
@@ -10,7 +10,7 @@ import {
   timestamp,
   handleSeekStart,
   handleSeekEnd,
-} from "@renderer/components/song/song.utils";
+} from "@/components/song/song.utils";
 import { Component, createMemo } from "solid-js";
 import { Show } from "solid-js";
 

@@ -2,7 +2,7 @@
 // String is converted to tokens and parser validates grammar of token sequence. From this sequence a
 // "list of instructions" is created. Using the "list of instructions" together with data source will produce a dynamic
 // string templating. Similar architecture is used to interpret search queries
-import { TemplateTokenizer, Tokens } from "../tokenizer/TemplateTokenizer";
+import { TemplateTokenizer, Tokens } from "@/lib/template-parser/tokenizer/TemplateTokenizer";
 import { closest } from "fastest-levenshtein";
 
 export type ConfigItem = {

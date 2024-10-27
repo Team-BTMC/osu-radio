@@ -4,14 +4,14 @@
 
 @font-face {
   font-family: "Nunito";
-  src: url("@renderer/assets/fonts/Nunito-Variable.ttf") format("truetype");
+  src: url("@/assets/fonts/Nunito-Variable.ttf") format("truetype");
   font-weight: 100 900;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Nunito";
-  src: url("@renderer/assets/fonts/Nunito-Italic-Variable.ttf") format("truetype");
+  src: url("@/assets/fonts/Nunito-Italic-Variable.ttf") format("truetype");
   font-weight: 100 900;
   font-style: italic;
 }
