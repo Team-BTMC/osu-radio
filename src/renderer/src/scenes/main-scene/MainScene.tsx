@@ -33,7 +33,7 @@ const MainScene: Component = () => {
   });
 
   return (
-    <>
+    <Show when={typeof os() !== "undefined"}>
       <NoticeContainer />
       <Tabs value={mainActiveTab} onValueChange={setMainActiveTab}>
         <Show when={os() === "darwin"}>
@@ -91,7 +91,7 @@ const MainScene: Component = () => {
           </Button>
         </Show>
       </Tabs>
-    </>
+    </Show>
   );
 };
 
@@ -117,10 +117,9 @@ const Nav: Component = () => {
   return (
     <div class="nav app-drag relative flex items-center">
       <nav
-        class="absolute right-0 top-4 flex w-[480px] flex-1 flex-shrink-0 items-center"
+        class="right-0 top-4 flex w-[480px] flex-1 flex-shrink-0 items-center pl-4"
         classList={{
-          "pl-[124px]": os() === "darwin",
-          "pl-4": os() !== "darwin",
+          "pl-[140px] absolute mr-5": os() === "darwin",
         }}
       >
         <Show when={os() === "win32"}>
@@ -149,9 +148,6 @@ const Nav: Component = () => {
         <Button
           onClick={() => setMainActiveTab(SIDEBAR_PAGES.SETTINGS.value)}
           class="app-no-drag ml-auto"
-          classList={{
-            "pr-5": os() === "darwin",
-          }}
           size="square"
           variant={mainActiveTab() === SIDEBAR_PAGES.SETTINGS.value ? "secondary" : "outlined"}
         >
@@ -195,7 +191,7 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
       <Button
         size="square"
         variant="ghost"
-        onclick={async () => window.api.request("window::minimize")}
+        onclick={() => window.api.request("window::minimize")}
         class="nav-window-control app-no-drag"
       >
         <MinusIcon size={20} />
@@ -203,7 +199,7 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
       <Button
         size="square"
         variant="ghost"
-        onClick={async () => {
+        onClick={() => {
           window.api.request("window::maximize");
           props.setMaximized(!props.maximized());
         }}
@@ -214,7 +210,7 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
       <Button
         size="square"
         variant="ghost"
-        onClick={async () => window.api.request("window::close")}
+        onClick={() => window.api.request("window::close")}
         class="nav-window-control close app-no-drag"
       >
         <XIcon size={20} />

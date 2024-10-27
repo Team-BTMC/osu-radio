@@ -14,7 +14,14 @@ import {
   ShiftOptions,
 } from "@floating-ui/dom";
 import useControllableState from "@renderer/lib/controllable-state";
-import { createSignal, createContext, useContext, ParentComponent, Accessor } from "solid-js";
+import {
+  createSignal,
+  createContext,
+  useContext,
+  ParentComponent,
+  Accessor,
+  createEffect,
+} from "solid-js";
 
 export const DEFAULT_POPOVER_OPEN = false;
 
@@ -32,6 +39,8 @@ export type Props = {
 export type Context = ReturnType<typeof useProviderValue>;
 
 function useProviderValue(props: Props) {
+  let resizeObserver: ResizeObserver | undefined;
+
   const [isOpen, setIsOpen] = useControllableState<boolean>({
     defaultProp: props.defaultProp || DEFAULT_POPOVER_OPEN,
     onChange: props.onValueChange,
@@ -41,6 +50,25 @@ function useProviderValue(props: Props) {
   const [position, setPosition] = createSignal<ComputePositionReturn | null>(null);
   const [triggerRef, _setTriggerRef] = createSignal<HTMLElement | null>(null);
   const [contentRef, _setContentRef] = createSignal<HTMLDivElement | null>(null);
+
+  createEffect(() => {
+    const triggerElement = triggerRef();
+    if (!triggerElement) {
+      return;
+    }
+
+    if (typeof resizeObserver !== "undefined") {
+      // Disconnects old resize observer if the trigger was chaneged
+      resizeObserver.disconnect();
+      resizeObserver = undefined;
+    }
+
+    resizeObserver = new ResizeObserver(() => {
+      listenResize();
+    });
+
+    resizeObserver.observe(triggerElement);
+  });
 
   const setTriggerRef = (element: HTMLElement) => {
     _setTriggerRef(element);

@@ -71,7 +71,7 @@ const SongItem: Component<SongItemProps> = (props) => {
     }
 
     const lowerAlpha = transparentize(0.9);
-    return `linear-gradient(to right, ${color}, ${lowerAlpha(color)})`;
+    return `linear-gradient(to right, ${color} 20%, ${lowerAlpha(color)})`;
   });
 
   return (
@@ -96,7 +96,7 @@ const SongItem: Component<SongItemProps> = (props) => {
         </Popover.Content>
       </Portal>
       <div
-        class="min-h-[72px] rounded-lg py-0.5 pl-1.5 pr-0.5 transition-colors hover:pl-2 active:pl-0.5"
+        class="min-h-[72px] rounded-lg py-0.5 pl-1.5 pr-0.5 transition-colors hover:pl-2 active:pl-0.5 group"
         classList={{
           "shadow-glow-blue": isSelected(),
         }}
@@ -111,19 +111,19 @@ const SongItem: Component<SongItemProps> = (props) => {
         }}
       >
         <div
-          class="group relative isolate select-none rounded-lg"
+          class="relative isolate select-none rounded-lg"
           ref={item}
           data-url={props.song.bg}
           onContextMenu={(evt) => setCoords([evt.clientX, evt.clientY])}
         >
           <SongImage
-            class={`absolute inset-0 z-[-1] h-full w-full rounded-md bg-cover bg-center bg-no-repeat`}
+            class={`absolute inset-0 z-[-1] h-full w-full rounded-l-[9px] rounded-r-md bg-cover bg-center bg-no-repeat bg-scroll`}
             src={props.song.bg}
             group={props.group}
             onImageLoaded={processImage}
           />
           <div
-            class="flex flex-col justify-center overflow-hidden rounded-md p-3 hover:pl-2.5 active:pl-4 transition-transform"
+            class="flex flex-col justify-center overflow-hidden rounded-md p-3 group-hover:pl-2.5 active:pl-4 transition-transform"
             style={{
               background: backgrund(),
               "transition-property": "padding",
@@ -133,7 +133,7 @@ const SongItem: Component<SongItemProps> = (props) => {
             <p class="text-base text-subtext">{props.song.artist}</p>
           </div>
 
-          <div class="absolute right-2 top-1/2 -translate-y-1/2 grid aspect-square size-9 place-items-center rounded border-solid border-stroke bg-transparent p-1 text-text hover:bg-surface">
+          <div class="absolute right-2 top-1/2 -translate-y-1/2 grid aspect-square size-9 place-items-center rounded border-solid border-stroke bg-transparent p-1 text-text group-hover:bg-surface">
             <Popover.Trigger
               class={twMerge(
                 "opacity-0 transition-opacity group-hover:opacity-100",

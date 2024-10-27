@@ -56,14 +56,14 @@ export function useRovingFocusGroup(props: Params) {
         break;
       }
 
-      case "End":
-      case "PageDown": {
+      case "Home":
+      case "PageUp": {
         newIndex = 0;
         break;
       }
 
-      case "Home":
-      case "PageUp": {
+      case "End":
+      case "PageDown": {
         newIndex = orderedNodes.length - 1;
         break;
       }

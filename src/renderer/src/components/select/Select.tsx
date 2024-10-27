@@ -1,6 +1,6 @@
 import { Component, createMemo, JSX, ParentComponent } from "solid-js";
 import Popover, { Props as PopoverProps, usePopover } from "../popover/Popover";
-import { ChevronDownIcon } from "lucide-solid";
+import { ChevronsUpDownIcon } from "lucide-solid";
 import List, { Props as ListProps } from "../list/List";
 import ListItem, { Props as ListItemProps } from "../list/ListItem";
 
@@ -21,7 +21,7 @@ export const SelectTrigger: ParentComponent<Props> = (props) => {
   return (
     <Popover.Trigger class="flex items-center justify-between gap-2 rounded bg-surface px-4 py-2.5 hover:bg-overlay">
       <span class="text-base leading-6">{props.children}</span>
-      <ChevronDownIcon size={20} class="text-subtext" />
+      <ChevronsUpDownIcon size={20} class="text-subtext flex-shrink-0" />
     </Popover.Trigger>
   );
 };

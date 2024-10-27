@@ -23,31 +23,25 @@ import {
   Volume2Icon,
   VolumeXIcon,
 } from "lucide-solid";
-import { Component, createEffect, createSignal, Match, Show, Switch } from "solid-js";
+import { Component, createMemo, createSignal, Match, Show, Switch } from "solid-js";
 
 // Add a prop to accept the averageColor
 type SongControlsProps = {
   averageColor?: string;
-  secondatyColor?: string;
 };
 
 const SongControls: Component<SongControlsProps> = (props) => {
-  const [disable, setDisable] = createSignal(isSongUndefined(song()));
-  const [playHint, setPlayHint] = createSignal("");
   const [isHovering, setIsHovering] = createSignal(false);
 
-  createEffect(() => {
+  const disable = createMemo(() => isSongUndefined(song()));
+  const playHint = createMemo(() => {
     const disabled = disable();
-
     if (disabled) {
-      setPlayHint("");
-      return;
+      return "";
     }
 
-    setPlayHint(isPlaying() ? "Pause" : "Play");
+    return isPlaying() ? "Pause" : "Play";
   });
-
-  createEffect(() => setDisable(isSongUndefined(song())));
 
   return (
     <div class="flex w-full items-center gap-4" style={{ "--dynamic-color": props.averageColor }}>
@@ -83,7 +77,6 @@ const SongControls: Component<SongControlsProps> = (props) => {
             onMouseLeave={() => setIsHovering(false)}
             style={{
               "background-color": isHovering() ? props.secondatyColor : props.averageColor,
-              "--secondary-color": props.secondatyColor,
             }}
           >
             <Show when={!isPlaying()} fallback={<PauseIcon fill="white" size={20} />}>
@@ -170,7 +163,7 @@ const LeftPart = () => {
             onValueChange={setVolume}
             enableWheelSlide
           >
-            <Slider.Track class="h-1 flex-1 rounded bg-thick-material outline outline-stroke">
+            <Slider.Track class="h-1 flex-1 rounded bg-thick-material border border-stroke">
               <Slider.Range class="block h-1 rounded bg-white" />
             </Slider.Track>
             <Slider.Thumb
