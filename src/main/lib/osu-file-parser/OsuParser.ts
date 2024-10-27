@@ -7,7 +7,7 @@ import { AudioSource, ImageSource, ResourceID, Result, Song } from "../../../@ty
 import { access } from "../fs-promises";
 import { fail, ok } from "../rust-like-utils-backend/Result";
 import { assertNever } from "../tungsten/assertNever";
-import { Beatmap, BeatmapSet } from "./LazerTypes";
+import { BeatmapSet } from "./LazerTypes";
 import { OsuFile } from "./OsuFile";
 
 const bgFileNameRegex = /.*"(?<!Video.*)(.*)".*/;
@@ -111,22 +111,6 @@ class BufferReader {
   }
 }
 
-// TODO: Add all diffs of same song to beatmap
-function removeUnoriginalBeatmaps(maps: Beatmap[]): Beatmap[] {
-  const mp3List: string[] = [];
-  const finalMaps: Beatmap[] = [];
-
-  for (const map of maps) {
-    if (mp3List.includes(map.Metadata.AudioFile)) {
-      continue;
-    }
-
-    mp3List.push(map.Metadata.AudioFile);
-    finalMaps.push(map);
-  }
-
-  return finalMaps;
-}
 export class OsuParser {
   static async parseLazerDatabase(
     databasePath: string,
@@ -148,7 +132,7 @@ export class OsuParser {
     let i = 0;
     for (const beatmapSet of beatmapSets) {
       try {
-        const beatmaps = removeUnoriginalBeatmaps(beatmapSet.Beatmaps);
+        const beatmaps = beatmapSet.Beatmaps;
 
         for (const beatmap of beatmaps) {
           try {
@@ -161,7 +145,7 @@ export class OsuParser {
               title: beatmap.Metadata.Title,
               artist: beatmap.Metadata.Artist,
               creator: beatmap.Metadata.Author?.Username ?? "No Creator",
-              bpm: [],
+              bpm: [[beatmap.BPM]],
               duration: beatmap.Length,
               diffs: [beatmap.DifficultyName ?? "Unknown difficulty"],
             };
@@ -186,6 +170,12 @@ export class OsuParser {
                 songHash.substring(0, 2),
                 songHash,
               );
+            }
+
+            const existingSong = songTable.get(song.audio);
+            if (existingSong) {
+              existingSong.diffs.push(song.diffs[0]);
+              continue;
             }
 
             /* Note: in lots of places throughout the application, it relies on the song.path parameter, which in the
