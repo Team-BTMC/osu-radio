@@ -25,9 +25,9 @@ const SongContextMenuItem: Component<SongContextMenuItemProps> = (props) => {
     <button
       ref={divAccessor}
       class={twMerge(
-        "flex flex-row items-center justify-between gap-3 rounded-md bg-thick-material p-2 text-left transition-colors duration-200 hover:cursor-pointer hover:bg-accent/20",
+        "flex flex-row items-center justify-between gap-3 rounded-md py-1.5 pl-2.5 pr-2 text-left hover:cursor-pointer hover:bg-surface align-baseline",
         props.class,
-        buttonDisabled && "text-subtext/20 hover:cursor-auto hover:bg-inherit",
+        buttonDisabled && "text-overlay hover:cursor-auto hover:bg-transparent",
       )}
       disabled={buttonDisabled}
     >

@@ -7,7 +7,6 @@ const buttonStyles = cva(
   {
     variants: {
       variant: {
-        accent: "bg-accent text-thick-material hover:bg-accent/80",
         primary: "bg-text text-thick-material hover:bg-text/80",
         secondary: "bg-surface text-text ring-inset ring-1 ring-stroke hover:bg-surface/40",
         outlined: "bg-transparent border-stroke border-solid text-text hover:bg-surface",
