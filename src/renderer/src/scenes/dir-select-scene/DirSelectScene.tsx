@@ -74,7 +74,11 @@ export default function DirSelectScene() {
         </div>
 
         <div class="flex items-end justify-end">
-          <Button size="large" onClick={submitDir}>
+          <Button
+            size="large"
+            disabled={selectedDir().version === "none" ? true : false}
+            onClick={submitDir}
+          >
             <span>Submit</span>
           </Button>
         </div>

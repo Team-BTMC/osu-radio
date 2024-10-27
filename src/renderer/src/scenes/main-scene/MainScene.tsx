@@ -1,7 +1,3 @@
-import SongDetail from "../../components/song/song-detail/SongDetail";
-import SongList from "../../components/song/song-list/SongList";
-import { mainActiveTab, setMainActiveTab, Tab, TABS } from "./main.utils";
-import "./styles.css";
 import Button from "@renderer/components/button/Button";
 import NoticeContainer from "@renderer/components/notice/NoticeContainer";
 import Settings from "@renderer/components/settings/Settings";
@@ -27,6 +23,10 @@ import {
   Show,
   Switch,
 } from "solid-js";
+import SongDetail from "../../components/song/song-detail/SongDetail";
+import SongList from "../../components/song/song-list/SongList";
+import { mainActiveTab, setMainActiveTab, Tab, TABS } from "./main.utils";
+import "./styles.css";
 
 const MainScene: Component = () => {
   return (

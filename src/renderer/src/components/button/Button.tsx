@@ -3,7 +3,14 @@ import { Component, JSX, splitProps } from "solid-js";
 import { twMerge } from "tailwind-merge";
 
 const buttonStyles = cva(
-  ["rounded-lg", "transition-colors", "duration-200", "ease-in-out", "font-medium"],
+  [
+    "rounded-lg",
+    "transition-colors",
+    "duration-200",
+    "ease-in-out",
+    "font-medium",
+    "disabled:pointer-events-none disabled:opacity-50",
+  ],
   {
     variants: {
       variant: {
