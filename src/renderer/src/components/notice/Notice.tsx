@@ -1,4 +1,4 @@
-import Button from "../button/Button";
+import Button from "@/components/button/Button";
 import { cva } from "class-variance-authority";
 import { XIcon } from "lucide-solid";
 import { Component, createEffect, createMemo, createSignal, JSX, onMount, Show } from "solid-js";

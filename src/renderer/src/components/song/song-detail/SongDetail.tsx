@@ -1,6 +1,6 @@
-import formatTime from "../../../lib/time-formatter";
-import SongImage from "../SongImage";
-import { useColorExtractor } from "../color-extractor";
+import formatTime from "@/lib/time-formatter";
+import SongImage from "@/components/song/SongImage";
+import { useColorExtractor } from "@/components/song/color-extractor";
 import SongControls from "./SongControls";
 import Slider from "@/components/slider/Slider";
 import {

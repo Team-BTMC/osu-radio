@@ -1,4 +1,4 @@
-import Popover, { Props as PopoverProps } from "../popover/Popover";
+import Popover, { Props as PopoverProps } from "@/components/popover/Popover";
 import DropdownList from "./DropdownList";
 import DropdownListItem from "./DropdownListItem";
 import DropdownSelectTrigger from "./DropdownSelectTrigger";

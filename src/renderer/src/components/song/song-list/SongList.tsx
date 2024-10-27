@@ -1,14 +1,14 @@
 import { Optional, Order, ResourceID, SongsQueryPayload, Tag } from "@types";
-import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-types";
-import { namespace } from "../../../App";
-import Impulse from "../../../lib/Impulse";
-import { none, some } from "../../../lib/rust-like-utils-client/Optional";
-import InfiniteScroller from "../../InfiniteScroller";
-import SongContextMenu from "../context-menu/SongContextMenu";
-import AddToPlaylist from "../context-menu/items/AddToPlaylist";
-import PlayNext from "../context-menu/items/PlayNext";
-import SongItem from "../song-item/SongItem";
-import SongListSearch from "../song-list-search/SongListSearch";
+import { SearchQueryError } from "src/main/lib/search-parser/@search-types";
+import { namespace } from "@/App";
+import Impulse from "@/lib/Impulse";
+import { none, some } from "@/lib/rust-like-utils-client/Optional";
+import InfiniteScroller from "@/components/InfiniteScroller";
+import SongContextMenu from "@/components/song/context-menu/SongContextMenu";
+import AddToPlaylist from "@/components/song/context-menu/items/AddToPlaylist";
+import PlayNext from "@/components/song/context-menu/items/PlayNext";
+import SongItem from "@/components/song/song-item/SongItem";
+import SongListSearch from "@/components/song/song-list-search/SongListSearch";
 import { songsSearch } from "./song-list.utils";
 import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 

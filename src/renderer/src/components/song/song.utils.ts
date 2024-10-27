@@ -2,7 +2,7 @@ import { delay } from "@/lib/delay";
 import { none, some } from "@/lib/rust-like-utils-client/Optional";
 import { isSongUndefined, msToBPM } from "@/lib/song";
 import { createEffect, createSignal } from "solid-js";
-import { AudioSource, Optional, Song } from "src/@types";
+import { AudioSource, Optional, Song } from "@types";
 
 /** Range from 0 to 1. */
 export type ZeroToOne = number;

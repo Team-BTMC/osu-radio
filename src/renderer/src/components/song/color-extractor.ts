@@ -1,7 +1,7 @@
 import { extractColors } from "extract-colors";
 import { lighten, darken, getContrast, parseToHsl, hslToColorString } from "polished";
 import { Accessor, createSignal } from "solid-js";
-import { Song } from "src/@types";
+import { Song } from "@types";
 
 const MIN_CONTRAST_RATIO = 4.5;
 const MIN_VIBRANCY_THRESHOLD = 0.3;

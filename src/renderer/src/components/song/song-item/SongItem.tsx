@@ -1,10 +1,10 @@
 import { ResourceID, Song } from "@types";
-import draggable from "../../../lib/draggable/draggable";
-import SongHint from "../SongHint";
-import SongImage from "../SongImage";
-import { useColorExtractor } from "../color-extractor";
-import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
-import { song as selectedSong } from "../song.utils";
+import draggable from "@/lib/draggable/draggable";
+import SongHint from "@/components/song/SongHint";
+import SongImage from "@/components/song/SongImage";
+import { useColorExtractor } from "@/components/song/color-extractor";
+import { ignoreClickInContextMenu } from "@/components/song/context-menu/SongContextMenu";
+import { song as selectedSong } from "@/components/song/song.utils";
 import { transparentize } from "polished";
 import Popover from "@/components/popover/Popover";
 import { EllipsisVerticalIcon } from "lucide-solid";

@@ -1,4 +1,4 @@
-import SongContextMenuItem from "../SongContextMenuItem";
+import SongContextMenuItem from "@/components/song/context-menu/SongContextMenuItem";
 import { DeleteIcon } from "lucide-solid";
 import { Component } from "solid-js";
 import { Song } from "src/@types";

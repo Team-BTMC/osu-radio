@@ -1,6 +1,6 @@
 import { Optional, Order, Tag } from "@types";
-import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-types";
-import { setSongsSearch } from "../song-list/song-list.utils";
+import { SearchQueryError } from "src/main/lib/search-parser/@search-types";
+import { setSongsSearch } from "@/components/song/song-list/song-list.utils";
 import SongListSearchOrderBy from "./SongListSearchOrderBy";
 import { SearchIcon } from "lucide-solid";
 import { Accessor, Component, Setter, Signal } from "solid-js";

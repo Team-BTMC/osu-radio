@@ -1,5 +1,5 @@
 import { Song } from "@types";
-import SongContextMenuItem from "../SongContextMenuItem";
+import SongContextMenuItem from "@/components/song/context-menu/SongContextMenuItem";
 import { ListStartIcon } from "lucide-solid";
 import { Component } from "solid-js";
 

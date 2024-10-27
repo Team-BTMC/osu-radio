@@ -1,6 +1,6 @@
 import { Result } from "@types";
-import { fail, ok } from "../../lib/rust-like-utils-client/Result";
-import { TokenNamespace } from "../../lib/tungsten/token";
+import { fail, ok } from "@/lib/rust-like-utils-client/Result";
+import { TokenNamespace } from "@/lib/tungsten/token";
 import Notice, { NoticeType } from "./Notice";
 import { For, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";

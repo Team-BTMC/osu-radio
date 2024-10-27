@@ -1,5 +1,5 @@
-import SongDetail from "../../components/song/song-detail/SongDetail";
-import SongList from "../../components/song/song-list/SongList";
+import SongDetail from "@/components/song/song-detail/SongDetail";
+import SongList from "@/components/song/song-list/SongList";
 import { mainActiveTab, setMainActiveTab, Tab, TABS } from "./main.utils";
 import "./styles.css";
 import Button from "@/components/button/Button";

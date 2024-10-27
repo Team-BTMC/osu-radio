@@ -1,5 +1,5 @@
-import { addNotice } from "../components/notice/NoticeContainer";
-import { Keyboard } from "../lib/Keyboard";
+import { addNotice } from "@/components/notice/NoticeContainer";
+import { Keyboard } from "@/lib/Keyboard";
 import { mainActiveTab, TABS } from "@/scenes/main-scene/main.utils";
 import { ShuffleIcon } from "lucide-solid";
 

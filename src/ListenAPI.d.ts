@@ -1,4 +1,4 @@
-import { LoadingSceneUpdate, NoticeType, Scenes, Song } from "./@types";
+import { LoadingSceneUpdate, NoticeType, Scenes, Song } from "@types";
 
 export type ListenAPI = {
   changeScene: (scene: Scenes) => void;

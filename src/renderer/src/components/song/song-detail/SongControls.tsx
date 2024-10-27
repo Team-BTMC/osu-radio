@@ -1,4 +1,4 @@
-import { isSongUndefined } from "../../../lib/song";
+import { isSongUndefined } from "@/lib/song";
 import {
   isPlaying,
   next,
