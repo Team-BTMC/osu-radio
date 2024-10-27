@@ -4,9 +4,9 @@ import { orDefault } from "@shared/lib/rust-types/Optional";
 import { collectTagsAndIndexSongs } from "@/lib/song";
 import { Storage } from "@/lib/storage/Storage";
 import { throttle } from "@shared/lib/throttle";
-import { dirSubmit } from "./router/dir-router";
-import { showError } from "./router/error-router";
-import "./router/import";
+import { dirSubmit } from "@/router/dir-router";
+import { showError } from "@/router/error-router";
+import "@/router/import";
 import { BrowserWindow } from "electron";
 
 export let mainWindow: BrowserWindow;

@@ -8,7 +8,7 @@ import order from "@/lib/song/order";
 import { Storage } from "@/lib/storage/Storage";
 import { shuffle } from "@shared/lib/tungsten/collections";
 import errorIgnored from "@shared/lib/tungsten/errorIgnored";
-import { mainWindow } from "../main";
+import { mainWindow } from "@/main";
 
 let queue: Song[];
 

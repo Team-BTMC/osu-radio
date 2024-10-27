@@ -1,7 +1,7 @@
 import { Router } from "@/lib/route-pass/Router";
 import createMenu from "@/lib/window/menu";
 import trackBounds, { getBounds, wasMaximized } from "@/lib/window/resizer";
-import { main } from "./main";
+import { main } from "@/main";
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
 import { app, BrowserWindow, dialog } from "electron";
 import { join } from "path";
