@@ -8,9 +8,9 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin()],
     resolve: {
       alias: {
-        "@src": resolve("src"),
         "@": resolve("src/main"),
         "@types": resolve("src/@types.d.ts"),
+        "@shared": resolve("src/shared"),
       },
     },
   },
@@ -22,6 +22,7 @@ export default defineConfig({
       alias: {
         "@": resolve("src/renderer/src"),
         "@types": resolve("src/@types.d.ts"),
+        "@shared": resolve("src/shared"),
       },
     },
     plugins: [lucidePreprocess(), solid()],

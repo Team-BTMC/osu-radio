@@ -1,7 +1,7 @@
 import defaultBackground from "../../renderer/src/assets/osu-default-background-small.jpg";
 import { Router } from "@/lib/route-pass/Router";
-import { none, some } from "@/lib/rust-like-utils-backend/Optional";
-import { fail, ok } from "@/lib/rust-like-utils-backend/Result";
+import { none, some } from "@shared/lib/rust-types/Optional";
+import { fail, ok } from "@shared/lib/rust-types/Result";
 import { Storage } from "@/lib/storage/Storage";
 import path from "path";
 import sharp from "sharp";

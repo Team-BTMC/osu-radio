@@ -1,4 +1,4 @@
-import { orDefault } from "@/lib/rust-like-utils-backend/Optional";
+import { orDefault } from "@shared/lib/rust-types/Optional";
 import { Storage } from "@/lib/storage/Storage";
 import { BrowserWindow } from "electron";
 

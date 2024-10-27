@@ -2,7 +2,7 @@ import { Optional, Order, ResourceID, SongsQueryPayload, Tag } from "@types";
 import { SearchQueryError } from "src/main/lib/search-parser/@search-types";
 import { namespace } from "@/App";
 import Impulse from "@/lib/Impulse";
-import { none, some } from "@/lib/rust-like-utils-client/Optional";
+import { none, some } from "@shared/lib/rust-types/Optional";
 import InfiniteScroller from "@/components/InfiniteScroller";
 import SongContextMenu from "@/components/song/context-menu/SongContextMenu";
 import AddToPlaylist from "@/components/song/context-menu/items/AddToPlaylist";

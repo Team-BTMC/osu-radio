@@ -1,7 +1,7 @@
 import { Song } from "@types";
 import { namespace } from "@/App";
 import Impulse from "@/lib/Impulse";
-import scrollIfNeeded from "@/lib/tungsten/scroll-if-needed";
+import scrollIfNeeded from "@shared/lib/tungsten/scroll-if-needed";
 import InfiniteScroller from "@/components/InfiniteScroller";
 import SongContextMenu from "@/components/song/context-menu/SongContextMenu";
 import AddToPlaylist from "@/components/song/context-menu/items/AddToPlaylist";

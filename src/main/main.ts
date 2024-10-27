@@ -1,9 +1,9 @@
 import { DirParseResult, OsuParser } from "@/lib/osu-file-parser/OsuParser";
 import { Router } from "@/lib/route-pass/Router";
-import { orDefault } from "@/lib/rust-like-utils-backend/Optional";
+import { orDefault } from "@shared/lib/rust-types/Optional";
 import { collectTagsAndIndexSongs } from "@/lib/song";
 import { Storage } from "@/lib/storage/Storage";
-import { throttle } from "@/lib/throttle";
+import { throttle } from "@shared/lib/throttle";
 import { dirSubmit } from "./router/dir-router";
 import { showError } from "./router/error-router";
 import "./router/import";

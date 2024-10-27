@@ -1,5 +1,5 @@
 import { Optional } from "@types";
-import { none, some } from "@/lib/rust-like-utils-backend/Optional";
+import { none, some } from "@shared/lib/rust-types/Optional";
 import fs from "fs";
 
 export class Table<S> {

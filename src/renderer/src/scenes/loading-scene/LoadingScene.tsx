@@ -1,5 +1,5 @@
 import { LoadingSceneUpdate } from "@types";
-import { clamp } from "@/lib/tungsten/math";
+import { clamp } from "@shared/lib/tungsten/math";
 import "./styles.css";
 import Slider from "@/components/slider/Slider";
 import { createMemo, createSignal, onCleanup, onMount } from "solid-js";

@@ -1,5 +1,5 @@
 import { delay } from "@/lib/delay";
-import { none, some } from "@/lib/rust-like-utils-client/Optional";
+import { none, some } from "@shared/lib/rust-types/Optional";
 import { isSongUndefined, msToBPM } from "@/lib/song";
 import { createEffect, createSignal } from "solid-js";
 import { AudioSource, Optional, Song } from "@types";

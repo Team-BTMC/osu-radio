@@ -5,8 +5,8 @@ import SliderTrack from "./SliderTrack";
 import useControllableState from "@/lib/controllable-state";
 import { cn } from "@/lib/css.utils";
 import { linearScale } from "@/lib/linear-scale";
-import { throttle } from "@/lib/throttle";
-import { clamp } from "@/lib/tungsten/math";
+import { throttle } from "@shared/lib/throttle";
+import { clamp } from "@shared/lib/tungsten/math";
 import {
   Accessor,
   createContext,

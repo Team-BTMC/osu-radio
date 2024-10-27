@@ -1,6 +1,6 @@
 import { Scenes } from "@types";
 import "./keyboard-registers/initialize";
-import { TokenNamespace } from "./lib/tungsten/token";
+import { TokenNamespace } from "@shared/lib/tungsten/token";
 import ErrorScene from "./scenes/ErrorScene";
 import NoScene from "./scenes/NoScene";
 import DirSelectScene from "./scenes/dir-select-scene/DirSelectScene";

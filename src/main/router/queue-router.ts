@@ -1,13 +1,13 @@
 import { Optional, QueueCreatePayload, QueueView, Result, Song, SongIndex } from "@types";
 import { Router } from "@/lib/route-pass/Router";
-import { none, some } from "@/lib/rust-like-utils-backend/Optional";
-import { fail, ok } from "@/lib/rust-like-utils-backend/Result";
+import { none, some } from "@shared/lib/rust-types/Optional";
+import { fail, ok } from "@shared/lib/rust-types/Result";
 import { filter } from "@/lib/song/filter";
 import { indexMapper } from "@/lib/song/indexMapper";
 import order from "@/lib/song/order";
 import { Storage } from "@/lib/storage/Storage";
-import { shuffle } from "@/lib/tungsten/collections";
-import errorIgnored from "@/lib/tungsten/errorIgnored";
+import { shuffle } from "@shared/lib/tungsten/collections";
+import errorIgnored from "@shared/lib/tungsten/errorIgnored";
 import { mainWindow } from "../main";
 
 let queue: Song[];
