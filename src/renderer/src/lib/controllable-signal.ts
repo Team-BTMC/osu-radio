@@ -1,3 +1,4 @@
+import { accessWith } from "./solid-utils";
 import { Accessor, createMemo, createSignal } from "solid-js";
 
 type createControllableSignalParams<T> = {
@@ -5,15 +6,6 @@ type createControllableSignalParams<T> = {
   defaultValue: T;
   onChange?: (newValue: T) => void;
 };
-
-type AnyFunction = (...args: any[]) => any;
-
-function accessWith<T>(
-  valueOrFn: T,
-  ...args: T extends AnyFunction ? Parameters<T> : never
-): T extends AnyFunction ? ReturnType<T> : T {
-  return typeof valueOrFn === "function" ? valueOrFn(...args) : valueOrFn;
-}
 
 function createControllableSignal<T>(props: createControllableSignalParams<T>) {
   const [uncontrolledValue, setUncontrolledValue] = createSignal(props.defaultValue);
