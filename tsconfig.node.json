@@ -4,6 +4,8 @@
   "compilerOptions": {
     "noImplicitAny": true,
     "composite": true,
-    "types": ["electron-vite/node"]
+    "types": ["electron-vite/node"],
+    "strictNullChecks": true,
+    "strict": true
   }
 }
