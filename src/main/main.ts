@@ -8,6 +8,9 @@ import { dirSubmit } from "./router/dir-router";
 import { showError } from "./router/error-router";
 import "./router/import";
 import { BrowserWindow } from "electron";
+import 'dotenv/config'
+
+//const db = drizzle({ connection: { url: process.env.DB_FILE_NAME! }});
 
 export let mainWindow: BrowserWindow;
 
@@ -101,11 +104,14 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
   });
 
   // Save created tables
+  // working on moving the actual write-to-database logic to osuParser.ts, so you would only have to make a call to osuParser and these lines would be unneccessary
   const songs = Object.fromEntries(tables.value[SONGS]);
+  /*
   Storage.setTable("songs", songs);
   Storage.setTable("audio", Object.fromEntries(tables.value[AUDIO]));
+  const test= tables.value[AUDIO]
   Storage.setTable("images", Object.fromEntries(tables.value[IMAGES]));
-
+  */
   // Start indexing songs
   const total = Object.values(songs).length;
   await Router.dispatch(mainWindow, "loadingScene::setTitle", "Indexing songs");

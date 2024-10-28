@@ -7,9 +7,11 @@ import fs from "graceful-fs";
 import os from "os";
 import path from "path/posix";
 import readline from "readline";
-
 const bgFileNameRegex = /.*"(?<!Video.*)(.*)".*/;
 const beatmapSetIDRegex = /([0-9]+) .*/;
+import { drizzle } from "drizzle-orm/libsql"
+import 'dotenv/config'
+import { songsTable} from "../storage/Schema";
 
 type FileState =
   | "Initial"
@@ -323,7 +325,10 @@ export class OsuParser {
         song.bg = songsFolderPath + "/" + folder + "/" + bgSrc;
 
         if (song.audio != last_audio_filepath) {
-          songTable.set(song.audio, song);
+          //this is so hacky im sorry
+          //songTable.set(song.audio, song);
+          const db = drizzle({ connection: { url: process.env.DB_FILE_NAME! }});
+          await db.insert(songsTable).values({audio: song.audio})
           audioTable.set(song.audio, {
             songID: song.audio,
             path: song.audio,
