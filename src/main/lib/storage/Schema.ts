@@ -1,7 +1,7 @@
 import { int, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const songsTable = sqliteTable("songs",{
-  audio: text().notNull().primaryKey,
+export const songsTable = sqliteTable("songs", {
+  audio: text().notNull().primaryKey(),
   OsuFile: text().notNull().unique(),
   path: text().notNull,
   ctime: int(),
