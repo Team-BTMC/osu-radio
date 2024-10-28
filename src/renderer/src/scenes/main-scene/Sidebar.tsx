@@ -13,6 +13,7 @@ import { SettingsIcon, SidebarIcon } from "lucide-solid";
 import Button from "@renderer/components/button/Button";
 import Settings from "@renderer/components/settings/Settings";
 import { Portal } from "solid-js/web";
+import { os } from "@renderer/lib/os";
 
 export const Sidebar: Component = () => {
   const toggleSidebarShow = () => {
@@ -33,7 +34,14 @@ export const Sidebar: Component = () => {
             size="square"
             variant="outlined"
             onClick={toggleSidebarShow}
-            class="app-no-drag fixed top-[44px] left-[16px] z-10"
+            class="app-no-drag fixed z-10"
+            classList={{
+              // Windows - Offset for the nav on the top
+              "top-[44px] left-[16px]": os() === "win32",
+
+              // Mac     - Offset for the traffic lights on the left
+              "top-[8px] left-[86px]": os() === "darwin",
+            }}
           >
             <SidebarIcon />
           </Button>
@@ -54,7 +62,13 @@ const SidebarTabs: Component = () => {
   });
 
   return (
-    <div class="flex pl-4 pr-5 mt-2 ml-9 items-center">
+    <div
+      class="flex pl-4 pr-5 mt-2 ml-9 items-center"
+      classList={{
+        // Mac - Offset for the traffic lights on the left
+        "pl-[86px]": os() === "darwin",
+      }}
+    >
       <Tabs.List class="ml-3 mr-auto">
         <For each={NAV_ITEMS}>
           {({ label, value, Icon }) => (
