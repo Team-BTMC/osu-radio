@@ -1,6 +1,5 @@
-import type { APIFunction, Packet } from "@types";
-import { ListenAPI } from "src/ListenAPI";
-import { RequestAPI } from "src/RequestAPI";
+import type { APIFunction, Packet } from "@shared/types/common.types";
+import { ListenAPI, RequestAPI } from "@shared/types/router.types";
 import { assertNever } from "@shared/lib/tungsten/assertNever";
 import { TokenNamespace } from "@shared/lib/tungsten/token";
 import { cratePacket } from "./Packet";

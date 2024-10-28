@@ -1,4 +1,4 @@
-import { Optional } from "@types";
+import { Optional } from "@shared/types/common.types";
 
 export function none(): Optional<any> {
   return {

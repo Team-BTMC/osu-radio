@@ -1,5 +1,5 @@
 import { orDefault } from "@shared/lib/rust-types/Optional";
-import { Storage } from "@/lib/storage/Storage";
+import { Storage } from "@main/lib/storage/Storage";
 import { BrowserWindow } from "electron";
 
 /**

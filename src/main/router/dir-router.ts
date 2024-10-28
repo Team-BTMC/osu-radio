@@ -1,4 +1,4 @@
-import { Router } from "@/lib/route-pass/Router";
+import { Router } from "@main/lib/route-pass/Router";
 import { none, some } from "@shared/lib/rust-types/Optional";
 import { dialog } from "electron";
 import path from "path";

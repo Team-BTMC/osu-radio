@@ -1,17 +1,17 @@
-import SongDetail from "@/components/song/song-detail/SongDetail";
-import SongList from "@/components/song/song-list/SongList";
+import SongDetail from "@renderer/components/song/song-detail/SongDetail";
+import SongList from "@renderer/components/song/song-list/SongList";
 import { mainActiveTab, setMainActiveTab, Tab, TABS } from "./main.utils";
 import "./styles.css";
-import Button from "@/components/button/Button";
-import NoticeContainer from "@/components/notice/NoticeContainer";
-import Settings from "@/components/settings/Settings";
-import SongImage from "@/components/song/SongImage";
-import SongQueue from "@/components/song/song-queue/SongQueue";
+import Button from "@renderer/components/button/Button";
+import NoticeContainer from "@renderer/components/notice/NoticeContainer";
+import Settings from "@renderer/components/settings/Settings";
+import SongImage from "@renderer/components/song/SongImage";
+import SongQueue from "@renderer/components/song/song-queue/SongQueue";
 import {
   songQueueModalOpen,
   toggleSongQueueModalOpen,
-} from "@/components/song/song-queue/song-queue.utils";
-import { song } from "@/components/song/song.utils";
+} from "@renderer/components/song/song-queue/song-queue.utils";
+import { song } from "@renderer/components/song/song.utils";
 import { LayersIcon, Minimize2Icon, MinusIcon, SquareIcon, XIcon } from "lucide-solid";
 import {
   Accessor,

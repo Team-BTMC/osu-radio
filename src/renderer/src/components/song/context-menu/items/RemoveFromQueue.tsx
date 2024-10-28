@@ -1,7 +1,7 @@
-import SongContextMenuItem from "@/components/song/context-menu/SongContextMenuItem";
+import SongContextMenuItem from "@renderer/components/song/context-menu/SongContextMenuItem";
 import { DeleteIcon } from "lucide-solid";
 import { Component } from "solid-js";
-import { Song } from "src/@types";
+import { Song } from "@shared/types/common.types";
 
 type RemoveFromQueueProps = {
   path: Song["path"] | undefined;

@@ -1,5 +1,5 @@
 import { useSlider } from "./Slider";
-import { linearScale } from "@/lib/linear-scale";
+import { linearScale } from "@renderer/lib/linear-scale";
 import { Component, createMemo, JSX } from "solid-js";
 
 export function getThumbInBoundsOffset(width: number, left: number) {

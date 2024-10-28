@@ -1,5 +1,5 @@
 import { useSlider } from "./Slider";
-import { sn } from "@/lib/css.utils";
+import { sn } from "@renderer/lib/css.utils";
 import { Component, JSX, createMemo } from "solid-js";
 
 const SliderRange: Component<JSX.IntrinsicElements["span"]> = (props) => {

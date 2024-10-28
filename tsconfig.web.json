@@ -1,20 +1,14 @@
 {
   "extends": "@electron-toolkit/tsconfig/tsconfig.web.json",
-  "include": [
-    "src/renderer/src/env.d.ts",
-    "src/renderer/src/**/*",
-    "src/renderer/src/**/*.tsx",
-    "src/preload/*.d.ts",
-    "src/shared/**/*"
-  ],
+  "include": ["src/renderer/src/**/*", "src/shared/**/*"],
   "compilerOptions": {
     "noImplicitAny": true,
     "composite": true,
+    "types": ["vite/client"],
     "jsxImportSource": "solid-js",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/renderer/src/*"],
-      "@types": ["src/@types.d.ts"],
+      "@renderer/*": ["src/renderer/src/*"],
       "@shared/*": ["src/shared/*"]
     }
   }

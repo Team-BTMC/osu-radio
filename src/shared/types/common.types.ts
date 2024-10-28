@@ -1,7 +1,7 @@
-import { ListenAPI } from "src/ListenAPI";
-import { RequestAPI } from "src/RequestAPI";
-import type { SearchQuerySuccess } from "src/main/lib/search-parser/@search-types";
-import { ConfigItem } from "src/main/lib/template-parser/parser/TemplateParser";
+import { IpcMainInvokeEvent } from "electron";
+import { ListenAPI, RequestAPI } from "./router.types";
+import { ConfigItem } from "./template-parser.types";
+import { SearchQuerySuccess } from "./search-parser.types";
 
 declare global {
   interface Window {
@@ -125,31 +125,29 @@ export type TableMap = {
   songs: { [key: ResourceID]: Song };
   audio: { [key: ResourceID]: AudioSource };
   images: { [key: ResourceID]: ImageSource };
-  colors: { [key: ResourceID]: ColorsSource };
   playlists: { [key: string]: ResourceID[] };
   settings: Settings;
   system: System;
 };
 
 // I guess this is definition of all binary blob files that can be access from the database code?
-export type BlobMap = {
-  times;
-};
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export type BlobMap = {};
 
 // Tables that work on ID -> Record relation
 export type ResourceTables = "songs" | "audio" | "images";
 
-type OmitPropsWithReturnType<O extends { [K: string]: (...args: any[]) => any }, V> = {
+export type OmitPropsWithReturnType<O extends { [K: string]: (...args: any[]) => any }, V> = {
   [K in keyof O as ReturnType<O[K]> extends V ? never : K]: O[K];
 };
 
 // Types as functions for type
-type OmitPropsWithoutReturnType<O extends { [K: string]: (...args: any[]) => any }, V> = {
+export type OmitPropsWithoutReturnType<O extends { [K: string]: (...args: any[]) => any }, V> = {
   [K in keyof O as ReturnType<O[K]> extends V ? K : never]: O[K];
 };
 
 export type APIFunction<F extends (...args: any) => any> = (
-  evt: Electron.IpcMainInvokeEvent,
+  evt: IpcMainInvokeEvent,
   ...args: Parameters<F>
 ) => ReturnType<F> | Promise<ReturnType<F>>;
 
@@ -238,3 +236,10 @@ export type InfiniteScrollerInitResponse = Optional<{
   initialIndex: number;
   count: number;
 }>;
+
+export type NoticeType = {
+  id?: string;
+  variant?: "neutral" | "success" | "error";
+  title?: string;
+  description?: string;
+};

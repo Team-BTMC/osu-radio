@@ -1,4 +1,4 @@
-import { Router } from "@/lib/route-pass/Router";
+import { Router } from "@main/lib/route-pass/Router";
 import { app } from "electron";
 import path from "path";
 

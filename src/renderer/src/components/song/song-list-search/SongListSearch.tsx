@@ -1,9 +1,9 @@
-import { Optional, Order, Tag } from "@types";
-import { SearchQueryError } from "src/main/lib/search-parser/@search-types";
-import { setSongsSearch } from "@/components/song/song-list/song-list.utils";
+import { Optional, Order, Tag } from "@shared/types/common.types";
+import { setSongsSearch } from "@renderer/components/song/song-list/song-list.utils";
 import SongListSearchOrderBy from "./SongListSearchOrderBy";
 import { SearchIcon } from "lucide-solid";
 import { Accessor, Component, Setter, Signal } from "solid-js";
+import { SearchQueryError } from "@shared/types/search-parser.types";
 
 export type SearchProps = {
   tags: Signal<Tag[]>;

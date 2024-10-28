@@ -1,4 +1,4 @@
-import { Router } from "@/lib/route-pass/Router";
+import { Router } from "@main/lib/route-pass/Router";
 import { Client, SetActivity } from "@xhayper/discord-rpc";
 
 const client = new Client({ clientId: "1292942523425099826" });

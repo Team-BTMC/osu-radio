@@ -1,4 +1,4 @@
-import { Optional } from "@types";
+import { Optional } from "@shared/types/common.types";
 import { none, some } from "@shared/lib/rust-types/Optional";
 import fs from "fs";
 

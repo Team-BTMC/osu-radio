@@ -1,4 +1,4 @@
-import defaultBackground from "@/assets/osu-default-background.jpg";
+import defaultBackground from "@renderer/assets/osu-default-background.jpg";
 import { availableResource, getResourcePath } from "@shared/lib/tungsten/resource";
 import { Accessor, Component, createEffect, createSignal, JSX, onCleanup, onMount } from "solid-js";
 

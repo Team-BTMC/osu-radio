@@ -8,20 +8,23 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin()],
     resolve: {
       alias: {
-        "@": resolve("src/main"),
-        "@types": resolve("src/@types.d.ts"),
+        "@main": resolve("src/main"),
         "@shared": resolve("src/shared"),
       },
     },
   },
   preload: {
     plugins: [externalizeDepsPlugin()],
+    resolve: {
+      alias: {
+        "@shared": resolve("src/shared"),
+      },
+    },
   },
   renderer: {
     resolve: {
       alias: {
-        "@": resolve("src/renderer/src"),
-        "@types": resolve("src/@types.d.ts"),
+        "@renderer": resolve("src/renderer/src"),
         "@shared": resolve("src/shared"),
       },
     },

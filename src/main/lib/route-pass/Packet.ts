@@ -1,4 +1,4 @@
-import type { PacketType, Packet } from "@types";
+import type { PacketType, Packet } from "@shared/types/common.types";
 
 export function cratePacket<T>(
   channel: string,

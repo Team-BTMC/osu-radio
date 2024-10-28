@@ -1,4 +1,4 @@
-import { Result } from "@types";
+import { Result } from "@shared/types/common.types";
 import { fail, ok } from "@shared/lib/rust-types/Result";
 import fs from "fs";
 import path from "path";

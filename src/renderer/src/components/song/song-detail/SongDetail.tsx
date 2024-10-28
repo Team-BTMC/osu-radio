@@ -1,8 +1,8 @@
-import formatTime from "@/lib/time-formatter";
-import SongImage from "@/components/song/SongImage";
-import { useColorExtractor } from "@/components/song/color-extractor";
+import formatTime from "@renderer/lib/time-formatter";
+import SongImage from "@renderer/components/song/SongImage";
+import { useColorExtractor } from "@renderer/components/song/color-extractor";
 import SongControls from "./SongControls";
-import Slider from "@/components/slider/Slider";
+import Slider from "@renderer/components/slider/Slider";
 import {
   seek,
   duration,
@@ -10,7 +10,7 @@ import {
   timestamp,
   handleSeekStart,
   handleSeekEnd,
-} from "@/components/song/song.utils";
+} from "@renderer/components/song/song.utils";
 import { Component, createMemo } from "solid-js";
 import { Show } from "solid-js";
 

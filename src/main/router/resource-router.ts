@@ -1,8 +1,7 @@
-import defaultBackground from "src/renderer/src/assets/osu-default-background-small.jpg";
-import { Router } from "@/lib/route-pass/Router";
+import { Router } from "@main/lib/route-pass/Router";
 import { none, some } from "@shared/lib/rust-types/Optional";
 import { fail, ok } from "@shared/lib/rust-types/Result";
-import { Storage } from "@/lib/storage/Storage";
+import { Storage } from "@main/lib/storage/Storage";
 import path from "path";
 import sharp from "sharp";
 import { pathToFileURL } from "url";
@@ -22,10 +21,7 @@ Router.respond("resource::getPath", (_evt, path) => {
   return ok(pathToFileURL(path).href);
 });
 
-Router.respond("resource::getMediaSessionImage", async (_evt, bgPath) => {
-  if (bgPath === undefined) {
-    return some(defaultBackground);
-  }
+Router.respond("resource::getResizedBg", async (_evt, bgPath) => {
   const settings = Storage.getTable("settings");
   const songsDir = settings.get("osuSongsDir");
   if (songsDir.isNone) {

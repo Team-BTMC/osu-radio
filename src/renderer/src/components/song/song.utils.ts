@@ -1,8 +1,9 @@
-import { delay } from "@/lib/delay";
+import { delay } from "@renderer/lib/delay";
 import { none, some } from "@shared/lib/rust-types/Optional";
-import { isSongUndefined, msToBPM } from "@/lib/song";
+import { isSongUndefined, msToBPM } from "@renderer/lib/song";
 import { createEffect, createSignal } from "solid-js";
-import { AudioSource, Optional, Song } from "@types";
+import { AudioSource, Optional, Song } from "@shared/types/common.types";
+import DEFAULT_SONG_BG_SMALL from "@renderer/assets/osu-default-background-small.jpg";
 
 /** Range from 0 to 1. */
 export type ZeroToOne = number;
@@ -53,7 +54,7 @@ export const setVolume = (newValue: ZeroToOne) => {
 };
 export { volume };
 
-let bgPath: Optional<string>;
+let resizedBg: Optional<string>;
 
 const player = new Audio();
 
@@ -206,8 +207,8 @@ export async function seek(range: ZeroToOne): Promise<void> {
 
 // Media Session functions
 async function setMediaSession(song: Song) {
-  bgPath = await window.api.request("resource::getMediaSessionImage", song.bg!);
-  if (bgPath.isNone) return;
+  const bgPath = song.bg ?? DEFAULT_SONG_BG_SMALL;
+  resizedBg = await window.api.request("resource::getResizedBg", bgPath);
 
   if ("mediaSession" in navigator) {
     await setMediaSessionMetadata();
@@ -234,18 +235,18 @@ async function setMediaSession(song: Song) {
 }
 
 async function setMediaSessionMetadata() {
-  if (bgPath.isNone) return;
+  if (resizedBg.isNone) return;
 
   navigator.mediaSession.metadata = new MediaMetadata({
     title: song().title,
     artist: song().artist,
     artwork: [
-      { src: bgPath.value, sizes: "96x96", type: "image/png" },
-      { src: bgPath.value, sizes: "128x128", type: "image/png" },
-      { src: bgPath.value, sizes: "192x192", type: "image/png" },
-      { src: bgPath.value, sizes: "256x256", type: "image/png" },
-      { src: bgPath.value, sizes: "384x384", type: "image/png" },
-      { src: bgPath.value, sizes: "512x512", type: "image/png" },
+      { src: resizedBg.value, sizes: "96x96", type: "image/png" },
+      { src: resizedBg.value, sizes: "128x128", type: "image/png" },
+      { src: resizedBg.value, sizes: "192x192", type: "image/png" },
+      { src: resizedBg.value, sizes: "256x256", type: "image/png" },
+      { src: resizedBg.value, sizes: "384x384", type: "image/png" },
+      { src: resizedBg.value, sizes: "512x512", type: "image/png" },
     ],
   });
 }

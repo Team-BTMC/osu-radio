@@ -1,4 +1,4 @@
-import { Result } from "@types";
+import { Result } from "@shared/types/common.types";
 
 export function ok<V>(value: V): Result<V, any> {
   return {

@@ -1,7 +1,7 @@
-import { AudioSource, ResourceID } from "@types";
-import { delay } from "@/lib/delay-backend";
-import { Router } from "@/lib/route-pass/Router";
-import { Storage } from "@/lib/storage/Storage";
+import { AudioSource, ResourceID } from "@shared/types/common.types";
+import { delay } from "@main/lib/delay-backend";
+import { Router } from "@main/lib/route-pass/Router";
+import { Storage } from "@main/lib/storage/Storage";
 
 const [writeAudioSource] = delay((audioID: ResourceID, audioSource: AudioSource) => {
   Storage.getTable("audio").write(audioID, audioSource);

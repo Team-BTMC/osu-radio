@@ -1,6 +1,6 @@
-import List from "@/components/list/List";
-import { Props as ListProps } from "@/components/list/List";
-import Popover from "@/components/popover/Popover";
+import List from "@renderer/components/list/List";
+import { Props as ListProps } from "@renderer/components/list/List";
+import Popover from "@renderer/components/popover/Popover";
 import { ParentComponent } from "solid-js";
 import { Portal } from "solid-js/web";
 

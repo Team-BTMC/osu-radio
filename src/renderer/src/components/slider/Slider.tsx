@@ -2,10 +2,10 @@ import SliderRange from "./SliderRange";
 import SliderThumb from "./SliderThumb";
 import SliderTime from "./SliderTime";
 import SliderTrack from "./SliderTrack";
-import useControllableState from "@/lib/controllable-state";
-import { cn } from "@/lib/css.utils";
-import { linearScale } from "@/lib/linear-scale";
-import { throttle } from "@shared/lib/throttle";
+import useControllableState from "@renderer/lib/controllable-state";
+import { cn } from "@renderer/lib/css.utils";
+import { linearScale } from "@renderer/lib/linear-scale";
+import { throttle } from "@renderer/lib/throttle";
 import { clamp } from "@shared/lib/tungsten/math";
 import {
   Accessor,

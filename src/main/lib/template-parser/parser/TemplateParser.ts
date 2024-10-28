@@ -2,31 +2,9 @@
 // String is converted to tokens and parser validates grammar of token sequence. From this sequence a
 // "list of instructions" is created. Using the "list of instructions" together with data source will produce a dynamic
 // string templating. Similar architecture is used to interpret search queries
-import { TemplateTokenizer, Tokens } from "@/lib/template-parser/tokenizer/TemplateTokenizer";
+import { TemplateTokenizer, Tokens } from "@main/lib/template-parser/tokenizer/TemplateTokenizer";
+import { ConfigError, ConfigSuccess, ConfigItem } from "@shared/types/template-parser.types";
 import { closest } from "fastest-levenshtein";
-
-export type ConfigItem = {
-  type: "TEXT" | "IDENT";
-  literal: string;
-};
-
-export type ConfigError = {
-  type: "error";
-  error: {
-    message: string;
-    suggestion?: {
-      start: number;
-      end: number;
-      replacement: string;
-      description: string;
-    };
-  };
-};
-
-export type ConfigSuccess = {
-  type: "success";
-  config: ConfigItem[];
-};
 
 export class TemplateParser {
   private readonly identifiers: string[];

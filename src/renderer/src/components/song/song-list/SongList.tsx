@@ -1,16 +1,16 @@
-import { Optional, Order, ResourceID, SongsQueryPayload, Tag } from "@types";
-import { SearchQueryError } from "src/main/lib/search-parser/@search-types";
-import { namespace } from "@/App";
-import Impulse from "@/lib/Impulse";
+import { Optional, Order, ResourceID, SongsQueryPayload, Tag } from "@shared/types/common.types";
+import { namespace } from "@renderer/App";
+import Impulse from "@renderer/lib/Impulse";
 import { none, some } from "@shared/lib/rust-types/Optional";
-import InfiniteScroller from "@/components/InfiniteScroller";
-import SongContextMenu from "@/components/song/context-menu/SongContextMenu";
-import AddToPlaylist from "@/components/song/context-menu/items/AddToPlaylist";
-import PlayNext from "@/components/song/context-menu/items/PlayNext";
-import SongItem from "@/components/song/song-item/SongItem";
-import SongListSearch from "@/components/song/song-list-search/SongListSearch";
+import InfiniteScroller from "@renderer/components/InfiniteScroller";
+import SongContextMenu from "@renderer/components/song/context-menu/SongContextMenu";
+import AddToPlaylist from "@renderer/components/song/context-menu/items/AddToPlaylist";
+import PlayNext from "@renderer/components/song/context-menu/items/PlayNext";
+import SongItem from "@renderer/components/song/song-item/SongItem";
+import SongListSearch from "@renderer/components/song/song-list-search/SongListSearch";
 import { songsSearch } from "./song-list.utils";
 import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
+import { SearchQueryError } from "@shared/types/search-parser.types";
 
 export type SongViewProps = {
   isAllSongs?: boolean;

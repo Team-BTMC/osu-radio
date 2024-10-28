@@ -5,7 +5,7 @@ import {
   SearchQuery,
   ValidationSuggestion,
   SearchQuerySuggestion,
-} from "./@search-types";
+} from "@shared/types/search-parser.types";
 import { closestLevenDist } from "./levenshteinDistance";
 
 type ComparisonExtractionTrue = {

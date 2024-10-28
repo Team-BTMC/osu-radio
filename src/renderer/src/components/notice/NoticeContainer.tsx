@@ -1,15 +1,15 @@
-import { Result } from "@types";
+import { Result } from "@shared/types/common.types";
 import { fail, ok } from "@shared/lib/rust-types/Result";
 import { TokenNamespace } from "@shared/lib/tungsten/token";
-import Notice, { NoticeType } from "./Notice";
+import Notice, { IconNoticeType } from "./Notice";
 import { For, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 
-const [notices, setNotices] = createStore<NoticeType[]>([]);
+const [notices, setNotices] = createStore<IconNoticeType[]>([]);
 const namespace = new TokenNamespace();
 const [isPaused, setIsPaused] = createSignal(false);
 
-export function addNotice(notice: NoticeType): void {
+export function addNotice(notice: IconNoticeType): void {
   if (notice.id === undefined) {
     notice.id = namespace.create();
   }
@@ -32,7 +32,7 @@ function hideNotice(id: string | undefined): Result<void, string> {
 
 export { notices, isPaused, setIsPaused };
 
-window.api.listen("notify", (n: NoticeType) => {
+window.api.listen("notify", (n) => {
   addNotice(n);
 });
 

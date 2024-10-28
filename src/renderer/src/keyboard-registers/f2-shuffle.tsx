@@ -1,6 +1,6 @@
-import { addNotice } from "@/components/notice/NoticeContainer";
-import { Keyboard } from "@/lib/Keyboard";
-import { mainActiveTab, TABS } from "@/scenes/main-scene/main.utils";
+import { addNotice } from "@renderer/components/notice/NoticeContainer";
+import { Keyboard } from "@renderer/lib/Keyboard";
+import { mainActiveTab, TABS } from "@renderer/scenes/main-scene/main.utils";
 import { ShuffleIcon } from "lucide-solid";
 
 Keyboard.register({

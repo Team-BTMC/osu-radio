@@ -1,4 +1,4 @@
-import { Order, Result, Song } from "@types";
+import { Order, Result, Song } from "@shared/types/common.types";
 import { ok } from "@shared/lib/rust-types/Result";
 import { averageBPM, msToBPM } from "./average-bpm";
 

@@ -1,5 +1,5 @@
-import { Keyboard } from "@/lib/Keyboard";
-import { togglePlay } from "@/components/song/song.utils";
+import { Keyboard } from "@renderer/lib/Keyboard";
+import { togglePlay } from "@renderer/components/song/song.utils";
 
 Keyboard.register({
   key: "c",

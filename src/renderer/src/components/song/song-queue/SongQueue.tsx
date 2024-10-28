@@ -1,14 +1,14 @@
-import { Song } from "@types";
-import { namespace } from "@/App";
-import Impulse from "@/lib/Impulse";
+import { Song } from "@shared/types/common.types";
+import { namespace } from "@renderer/App";
+import Impulse from "@renderer/lib/Impulse";
 import scrollIfNeeded from "@shared/lib/tungsten/scroll-if-needed";
-import InfiniteScroller from "@/components/InfiniteScroller";
-import SongContextMenu from "@/components/song/context-menu/SongContextMenu";
-import AddToPlaylist from "@/components/song/context-menu/items/AddToPlaylist";
-import RemoveFromQueue from "@/components/song/context-menu/items/RemoveFromQueue";
-import SongItem from "@/components/song/song-item/SongItem";
+import InfiniteScroller from "@renderer/components/InfiniteScroller";
+import SongContextMenu from "@renderer/components/song/context-menu/SongContextMenu";
+import AddToPlaylist from "@renderer/components/song/context-menu/items/AddToPlaylist";
+import RemoveFromQueue from "@renderer/components/song/context-menu/items/RemoveFromQueue";
+import SongItem from "@renderer/components/song/song-item/SongItem";
 import { setSongQueueModalOpen } from "./song-queue.utils";
-import Button from "@/components/button/Button";
+import Button from "@renderer/components/button/Button";
 import { XIcon } from "lucide-solid";
 import { Component, createSignal, onCleanup, onMount } from "solid-js";
 

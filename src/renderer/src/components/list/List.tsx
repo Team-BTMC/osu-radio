@@ -1,5 +1,5 @@
 import ListItem from "./ListItem";
-import useControllableState from "@/lib/controllable-state";
+import useControllableState from "@renderer/lib/controllable-state";
 import { Accessor, createContext, ParentComponent, useContext } from "solid-js";
 
 const DEFAULT_SELECTED_VALUE = "";

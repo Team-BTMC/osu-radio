@@ -1,4 +1,4 @@
-import { BlobMap, TableMap } from "@types";
+import { BlobMap, TableMap } from "@shared/types/common.types";
 import { Table } from "./Table";
 import { app } from "electron";
 import fs from "fs";

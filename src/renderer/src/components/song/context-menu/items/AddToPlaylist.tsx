@@ -1,5 +1,5 @@
-import { Song } from "@types";
-import SongContextMenuItem from "@/components/song/context-menu/SongContextMenuItem";
+import { Song } from "@shared/types/common.types";
+import SongContextMenuItem from "@renderer/components/song/context-menu/SongContextMenuItem";
 import { PlusIcon } from "lucide-solid";
 import { Component } from "solid-js";
 

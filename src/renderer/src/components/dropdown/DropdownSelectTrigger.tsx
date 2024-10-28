@@ -1,4 +1,4 @@
-import Popover from "@/components/popover/Popover";
+import Popover from "@renderer/components/popover/Popover";
 import { ChevronDownIcon } from "lucide-solid";
 import { Component, JSX } from "solid-js";
 

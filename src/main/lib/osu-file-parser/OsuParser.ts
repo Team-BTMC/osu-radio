@@ -1,5 +1,5 @@
-import { AudioSource, ImageSource, ResourceID, Result, Song } from "@types";
-import { access } from "@/lib/fs-promises";
+import { AudioSource, ImageSource, ResourceID, Result, Song } from "@shared/types/common.types";
+import { access } from "@main/lib/fs-promises";
 import { fail, ok } from "@shared/lib/rust-types/Result";
 import { assertNever } from "@shared/lib/tungsten/assertNever";
 import { OsuFile } from "./OsuFile";
