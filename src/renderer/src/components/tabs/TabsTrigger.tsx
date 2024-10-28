@@ -19,9 +19,12 @@ const TabsTrigger: Component<Props> = (_props) => {
       {...attrs}
       {...rest}
       class={cn(
-        "ring-offset-background focus-visible:ring-ring z-10 flex h-8 items-center gap-2 rounded-lg px-3 text-subtext focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+        "ring-offset-background focus-visible:ring-ring z-10 flex h-[33px] items-center gap-2 rounded-lg px-3 text-subtext focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-colors",
         props.class,
       )}
+      classList={{
+        "hover:bg-surface/15": !isSelected(),
+      }}
     />
   );
 };

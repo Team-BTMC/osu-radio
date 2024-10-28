@@ -7,6 +7,7 @@ import {
   ComputePositionReturn,
   flip,
   FlipOptions,
+  Middleware,
   offset,
   OffsetOptions,
   Placement,
@@ -27,8 +28,8 @@ export const DEFAULT_POPOVER_OPEN = false;
 
 export type Props = {
   offset?: OffsetOptions;
-  flip?: FlipOptions;
-  shift?: ShiftOptions;
+  flip?: true | FlipOptions;
+  shift?: true | ShiftOptions;
   placement?: Placement;
   mousePos?: Accessor<[number, number]>; // [x, y]
   defaultProp?: boolean;
@@ -105,15 +106,21 @@ function useProviderValue(props: Props) {
       return;
     }
 
+    const middleware: Middleware[] = [offset(props.offset)];
+    if (typeof props.shift !== "undefined") {
+      middleware.push(shift(props.shift === true ? undefined : props.shift));
+    }
+    if (typeof props.flip !== "undefined") {
+      middleware.push(flip(props.flip === true ? undefined : props.flip));
+    }
+    if (typeof props.mousePos !== "undefined") {
+      middleware.push(useCustomCoords);
+    }
+
     computePosition(trigger, content, {
       placement: props.placement,
       strategy: "fixed",
-      middleware: [
-        props.mousePos !== undefined && useCustomCoords,
-        offset(props.offset),
-        props.shift && shift(props.shift),
-        props.flip && flip(props.flip),
-      ],
+      middleware,
     }).then(setPosition);
   };
 

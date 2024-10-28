@@ -10,8 +10,6 @@ import PlayNext from "../context-menu/items/PlayNext";
 import SongItem from "../song-item/SongItem";
 import SongListSearch from "../song-list-search/SongListSearch";
 import { songsSearch } from "./song-list.utils";
-import Tabs from "@renderer/components/tabs/Tabs";
-import { SIDEBAR_PAGES } from "@renderer/scenes/main-scene/main.utils";
 import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 
 export type SongViewProps = {
@@ -80,40 +78,36 @@ const SongList: Component<SongViewProps> = (props) => {
   const group = namespace.create(true);
 
   return (
-    <Tabs.Content value={SIDEBAR_PAGES.SONGS.value}>
-      <div class="absolute right-0 top-0 flex h-full w-[480px] min-w-[320px] flex-col">
-        <div class="z-10">
-          <SongListSearch tags={tagsSignal} setOrder={setOrder} count={count} error={searchError} />
-        </div>
+    <>
+      <SongListSearch tags={tagsSignal} setOrder={setOrder} count={count} error={searchError} />
 
-        <div class="flex-grow overflow-y-auto p-5 py-0">
-          <InfiniteScroller
-            apiKey={"query::songsPool"}
-            apiData={payload()}
-            apiInitKey={"query::songsPool::init"}
-            apiInitData={payload()}
-            setCount={setCount}
-            reset={resetListing}
-            fallback={<div class="py-8 text-center text-lg uppercase text-subtext">No songs</div>}
-            builder={(s) => (
-              <div>
-                <SongItem
-                  song={s}
-                  group={group}
-                  onSelect={createQueue}
-                  contextMenu={
-                    <SongContextMenu>
-                      <PlayNext path={s.path} disabled={!isQueueExist()} />
-                      <AddToPlaylist path={s.path} />
-                    </SongContextMenu>
-                  }
-                />
-              </div>
-            )}
-          />
-        </div>
+      <div class="flex-grow overflow-y-auto p-5 py-0">
+        <InfiniteScroller
+          apiKey={"query::songsPool"}
+          apiData={payload()}
+          apiInitKey={"query::songsPool::init"}
+          apiInitData={payload()}
+          setCount={setCount}
+          reset={resetListing}
+          fallback={<div class="py-8 text-center text-lg uppercase text-subtext">No songs</div>}
+          builder={(s) => (
+            <div>
+              <SongItem
+                song={s}
+                group={group}
+                onSelect={createQueue}
+                contextMenu={
+                  <SongContextMenu>
+                    <PlayNext path={s.path} disabled={!isQueueExist()} />
+                    <AddToPlaylist path={s.path} />
+                  </SongContextMenu>
+                }
+              />
+            </div>
+          )}
+        />
       </div>
-    </Tabs.Content>
+    </>
   );
 };
 

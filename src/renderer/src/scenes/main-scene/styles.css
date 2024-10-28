@@ -1,22 +1,12 @@
 .main-scene {
   display: grid;
-  &.windows-grid {
-    padding-top: 4px;
+  &.app-grid {
     grid-template-areas:
-      "nav     nav"
+      "sidebar song"
       "sidebar song";
     grid-template-columns: auto 1fr;
-    grid-template-rows: 50px calc(100vh - 54px);
+    grid-template-rows: auto 1fr;
   }
-
-  &.mac-grid {
-    grid-template-areas:
-      "nav     song"
-      "sidebar song";
-    grid-template-columns: auto 1fr;
-    grid-template-rows: 68px calc(100vh - 68px);
-  }
-
   .nav {
     grid-area: nav;
   }
@@ -26,4 +16,11 @@
   .sidebar {
     grid-area: sidebar;
   }
+}
+
+.drag {
+  -webkit-app-region: drag;
+}
+.no-drag {
+  -webkit-app-region: no-drag;
 }

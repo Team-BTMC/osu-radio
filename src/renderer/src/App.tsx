@@ -1,5 +1,7 @@
 import { Scenes } from "../../@types";
+import NoticeContainer from "./components/notice/NoticeContainer";
 import "./keyboard-registers/initialize";
+import { fetchOs, os, setOs } from "./lib/os";
 import { TokenNamespace } from "./lib/tungsten/token";
 import ErrorScene from "./scenes/ErrorScene";
 import NoScene from "./scenes/NoScene";
@@ -7,7 +9,7 @@ import DirSelectScene from "./scenes/dir-select-scene/DirSelectScene";
 import LoadingScene from "./scenes/loading-scene/LoadingScene";
 import MainScene from "./scenes/main-scene/MainScene";
 import type { JSX } from "solid-js";
-import { createSignal, Match, onCleanup, onMount, Switch } from "solid-js";
+import { createSignal, Match, onCleanup, onMount, Show, Switch } from "solid-js";
 
 export default function App(): JSX.Element {
   const [scene, setScene] = createSignal<Scenes>("");
@@ -22,9 +24,12 @@ export default function App(): JSX.Element {
     setScene(event.detail.scene);
   };
 
-  onMount(() => {
+  onMount(async () => {
     window.api.listen("changeScene", setScene);
     window.addEventListener("changeScene", eventHandler);
+
+    // Sets current OS
+    setOs(await fetchOs());
   });
 
   onCleanup(() => {
@@ -33,20 +38,24 @@ export default function App(): JSX.Element {
   });
 
   return (
-    <Switch fallback={<NoScene />}>
-      <Match when={scene() === "dir-select"}>
-        <DirSelectScene />
-      </Match>
-      <Match when={scene() === "main"}>
-        <MainScene />
-      </Match>
-      <Match when={scene() === "loading"}>
-        <LoadingScene />
-      </Match>
-      <Match when={scene() === "error"}>
-        <ErrorScene />
-      </Match>
-    </Switch>
+    <Show when={typeof os() !== "undefined"}>
+      <NoticeContainer />
+
+      <Switch fallback={<NoScene />}>
+        <Match when={scene() === "dir-select"}>
+          <DirSelectScene />
+        </Match>
+        <Match when={scene() === "main"}>
+          <MainScene />
+        </Match>
+        <Match when={scene() === "loading"}>
+          <LoadingScene />
+        </Match>
+        <Match when={scene() === "error"}>
+          <ErrorScene />
+        </Match>
+      </Switch>
+    </Show>
   );
 }
 

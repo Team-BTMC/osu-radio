@@ -13,7 +13,10 @@ export const TabsList: ParentComponent<Props> = (_props) => {
     <div
       {...state.attrs}
       {...rest}
-      class={cn("relative flex rounded-xl bg-thin-material p-1", props.class)}
+      class={cn(
+        "relative flex rounded-xl bg-thin-material p-1 gap-1 ring-1 ring-stroke",
+        props.class,
+      )}
     >
       {props.children}
     </div>

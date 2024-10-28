@@ -31,7 +31,7 @@ const TabsRoot: ParentComponent<Props> = (props) => {
 export function useTabs(): Context {
   const state = useContext(TabsContext);
   if (!state) {
-    throw new Error("useList needs to be used inisde of the `ListContext` component.");
+    throw new Error("useTabs needs to be used inisde of the `ListContext` component.");
   }
   return state;
 }

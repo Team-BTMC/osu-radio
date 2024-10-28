@@ -11,7 +11,6 @@ import { EllipsisVerticalIcon } from "lucide-solid";
 import { Component, createSignal, JSXElement, onMount, createMemo } from "solid-js";
 import { Portal } from "solid-js/web";
 import { twMerge } from "tailwind-merge";
-import Button from "@renderer/components/button/Button";
 
 type SongItemProps = {
   song: Song;
@@ -25,12 +24,10 @@ type SongItemProps = {
 
 const SongItem: Component<SongItemProps> = (props) => {
   let item: HTMLDivElement | undefined;
-  const [, setCoords] = createSignal<[number, number]>([0, 0], { equals: false });
-
   const { extractColorFromImage } = useColorExtractor();
   const { primaryColor, secondaryColor, processImage } = extractColorFromImage(props.song);
   const [localShow, setLocalShow] = createSignal(false);
-  const [mousePos, setMousePos] = createSignal<[number, number]>([0, 0]);
+  const [isHovering, setIsHovering] = createSignal(false);
 
   onMount(() => {
     if (!item) return;
@@ -71,19 +68,21 @@ const SongItem: Component<SongItemProps> = (props) => {
       return "rgba(0, 0, 0, 0.72)";
     }
 
-    const lowerAlpha = transparentize(0.9);
-    return `linear-gradient(to right, ${color} 20%, ${lowerAlpha(color)})`;
+    if (isHovering() || localShow()) {
+      return `linear-gradient(to right, ${color} 20%, ${transparentize(0.9)(color)}), rgba(255, 255, 255, 0.2)`;
+    }
+
+    return `linear-gradient(to right, ${color} 20%, ${transparentize(0.9)(color)})`;
   });
 
   return (
     <Popover
       isOpen={localShow}
       onValueChange={setLocalShow}
-      placement="right"
+      placement="right-start"
       offset={{ crossAxis: 5, mainAxis: 5 }}
-      shift={{}}
-      flip={{}}
-      mousePos={mousePos}
+      shift
+      flip
     >
       <Portal>
         <Popover.Overlay />
@@ -97,25 +96,31 @@ const SongItem: Component<SongItemProps> = (props) => {
         </Popover.Content>
       </Portal>
       <div
-        class="min-h-[72px] rounded-lg py-0.5 pl-1.5 pr-0.5 transition-colors hover:pl-2 active:pl-0.5 group"
+        onMouseEnter={() => {
+          setIsHovering(true);
+        }}
+        onMouseLeave={() => {
+          setIsHovering(false);
+        }}
+        class="min-h-[72px] rounded-lg py-0.5 pl-1.5 pr-0.5 transition-colors active:pl-0.5 group relative"
         classList={{
           "shadow-glow-blue": isSelected(),
+          "pr-6": isHovering() || localShow(),
         }}
         style={{
           background: borderColor(),
-          "transition-property": "padding",
+          "transition-property": "padding, background",
         }}
         onContextMenu={(e) => {
           e.preventDefault();
-          setMousePos([e.clientX, e.clientY]);
           setLocalShow(true);
         }}
       >
         <div
           class="relative isolate select-none rounded-lg"
+          classList={{}}
           ref={item}
           data-url={props.song.bg}
-          onContextMenu={(evt) => setCoords([evt.clientX, evt.clientY])}
         >
           <SongImage
             class={`absolute inset-0 z-[-1] h-full w-full rounded-l-[9px] rounded-r-md bg-cover bg-center bg-no-repeat bg-scroll`}
@@ -124,30 +129,30 @@ const SongItem: Component<SongItemProps> = (props) => {
             onImageLoaded={processImage}
           />
           <div
-            class="flex flex-col justify-center overflow-hidden rounded-md p-3 group-hover:pl-2.5 active:pl-4 transition-transform"
+            class="flex flex-col justify-center overflow-hidden rounded-md p-3 active:pl-4 transition-transform"
             style={{
               background: backgrund(),
-              "transition-property": "padding",
+              "transition-property": "padding, background",
             }}
           >
             <h3 class="drop-shadow-md text-[22px] font-[740] leading-7">{props.song.title}</h3>
             <p class="text-base text-subtext drop-shadow-sm">{props.song.artist}</p>
           </div>
-
-          <Popover.Anchor>
-            <Button
-              onClick={(e) => e.stopPropagation()}
-              class={twMerge(
-                "absolute right-2 top-1/2 -translate-y-1/2 opacity-0 transition-opacity group-hover:opacity-100 p-1 z-10",
-                localShow() && "opacity-100",
-              )}
-              variant="secondary"
-              size="icon"
-            >
-              <EllipsisVerticalIcon />
-            </Button>
-          </Popover.Anchor>
         </div>
+
+        <Popover.Trigger class="absolute right-0 top-0 h-full  flex items-center">
+          <div
+            class={twMerge("opacity-0 transition-opacity z-10")}
+            classList={{
+              "opacity-100": isHovering() || localShow(),
+            }}
+            style={{
+              color: isSelected() ? secondaryColor() : undefined,
+            }}
+          >
+            <EllipsisVerticalIcon />
+          </div>
+        </Popover.Trigger>
       </div>
     </Popover>
   );

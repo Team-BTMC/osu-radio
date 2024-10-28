@@ -33,5 +33,12 @@ export const SIDEBAR_PAGES = {
 
 export const NAV_ITEMS: Tab[] = [SIDEBAR_PAGES.SONGS, SIDEBAR_PAGES.PLAYLISTS] as const;
 
-const [mainActiveTab, setMainActiveTab] = createSignal<Tab["value"]>(SIDEBAR_PAGES.SONGS.value);
-export { mainActiveTab, setMainActiveTab };
+// --------------
+// STATE
+// --------------
+
+export const [sidebarActiveTab, setSidebarActiveTab] = createSignal<Tab["value"]>(
+  SIDEBAR_PAGES.SONGS.value,
+);
+
+export const [sidebarExpanded, setSidebarExpanded] = createSignal(true);
