@@ -11,7 +11,7 @@ import { Sidebar } from "./Sidebar";
 
 const MainScene: Component = () => {
   return (
-    <div class="h-screen flex flex-col">
+    <div class="min-h-screen h-full flex flex-col">
       <Switch>
         <Match when={os() === "darwin"}>
           <MacNav />
@@ -43,7 +43,7 @@ const MainScene: Component = () => {
         </div>
       </main>
 
-      <div class="pointer-events-none absolute inset-0 z-[-1]">
+      <div class="pointer-events-none fixe h-full inset-0 z-[-1]">
         <SongImage
           src={song().bg}
           instantLoad={true}
@@ -51,7 +51,7 @@ const MainScene: Component = () => {
         />
       </div>
 
-      <div class="pointer-events-none absolute inset-0 z-[-1] bg-black/80" />
+      <div class="pointer-events-none fixed h-full inset-0 z-[-1] bg-black/80" />
     </div>
   );
 };
