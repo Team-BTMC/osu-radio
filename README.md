@@ -7,7 +7,6 @@ Development status: Pre-Alpha ⚠️
   <h1 align="center">osu!radio</h1>
 </p>
 
-
 <div align="center">
   <a href="https://discord.gg/VvMzQ3AxFT" target="_blank">
     <img src="https://img.shields.io/discord/1284644086820896879?color=7289da&label=BTMC Talent Server&logo=discord&logoColor=white" alt="Discord"/>
@@ -23,6 +22,7 @@ Development status: Pre-Alpha ⚠️
 </div>
 
 ## What is osu!radio?
+
 osu!radio is a music player for the songs in your osu! library!
 
 ![osu!radio screenshot](https://github.com/user-attachments/assets/da67b906-1429-4cc1-9087-76026e94b98a "A desktop music player UI. The left sidebar has tabs for Songs and Settings, a search bar with filters, and a list of four song cards with title, artist, and length. The right side has player controls, with a square song cover image, song title, and artist. Below, icons for volume, shuffle, previous, play/pause, next, repeat, and add to playlist. In the top-right there is a queue icon.")
