@@ -4,11 +4,8 @@ description: "Setup and install dependencies"
 runs:
   using: "composite"
   steps:
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
+    - name: Set up Node.js and Bun
+      uses: actions/setup-bun@v2
       with:
-        node-version: "20"
-        cache: "npm"
-
-    - shell: bash
-      run: npm ci
+        bun-version-file: package.json
+      run: bun install --frozen-lockfile
