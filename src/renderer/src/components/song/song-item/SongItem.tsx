@@ -3,7 +3,6 @@ import draggable from "../../../lib/draggable/draggable";
 import SongHint from "../SongHint";
 import SongImage from "../SongImage";
 import { useColorExtractor } from "../color-extractor";
-import { ignoreClickInContextMenu } from "../context-menu/SongContextMenu";
 import { song as selectedSong } from "../song.utils";
 import { transparentize } from "polished";
 import Popover from "@renderer/components/popover/Popover";
@@ -19,7 +18,7 @@ type SongItemProps = {
   onSelect: (songResource: ResourceID) => any;
   draggable?: true;
   onDrop?: (before: Element | null) => any;
-  contextMenu: JSXElement;
+  contextMenu?: JSXElement;
 };
 
 const SongItem: Component<SongItemProps> = (props) => {
@@ -34,7 +33,7 @@ const SongItem: Component<SongItemProps> = (props) => {
 
     // Initialize draggable functionality
     draggable(item, {
-      onClick: ignoreClickInContextMenu(() => props.onSelect(props.song.path)),
+      onClick: () => props.onSelect(props.song.path),
       onDrop: props.onDrop ?? (() => {}),
       createHint: SongHint,
       useOnlyAsOnClickBinder: !props.draggable || selectedSong().path === props.song.path,
@@ -72,7 +71,7 @@ const SongItem: Component<SongItemProps> = (props) => {
       return `linear-gradient(to right, ${color} 20%, ${transparentize(0.9)(color)}), rgba(255, 255, 255, 0.2)`;
     }
 
-    return `linear-gradient(to right, ${color} 20%, ${transparentize(0.9)(color)})`;
+    return `linear-gradient(to right, ${color} 16%, ${transparentize(0.92)(color)})`;
   });
 
   return (
@@ -102,7 +101,7 @@ const SongItem: Component<SongItemProps> = (props) => {
         onMouseLeave={() => {
           setIsHovering(false);
         }}
-        class="min-h-[72px] rounded-lg py-0.5 pl-1.5 pr-0.5 transition-colors active:pl-0.5 group relative"
+        class="min-h-[72px] rounded-lg py-0.5 pl-1.5 pr-0.5 transition-colors active: group relative"
         classList={{
           "shadow-glow-blue": isSelected(),
           "pr-6": isHovering() || localShow(),
@@ -129,7 +128,7 @@ const SongItem: Component<SongItemProps> = (props) => {
             onImageLoaded={processImage}
           />
           <div
-            class="flex flex-col justify-center overflow-hidden rounded-md p-3 active:pl-4 transition-transform"
+            class="flex flex-col justify-center overflow-hidden rounded-md p-3 transition-transform pr-10 group-hover:pr-3"
             style={{
               background: backgrund(),
               "transition-property": "padding, background",
@@ -140,7 +139,17 @@ const SongItem: Component<SongItemProps> = (props) => {
           </div>
         </div>
 
-        <Popover.Trigger class="absolute right-0 top-0 h-full  flex items-center">
+        <Popover.Anchor
+          onClick={(e) => {
+            e.stopPropagation();
+            setLocalShow(true);
+          }}
+          class="absolute right-0 top-0 h-full  flex items-center text-subtext transition-colors hover:text-text"
+          title="Song options"
+          classList={{
+            "text-text": localShow(),
+          }}
+        >
           <div
             class={twMerge("opacity-0 transition-opacity z-10")}
             classList={{
@@ -152,7 +161,7 @@ const SongItem: Component<SongItemProps> = (props) => {
           >
             <EllipsisVerticalIcon />
           </div>
-        </Popover.Trigger>
+        </Popover.Anchor>
       </div>
     </Popover>
   );

@@ -1,3 +1,4 @@
+import { cn } from "@renderer/lib/css.utils";
 import ListItem from "./ListItem";
 import { useRovingFocusGroup } from "@renderer/lib/roving-focus-group/rovingFocusGroup";
 import { Accessor, createContext, JSX, ParentComponent, splitProps, useContext } from "solid-js";
@@ -23,11 +24,17 @@ function useProviderValue(props: ListOptions) {
 
 export const ListContext = createContext<Context>();
 const ListRoot: ParentComponent<Props> = (_props) => {
-  const [props, rest] = splitProps(_props, ["value", "onValueChange", "defaultValue", "children"]);
+  const [props, rest] = splitProps(_props, [
+    "value",
+    "onValueChange",
+    "defaultValue",
+    "children",
+    "class",
+  ]);
   const value = useProviderValue(props);
   return (
     <ListContext.Provider value={value}>
-      <div {...rest} {...value.attrs} class="flex flex-col gap-1">
+      <div {...rest} {...value.attrs} class={cn("flex flex-col gap-0.5", props.class)}>
         {props.children}
       </div>
     </ListContext.Provider>

@@ -35,7 +35,9 @@ export function useRovingFocusGroup(props: Params) {
   };
 
   const handleKeyUp = (event: KeyboardEvent) => {
-    const orderedNodes = Array.from(container.querySelectorAll(`[${ITEM_DATA_ATTR}]`));
+    const orderedNodes = Array.from(
+      container.querySelectorAll(`[${ITEM_DATA_ATTR}]:not([disabled])`),
+    );
     const currentlySelectedNodeIndex = orderedNodes.findIndex(
       (node) => node.getAttribute(ITEM_DATA_ATTR) === currentStopId(),
     );
@@ -45,7 +47,8 @@ export function useRovingFocusGroup(props: Params) {
       case "ArrowUp":
       case "ArrowLeft": {
         if (currentlySelectedNodeIndex === 0) {
-          return;
+          newIndex = currentlySelectedNodeIndex;
+          break;
         }
 
         newIndex = currentlySelectedNodeIndex - 1;
@@ -54,7 +57,8 @@ export function useRovingFocusGroup(props: Params) {
       case "ArrowDown":
       case "ArrowRight": {
         if (currentlySelectedNodeIndex === orderedNodes.length - 1) {
-          return;
+          newIndex = currentlySelectedNodeIndex;
+          break;
         }
 
         newIndex = currentlySelectedNodeIndex + 1;
@@ -80,6 +84,8 @@ export function useRovingFocusGroup(props: Params) {
     if (newIndex === -1) {
       return;
     }
+
+    event.preventDefault();
 
     const nextFocused = orderedNodes[newIndex];
     if (!canFocus(nextFocused)) {
@@ -114,12 +120,16 @@ export function useRovingFocusGroup(props: Params) {
       },
     },
     item: (
-      tabStopId: string,
+      tabStopId?: string,
       options: {
         onSelectedByClick?: () => void;
       } = {},
     ) => {
       const handleClick = () => {
+        if (!tabStopId) {
+          return;
+        }
+
         setCurrentStopId(tabStopId);
         options.onSelectedByClick?.();
         const nextFocused = container.querySelector(`[${ITEM_DATA_ATTR}="${tabStopId}"]`);

@@ -25,7 +25,7 @@ const SongDetail: Component = () => {
           src={song().bg}
           instantLoad={true}
           onImageLoaded={colorData().processImage}
-          class="size-80 rounded-lg bg-cover bg-center object-cover shadow-lg ring-2 ring-stroke ring-inset"
+          class="size-80 rounded-lg bg-cover bg-center object-cover shadow-lg"
         />
       </div>
 

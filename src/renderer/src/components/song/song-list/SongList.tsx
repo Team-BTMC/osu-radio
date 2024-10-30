@@ -1,16 +1,15 @@
-import { Optional, Order, ResourceID, SongsQueryPayload, Tag } from "../../../../../@types";
+import List from "@renderer/components/list/List";
+import { Optional, Order, ResourceID, Song, SongsQueryPayload, Tag } from "../../../../../@types";
 import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-types";
 import { namespace } from "../../../App";
 import Impulse from "../../../lib/Impulse";
 import { none, some } from "../../../lib/rust-like-utils-client/Optional";
 import InfiniteScroller from "../../InfiniteScroller";
-import SongContextMenu from "../context-menu/SongContextMenu";
-import AddToPlaylist from "../context-menu/items/AddToPlaylist";
-import PlayNext from "../context-menu/items/PlayNext";
 import SongItem from "../song-item/SongItem";
 import SongListSearch from "../song-list-search/SongListSearch";
 import { songsSearch } from "./song-list.utils";
 import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
+import { ListPlus } from "lucide-solid";
 
 export type SongViewProps = {
   isAllSongs?: boolean;
@@ -25,7 +24,6 @@ const SongList: Component<SongViewProps> = (props) => {
   const tagsSignal = createSignal(DEFAULT_TAGS_VALUE, { equals: false });
   const [order, setOrder] = createSignal(DEFAULT_ORDER_VALUE);
   const [count, setCount] = createSignal(0);
-  const [isQueueExist, setIsQueueExist] = createSignal(false);
 
   const [payload, setPayload] = createSignal<SongsQueryPayload>({
     view: props,
@@ -72,7 +70,6 @@ const SongList: Component<SongViewProps> = (props) => {
       startSong: songResource,
       ...payload(),
     });
-    setIsQueueExist(true);
   };
 
   const group = namespace.create(true);
@@ -96,18 +93,24 @@ const SongList: Component<SongViewProps> = (props) => {
                 song={s}
                 group={group}
                 onSelect={createQueue}
-                contextMenu={
-                  <SongContextMenu>
-                    <PlayNext path={s.path} disabled={!isQueueExist()} />
-                    <AddToPlaylist path={s.path} />
-                  </SongContextMenu>
-                }
+                contextMenu={<SongListContextMenuContent />}
               />
             </div>
           )}
         />
       </div>
     </>
+  );
+};
+
+const SongListContextMenuContent: Component = () => {
+  return (
+    <List class="w-40" defaultValue="playlist">
+      <List.Item value="playlist">
+        <span>Add to Playlist</span>
+        <ListPlus class="text-subtext" size={20} />
+      </List.Item>
+    </List>
   );
 };
 

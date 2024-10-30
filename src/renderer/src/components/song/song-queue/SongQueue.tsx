@@ -1,3 +1,4 @@
+import List from "@renderer/components/list/List";
 import { Song } from "../../../../../@types";
 import { namespace } from "../../../App";
 import Impulse from "../../../lib/Impulse";
@@ -101,17 +102,23 @@ const SongQueue: Component = () => {
               draggable={true}
               onSelect={() => window.api.request("queue::play", s.path)}
               onDrop={onDrop(s)}
-              contextMenu={
-                <SongContextMenu>
-                  <AddToPlaylist path={s.path} />
-                  <RemoveFromQueue path={s.path} />
-                </SongContextMenu>
-              }
-            ></SongItem>
+              contextMenu={<QueueContextMenuContent />}
+            />
           )}
         />
       </div>
     </div>
+  );
+};
+
+const QueueContextMenuContent: Component = () => {
+  return (
+    <List>
+      <List.Item>Add to Playlist</List.Item>
+      <List.Item>Remove from queue</List.Item>
+      {/* <AddToPlaylist path={s.path} />
+  <RemoveFromQueue path={s.path} /> */}
+    </List>
   );
 };
 
