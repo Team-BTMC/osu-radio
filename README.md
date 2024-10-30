@@ -27,7 +27,7 @@ osu!radio is a music player for the songs in your osu! library!
 
 ![osu!radio screenshot](https://github.com/user-attachments/assets/da67b906-1429-4cc1-9087-76026e94b98a "A desktop music player UI. The left sidebar has tabs for Songs and Settings, a search bar with filters, and a list of four song cards with title, artist, and length. The right side has player controls, with a square song cover image, song title, and artist. Below, icons for volume, shuffle, previous, play/pause, next, repeat, and add to playlist. In the top-right there is a queue icon.")
 
-### Download Guide
+### Development Setup
 
 > [!NOTE]
 > To use `git` and `bun`, you need to have [Git](https://git-scm.com/), [Node.js](https://nodejs.org/en) and [Bun](https://bun.sh/) installed.
