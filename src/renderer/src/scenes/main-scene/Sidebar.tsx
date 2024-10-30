@@ -34,13 +34,13 @@ export const Sidebar: Component = () => {
             size="square"
             variant="outlined"
             onClick={toggleSidebarShow}
-            class="app-no-drag fixed z-10"
+            class="no-drag fixed z-10"
             classList={{
               // Windows - Offset for the nav on the top
               "top-[44px] left-[16px]": os() === "win32",
 
               // Mac     - Offset for the traffic lights on the left
-              "top-[8px] left-[86px]": os() === "darwin",
+              "top-[16px] left-[86px]": os() === "darwin",
             }}
           >
             <SidebarIcon />
@@ -63,10 +63,10 @@ const SidebarTabs: Component = () => {
 
   return (
     <div
-      class="flex pl-4 pr-5 mt-2 ml-9 items-center"
+      class="flex pl-4 pr-5 mt-2 ml-9 items-center no-drag"
       classList={{
         // Mac - Offset for the traffic lights on the left
-        "pl-[86px]": os() === "darwin",
+        "pl-[86px] pt-2": os() === "darwin",
       }}
     >
       <Tabs.List class="ml-3 mr-auto">
