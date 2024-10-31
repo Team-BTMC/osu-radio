@@ -34,7 +34,7 @@ const PlaylistList: Component = () => {
             <label
               class={twMerge(
                 "absolute top-1/2 -translate-x-8 -translate-y-[22px] transform text-xl text-text",
-                showCreateBox() && "-translate-y-[126px]",
+                showCreateBox() && "-translate-y-[116px]",
               )}
               for="search_input"
             >
@@ -48,7 +48,7 @@ const PlaylistList: Component = () => {
                 setShowCreateBox(!showCreateBox());
               }}
               class="rounded-lg text-xl"
-              variant={showCreateBox() ? "accent" : "ghost"}
+              variant={showCreateBox() ? "primary" : "ghost"}
               size={"icon"}
             >
               <PlusIcon />

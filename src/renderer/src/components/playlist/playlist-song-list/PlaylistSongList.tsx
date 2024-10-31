@@ -57,7 +57,7 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
           <h3 class="text-xl">{props.playlistName}</h3>
         </div>
         <Button
-          variant={editMode() ? "accent" : "ghost"}
+          variant={editMode() ? "primary" : "ghost"}
           size={"icon"}
           class="rounded-lg"
           onClick={() => {
