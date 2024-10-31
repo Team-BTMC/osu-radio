@@ -1,9 +1,9 @@
-import { Component, For } from "solid-js";
+import { Component, For, Show } from "solid-js";
 import { Song } from "src/@types";
 import SongContextMenuItem from "../SongContextMenuItem";
 import { noticeError } from "@renderer/components/playlist/playlist.utils";
 import { addNotice } from "@renderer/components/notice/NoticeContainer";
-import { BadgeCheckIcon } from "lucide-solid";
+import { BadgeCheckIcon, CheckIcon } from "lucide-solid";
 
 type PlaylistChooserProps = {
   song: Song;
@@ -25,6 +25,14 @@ const PlaylistChooser: Component<PlaylistChooserProps> = (props) => {
     });
   };
 
+  const isInPlaylist = (song: Song, playlistName: string) => {
+    if (song.playlists === undefined) {
+      return false;
+    }
+
+    return song.playlists.includes(playlistName);
+  };
+
   return (
     <For
       fallback={
@@ -41,6 +49,9 @@ const PlaylistChooser: Component<PlaylistChooserProps> = (props) => {
           }}
         >
           <p>{child}</p>
+          <Show when={isInPlaylist(props.song, props.playlistNames[index()])}>
+            <CheckIcon size={20} />
+          </Show>
         </SongContextMenuItem>
       )}
     </For>

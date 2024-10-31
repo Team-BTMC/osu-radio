@@ -22,18 +22,22 @@ export function noticeError(error: string) {
   });
 }
 
-export function deletePlaylist(name: string, reset: Impulse) {
-  window.api.request("playlist::delete", name);
-  reset.pulse();
-  addNotice({
-    variant: "success",
-    title: "Playlist deleted",
-    description: "Playlist " + name + " successfully deleted!",
-    icon: BadgeCheckIcon({ size: 20 }),
-  });
+export async function deletePlaylist(name: string, reset: Impulse) {
+  const result = await window.api.request("playlist::delete", name);
+  if (result.isError) {
+    noticeError(result.error);
+  } else {
+    reset.pulse();
+    addNotice({
+      variant: "success",
+      title: "Playlist deleted",
+      description: "Playlist " + name + " successfully deleted!",
+      icon: BadgeCheckIcon({ size: 20 }),
+    });
+  }
 }
 
-export const renamePlaylist = async (oldName: string, newName: string) => {
+export async function renamePlaylist(oldName: string, newName: string) {
   newName = newName.trim();
   if (newName === undefined || newName === "" || newName === oldName) {
     return;
@@ -51,12 +55,12 @@ export const renamePlaylist = async (oldName: string, newName: string) => {
     variant: "success",
     icon: BadgeCheckIcon({ size: 20 }),
   });
-};
+}
 
-export const deleteSong = async (playlistName: string, song: Song) => {
+export async function deleteSong(playlistName: string, song: Song) {
   const result = await window.api.request("playlist::remove", playlistName, song);
   if (result.isError) {
     noticeError(result.error);
     return;
   }
-};
+}

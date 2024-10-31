@@ -81,6 +81,9 @@ export type Song = {
   // Colors
   primaryColor?: string;
   secondaryColor?: string;
+
+  // Playlists
+  playlists?: string[];
 } & Resource;
 
 // Serialization is in JSON that's why properties are only single letter
