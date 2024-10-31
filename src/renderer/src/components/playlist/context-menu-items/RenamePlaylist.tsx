@@ -12,7 +12,6 @@ const RenamePlaylist: Component<RenamePlaylistProps> = (props) => {
       onClick={() => {
         props.setEdit(true);
       }}
-      class="hover:bg-red/20"
     >
       <p>Rename playlist</p>
       <PencilLineIcon size={20} />
