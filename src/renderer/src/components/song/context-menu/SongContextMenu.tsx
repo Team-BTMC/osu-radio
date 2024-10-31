@@ -1,4 +1,4 @@
-import "../../../assets/css/song/song-context-menu.css";
+import "./SongContextMenu.css";
 import { Component, For, JSX } from "solid-js";
 
 type SongContextMenuProps = {
@@ -10,14 +10,12 @@ const SongContextMenu: Component<SongContextMenuProps> = (props) => {
 
   return (
     <div
-      class="z-30 min-w-48 rounded-xl border border-stroke bg-thick-material max-h-screen overflow-y-scroll [scrollbar-width:none]"
+      // max-h-screen overflow-y-scroll [scrollbar-width:none]
+      class="flex flex-col gap-1 rounded-xl bg-thick-material p-2 z-30 min-w-48 ring-1 ring-inset ring-stroke backdrop-blur-md shadow-xl"
       ref={menu}
     >
-      <div class="flex flex-col gap-1 rounded-xl bg-thick-material p-2">
-        <For
-          fallback={<div>asdasd</div>}
-          each={Array.isArray(props.children) ? props.children : [props.children]}
-        >
+      <div class="flex flex-col">
+        <For each={Array.isArray(props.children) ? props.children : [props.children]}>
           {(child) => child}
         </For>
       </div>
