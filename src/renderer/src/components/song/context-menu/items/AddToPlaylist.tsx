@@ -33,7 +33,7 @@ const AddToPlaylist: Component<AddToPlaylistProps> = (props) => {
       placement="right"
     >
       <Popover.Content>
-        <SongContextMenu>
+        <SongContextMenu class="max-h-screen overflow-y-scroll overflow-x-hidden [scrollbar-width:none] backdrop-blur-md">
           <PlaylistChooser playlistNames={playlistNames()} song={props.song} />
         </SongContextMenu>
       </Popover.Content>
