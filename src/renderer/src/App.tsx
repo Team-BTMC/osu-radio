@@ -1,5 +1,6 @@
 import { Scenes } from "../../@types";
 import NoticeContainer from "./components/notice/NoticeContainer";
+import Popover from "./components/popover/Popover";
 import "./keyboard-registers/initialize";
 import { fetchOs, os, setOs } from "./lib/os";
 import { TokenNamespace } from "./lib/tungsten/token";
@@ -55,6 +56,8 @@ export default function App(): JSX.Element {
           <ErrorScene />
         </Match>
       </Switch>
+
+      <Popover.PortalMountStack />
     </Show>
   );
 }

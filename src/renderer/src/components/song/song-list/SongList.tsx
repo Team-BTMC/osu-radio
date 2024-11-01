@@ -1,5 +1,5 @@
 import List from "@renderer/components/list/List";
-import { Optional, Order, ResourceID, Song, SongsQueryPayload, Tag } from "../../../../../@types";
+import { Optional, Order, ResourceID, SongsQueryPayload, Tag } from "../../../../../@types";
 import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-types";
 import { namespace } from "../../../App";
 import Impulse from "../../../lib/Impulse";
@@ -105,8 +105,8 @@ const SongList: Component<SongViewProps> = (props) => {
 
 const SongListContextMenuContent: Component = () => {
   return (
-    <List class="w-40" defaultValue="playlist">
-      <List.Item value="playlist">
+    <List class="w-40">
+      <List.Item>
         <span>Add to Playlist</span>
         <ListPlus class="text-subtext" size={20} />
       </List.Item>

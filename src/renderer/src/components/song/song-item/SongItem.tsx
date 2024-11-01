@@ -8,7 +8,6 @@ import { transparentize } from "polished";
 import Popover from "@renderer/components/popover/Popover";
 import { EllipsisVerticalIcon } from "lucide-solid";
 import { Component, createSignal, JSXElement, onMount, createMemo } from "solid-js";
-import { Portal } from "solid-js/web";
 import { twMerge } from "tailwind-merge";
 
 type SongItemProps = {
@@ -83,7 +82,7 @@ const SongItem: Component<SongItemProps> = (props) => {
       shift
       flip
     >
-      <Portal>
+      <Popover.Portal>
         <Popover.Overlay />
         <Popover.Content
           onClick={(e) => {
@@ -93,7 +92,8 @@ const SongItem: Component<SongItemProps> = (props) => {
         >
           {props.contextMenu}
         </Popover.Content>
-      </Portal>
+      </Popover.Portal>
+
       <div
         onMouseEnter={() => {
           setIsHovering(true);
@@ -128,7 +128,7 @@ const SongItem: Component<SongItemProps> = (props) => {
             onImageLoaded={processImage}
           />
           <div
-            class="flex flex-col justify-center overflow-hidden rounded-md p-3 transition-transform pr-10 group-hover:pr-3"
+            class="flex flex-col justify-center overflow-hidden rounded-md p-3 transition-transform pr-10 group-hover:pr-6"
             style={{
               background: backgrund(),
               "transition-property": "padding, background",

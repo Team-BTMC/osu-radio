@@ -1,8 +1,8 @@
 import { cn, sn } from "@renderer/lib/css.utils";
-import { usePopover } from "./Popover";
+import { popoverStack, usePopover } from "./Popover";
 import { ComputePositionReturn } from "@floating-ui/dom";
 import createFocusTrap from "solid-focus-trap";
-import { Component, onCleanup, onMount, Show } from "solid-js";
+import { Component, createMemo, onCleanup, onMount, Show } from "solid-js";
 import { JSX } from "solid-js/jsx-runtime";
 
 function stylesFromPosition(position: ComputePositionReturn | null): JSX.CSSProperties | undefined {
@@ -20,13 +20,21 @@ export type Props = JSX.IntrinsicElements["div"];
 const PopoverContent: Component<Props> = (props) => {
   const state = usePopover();
 
+  const isLastPopoupOpen = createMemo(() => {
+    return state.isOpen() && popoverStack().at(-1) === state.id();
+  });
+
   createFocusTrap({
     element: state.contentRef,
-    enabled: state.isOpen,
+    enabled: isLastPopoupOpen,
   });
 
   onMount(() => {
     const handleKeyUp = (e: KeyboardEvent) => {
+      if (!isLastPopoupOpen()) {
+        return;
+      }
+
       switch (e.key) {
         case "Escape":
           state.close();

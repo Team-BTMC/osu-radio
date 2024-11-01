@@ -1,5 +1,5 @@
 import useControllableState from "../controllable-state";
-import { Accessor, createMemo, createSignal } from "solid-js";
+import { Accessor, createMemo, createSignal, onMount } from "solid-js";
 
 const ITEM_DATA_ATTR = "data-item";
 const DEFAULT_SELECTED_VALUE = "";
@@ -34,10 +34,26 @@ export function useRovingFocusGroup(props: Params) {
     setHasMounted(true);
   };
 
+  const findOrderedNodes = () => {
+    return Array.from(container.querySelectorAll(`[${ITEM_DATA_ATTR}]:not([disabled])`));
+  };
+
+  onMount(() => {
+    if (currentStopId()) {
+      return;
+    }
+
+    const [firstNode] = findOrderedNodes();
+    if (!canFocus(firstNode)) {
+      return;
+    }
+
+    firstNode.focus();
+    setCurrentStopId(firstNode.getAttribute(ITEM_DATA_ATTR)!);
+  });
+
   const handleKeyUp = (event: KeyboardEvent) => {
-    const orderedNodes = Array.from(
-      container.querySelectorAll(`[${ITEM_DATA_ATTR}]:not([disabled])`),
-    );
+    const orderedNodes = findOrderedNodes();
     const currentlySelectedNodeIndex = orderedNodes.findIndex(
       (node) => node.getAttribute(ITEM_DATA_ATTR) === currentStopId(),
     );

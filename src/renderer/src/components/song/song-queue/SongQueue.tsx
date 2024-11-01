@@ -4,11 +4,9 @@ import { namespace } from "../../../App";
 import Impulse from "../../../lib/Impulse";
 import scrollIfNeeded from "../../../lib/tungsten/scroll-if-needed";
 import InfiniteScroller from "../../InfiniteScroller";
-import SongContextMenu from "../context-menu/SongContextMenu";
-import AddToPlaylist from "../context-menu/items/AddToPlaylist";
-import RemoveFromQueue from "../context-menu/items/RemoveFromQueue";
 import SongItem from "../song-item/SongItem";
 import { Component, createSignal, onCleanup, onMount } from "solid-js";
+import { DeleteIcon, ListPlus } from "lucide-solid";
 
 const SongQueue: Component = () => {
   const [count, setCount] = createSignal(0);
@@ -78,8 +76,8 @@ const SongQueue: Component = () => {
   });
 
   return (
-    <div ref={view} class="flex h-full flex-col">
-      <div class="sticky top-0 z-10 flex items-center justify-between px-5 pb-2 pt-5">
+    <div class="flex flex-col w-full">
+      <div class="flex items-center justify-between px-5 pb-2 pt-5">
         <h2 class="text-sm font-bold">
           <span>Next songs on the queue</span>
           <span class="text-subtext"> ({count()})</span>
@@ -99,10 +97,9 @@ const SongQueue: Component = () => {
               song={s}
               group={group}
               selectable={true}
-              draggable={true}
               onSelect={() => window.api.request("queue::play", s.path)}
               onDrop={onDrop(s)}
-              contextMenu={<QueueContextMenuContent />}
+              contextMenu={<QueueContextMenuContent song={s} />}
             />
           )}
         />
@@ -111,13 +108,21 @@ const SongQueue: Component = () => {
   );
 };
 
-const QueueContextMenuContent: Component = () => {
+type QueueContextMenuContentProps = { song: Song };
+const QueueContextMenuContent: Component<QueueContextMenuContentProps> = (props) => {
   return (
-    <List>
-      <List.Item>Add to Playlist</List.Item>
-      <List.Item>Remove from queue</List.Item>
-      {/* <AddToPlaylist path={s.path} />
-  <RemoveFromQueue path={s.path} /> */}
+    <List class="w-52">
+      <List.Item>
+        <span>Add to Playlist</span>
+        <ListPlus class="text-subtext" size={20} />
+      </List.Item>
+      <List.Item
+        onClick={() => window.api.request("queue::removeSong", props.song.path)}
+        class="text-red"
+      >
+        <span>Remove from queue</span>
+        <DeleteIcon class="opacity-80" size={20} />
+      </List.Item>
     </List>
   );
 };

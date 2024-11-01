@@ -3,7 +3,6 @@ import { Props as PopoverContentProps } from "@renderer/components/popover/Popov
 import { cn } from "@renderer/lib/css.utils";
 import { ChevronDownIcon } from "lucide-solid";
 import { Component, createMemo, JSX, mergeProps, ParentComponent, splitProps } from "solid-js";
-import { Portal } from "solid-js/web";
 
 // ------------
 // Container
@@ -67,7 +66,7 @@ export const FilterOptionTrigger: Component<FilterOptionTriggerProps> = (_props)
     <Popover.Trigger
       {...rest}
       class={cn(
-        "hover:bg-surface py-1 px-2.5 rounded text-sm flex gap-1 items-center",
+        "hover:bg-surface py-1 px-2.5 rounded text-sm flex gap-1.5 items-center focus-visible:bg-surface",
         props.class,
       )}
     >
@@ -102,7 +101,7 @@ export const FilterOptionItem: Component<FilterOptionItemProps> = (_props) => {
 // ------------
 const FilterOptionContent: ParentComponent<PopoverContentProps> = (props) => {
   return (
-    <Portal>
+    <Popover.Portal>
       <Popover.Overlay />
       <Popover.Content
         {...props}
@@ -111,7 +110,7 @@ const FilterOptionContent: ParentComponent<PopoverContentProps> = (props) => {
           props.class,
         )}
       />
-    </Portal>
+    </Popover.Portal>
   );
 };
 

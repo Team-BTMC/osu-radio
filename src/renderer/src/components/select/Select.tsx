@@ -41,7 +41,7 @@ export const SelectContent: Component<ListProps> = (props) => {
   });
 
   return (
-    <>
+    <Popover.Portal>
       <Popover.Overlay />
       <Popover.Content
         style={{
@@ -50,7 +50,7 @@ export const SelectContent: Component<ListProps> = (props) => {
       >
         <List {...props} />
       </Popover.Content>
-    </>
+    </Popover.Portal>
   );
 };
 export const SelectOption: Component<ListItemProps> = (props) => {

@@ -1,3 +1,4 @@
+import { Token, TokenNamespace } from "@renderer/lib/tungsten/token";
 import PopoverContent from "./PopoverContent";
 import PopoverOverlay from "./PopoverOverlay";
 import PopoverTrigger, { PopoverAnchor } from "./PopoverTrigger";
@@ -22,7 +23,10 @@ import {
   ParentComponent,
   Accessor,
   createEffect,
+  onMount,
+  onCleanup,
 } from "solid-js";
+import { PopoverPortal, PopoverPortalMountStack } from "./PopoverPortal";
 
 export const DEFAULT_POPOVER_OPEN = false;
 
@@ -36,6 +40,9 @@ export type Props = {
   isOpen?: Accessor<boolean>;
   onValueChange?: (newOpen: boolean) => void;
 };
+
+export const [popoverStack, setPopoverStack] = createSignal<Token[]>([]);
+const stackIds = new TokenNamespace();
 
 export type Context = ReturnType<typeof useProviderValue>;
 
@@ -51,6 +58,13 @@ function useProviderValue(props: Props) {
   const [position, setPosition] = createSignal<ComputePositionReturn | null>(null);
   const [triggerRef, _setTriggerRef] = createSignal<HTMLElement | null>(null);
   const [contentRef, _setContentRef] = createSignal<HTMLDivElement | null>(null);
+  const [id, setId] = createSignal<string>("");
+
+  onMount(() => {
+    onCleanup(() => {
+      stackIds.destroy(id());
+    });
+  });
 
   createEffect(() => {
     const triggerElement = triggerRef();
@@ -124,10 +138,26 @@ function useProviderValue(props: Props) {
     }).then(setPosition);
   };
 
+  createEffect(() => {
+    if (isOpen()) {
+      const newId = stackIds.create();
+      setPopoverStack((p) => [...p, newId]);
+      setId(newId);
+    } else {
+      setPopoverStack((p) => p.filter((popoverId) => popoverId !== id()));
+      setId("");
+    }
+  });
+
   return {
+    id,
     isOpen,
-    open: () => setIsOpen(true),
-    close: () => setIsOpen(false),
+    open: () => {
+      setIsOpen(true);
+    },
+    close: () => {
+      setIsOpen(false);
+    },
     toggle: () => setIsOpen((o) => !o),
     position,
     setPosition,
@@ -154,6 +184,8 @@ export function usePopover(): Context {
 }
 
 const Popover = Object.assign(PopoverRoot, {
+  Portal: PopoverPortal,
+  PortalMountStack: PopoverPortalMountStack,
   Content: PopoverContent,
   Trigger: PopoverTrigger,
   Anchor: PopoverAnchor,
