@@ -46,14 +46,14 @@ const AddToPlaylist: Component<AddToPlaylistProps> = (props) => {
       </Popover.Content>
       <Popover.Trigger>
         <SongContextMenuItem
-          onClick={(e) => {
+          onClick={(e: MouseEvent) => {
             e.stopPropagation();
           }}
-          onHover={() => {
+          onMouseOver={() => {
             setShowChooser(true);
             clearTimeout(timeoutId());
           }}
-          onHoverEnd={() => {
+          onMouseLeave={() => {
             setTimeoutId(
               setTimeout(() => {
                 setShowChooser(false);

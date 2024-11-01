@@ -14,8 +14,6 @@ type PlaylistChooserProps = {
 };
 
 const PlaylistChooser: Component<PlaylistChooserProps> = (props) => {
-  // const [timeoutId, setTimeoutId] = props.timeoutId;
-
   const addToPlaylist = async (name: string) => {
     const result = await window.api.request("playlist::add", name, props.song);
     if (result.isError) {
@@ -52,10 +50,10 @@ const PlaylistChooser: Component<PlaylistChooserProps> = (props) => {
           onClick={() => {
             addToPlaylist(props.playlistNames[index()]);
           }}
-          onHover={() => {
+          onMouseOver={() => {
             clearTimeout(props.timeoutId());
           }}
-          onHoverEnd={() => {
+          onMouseLeave={() => {
             props.setTimeoutId(
               setTimeout(() => {
                 props.setShowChooser(false);
