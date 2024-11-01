@@ -1,4 +1,4 @@
-import { Component, For, Show } from "solid-js";
+import { Accessor, Component, For, Setter, Show } from "solid-js";
 import { Song } from "src/@types";
 import SongContextMenuItem from "../SongContextMenuItem";
 import { noticeError } from "@renderer/components/playlist/playlist.utils";
@@ -8,9 +8,14 @@ import { BadgeCheckIcon, CheckIcon } from "lucide-solid";
 type PlaylistChooserProps = {
   song: Song;
   playlistNames: string[];
+  setShowChooser: Setter<boolean>;
+  timeoutId: Accessor<NodeJS.Timeout | undefined>;
+  setTimeoutId: Setter<NodeJS.Timeout | undefined>;
 };
 
 const PlaylistChooser: Component<PlaylistChooserProps> = (props) => {
+  // const [timeoutId, setTimeoutId] = props.timeoutId;
+
   const addToPlaylist = async (name: string) => {
     const result = await window.api.request("playlist::add", name, props.song);
     if (result.isError) {
@@ -46,6 +51,16 @@ const PlaylistChooser: Component<PlaylistChooserProps> = (props) => {
         <SongContextMenuItem
           onClick={() => {
             addToPlaylist(props.playlistNames[index()]);
+          }}
+          onHover={() => {
+            clearTimeout(props.timeoutId());
+          }}
+          onHoverEnd={() => {
+            props.setTimeoutId(
+              setTimeout(() => {
+                props.setShowChooser(false);
+              }, 320),
+            );
           }}
         >
           <p>{child}</p>

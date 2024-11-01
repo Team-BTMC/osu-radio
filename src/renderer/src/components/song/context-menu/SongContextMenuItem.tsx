@@ -4,6 +4,7 @@ import { twMerge } from "tailwind-merge";
 type SongContextMenuItemProps = {
   onClick: (event: MouseEvent) => any;
   onHover?: (event: MouseEvent) => any;
+  onHoverEnd?: (event: MouseEvent) => any;
   children: any;
   class?: JSX.ButtonHTMLAttributes<HTMLButtonElement>["class"];
   disabled?: JSX.ButtonHTMLAttributes<HTMLButtonElement>["disabled"];
@@ -15,17 +16,11 @@ const SongContextMenuItem: Component<SongContextMenuItemProps> = (props) => {
 
   const divAccessor = (div: HTMLElement) => {
     div.addEventListener("click", props.onClick);
-    if (props.onHover !== undefined) {
-      div.addEventListener("mouseover", props.onHover);
-    }
     item = div;
   };
 
   onCleanup(() => {
     item?.removeEventListener("click", props.onClick);
-    if (props.onHover !== undefined) {
-      item?.removeEventListener("mouseover", props.onHover);
-    }
   });
 
   return (
@@ -37,6 +32,8 @@ const SongContextMenuItem: Component<SongContextMenuItemProps> = (props) => {
         buttonDisabled && "text-overlay hover:cursor-auto hover:bg-transparent",
       )}
       disabled={buttonDisabled}
+      onMouseOver={props.onHover}
+      onMouseLeave={props.onHoverEnd}
     >
       <div class="flex flex-row items-center justify-between w-full gap-1">{props.children}</div>
     </button>

@@ -13,6 +13,7 @@ type AddToPlaylistProps = {
 const AddToPlaylist: Component<AddToPlaylistProps> = (props) => {
   const [playlistNames, setPlaylistNames] = createSignal<string[]>([]);
   const [showChooser, setShowChooser] = createSignal<boolean>(false);
+  const [timeoutId, setTimeoutId] = createSignal<NodeJS.Timeout>();
 
   onMount(async () => {
     const playlists = await window.api.request("query::playlistNames");
@@ -34,7 +35,13 @@ const AddToPlaylist: Component<AddToPlaylistProps> = (props) => {
     >
       <Popover.Content>
         <SongContextMenu class="max-h-screen overflow-y-scroll overflow-x-hidden [scrollbar-width:none] backdrop-blur-md">
-          <PlaylistChooser playlistNames={playlistNames()} song={props.song} />
+          <PlaylistChooser
+            playlistNames={playlistNames()}
+            song={props.song}
+            setShowChooser={setShowChooser}
+            setTimeoutId={setTimeoutId}
+            timeoutId={timeoutId}
+          />
         </SongContextMenu>
       </Popover.Content>
       <Popover.Trigger>
@@ -44,6 +51,14 @@ const AddToPlaylist: Component<AddToPlaylistProps> = (props) => {
           }}
           onHover={() => {
             setShowChooser(true);
+            clearTimeout(timeoutId());
+          }}
+          onHoverEnd={() => {
+            setTimeoutId(
+              setTimeout(() => {
+                setShowChooser(false);
+              }, 320),
+            );
           }}
         >
           <p>Add to Playlist</p>
