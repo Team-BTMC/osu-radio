@@ -9,7 +9,6 @@ import { Component, createSignal, onCleanup, onMount, Show } from "solid-js";
 import { twMerge } from "tailwind-merge";
 
 const PlaylistList: Component = () => {
-  const [, setCount] = createSignal(0);
   const resetListing = new Impulse();
   const [showCreateBox, setShowCreateBox] = createSignal(false);
 
@@ -64,13 +63,10 @@ const PlaylistList: Component = () => {
         <InfiniteScroller
           apiKey={"query::playlists"}
           apiInitKey={"query::playlists::init"}
-          setCount={setCount}
           reset={resetListing}
           fallback={<div>No playlists...</div>}
           class="mx-5 my-6 flex w-full flex-col gap-4"
-          builder={(s) => (
-            <PlaylistItem playlist={s} group={group} reset={resetListing}></PlaylistItem>
-          )}
+          builder={(s) => <PlaylistItem playlist={s} group={group} reset={resetListing} />}
         />
       </div>
     </div>

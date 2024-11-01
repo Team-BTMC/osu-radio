@@ -12,8 +12,8 @@ type RemoveFromPlaylistProps = {
 const RemoveFromPlaylist: Component<RemoveFromPlaylistProps> = (props) => {
   return (
     <SongContextMenuItem
-      onClick={async () => {
-        await deleteSong(props.playlistName, props.song);
+      onClick={() => {
+        deleteSong(props.playlistName, props.song);
       }}
       class="hover:bg-red/20"
     >

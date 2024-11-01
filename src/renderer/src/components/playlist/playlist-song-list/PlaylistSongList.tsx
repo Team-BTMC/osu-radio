@@ -90,14 +90,14 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
                     <RemoveFromPlaylist playlistName={props.playlistName} song={s} />
                   </SongContextMenu>
                 }
-              ></SongItem>
+              />
               <Show when={editMode() === true}>
                 <Button
                   variant={"ghost"}
                   size={"icon"}
                   // this needs to be slightly larger for some reason (probably margin)
                   class="ml-3 w-10 rounded-lg"
-                  onClick={async () => await deleteSong(props.playlistName, s)}
+                  onClick={() => deleteSong(props.playlistName, s)}
                 >
                   <Trash2Icon class="text-red" />
                 </Button>
