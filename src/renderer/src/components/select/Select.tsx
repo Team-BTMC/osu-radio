@@ -32,7 +32,6 @@ export const SelectContent: Component<ListProps> = (props) => {
   const width = createMemo(() => {
     state.isOpen();
     const trigger = state.triggerRef();
-    console.log("trigger", trigger?.getBoundingClientRect());
     if (!trigger) {
       return "0px";
     }
