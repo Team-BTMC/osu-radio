@@ -87,11 +87,11 @@ export const FilterOptionItem: Component<FilterOptionItemProps> = (_props) => {
     <div
       {...rest}
       class={cn(
-        "hover:bg-surface py-1 px-2.5 rounded text-sm flex gap-1 items-center",
+        "hover:bg-surface py-1 px-2.5 rounded text-sm flex gap-1 items-center focus-within:bg-surface",
         props.class,
       )}
     >
-      <span>{props.children}</span>
+      {props.children}
     </div>
   );
 };

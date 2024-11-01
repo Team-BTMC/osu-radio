@@ -71,7 +71,7 @@ const Queue: Component = () => {
       isOpen={isOpen}
     >
       <Popover.Anchor onClick={() => setIsOpen(true)} class="no-drag absolute right-2 top-2">
-        <Button size="square" variant="outlined">
+        <Button size="square" variant="outlined" class="no-drag">
           <Layers3Icon size={20} />
         </Button>
       </Popover.Anchor>

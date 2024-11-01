@@ -109,8 +109,8 @@ const SongListSearch: Component<SearchProps> = (props) => {
         }}
       >
         <div class="mt-2 flex flex-nowrap items-center gap-2 overflow-y-auto">
-          <SongListSearchOrderBy setOrder={props.setOrder} />
-          <SongListSearchTags />
+          <SongListSearchOrderBy disabled={!filterExpanded()} setOrder={props.setOrder} />
+          <SongListSearchTags disabled={!filterExpanded()} />
         </div>
       </div>
     </div>

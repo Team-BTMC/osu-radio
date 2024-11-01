@@ -70,8 +70,8 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
     >
       <FilterOption.Label>Sort by</FilterOption.Label>
       <FilterOption.List>
-        <FilterOption.Item class="text-subtext" onClick={switchDirections}>
-          <div class="p-0.5">
+        <FilterOption.Item class="text-subtext">
+          <button disabled={props.disabled} onClick={switchDirections} class="p-0.5">
             <Switch>
               <Match when={direction() === "asc"}>
                 <SortAsc size={16} />
@@ -80,10 +80,10 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
                 <SortDesc size={16} />
               </Match>
             </Switch>
-          </div>
+          </button>
         </FilterOption.Item>
         <div class="h-4 w-px bg-stroke" />
-        <FilterOption.Trigger>{optionLabel()}</FilterOption.Trigger>
+        <FilterOption.Trigger disabled={props.disabled}>{optionLabel()}</FilterOption.Trigger>
       </FilterOption.List>
 
       <FilterOption.Content class="w-48">
