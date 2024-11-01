@@ -18,7 +18,7 @@ const MainScene: Component = () => {
         <Match when={os() === "darwin"}>
           <MacNav />
         </Match>
-        <Match when={os() === "win32"}>
+        <Match when={os() !== "darwin"}>
           <WindownsNav />
         </Match>
       </Switch>
@@ -30,7 +30,7 @@ const MainScene: Component = () => {
           class="song relative flex flex-1 items-center justify-center"
           classList={{
             "m-2 rounded-3xl": os() === "darwin",
-            "mt-0 m-2": os() === "win32",
+            "mt-0 m-2": os() !== "darwin",
           }}
         >
           <SongDetail />

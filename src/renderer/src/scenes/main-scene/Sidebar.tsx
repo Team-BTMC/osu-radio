@@ -36,8 +36,8 @@ export const Sidebar: Component = () => {
             onClick={toggleSidebarShow}
             class="no-drag fixed z-10"
             classList={{
-              // Windows - Offset for the nav on the top
-              "top-[44px] left-[16px]": os() === "win32",
+              // Windows/Linux - Offset for the nav on the top
+              "top-[44px] left-[16px]": os() !== "darwin",
 
               // Mac     - Offset for the traffic lights on the left
               "top-[16px] left-[86px]": os() === "darwin",
