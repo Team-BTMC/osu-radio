@@ -144,6 +144,7 @@ function useProviderValue(props: Props) {
       setPopoverStack((p) => [...p, newId]);
       setId(newId);
     } else {
+      stackIds.destroy(id());
       setPopoverStack((p) => p.filter((popoverId) => popoverId !== id()));
       setId("");
     }
