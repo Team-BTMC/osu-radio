@@ -21,6 +21,7 @@ type Params = {
   prop?: Accessor<string>;
   onChange?: (newValue: string) => void;
   updateFocusOnHover?: boolean;
+  onKeyUp?: () => void;
 };
 export function useRovingFocusGroup(props: Params = {}) {
   let container!: HTMLElement;
@@ -54,6 +55,8 @@ export function useRovingFocusGroup(props: Params = {}) {
   });
 
   const handleKeyUp = (event: KeyboardEvent) => {
+    props.onKeyUp?.();
+
     const orderedNodes = findOrderedNodes();
     const currentlySelectedNodeIndex = orderedNodes.findIndex(
       (node) => node.getAttribute(ITEM_DATA_ATTR) === currentStopId(),
@@ -140,6 +143,7 @@ export function useRovingFocusGroup(props: Params = {}) {
       tabStopId?: string,
       options: {
         onSelectedByClick?: () => void;
+        onPointerMove?: () => void;
       } = {},
     ) => {
       const getCurrentOption = () => {
@@ -147,6 +151,8 @@ export function useRovingFocusGroup(props: Params = {}) {
       };
 
       const handlePointerMove = () => {
+        options.onPointerMove?.();
+
         if (!props.updateFocusOnHover) {
           return;
         }

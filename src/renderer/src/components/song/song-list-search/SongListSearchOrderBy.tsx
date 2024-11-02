@@ -1,4 +1,4 @@
-import List from "@renderer/components/list/List";
+import SelectableList from "@renderer/components/selectable-list/SelectableList";
 import { SortAsc, SortDesc } from "lucide-solid";
 import { Component, createMemo, createSignal, For, Match, Setter, Switch } from "solid-js";
 import { OrderDirection, OrderOptions, Order } from "src/@types";
@@ -87,7 +87,7 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
       </FilterOption.List>
 
       <FilterOption.Content class="w-48">
-        <List
+        <SelectableList
           onValueChange={(newSelectedOption) => {
             setOption(newSelectedOption as OrderOptions);
             handlerOrderChanged();
@@ -96,12 +96,12 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
         >
           <For each={orderOptions}>
             {(option) => (
-              <List.Item onSelectedByClick={() => setIsOpen(false)} value={option.value}>
+              <SelectableList.Item onSelectedByClick={() => setIsOpen(false)} value={option.value}>
                 {option.text}
-              </List.Item>
+              </SelectableList.Item>
             )}
           </For>
-        </List>
+        </SelectableList>
       </FilterOption.Content>
     </FilterOption>
   );

@@ -1,4 +1,3 @@
-import List from "@renderer/components/list/List";
 import { Optional, Order, ResourceID, SongsQueryPayload, Tag } from "../../../../../@types";
 import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-types";
 import { namespace } from "../../../App";
@@ -10,6 +9,7 @@ import SongListSearch from "../song-list-search/SongListSearch";
 import { songsSearch } from "./song-list.utils";
 import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { ListPlus } from "lucide-solid";
+import DropdownList from "@renderer/components/dropdown-list/DropdownList";
 
 export type SongViewProps = {
   isAllSongs?: boolean;
@@ -105,12 +105,16 @@ const SongList: Component<SongViewProps> = (props) => {
 
 const SongListContextMenuContent: Component = () => {
   return (
-    <List class="w-40">
-      <List.Item>
+    <DropdownList class="w-40">
+      <DropdownList.Item>
         <span>Add to Playlist</span>
         <ListPlus class="text-subtext" size={20} />
-      </List.Item>
-    </List>
+      </DropdownList.Item>
+      <DropdownList.Item>
+        <span>Play next</span>
+        <ListPlus class="text-subtext" size={20} />
+      </DropdownList.Item>
+    </DropdownList>
   );
 };
 

@@ -1,8 +1,8 @@
 import { Component, createMemo, JSX, ParentComponent } from "solid-js";
 import Popover, { Props as PopoverProps, usePopover } from "../popover/Popover";
 import { ChevronsUpDownIcon } from "lucide-solid";
-import List, { Props as ListProps } from "../list/List";
-import ListItem, { Props as ListItemProps } from "../list/ListItem";
+import SelectableList, { Props as ListProps } from "../selectable-list/SelectableList";
+import SelectableListItem, { Props as ListItemProps } from "../selectable-list/SelectableListItem";
 
 export const SelectContainer: ParentComponent<PopoverProps> = (props) => {
   return (
@@ -47,13 +47,13 @@ export const SelectContent: Component<ListProps> = (props) => {
           width: width(),
         }}
       >
-        <List {...props} />
+        <SelectableList {...props} />
       </Popover.Content>
     </Popover.Portal>
   );
 };
 export const SelectOption: Component<ListItemProps> = (props) => {
-  return <ListItem {...props} />;
+  return <SelectableListItem {...props} />;
 };
 
 const Select = Object.assign(SelectContainer, {

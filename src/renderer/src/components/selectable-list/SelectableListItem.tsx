@@ -1,26 +1,22 @@
-import { cn } from "@renderer/lib/css.utils";
-import { useList } from "./List";
+import { useSelectableList } from "./SelectableList";
 import { Component, createMemo, Show, splitProps } from "solid-js";
 import { JSX } from "solid-js/jsx-runtime";
 import { CheckIcon } from "lucide-solid";
+import { RawList } from "../raw-list/RawList";
 
 export type Props = JSX.IntrinsicElements["button"] & {
-  value?: string;
+  value: string;
   onSelectedByClick?: () => void;
 };
-const ListItem: Component<Props> = (_props) => {
-  const [props, rest] = splitProps(_props, ["value", "onSelectedByClick", "class", "children"]);
+const SelectableListItem: Component<Props> = (_props) => {
+  const [props, rest] = splitProps(_props, ["value", "onSelectedByClick", "children"]);
 
-  const value = () => {
-    return props.value ?? Math.random().toString(36);
-  };
-
-  const state = useList();
+  const state = useSelectableList();
   const {
     attrs,
     isSelected: isFocused,
     tabIndex,
-  } = state.item(value(), {
+  } = state.item(props.value, {
     onSelectedByClick: () => {
       props.onSelectedByClick?.();
       if (!props.value) {
@@ -36,23 +32,20 @@ const ListItem: Component<Props> = (_props) => {
   });
 
   return (
-    <button
-      class={cn(
-        "flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-stroke data-[selected=true]:bg-overlay/30 disabled:opacity-50 disabled:pointer-events-none",
-        props.class,
-      )}
+    <RawList.Item
       tabIndex={tabIndex()}
-      data-selected={isFocused()}
+      classList={{
+        "bg-overlay/30": isFocused(),
+      }}
       {...attrs}
       {...rest}
     >
       {props.children}
-
       <Show when={isSelected()}>
         <CheckIcon size={14} />
       </Show>
-    </button>
+    </RawList.Item>
   );
 };
 
-export default ListItem;
+export default SelectableListItem;

@@ -1,21 +1,21 @@
-import { cn } from "@renderer/lib/css.utils";
-import ListItem from "./ListItem";
+import SelectableListItem from "./SelectableListItem";
 import { useRovingFocusGroup } from "@renderer/lib/roving-focus-group/rovingFocusGroup";
 import { Accessor, createContext, JSX, ParentComponent, splitProps, useContext } from "solid-js";
 import useControllableState from "@renderer/lib/controllable-state";
+import { RawList } from "../raw-list/RawList";
 
 const DEFAULT_SELECTED_VALUE = "";
 
-export type ListOptions = {
+export type SelectableListOptions = {
   defaultValue?: string;
   value?: Accessor<string>;
   onValueChange?: (newValue: string) => void;
 };
 
-export type Props = JSX.IntrinsicElements["div"] & ListOptions;
+export type Props = JSX.IntrinsicElements["div"] & SelectableListOptions;
 
 export type Context = ReturnType<typeof useProviderValue>;
-function useProviderValue(props: ListOptions) {
+function useProviderValue(props: SelectableListOptions) {
   const rovingFocusGroup = useRovingFocusGroup({
     updateFocusOnHover: true,
     defaultProp: props.value?.() ?? props.defaultValue,
@@ -33,35 +33,29 @@ function useProviderValue(props: ListOptions) {
   };
 }
 
-export const ListContext = createContext<Context>();
-const ListRoot: ParentComponent<Props> = (_props) => {
-  const [props, rest] = splitProps(_props, [
-    "value",
-    "onValueChange",
-    "defaultValue",
-    "children",
-    "class",
-  ]);
+export const SelectableListContext = createContext<Context>();
+const SelectableListRoot: ParentComponent<Props> = (_props) => {
+  const [props, rest] = splitProps(_props, ["value", "onValueChange", "defaultValue", "children"]);
   const value = useProviderValue(props);
   return (
-    <ListContext.Provider value={value}>
-      <div {...rest} {...value.attrs} class={cn("flex flex-col gap-0.5", props.class)}>
+    <SelectableListContext.Provider value={value}>
+      <RawList {...rest} {...value.attrs}>
         {props.children}
-      </div>
-    </ListContext.Provider>
+      </RawList>
+    </SelectableListContext.Provider>
   );
 };
 
-export function useList(): Context {
-  const state = useContext(ListContext);
+export function useSelectableList(): Context {
+  const state = useContext(SelectableListContext);
   if (!state) {
-    throw new Error("useList needs to be used inisde of the `ListContext` component.");
+    throw new Error("useSelectableList needs to be used inisde of the `ListContext` component.");
   }
   return state;
 }
 
-const List = Object.assign(ListRoot, {
-  Item: ListItem,
+const SelectableList = Object.assign(SelectableListRoot, {
+  Item: SelectableListItem,
 });
 
-export default List;
+export default SelectableList;
