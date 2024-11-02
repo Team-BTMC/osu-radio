@@ -35,7 +35,7 @@ export type Props = {
   flip?: true | FlipOptions;
   shift?: true | ShiftOptions;
   placement?: Placement;
-  mousePos?: Accessor<[number, number]>; // [x, y]
+  position?: Accessor<[number, number] | undefined>; // [x, y]
   defaultProp?: boolean;
   isOpen?: Accessor<boolean>;
   onValueChange?: (newOpen: boolean) => void;
@@ -99,16 +99,17 @@ function useProviderValue(props: Props) {
   const useCustomCoords = {
     name: "useCustomCoords",
     fn() {
-      if (
-        props.mousePos !== undefined &&
-        props.mousePos() !== lastMousePos &&
-        props.mousePos()[0] !== 0 &&
-        props.mousePos()[1] !== 0
-      ) {
-        lastMousePos = props.mousePos();
-        return { x: lastMousePos[0], y: lastMousePos[1] };
+      const position = props.position?.();
+      if (position === undefined || position === lastMousePos) {
+        return {};
       }
-      return {};
+
+      const [x, y] = position;
+      if (x === 0 || y === 0) {
+        return {};
+      }
+
+      return { x, y };
     },
   };
 
@@ -127,7 +128,7 @@ function useProviderValue(props: Props) {
     if (typeof props.flip !== "undefined") {
       middleware.push(flip(props.flip === true ? undefined : props.flip));
     }
-    if (typeof props.mousePos !== "undefined") {
+    if (typeof props.position !== "undefined") {
       middleware.push(useCustomCoords);
     }
 

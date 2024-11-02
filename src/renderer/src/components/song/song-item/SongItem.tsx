@@ -26,6 +26,7 @@ const SongItem: Component<SongItemProps> = (props) => {
   const { primaryColor, secondaryColor, processImage } = extractColorFromImage(props.song);
   const [localShow, setLocalShow] = createSignal(false);
   const [isHovering, setIsHovering] = createSignal(false);
+  const [mousePos, setMousePos] = createSignal<[number, number] | undefined>();
 
   onMount(() => {
     if (!item) return;
@@ -79,6 +80,7 @@ const SongItem: Component<SongItemProps> = (props) => {
       onValueChange={setLocalShow}
       placement="right-start"
       offset={{ crossAxis: 5, mainAxis: 5 }}
+      position={mousePos}
       shift
       flip
     >
@@ -112,6 +114,7 @@ const SongItem: Component<SongItemProps> = (props) => {
         }}
         onContextMenu={(e) => {
           e.preventDefault();
+          setMousePos([e.clientX, e.clientY]);
           setLocalShow(true);
         }}
       >
@@ -142,6 +145,7 @@ const SongItem: Component<SongItemProps> = (props) => {
         <Popover.Anchor
           onClick={(e) => {
             e.stopPropagation();
+            setMousePos(undefined);
             setLocalShow(true);
           }}
           class="absolute right-0 top-0 h-full  flex items-center text-subtext transition-colors hover:text-text"
