@@ -78,7 +78,7 @@ const SongItem: Component<SongItemProps> = (props) => {
     <Popover
       isOpen={localShow}
       onValueChange={setLocalShow}
-      placement="right-start"
+      placement="right"
       offset={{ crossAxis: 5, mainAxis: 5 }}
       position={mousePos}
       shift

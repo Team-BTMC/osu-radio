@@ -125,11 +125,11 @@ function useProviderValue(props: Props) {
     if (typeof props.position !== "undefined") {
       middleware.push(useCustomCoords);
     }
-    if (typeof props.shift !== "undefined") {
-      middleware.push(shift(props.shift === true ? undefined : props.shift));
-    }
     if (typeof props.flip !== "undefined") {
       middleware.push(flip(props.flip === true ? undefined : props.flip));
+    }
+    if (typeof props.shift !== "undefined") {
+      middleware.push(shift(props.shift === true ? undefined : props.shift));
     }
 
     computePosition(trigger, content, {
