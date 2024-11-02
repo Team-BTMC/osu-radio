@@ -2,6 +2,7 @@ import { cn } from "@renderer/lib/css.utils";
 import ListItem from "./ListItem";
 import { useRovingFocusGroup } from "@renderer/lib/roving-focus-group/rovingFocusGroup";
 import { Accessor, createContext, JSX, ParentComponent, splitProps, useContext } from "solid-js";
+import useControllableState from "@renderer/lib/controllable-state";
 
 const DEFAULT_SELECTED_VALUE = "";
 
@@ -15,11 +16,21 @@ export type Props = JSX.IntrinsicElements["div"] & ListOptions;
 
 export type Context = ReturnType<typeof useProviderValue>;
 function useProviderValue(props: ListOptions) {
-  return useRovingFocusGroup({
+  const rovingFocusGroup = useRovingFocusGroup({
+    updateFocusOnHover: true,
+    defaultProp: props.value?.() ?? props.defaultValue,
+  });
+  const [selectedItem, setSelectedItem] = useControllableState({
     defaultProp: props.defaultValue || DEFAULT_SELECTED_VALUE,
     onChange: props.onValueChange,
     prop: props.value,
   });
+
+  return {
+    ...rovingFocusGroup,
+    selectedItem,
+    setSelectedItem,
+  };
 }
 
 export const ListContext = createContext<Context>();

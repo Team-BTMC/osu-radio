@@ -20,8 +20,9 @@ type Params = {
   defaultProp?: string;
   prop?: Accessor<string>;
   onChange?: (newValue: string) => void;
+  updateFocusOnHover?: boolean;
 };
-export function useRovingFocusGroup(props: Params) {
+export function useRovingFocusGroup(props: Params = {}) {
   let container!: HTMLElement;
   const [hasMounted, setHasMounted] = createSignal(false);
   const [currentStopId, setCurrentStopId] = useControllableState({
@@ -141,6 +142,27 @@ export function useRovingFocusGroup(props: Params) {
         onSelectedByClick?: () => void;
       } = {},
     ) => {
+      const getCurrentOption = () => {
+        return container.querySelector(`[${ITEM_DATA_ATTR}="${tabStopId}"]`);
+      };
+
+      const handlePointerMove = () => {
+        if (!props.updateFocusOnHover) {
+          return;
+        }
+
+        const optionToFocus = getCurrentOption();
+        if (!canFocus(optionToFocus)) {
+          return;
+        }
+
+        if (tabStopId) {
+          setCurrentStopId(tabStopId);
+        }
+
+        optionToFocus.focus();
+      };
+
       const handleClick = () => {
         if (!tabStopId) {
           return;
@@ -148,7 +170,7 @@ export function useRovingFocusGroup(props: Params) {
 
         setCurrentStopId(tabStopId);
         options.onSelectedByClick?.();
-        const nextFocused = container.querySelector(`[${ITEM_DATA_ATTR}="${tabStopId}"]`);
+        const nextFocused = getCurrentOption();
         if (!canFocus(nextFocused)) {
           return;
         }
@@ -170,6 +192,7 @@ export function useRovingFocusGroup(props: Params) {
         attrs: {
           onKeyUp: handleKeyUp,
           onClick: handleClick,
+          onPointerMove: handlePointerMove,
           [ITEM_DATA_ATTR]: tabStopId ?? "fallback",
         },
       };

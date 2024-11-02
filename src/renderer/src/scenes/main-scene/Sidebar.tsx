@@ -43,7 +43,7 @@ export const Sidebar: Component = () => {
               "top-[16px] left-[86px]": os() === "darwin",
             }}
           >
-            <SidebarIcon />
+            <SidebarIcon size={20} />
           </Button>
         </Portal>
 

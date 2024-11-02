@@ -23,13 +23,7 @@ const FilterOptionContainer: Component<FilterOptionContainerProps> = (_props) =>
 
   return (
     <Popover {...mergedPopoverProps}>
-      <div
-        class={cn(
-          "flex border border-stroke p-0.5 items-center rounded-lg bg-surface",
-          props.class,
-        )}
-        {...rest}
-      />
+      <div class={cn("flex p-0.5 items-center rounded-lg bg-surface", props.class)} {...rest} />
     </Popover>
   );
 };
