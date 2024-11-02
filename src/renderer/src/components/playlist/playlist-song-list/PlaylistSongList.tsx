@@ -27,9 +27,11 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
 
   const reset = new Impulse();
 
-  onMount(() => {
+  onMount(async () => {
     window.api.listen("playlist::resetSongList", reset.pulse.bind(reset));
+    setIsQueueExist(await window.api.request("queue::exists"));
   });
+
   onCleanup(() => window.api.removeListener("playlist::resetSongList", reset.pulse.bind(reset)));
 
   const createQueue = async (songResource: ResourceID) => {
@@ -39,7 +41,6 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
       tags: [],
       view: { playlist: props.playlistName },
     });
-    // todo: check if a queue already exists
     setIsQueueExist(true);
   };
 
@@ -95,7 +96,6 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
                 <Button
                   variant={"ghost"}
                   size={"icon"}
-                  // this needs to be slightly larger for some reason (probably margin)
                   class="ml-3 w-10 rounded-lg"
                   onClick={() => deleteSong(props.playlistName, s)}
                 >

@@ -41,7 +41,6 @@ const PlaylistList: Component = () => {
             </label>
           </div>
           <div class="ml-3">
-            {/* // TODO: fix button misaligning when the scrollbar appears */}
             <Button
               onClick={() => {
                 setShowCreateBox(!showCreateBox());

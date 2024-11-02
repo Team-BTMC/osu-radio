@@ -7,14 +7,12 @@ import { Storage } from "../lib/storage/Storage";
 
 Router.respond("query::songsPool::init", (_evt, payload) => {
   const indexes = Storage.getTable("system").get("indexes");
-  //console.log(indexes);
 
   if (indexes.isNone) {
     return none();
   }
 
   const filtered = filter(indexes.value, payload);
-  // console.log(filtered);
 
   return some({
     initialIndex: 0,
