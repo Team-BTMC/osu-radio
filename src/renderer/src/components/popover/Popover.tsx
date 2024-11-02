@@ -122,14 +122,14 @@ function useProviderValue(props: Props) {
     }
 
     const middleware: Middleware[] = [offset(props.offset)];
+    if (typeof props.position !== "undefined") {
+      middleware.push(useCustomCoords);
+    }
     if (typeof props.shift !== "undefined") {
       middleware.push(shift(props.shift === true ? undefined : props.shift));
     }
     if (typeof props.flip !== "undefined") {
       middleware.push(flip(props.flip === true ? undefined : props.flip));
-    }
-    if (typeof props.position !== "undefined") {
-      middleware.push(useCustomCoords);
     }
 
     computePosition(trigger, content, {
