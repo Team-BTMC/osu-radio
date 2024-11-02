@@ -45,7 +45,7 @@ const MainScene: Component = () => {
         </div>
       </main>
 
-      <div class="pointer-events-none fixe h-full inset-0 z-[-1]">
+      <div class="pointer-events-none fixed h-full inset-0 z-[-1]">
         <SongImage
           src={song().bg}
           instantLoad={true}
