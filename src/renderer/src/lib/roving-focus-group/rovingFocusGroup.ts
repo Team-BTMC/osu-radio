@@ -59,7 +59,33 @@ export function useRovingFocusGroup(props: Params = {}) {
     setCurrentStopId(firstNode.getAttribute(ITEM_DATA_ATTR)!);
   };
 
-  const handleKeyUp = (
+  const handleListKeyUp = (
+    event: KeyboardEvent & {
+      currentTarget: DOMElement;
+      target: DOMElement;
+    },
+  ) => {
+    if (!event.currentTarget.isSameNode(event.target)) {
+      return;
+    }
+
+    switch (event.key) {
+      case "ArrowUp":
+      case "ArrowLeft":
+      case "ArrowDown":
+      case "ArrowRight": {
+        event.preventDefault();
+        tryFocusFirstItem();
+        break;
+      }
+
+      default: {
+        break;
+      }
+    }
+  };
+
+  const handleItemKeyUp = (
     event: KeyboardEvent & {
       currentTarget: DOMElement;
       target: DOMElement;
@@ -150,7 +176,7 @@ export function useRovingFocusGroup(props: Params = {}) {
     tryFocusFirstItem,
     value: currentStopId,
     attrs: {
-      onKeyUp: handleKeyUp,
+      onKeyUp: handleListKeyUp,
       ref: (node: HTMLElement) => {
         container = node;
       },
@@ -212,7 +238,7 @@ export function useRovingFocusGroup(props: Params = {}) {
         isSelected,
         tabIndex,
         attrs: {
-          onKeyUp: handleKeyUp,
+          onKeyUp: handleItemKeyUp,
           onClick: handleClick,
           onPointerMove: handlePointerMove,
           [ITEM_DATA_ATTR]: tabStopId ?? "fallback",
