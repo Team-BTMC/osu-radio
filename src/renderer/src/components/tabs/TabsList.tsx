@@ -13,6 +13,7 @@ export const TabsList: ParentComponent<Props> = (_props) => {
     <div
       {...state.attrs}
       {...rest}
+      tabindex={0}
       class={cn(
         "relative flex rounded-xl bg-thin-material p-1 gap-1 ring-1 ring-stroke",
         props.class,

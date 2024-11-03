@@ -60,7 +60,7 @@ export const FilterOptionTrigger: Component<FilterOptionTriggerProps> = (_props)
     <Popover.Trigger
       {...rest}
       class={cn(
-        "hover:bg-surface py-1 px-2.5 rounded text-sm flex gap-1.5 items-center",
+        "hover:bg-surface py-1 px-2.5 rounded text-sm flex gap-1.5 items-center focus-visible:bg-surface focus-within:outline-none",
         props.class,
       )}
     >
@@ -73,20 +73,20 @@ export const FilterOptionTrigger: Component<FilterOptionTriggerProps> = (_props)
 // ------------
 // Item
 // ------------
-type FilterOptionItemProps = JSX.IntrinsicElements["div"];
+type FilterOptionItemProps = JSX.IntrinsicElements["button"];
 export const FilterOptionItem: Component<FilterOptionItemProps> = (_props) => {
   const [props, rest] = splitProps(_props, ["class", "children"]);
 
   return (
-    <div
+    <button
       {...rest}
       class={cn(
-        "hover:bg-surface py-1 px-2.5 rounded text-sm flex gap-1 items-center",
+        "hover:bg-surface py-1 px-2.5 rounded text-sm flex gap-1 items-center focus-within:bg-surface focus-within:outline-none",
         props.class,
       )}
     >
       {props.children}
-    </div>
+    </button>
   );
 };
 

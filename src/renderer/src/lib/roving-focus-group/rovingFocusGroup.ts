@@ -1,3 +1,4 @@
+import { DOMElement } from "solid-js/jsx-runtime";
 import useControllableState from "../controllable-state";
 import { Accessor, createMemo, createSignal, onMount } from "solid-js";
 
@@ -45,6 +46,10 @@ export function useRovingFocusGroup(props: Params = {}) {
       return;
     }
 
+    tryFocusFirstItem();
+  });
+
+  const tryFocusFirstItem = () => {
     const [firstNode] = findOrderedNodes();
     if (!canFocus(firstNode)) {
       return;
@@ -52,9 +57,18 @@ export function useRovingFocusGroup(props: Params = {}) {
 
     firstNode.focus();
     setCurrentStopId(firstNode.getAttribute(ITEM_DATA_ATTR)!);
-  });
+  };
 
-  const handleKeyUp = (event: KeyboardEvent) => {
+  const handleKeyUp = (
+    event: KeyboardEvent & {
+      currentTarget: DOMElement;
+      target: DOMElement;
+    },
+  ) => {
+    if (!event.currentTarget.isSameNode(event.target)) {
+      return;
+    }
+
     props.onKeyUp?.();
 
     const orderedNodes = findOrderedNodes();
@@ -133,8 +147,10 @@ export function useRovingFocusGroup(props: Params = {}) {
   return {
     currentlyActiveElement,
     onListmounted,
+    tryFocusFirstItem,
     value: currentStopId,
     attrs: {
+      onKeyUp: handleKeyUp,
       ref: (node: HTMLElement) => {
         container = node;
       },
