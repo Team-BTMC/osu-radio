@@ -16,7 +16,7 @@
   font-style: italic;
 }
 
-:focus {
+:focus-visible {
   @apply outline outline-blue-500 outline-2;
 }
 
