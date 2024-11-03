@@ -1,6 +1,6 @@
 import { DOMElement } from "solid-js/jsx-runtime";
 import useControllableState from "../controllable-state";
-import { Accessor, createMemo, createSignal, onMount } from "solid-js";
+import { Accessor, createMemo, createSignal, onCleanup, onMount } from "solid-js";
 
 const ITEM_DATA_ATTR = "data-item";
 const DEFAULT_SELECTED_VALUE = "";
@@ -26,6 +26,9 @@ type Params = {
 };
 export function useRovingFocusGroup(props: Params = {}) {
   let container!: HTMLElement;
+
+  const registeredTabs = new Set<string>();
+
   const [hasMounted, setHasMounted] = createSignal(false);
   const [currentStopId, setCurrentStopId] = useControllableState({
     defaultProp: props.defaultProp || DEFAULT_SELECTED_VALUE,
@@ -57,32 +60,6 @@ export function useRovingFocusGroup(props: Params = {}) {
 
     firstNode.focus();
     setCurrentStopId(firstNode.getAttribute(ITEM_DATA_ATTR)!);
-  };
-
-  const handleListKeyUp = (
-    event: KeyboardEvent & {
-      currentTarget: DOMElement;
-      target: DOMElement;
-    },
-  ) => {
-    if (!event.currentTarget.isSameNode(event.target)) {
-      return;
-    }
-
-    switch (event.key) {
-      case "ArrowUp":
-      case "ArrowLeft":
-      case "ArrowDown":
-      case "ArrowRight": {
-        event.preventDefault();
-        tryFocusFirstItem();
-        break;
-      }
-
-      default: {
-        break;
-      }
-    }
   };
 
   const handleItemKeyUp = (
@@ -171,12 +148,12 @@ export function useRovingFocusGroup(props: Params = {}) {
   });
 
   return {
+    registeredTabs,
     currentlyActiveElement,
     onListmounted,
     tryFocusFirstItem,
     value: currentStopId,
     attrs: {
-      onKeyUp: handleListKeyUp,
       ref: (node: HTMLElement) => {
         container = node;
       },
@@ -232,6 +209,17 @@ export function useRovingFocusGroup(props: Params = {}) {
 
       const tabIndex = createMemo(() => {
         return isSelected() ? 0 : -1;
+      });
+
+      onMount(() => {
+        if (!tabStopId) {
+          return;
+        }
+
+        registeredTabs.add(tabStopId);
+        onCleanup(() => {
+          registeredTabs.delete(tabStopId);
+        });
       });
 
       return {
