@@ -21,7 +21,7 @@ export const WindowsControls: Component = () => {
       <WindownButton onClick={toggleMaximize}>
         <SquareIcon size={18} />
       </WindownButton>
-      <WindownButton onClick={close} class="hover:bg-red">
+      <WindownButton onClick={close} class="hover:bg-red-500">
         <XIcon size={20} />
       </WindownButton>
     </div>

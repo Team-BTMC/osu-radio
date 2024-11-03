@@ -79,7 +79,7 @@ const AudioDeviceSetting: Component = () => {
   return (
     <Setting name="audio-device" label="Choose audio device">
       <Select isOpen={isPopoverOpen} onValueChange={setIsPopoverOpen}>
-        <Select.Trigger class="w-full rounded border border-stroke bg-surface px-2 py-1 text-text hover:bg-red">
+        <Select.Trigger class="w-full rounded border border-stroke bg-surface px-2 py-1 text-text hover:bg-danger">
           {selectedAudioDevice() || "No device selected"}
         </Select.Trigger>
 

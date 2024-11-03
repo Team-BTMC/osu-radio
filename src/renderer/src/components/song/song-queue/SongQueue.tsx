@@ -118,7 +118,7 @@ const QueueContextMenuContent: Component<QueueContextMenuContentProps> = (props)
       </DropdownList.Item>
       <DropdownList.Item
         onClick={() => window.api.request("queue::removeSong", props.song.path)}
-        class="text-red"
+        class="text-danger"
       >
         <span>Remove from queue</span>
         <DeleteIcon class="opacity-80" size={20} />
