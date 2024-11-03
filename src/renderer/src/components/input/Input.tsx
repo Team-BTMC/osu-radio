@@ -1,19 +1,20 @@
 import { cva, VariantProps } from "class-variance-authority";
 import { Component, JSX, splitProps } from "solid-js";
 
-const inputStyles = cva(
+export const inputStyles = cva(
   [
-    "ring-offset-background placeholder:text-subtext flex h-[42px] w-full rounded-lg px-3.5 py-2 disabled:cursor-not-allowed disabled:opacity-50",
+    "ring-offset-background placeholder:text-subtext flex h-[42px] w-full rounded-lg px-3.5 py-2 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-none focus-visible:bg-surface",
   ],
   {
     variants: {
       variant: {
         primary: "",
-        outlined: "border border-stroke bg-transparent border-solid block",
+        outlined:
+          "border border-stroke bg-transparent border-solid block focus-visible:border-grey-400",
       },
     },
     defaultVariants: {
-      variant: "primary",
+      variant: "outlined",
     },
   },
 );
