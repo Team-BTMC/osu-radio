@@ -33,6 +33,7 @@ const MainScene: Component = () => {
             "mt-0 m-2": os() !== "darwin",
           }}
         >
+          <Queue />
           <SongDetail />
           <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-lg shadow-2xl ring-2 ring-inset ring-stroke">
             <SongImage
@@ -41,7 +42,6 @@ const MainScene: Component = () => {
               class="absolute inset-0 bg-cover bg-fixed bg-left-top opacity-30 blur-lg filter"
             />
           </div>
-          <Queue />
         </div>
       </main>
 

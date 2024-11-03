@@ -3,7 +3,7 @@ import { Component, JSX, splitProps } from "solid-js";
 
 const inputStyles = cva(
   [
-    "ring-offset-background placeholder:text-subtext focus-visible:ring-ring flex h-[42px] w-full rounded-lg px-3.5 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+    "ring-offset-background placeholder:text-subtext flex h-[42px] w-full rounded-lg px-3.5 py-2 disabled:cursor-not-allowed disabled:opacity-50",
   ],
   {
     variants: {

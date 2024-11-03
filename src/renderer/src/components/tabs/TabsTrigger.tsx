@@ -19,7 +19,7 @@ const TabsTrigger: Component<Props> = (_props) => {
       {...attrs}
       {...rest}
       class={cn(
-        "ring-offset-background focus-visible:ring-ring z-10 flex h-[33px] items-center gap-2 rounded-lg px-3 text-subtext focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-colors",
+        "ring-offset-background z-10 flex h-[33px] items-center gap-2 rounded-lg px-3 text-subtext transition-colors",
         props.class,
       )}
       classList={{
