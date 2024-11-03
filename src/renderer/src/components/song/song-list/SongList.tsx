@@ -1,4 +1,4 @@
-import { Optional, Order, ResourceID, SongsQueryPayload, Tag } from "../../../../../@types";
+import { Optional, Order, ResourceID, Song, SongsQueryPayload, Tag } from "../../../../../@types";
 import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-types";
 import { namespace } from "../../../App";
 import Impulse from "../../../lib/Impulse";
@@ -8,7 +8,7 @@ import SongItem from "../song-item/SongItem";
 import SongListSearch from "../song-list-search/SongListSearch";
 import { songsSearch } from "./song-list.utils";
 import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
-import { ListPlus } from "lucide-solid";
+import { ListPlus, ListStartIcon } from "lucide-solid";
 import DropdownList from "@renderer/components/dropdown-list/DropdownList";
 
 export type SongViewProps = {
@@ -93,7 +93,7 @@ const SongList: Component<SongViewProps> = (props) => {
                 song={s}
                 group={group}
                 onSelect={createQueue}
-                contextMenu={<SongListContextMenuContent />}
+                contextMenu={<SongListContextMenuContent song={s} />}
               />
             </div>
           )}
@@ -103,16 +103,21 @@ const SongList: Component<SongViewProps> = (props) => {
   );
 };
 
-const SongListContextMenuContent: Component = () => {
+type SongListContextMenuContentProps = { song: Song };
+const SongListContextMenuContent: Component<SongListContextMenuContentProps> = (props) => {
   return (
     <DropdownList class="w-40">
       <DropdownList.Item>
         <span>Add to Playlist</span>
         <ListPlus class="text-subtext" size={20} />
       </DropdownList.Item>
-      <DropdownList.Item>
+      <DropdownList.Item
+        onClick={() => {
+          window.api.request("queue::playNext", props.song.path);
+        }}
+      >
         <span>Play next</span>
-        <ListPlus class="text-subtext" size={20} />
+        <ListStartIcon class="text-subtext" size={20} />
       </DropdownList.Item>
     </DropdownList>
   );
