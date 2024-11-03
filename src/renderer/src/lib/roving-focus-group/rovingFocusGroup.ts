@@ -27,7 +27,7 @@ type Params = {
 export function useRovingFocusGroup(props: Params = {}) {
   let container!: HTMLElement;
 
-  const registeredTabs = new Set<string>();
+  const [registeredTabs, setRegisteredTabs] = createSignal<string[]>([]);
 
   const [hasMounted, setHasMounted] = createSignal(false);
   const [currentStopId, setCurrentStopId] = useControllableState({
@@ -216,9 +216,9 @@ export function useRovingFocusGroup(props: Params = {}) {
           return;
         }
 
-        registeredTabs.add(tabStopId);
+        setRegisteredTabs((t) => [...t, tabStopId]);
         onCleanup(() => {
-          registeredTabs.delete(tabStopId);
+          setRegisteredTabs((t) => t.filter((tab) => tab !== tabStopId));
         });
       });
 

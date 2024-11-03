@@ -12,7 +12,6 @@ import SongList from "@renderer/components/song/song-list/SongList";
 import { SettingsIcon, SidebarIcon } from "lucide-solid";
 import Button from "@renderer/components/button/Button";
 import Settings from "@renderer/components/settings/Settings";
-import { Portal } from "solid-js/web";
 import { os } from "@renderer/lib/os";
 
 export const Sidebar: Component = () => {
@@ -29,23 +28,21 @@ export const Sidebar: Component = () => {
       }}
     >
       <div class="absolute right-0 bottom-0 h-full flex flex-col gap-2  min-w-[480px]">
-        <Portal>
-          <Button
-            size="square"
-            variant="outlined"
-            onClick={toggleSidebarShow}
-            class="no-drag fixed z-10"
-            classList={{
-              // Windows/Linux - Offset for the nav on the top
-              "top-[44px] left-[16px]": os() !== "darwin",
+        <Button
+          size="square"
+          variant="outlined"
+          onClick={toggleSidebarShow}
+          class="no-drag fixed z-10"
+          classList={{
+            // Windows/Linux - Offset for the nav on the top
+            "top-[44px] left-[16px]": os() !== "darwin",
 
-              // Mac     - Offset for the traffic lights on the left
-              "top-[16px] left-[86px]": os() === "darwin",
-            }}
-          >
-            <SidebarIcon size={20} />
-          </Button>
-        </Portal>
+            // Mac     - Offset for the traffic lights on the left
+            "top-[16px] left-[86px]": os() === "darwin",
+          }}
+        >
+          <SidebarIcon size={20} />
+        </Button>
 
         <Tabs value={sidebarActiveTab} onValueChange={setSidebarActiveTab}>
           <SidebarTabs />

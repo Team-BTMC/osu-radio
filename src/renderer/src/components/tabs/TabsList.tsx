@@ -10,15 +10,21 @@ export const TabsList: ParentComponent<Props> = (_props) => {
   onMount(state.onListmounted);
 
   const hasSelectedValue = createMemo(() => {
-    return state.registeredTabs.has(state.value());
+    return state.registeredTabs().includes(state.value());
   });
 
   return (
     <div
       {...state.attrs}
       {...rest}
-      tabindex={hasSelectedValue() ? -1 : 0}
-      onFocus={state.tryFocusFirstItem}
+      tabIndex={hasSelectedValue() ? -1 : 0}
+      onFocus={(event) => {
+        if (!event.currentTarget.isSameNode(event.target)) {
+          return;
+        }
+
+        state.tryFocusFirstItem();
+      }}
       class={cn(
         "relative flex rounded-xl bg-thin-material p-1 gap-1 ring-1 ring-stroke",
         props.class,
