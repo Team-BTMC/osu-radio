@@ -96,7 +96,7 @@ class BufferReader {
   readLong() {
     const low = this.readInt();
     const high = this.readInt();
-    return (high << 32) | low;
+    return (high << 0) | low;
   }
 
   readInt() {
