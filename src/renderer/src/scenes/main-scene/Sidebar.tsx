@@ -21,7 +21,7 @@ export const Sidebar: Component = () => {
 
   return (
     <div
-      class="sidebar transition-all relative"
+      class="sidebar transition-all absolute lg:relative z-40 h-full bg-thick-material backdrop-blur-md border-r-stroke border-e-2 lg:border-e-0 lg:bg-transparent shadow-2xl lg:shadow-none"
       classList={{
         "w-[480px]": sidebarExpanded(),
         "w-0": !sidebarExpanded(),
@@ -37,7 +37,7 @@ export const Sidebar: Component = () => {
             // Windows/Linux - Offset for the nav on the top
             "top-[44px] left-[16px]": os() !== "darwin",
 
-            // Mac     - Offset for the traffic lights on the left
+            // Mac - Offset for the traffic lights on the left
             "top-[16px] left-[86px]": os() === "darwin",
           }}
         >
@@ -66,7 +66,7 @@ const SidebarTabs: Component = () => {
         "pl-[86px] pt-2": os() === "darwin",
       }}
     >
-      <Tabs.List class="ml-3 mr-auto">
+      <Tabs.List class="ml-3">
         <For each={NAV_ITEMS}>
           {({ label, value, Icon }) => (
             <Tabs.Trigger value={value} class="app-no-drag">
