@@ -10,7 +10,6 @@ import {
 import { song } from "@renderer/components/song/song.utils";
 import { LayersIcon, Minimize2Icon, MinusIcon, SquareIcon, XIcon } from "lucide-solid";
 import {
-  Accessor,
   Component,
   createEffect,
   createSignal,
@@ -19,7 +18,6 @@ import {
   Match,
   onCleanup,
   onMount,
-  Setter,
   Show,
   Switch,
 } from "solid-js";
@@ -54,30 +52,13 @@ const MainScene: Component = () => {
 
 const Nav: Component = () => {
   const [os, setOs] = createSignal<NodeJS.Platform>();
-  const [maximized, setMaximized] = createSignal<boolean>(false);
 
   onMount(async () => {
     const fetchOS = async () => {
       return await window.api.request("os::platform");
     };
 
-    const fetchMaximized = async () => {
-      return await window.api.request("window::isMaximized");
-    };
-
     setOs(await fetchOS());
-    setMaximized(await fetchMaximized());
-  });
-
-  createEffect(() => {
-    const resizeListener = (maximized: boolean) => {
-      setMaximized(maximized);
-    };
-
-    window.api.listen("window::maximizeChange", resizeListener);
-    return () => {
-      window.api.removeListener("window::maximizeChange", resizeListener);
-    };
   });
 
   return (
@@ -102,12 +83,32 @@ const Nav: Component = () => {
           <LayersIcon size={20} />
         </Button>
       </div>
-      {os() !== "darwin" && <WindowControls maximized={maximized} setMaximized={setMaximized} />}
+      {os() !== "darwin" && <WindowControls />}
     </nav>
   );
 };
 
-function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Setter<boolean> }) {
+export function WindowControls() {
+  const [maximized, setMaximized] = createSignal<boolean>(false);
+
+  onMount(async () => {
+    const fetchMaximized = async () => {
+      return await window.api.request("window::isMaximized");
+    };
+
+    setMaximized(await fetchMaximized());
+  });
+
+  createEffect(() => {
+    const resizeListener = (maximized: boolean) => {
+      setMaximized(maximized);
+    };
+
+    window.api.listen("window::maximizeChange", resizeListener);
+    return () => {
+      window.api.removeListener("window::maximizeChange", resizeListener);
+    };
+  });
   return (
     <div class="nav-window-controls">
       <button
@@ -119,11 +120,11 @@ function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Set
       <button
         onClick={async () => {
           window.api.request("window::maximize");
-          props.setMaximized(!props.maximized());
+          setMaximized(!maximized());
         }}
         class="nav-window-control"
       >
-        {props.maximized() ? <Minimize2Icon size={20} /> : <SquareIcon size={18} />}
+        {maximized() ? <Minimize2Icon size={20} /> : <SquareIcon size={18} />}
       </button>
       <button
         onClick={async () => window.api.request("window::close")}

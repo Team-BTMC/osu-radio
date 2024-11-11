@@ -1,3 +1,26 @@
+.nav-window-controls {
+  height: 100%;
+  display: flex;
+  -webkit-app-region: no-drag;
+  padding-left: 5px;
+}
+
+.nav-window-control {
+  width: 45px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-window-control:hover {
+  background: rgba(var(--color-surface), 0.5);
+}
+
+.nav-window-control.close:hover {
+  background: hsl(0, 69%, 50%);
+}
+
 .main-scene {
   .nav {
     display: flex;
@@ -7,29 +30,6 @@
     background: rgba(var(--color-thick-material), 0.95);
     gap: 4px;
     -webkit-app-region: drag;
-
-    .nav-window-controls {
-      height: 100%;
-      display: flex;
-      -webkit-app-region: no-drag;
-      padding-left: 5px;
-    }
-
-    .nav-window-control {
-      width: 45px;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .nav-window-control:hover {
-      background: rgba(var(--color-surface), 0.5);
-    }
-
-    .nav-window-control.close:hover {
-      background: hsl(0, 69%, 50%);
-    }
 
     .nav-item {
       display: flex;
