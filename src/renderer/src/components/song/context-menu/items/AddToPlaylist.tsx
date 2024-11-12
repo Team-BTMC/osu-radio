@@ -17,7 +17,7 @@ const AddToPlaylist: Component<AddToPlaylistProps> = (props) => {
       }}
     >
       <p>Add to Playlist</p>
-      <PlusIcon />
+      <PlusIcon size={20} />
     </SongContextMenuItem>
   );
 };

@@ -15,10 +15,10 @@ const RemoveFromQueue: Component<RemoveFromQueueProps> = (props) => {
           window.api.request("queue::removeSong", props.path);
         }
       }}
-      class="hover:bg-red/20"
+      class="hover:bg-red/20 hover:ring-1 ring-red/30"
     >
       <p class="text-red">Remove from queue</p>
-      <DeleteIcon class="text-red" />
+      <DeleteIcon class="text-red" size={20} />
     </SongContextMenuItem>
   );
 };

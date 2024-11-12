@@ -19,7 +19,7 @@ const PlayNext: Component<SongPlayNextProps> = (props) => {
       disabled={props.disabled}
     >
       <p>Play next</p>
-      <ListStartIcon />
+      <ListStartIcon size={20} />
     </SongContextMenuItem>
   );
 };

@@ -127,14 +127,14 @@ const SongItem: Component<SongItemProps> = (props) => {
               background: backgrund(),
             }}
           >
-            <h3 class="text-shadow text-[22px] font-extrabold leading-7">{props.song.title}</h3>
-            <p class="text-base text-subtext">{props.song.artist}</p>
+            <h3 class="drop-shadow-md text-[22px] font-[740] leading-7">{props.song.title}</h3>
+            <p class="text-base text-subtext drop-shadow-sm">{props.song.artist}</p>
           </div>
 
-          <div class="absolute right-2 top-1/2 -translate-y-1/2 grid aspect-square size-9 place-items-center rounded border-solid border-stroke bg-transparent p-1 text-text hover:bg-surface">
+          <div class="absolute right-2 top-1/2 -translate-y-1/2 grid aspect-square place-items-center rounded bg-transparent text-text hover:bg-thin-material/30 hover:backdrop-blur-sm">
             <Popover.Trigger
               class={twMerge(
-                "opacity-0 transition-opacity group-hover:opacity-100",
+                "opacity-0 transition-opacity group-hover:opacity-100 p-1",
                 localShow() && "opacity-100",
               )}
             >
