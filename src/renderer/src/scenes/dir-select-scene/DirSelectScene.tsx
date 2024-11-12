@@ -1,7 +1,7 @@
 import osuLazerLogo from "@renderer/assets/osu-lazer-logo.png";
 import osuStableLogo from "@renderer/assets/osu-stable-logo.png";
 import Button from "@renderer/components/button/Button";
-import { Accessor, createSignal, onMount, Setter } from "solid-js";
+import { Accessor, Component, createSignal, For, onMount, Setter, Show } from "solid-js";
 import { OsuDirectory } from "src/main/router/dir-router";
 import { WindowControls } from "../main-scene/MainScene";
 import "../main-scene/styles.css";
@@ -73,20 +73,22 @@ export default function DirSelectScene() {
         <div class="flex flex-col gap-4">
           <div class="flex flex-col gap-1.5">
             <label class="text-md font-bold text-text">Select an osu! installation:</label>
-            {dirs().length > 0 ? (
-              dirs().map((dir) => (
-                <InstallationCard
-                  directory={dir}
-                  selectedDir={selectedDir}
-                  setSelectedDir={setSelectedDir}
-                />
-              ))
-            ) : (
-              <p>No directories found</p>
-            )}
-            <div class="flex justify-between">
-              <Button onClick={selectDir}>Select a different installation</Button>
-              <p class="pt-1 text-sm text-subtext">You can always change this in settings.</p>
+            <Show when={dirs().length > 0} fallback={<p>No directories found</p>}>
+              <For each={dirs()}>
+                {(dir) => (
+                  <InstallationCard
+                    directory={dir}
+                    selectedDir={selectedDir}
+                    setSelectedDir={setSelectedDir}
+                  />
+                )}
+              </For>
+            </Show>
+            <div class="flex justify-between items-baseline pt-2">
+              <Button size="medium" variant="secondary" onClick={selectDir}>
+                Select a different installation
+              </Button>
+              <p class="text-sm text-subtext">You can always change this in settings.</p>
             </div>
           </div>
         </div>
@@ -105,11 +107,13 @@ export default function DirSelectScene() {
   );
 }
 
-function InstallationCard(props: {
+type InstallationCardProps = {
   directory: OsuDirectory;
   selectedDir: Accessor<OsuDirectory>;
   setSelectedDir: Setter<OsuDirectory>;
-}) {
+};
+
+const InstallationCard: Component<InstallationCardProps> = (props) => {
   return (
     <div
       class={`w-full rounded-xl border border-white/5 h-[72px] p-3 flex items-center select-none hover:cursor-pointer bg-[#333333] ${props.selectedDir() === props.directory ? "bg-[#333333]" : "bg-regular-material"}`}
@@ -124,7 +128,11 @@ function InstallationCard(props: {
         <p class="font-bold">{props.directory.path}</p>
         <div class="flex items-center gap-3">
           <div
-            class={`font-bold text-xs w-20 h-5 flex items-center justify-center rounded-full ${props.directory.version === "stable" ? "bg-pink-400" : "bg-teal-400"}`}
+            class="font-bold text-xs w-20 h-5 flex items-center justify-center rounded-full"
+            classList={{
+              "bg-pink-400": props.directory.version === "stable",
+              "bg-teal-400": props.directory.version === "lazer",
+            }}
           >
             {props.directory.version.toUpperCase()}
           </div>
@@ -132,4 +140,4 @@ function InstallationCard(props: {
       </div>
     </div>
   );
-}
+};
