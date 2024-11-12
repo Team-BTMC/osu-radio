@@ -3,7 +3,11 @@ import { Table } from "./Table";
 import { app } from "electron";
 import fs from "fs";
 import path from "path";
+import 'dotenv/config'
+//import { drizzle } from "drizzle-orm/libsql"
 
+
+//const db = drizzle({ connection: { url: process.env.DB_FILE_NAME! }});
 export class Storage {
   private static cache: Map<string, Table<any>> = new Map();
 

@@ -328,7 +328,7 @@ export class OsuParser {
           //this is so hacky im sorry
           //songTable.set(song.audio, song);
           const db = drizzle({ connection: { url: process.env.DB_FILE_NAME! }});
-          await db.insert(songsTable).values({audio: song.audio})
+          await db.insert(songsTable).values({audioPath: song.audio, OsuFile: song.osuFile, path:song.path, dateAdded: song.dateAdded, title:song.title, artist:song.artist,creator:song.creator,BPM:song.bpm,duration:song.duration,diffs:song.diffs,artistUnicode:song.artistUnicode,titleUnicode:song.titleUnicode,beatmapSetId:song.beatmapSetID,mode:song.mode,tags:song.tags,bg:song.bg});
           audioTable.set(song.audio, {
             songID: song.audio,
             path: song.audio,

@@ -1,7 +1,9 @@
 {
   "files": [],
   "compilerOptions": {
-    "jsx": "react"
+    "jsx": "react",
+    "strictNullChecks": true,
+    "strict": true
   },
   "references": [
     {
