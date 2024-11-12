@@ -61,15 +61,11 @@ export default function DirSelectScene() {
 
   return (
     <div class="relative grid h-screen place-items-center p-8" style={{ background: GRADIENT }}>
-      <div
-        class="absolute top-0 left-0 w-full h-10 flex justify-end"
-        style={{ "-webkit-app-region": "drag" }}
-      >
+      <div class="absolute top-0 left-0 w-full h-10 flex justify-end drag">
         {os() !== "darwin" && <WindowsControls />}
       </div>
       <div class="flex h-full max-h-[720px] w-full max-w-[860px] flex-col justify-between gap-12 overflow-y-auto rounded-2xl border border-stroke/10 bg-regular-material p-8 shadow-2xl">
         <h1 class="pt-12 text-center text-2xl">Welcome to osu! radio</h1>
-
         <div class="flex flex-col gap-4">
           <div class="flex flex-col gap-1.5">
             <label class="text-md font-bold text-text">Select an osu! installation:</label>
