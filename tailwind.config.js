@@ -23,7 +23,7 @@ export default {
         accent: "rgba(var(--color-accent))",
         surface: "rgba(var(--color-surface), 0.2)",
         black: "rgba(var(--color-black))",
-        red: "rgba(var(--color-red))",
+        danger: "rgba(var(--color-red))",
         green: "rgba(var(--color-green))",
       },
       boxShadow: {
