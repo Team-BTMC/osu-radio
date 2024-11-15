@@ -7,12 +7,15 @@ import {
   song,
   setVolume,
   volume,
+  setSpeed,
+  speed,
   handleMuteSong,
 } from "../song.utils";
 import Button from "@renderer/components/button/Button";
 import Slider from "@renderer/components/slider/Slider";
 import {
   CirclePlusIcon,
+  GaugeIcon,
   PauseIcon,
   PlayIcon,
   RepeatIcon,
@@ -154,6 +157,26 @@ const LeftPart = () => {
             max={1}
             value={volume}
             onValueChange={setVolume}
+            enableWheelSlide
+          >
+            <Slider.Track class="h-1 flex-1 rounded bg-thick-material ring-1 ring-stroke">
+              <Slider.Range class="block h-1 rounded bg-white" />
+            </Slider.Track>
+            <Slider.Thumb class="mt-2 block h-4 w-4 rounded-full bg-white" />
+          </Slider>
+        </Show>
+
+        <Button size="icon" variant="ghost" title="Set speed">
+          <GaugeIcon size={20} />
+        </Button>
+
+        <Show when={isHoveringVolume()}>
+          <Slider
+            class="flex h-8 w-28 flex-grow items-center"
+            min={1}
+            max={2}
+            value={speed}
+            onValueChange={setSpeed}
             enableWheelSlide
           >
             <Slider.Track class="h-1 flex-1 rounded bg-thick-material ring-1 ring-stroke">
