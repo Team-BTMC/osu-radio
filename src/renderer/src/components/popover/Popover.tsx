@@ -1,6 +1,7 @@
 import PopoverContent from "./PopoverContent";
 import PopoverOverlay from "./PopoverOverlay";
 import PopoverTrigger from "./PopoverTrigger";
+import { PopoverAnchor } from "./PopoverTrigger";
 import "./styles.css";
 import {
   computePosition,
@@ -39,10 +40,10 @@ function useProviderValue(props: Props) {
   });
 
   const [position, setPosition] = createSignal<ComputePositionReturn | null>(null);
-  const [triggerRef, _setTriggerRef] = createSignal<HTMLButtonElement | null>(null);
+  const [triggerRef, _setTriggerRef] = createSignal<HTMLElement | null>(null);
   const [contentRef, _setContentRef] = createSignal<HTMLDivElement | null>(null);
 
-  const setTriggerRef = (element: HTMLButtonElement) => {
+  const setTriggerRef = (element: HTMLElement) => {
     _setTriggerRef(element);
     listenResize();
   };
@@ -119,6 +120,7 @@ export function usePopover(): Context {
 }
 
 const Popover = Object.assign(PopoverRoot, {
+  Anchor: PopoverAnchor,
   Content: PopoverContent,
   Trigger: PopoverTrigger,
   Overlay: PopoverOverlay,
