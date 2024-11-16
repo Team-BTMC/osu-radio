@@ -55,13 +55,11 @@ export const setVolume = (newValue: ZeroToOne) => {
 const [speed, _setSpeed] = createSignal<ZeroToOne>(1);
 export const setSpeed = (newValue: ZeroToOne) => {
   _setSpeed(newValue);
-  speedNum = newValue;
   player.playbackRate = newValue;
 };
 export { volume, speed };
 
 let bgPath: Optional<string>;
-let speedNum = 1;
 
 const player = new Audio();
 
@@ -303,7 +301,7 @@ window.api.listen("queue::songChanged", async (s) => {
   setSong(s);
   await window.api.request("discord::play", s);
   await play();
-  player.playbackRate = speedNum;
+  player.playbackRate = speed();
 });
 
 player.addEventListener("ended", async () => {
