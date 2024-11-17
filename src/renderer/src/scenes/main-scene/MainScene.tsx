@@ -6,12 +6,21 @@ import { song } from "@renderer/components/song/song.utils";
 import { WindowsControls } from "@renderer/components/windows-control/WindowsControl";
 import { os } from "@renderer/lib/os";
 import { Layers3Icon } from "lucide-solid";
-import { Component, createSignal, Match, Switch } from "solid-js";
+import { Accessor, Component, createSignal, Match, Switch } from "solid-js";
 import { Sidebar } from "./Sidebar";
 import Popover from "@renderer/components/popover/Popover";
 import SongQueue from "@renderer/components/song/song-queue/SongQueue";
+import ResizablePanel from "@renderer/components/resizable-panel/ResizablePanel";
+import {
+  setAnimateSidebar,
+  setSidebarWidth,
+  settingsWriteSidebarWidth,
+  sidebarWidth,
+  useMainResizableOptions,
+} from "./main.utils";
 
 const MainScene: Component = () => {
+  const { maxSidebarWidth, offsetFromPanel } = useMainResizableOptions();
   return (
     <div class="min-h-screen h-full flex flex-col">
       <Switch>
@@ -23,28 +32,39 @@ const MainScene: Component = () => {
         </Match>
       </Switch>
 
-      <main class="main-scene relative flex-1 app-grid">
-        <Sidebar />
-
-        <div
-          class="song relative flex flex-1 items-center justify-center"
-          classList={{
-            "m-2 rounded-3xl": os() === "darwin",
-            "mt-0 m-2": os() !== "darwin",
-          }}
-        >
-          <Queue />
-          <SongDetail />
-          <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-lg shadow-2xl ring-2 ring-inset ring-stroke">
-            <SongImage
-              src={song().bg}
-              instantLoad={true}
-              class="absolute inset-0 bg-cover bg-fixed bg-left-top opacity-30 blur-lg filter"
-            />
+      <ResizablePanel
+        offsetFromPanel={offsetFromPanel()}
+        min={390}
+        max={maxSidebarWidth()}
+        value={sidebarWidth as Accessor<number>}
+        onValueChange={setSidebarWidth}
+        onValueStart={() => setAnimateSidebar(false)}
+        onValueCommit={(width) => {
+          setAnimateSidebar(true);
+          settingsWriteSidebarWidth(width);
+        }}
+      >
+        <main class="main-scene relative flex-1 app-grid">
+          <Sidebar />
+          <div
+            class="song relative flex flex-1 items-center justify-center"
+            classList={{
+              "m-2 rounded-3xl": os() === "darwin",
+              "mt-0 m-2": os() !== "darwin",
+            }}
+          >
+            <SongDetail />
+            <Queue />
+            <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-lg shadow-2xl ring-2 ring-inset ring-stroke">
+              <SongImage
+                src={song().bg}
+                instantLoad={true}
+                class="absolute inset-0 bg-cover bg-fixed bg-left-top opacity-30 blur-lg filter"
+              />
+            </div>
           </div>
-        </div>
-      </main>
-
+        </main>
+      </ResizablePanel>
       <div class="pointer-events-none fixed h-full inset-0 z-[-1]">
         <SongImage
           src={song().bg}
@@ -70,7 +90,7 @@ const Queue: Component = () => {
       onValueChange={setIsOpen}
       isOpen={isOpen}
     >
-      <Popover.Anchor onClick={() => setIsOpen(true)} class="no-drag absolute right-2 top-2">
+      <Popover.Anchor onClick={() => setIsOpen(true)} class="no-drag absolute right-2 top-2 z-10">
         <Button size="square" variant="outlined" class="no-drag">
           <Layers3Icon size={20} />
         </Button>

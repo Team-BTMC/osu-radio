@@ -1,14 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 import { noticeAnimations } from "./src/renderer/src/components/notice/NoticeAnimations";
+import { songItemAnimations } from "./src/renderer/src/components/song/song-item/SongItemAnimations";
 
 export default {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       keyframes: {
+        ...songItemAnimations.keyframes,
         ...noticeAnimations.keyframes,
       },
       animation: {
+        ...songItemAnimations.animation,
         ...noticeAnimations.animation,
       },
       colors: {

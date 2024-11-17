@@ -2,57 +2,64 @@
 @tailwind components;
 @tailwind utilities;
 
-@font-face {
-  font-family: "Nunito";
-  src: url("@renderer/assets/fonts/Nunito-Variable.ttf") format("truetype");
-  font-weight: 100 900;
-  font-style: normal;
-}
+@layer base {
+  @font-face {
+    font-family: "Nunito";
+    src: url("@renderer/assets/fonts/Nunito-Variable.ttf") format("truetype");
+    font-weight: 100 900;
+    font-style: normal;
+  }
 
-@font-face {
-  font-family: "Nunito";
-  src: url("@renderer/assets/fonts/Nunito-Italic-Variable.ttf") format("truetype");
-  font-weight: 100 900;
-  font-style: italic;
-}
+  @font-face {
+    font-family: "Nunito";
+    src: url("@renderer/assets/fonts/Nunito-Italic-Variable.ttf") format("truetype");
+    font-weight: 100 900;
+    font-style: italic;
+  }
 
-:focus-visible {
-  @apply outline outline-blue-500 outline-2;
-}
+  :focus-visible {
+    @apply outline outline-blue-500 outline-2;
+  }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  user-select: none;
-}
+  .transition-base {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
 
-html {
-  background: rgba(var(--color-thick-material));
-  color: rgb(var(--color-text));
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+  }
 
-  font-family: "Nunito", sans-serif;
-  font-optical-sizing: auto;
-}
+  html {
+    background: rgba(var(--color-thick-material));
+    color: rgb(var(--color-text));
 
-button {
-  all: unset;
-}
+    font-family: "Nunito", sans-serif;
+    font-optical-sizing: auto;
+  }
 
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
+  button {
+    all: unset;
+  }
 
-::-webkit-scrollbar-track {
-  background-color: transparent;
-}
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
 
-::-webkit-scrollbar-thumb {
-  background-color: rgba(var(--color-surface), 0.5);
-  border-radius: 999px;
-}
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
 
-::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(var(--color-surface), 0.7);
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(var(--color-surface), 0.5);
+    border-radius: 999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(var(--color-surface), 0.7);
+  }
 }

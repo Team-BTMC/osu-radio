@@ -7,7 +7,7 @@ import { song as selectedSong } from "../song.utils";
 import { transparentize } from "polished";
 import Popover from "@renderer/components/popover/Popover";
 import { EllipsisVerticalIcon } from "lucide-solid";
-import { Component, createSignal, JSXElement, onMount, createMemo } from "solid-js";
+import { Component, createSignal, JSXElement, onMount, createMemo, Show } from "solid-js";
 import { twMerge } from "tailwind-merge";
 
 type SongItemProps = {
@@ -67,11 +67,11 @@ const SongItem: Component<SongItemProps> = (props) => {
       return "rgba(0, 0, 0, 0.72)";
     }
 
-    if (isHovering() || localShow()) {
-      return `linear-gradient(to right, ${color} 20%, ${transparentize(0.9)(color)}), rgba(255, 255, 255, 0.2)`;
+    if (isHovering() || localShow() || isSelected()) {
+      return `linear-gradient(to right, ${transparentize(0.1)(color)} 20%, ${transparentize(0.9)(color)}), rgba(0, 0, 0, 0.1)`;
     }
 
-    return `linear-gradient(to right, ${color} 16%, ${transparentize(0.92)(color)})`;
+    return `linear-gradient(to right, ${color} 20%, ${transparentize(0.9)(color)}), rgba(0, 0, 0, 0.2)`;
   });
 
   return (
@@ -103,14 +103,12 @@ const SongItem: Component<SongItemProps> = (props) => {
         onMouseLeave={() => {
           setIsHovering(false);
         }}
-        class="min-h-[72px] rounded-lg py-0.5 pl-1.5 pr-0.5 transition-colors active: group relative"
+        class="min-h-[72px] rounded-lg py-0.5 pl-1.5 pr-0.5 transition-colors active: group relative isolate overflow-hidden"
         classList={{
           "shadow-glow-blue": isSelected(),
-          "pr-6": isHovering() || localShow(),
         }}
         style={{
           background: borderColor(),
-          "transition-property": "padding, background",
         }}
         onContextMenu={(e) => {
           e.preventDefault();
@@ -119,22 +117,24 @@ const SongItem: Component<SongItemProps> = (props) => {
         }}
       >
         <div
-          class="relative isolate select-none rounded-lg"
-          classList={{}}
+          class="relative isolate select-none rounded-lg h-full"
           ref={item}
           data-url={props.song.bg}
         >
           <SongImage
-            class={`absolute inset-0 z-[-1] h-full w-full rounded-l-[9px] rounded-r-md bg-cover bg-center bg-no-repeat bg-scroll`}
+            class={`absolute z-[-1] inset-0 h-full w-full rounded-l-[9px] rounded-r-md bg-cover bg-center bg-no-repeat bg-scroll opacity-70 rounded-lg`}
+            classList={{
+              "opacity-100": isSelected(),
+            }}
             src={props.song.bg}
             group={props.group}
             onImageLoaded={processImage}
           />
+
           <div
-            class="flex flex-col justify-center overflow-hidden rounded-md p-3 transition-transform pr-10 group-hover:pr-6"
+            class="flex flex-col justify-center overflow-hidden rounded-md p-3 transition-transform pr-10 h-full"
             style={{
               background: backgrund(),
-              "transition-property": "padding, background",
             }}
           >
             <h3 class="drop-shadow-md text-[22px] font-[740] leading-7">{props.song.title}</h3>
@@ -142,30 +142,32 @@ const SongItem: Component<SongItemProps> = (props) => {
           </div>
         </div>
 
-        <Popover.Anchor
-          onClick={(e) => {
-            e.stopPropagation();
-            setMousePos(undefined);
-            setLocalShow(true);
-          }}
-          class="absolute right-0 top-0 h-full  flex items-center text-subtext transition-colors hover:text-text"
-          title="Song options"
-          classList={{
-            "text-text": localShow(),
-          }}
-        >
-          <div
-            class={twMerge("opacity-0 transition-opacity z-10")}
+        <Show when={isHovering() || localShow()}>
+          <Popover.Anchor
+            onClick={(e) => {
+              e.stopPropagation();
+              setMousePos(undefined);
+              setLocalShow(true);
+            }}
+            class="absolute right-0 top-0 h-full flex items-center text-subtext transition-colors hover:text-text rounded-r-lg animate-song-item-slide-in"
+            title="Song options"
             classList={{
-              "opacity-100": isHovering() || localShow(),
+              "text-text": localShow(),
             }}
             style={{
-              color: isSelected() ? secondaryColor() : undefined,
+              background: borderColor(),
             }}
           >
-            <EllipsisVerticalIcon />
-          </div>
-        </Popover.Anchor>
+            <div
+              class={twMerge("transition-opacity z-10")}
+              style={{
+                color: isSelected() ? secondaryColor() : undefined,
+              }}
+            >
+              <EllipsisVerticalIcon />
+            </div>
+          </Popover.Anchor>
+        </Show>
       </div>
     </Popover>
   );

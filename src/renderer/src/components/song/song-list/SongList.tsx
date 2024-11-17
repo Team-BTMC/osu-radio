@@ -88,14 +88,12 @@ const SongList: Component<SongViewProps> = (props) => {
           reset={resetListing}
           fallback={<div class="py-8 text-center text-lg uppercase text-subtext">No songs</div>}
           builder={(s) => (
-            <div>
-              <SongItem
-                song={s}
-                group={group}
-                onSelect={createQueue}
-                contextMenu={<SongListContextMenuContent song={s} />}
-              />
-            </div>
+            <SongItem
+              song={s}
+              group={group}
+              onSelect={createQueue}
+              contextMenu={<SongListContextMenuContent song={s} />}
+            />
           )}
         />
       </div>
