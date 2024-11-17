@@ -66,6 +66,14 @@ function useProviderValue(props: Props) {
     });
   });
 
+  onMount(() => {
+    window.addEventListener("resize", listenResize);
+
+    onCleanup(() => {
+      window.removeEventListener("resize", listenResize);
+    });
+  });
+
   createEffect(() => {
     const triggerElement = triggerRef();
     if (!triggerElement) {
