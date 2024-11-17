@@ -157,7 +157,7 @@ const LeftPart = () => {
 
         <Show when={isHoveringVolume()}>
           <Slider
-            class="flex h-8 w-28 flex-grow items-center"
+            class="flex h-8 w-24 flex-grow items-center"
             min={0}
             max={1}
             value={volume}

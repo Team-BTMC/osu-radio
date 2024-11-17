@@ -34,7 +34,7 @@ const MainScene: Component = () => {
 
       <ResizablePanel
         offsetFromPanel={offsetFromPanel()}
-        min={390}
+        min={os() === "darwin" ? 432 : 390}
         max={maxSidebarWidth()}
         value={sidebarWidth as Accessor<number>}
         onValueChange={setSidebarWidth}
