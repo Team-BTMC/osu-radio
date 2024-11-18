@@ -1,4 +1,4 @@
-import { Accessor, createContext, ParentComponent, useContext } from "solid-js";
+import { Accessor, createContext, createMemo, ParentComponent, useContext } from "solid-js";
 import { DragHandler } from "./DragHandler";
 import useControllableState from "@renderer/lib/controllable-state";
 import { DOMElement } from "solid-js/jsx-runtime";
@@ -35,16 +35,16 @@ function useProviderValue(props: Props) {
     onChange: props.onValueChange,
   });
 
+  const min = createMemo(() => props.min ?? DEFAULT_MIN);
+  const max = createMemo(() => props.max ?? DEFAULT_MAX);
+
   const getValueFromPointer = (pointerPosition: number) => {
     if (!startDragValue) {
       return;
     }
 
-    const min = props.min ?? DEFAULT_MIN;
-    const max = props.max ?? DEFAULT_MAX;
-
     const value = pointerPosition - (props.offsetFromPanel ?? 0);
-    return clamp(min, max, value);
+    return clamp(min(), max(), value);
   };
 
   const handlePointerStart = (event: Event) => {
@@ -69,7 +69,40 @@ function useProviderValue(props: Props) {
     props.onValueCommit?.(value());
   };
 
-  return { value, handlePointerStart, handlePointerMove, handlePointerEnd };
+  const handleKeyDown = () => {
+    props.onValueStart?.();
+  };
+
+  const handleKeyUp = () => {
+    props.onValueCommit?.(value());
+  };
+
+  const handleStep = (direction: "left" | "right") => {
+    const stepDirection = direction === "left" ? -1 : 1;
+    const step = (max() / 100) * 5;
+    const stepInDirection = step * stepDirection;
+    setValue((value) => clamp(min(), max(), value + stepInDirection));
+  };
+
+  const handleHomeKeyDown = () => {
+    setValue(min());
+  };
+
+  const handleEndKeyDown = () => {
+    setValue(max());
+  };
+
+  return {
+    value,
+    handlePointerStart,
+    handlePointerMove,
+    handlePointerEnd,
+    handleStep,
+    handleHomeKeyDown,
+    handleEndKeyDown,
+    handleKeyDown,
+    handleKeyUp,
+  };
 }
 
 export const ResizablePanelContext = createContext<Context>();

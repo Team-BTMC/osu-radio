@@ -10,6 +10,7 @@ export const DragHandler: Component<DragHandlerProps> = (props) => {
 
   return (
     <div
+      tabIndex={0}
       onPointerDown={(event) => {
         const target = event.target as HTMLElement;
         target.setPointerCapture(event.pointerId);
@@ -32,8 +33,32 @@ export const DragHandler: Component<DragHandlerProps> = (props) => {
           state.handlePointerEnd();
         }
       }}
+      onKeyUp={() => {
+        state.handleKeyUp();
+      }}
+      onKeyDown={(event) => {
+        state.handleKeyDown();
+
+        switch (event.key) {
+          case "ArrowLeft":
+            state.handleStep("left");
+            break;
+          case "ArrowRight":
+            state.handleStep("right");
+            break;
+          case "Home":
+            state.handleHomeKeyDown();
+            break;
+          case "End":
+            state.handleEndKeyDown();
+            break;
+
+          default:
+            break;
+        }
+      }}
       class={cn(
-        "opacity-0 hover:opacity-100 h-full w-4 translate-x-[-50%] cursor-w-resize flex flex-col items-center justify-center",
+        "opacity-0 hover:opacity-100 focus:opacity-100 h-full w-4 translate-x-[-50%] cursor-w-resize flex flex-col items-center justify-center",
         props.class,
       )}
     >

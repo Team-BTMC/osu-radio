@@ -132,7 +132,7 @@ const SongItem: Component<SongItemProps> = (props) => {
           />
 
           <div
-            class="flex flex-col justify-center overflow-hidden rounded-md p-3 transition-transform pr-10 h-full"
+            class="flex flex-col justify-center overflow-hidden rounded-md p-3 pr-10 h-full"
             style={{
               background: backgrund(),
             }}
