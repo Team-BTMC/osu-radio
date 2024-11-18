@@ -4,11 +4,19 @@ import { TokenNamespace } from "@shared/lib/tungsten/token";
 import Notice, { IconNoticeType } from "./Notice";
 import { For, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
-import { MaximizeIcon, XIcon } from "lucide-solid";
 import { NoticeTypeIconMap } from "@shared/types/common.types";
 const [notices, setNotices] = createStore<IconNoticeType[]>([]);
 const namespace = new TokenNamespace();
 const [isPaused, setIsPaused] = createSignal(false);
+
+// NOTE: If you're looking to send a notice from the backend, do something like this:
+// Router.dispatch(window, "notify", {
+//   variant: "neutral",
+//   title: "",
+//   description: "",
+//   icon: "a-arrow-up"
+// });
+// Remember to add "a-arrow-up", etc into the NoticeTypeIconMap.
 
 export function addNotice(notice: IconNoticeType): void {
   if (notice.id === undefined) {
@@ -41,13 +49,12 @@ window.api.listen("notify", (n: NoticeTypeIconMap) => {
     description: n.description,
   };
 
-  switch (n.icon) {
-    case "maximize-icon":
-      noticeParams.icon = <MaximizeIcon size={20} />;
-      break;
-    case "X-icon":
-      noticeParams.icon = <XIcon size={20} />;
-  }
+  // NOTE: *No icons mapped yet. To add the mapping, do something like this:
+  // switch (n.icon) {
+  //   case "a-arrow-up":
+  //     noticeParams.icon = <...Icon />;
+  //     break;
+  // }
 
   addNotice(noticeParams);
 });

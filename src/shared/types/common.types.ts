@@ -245,6 +245,6 @@ export type NoticeType = {
 };
 
 export type NoticeTypeIconMap = NoticeType & {
-  icon?: "maximize-icon" | "X-icon";
+  icon?: undefined;
+  // NOTE: add the icons like "a-arrow-down" | "a-arrow-up", etc.
 };
-
