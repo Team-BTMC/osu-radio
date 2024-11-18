@@ -243,3 +243,8 @@ export type NoticeType = {
   title?: string;
   description?: string;
 };
+
+export type NoticeTypeIconMap = NoticeType & {
+  icon?: "maximize-icon" | "X-icon";
+};
+

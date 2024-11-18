@@ -13,7 +13,7 @@ import type {
   Song,
   SongsQueryPayload,
   LoadingSceneUpdate,
-  NoticeType,
+  NoticeTypeIconMap,
   Scenes,
 } from "./common.types";
 import type { SearchQuery } from "./search-parser.types";
@@ -93,5 +93,5 @@ export type ListenAPI = {
 
   "window::maximizeChange": (maximized: boolean) => void;
 
-  notify: (notice: NoticeType) => void;
+  notify: (notice: NoticeTypeIconMap) => void;
 };

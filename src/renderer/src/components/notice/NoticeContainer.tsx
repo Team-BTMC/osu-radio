@@ -4,7 +4,8 @@ import { TokenNamespace } from "@shared/lib/tungsten/token";
 import Notice, { IconNoticeType } from "./Notice";
 import { For, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
-
+import { MaximizeIcon, XIcon } from "lucide-solid";
+import { NoticeTypeIconMap } from "@shared/types/common.types";
 const [notices, setNotices] = createStore<IconNoticeType[]>([]);
 const namespace = new TokenNamespace();
 const [isPaused, setIsPaused] = createSignal(false);
@@ -32,8 +33,23 @@ function hideNotice(id: string | undefined): Result<void, string> {
 
 export { notices, isPaused, setIsPaused };
 
-window.api.listen("notify", (n) => {
-  addNotice(n);
+window.api.listen("notify", (n: NoticeTypeIconMap) => {
+  const noticeParams: IconNoticeType = {
+    id: n.id,
+    variant: n.variant,
+    title: n.title,
+    description: n.description,
+  };
+
+  switch (n.icon) {
+    case "maximize-icon":
+      noticeParams.icon = <MaximizeIcon size={20} />;
+      break;
+    case "X-icon":
+      noticeParams.icon = <XIcon size={20} />;
+  }
+
+  addNotice(noticeParams);
 });
 
 const NoticeContainer = () => {
