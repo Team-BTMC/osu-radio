@@ -1,6 +1,6 @@
 import { addNotice } from "@renderer/components/notice/NoticeContainer";
 import { Keyboard } from "@renderer/lib/Keyboard";
-import { mainActiveTab, TABS } from "@renderer/scenes/main-scene/main.utils";
+import { sidebarActiveTab, SIDEBAR_PAGES } from "@renderer/scenes/main-scene/main.utils";
 import { ShuffleIcon } from "lucide-solid";
 
 Keyboard.register({
@@ -8,7 +8,7 @@ Keyboard.register({
   onPress: async () => {
     await window.api.request("queue::shuffle");
 
-    if (mainActiveTab() !== TABS.SONGS.value) {
+    if (sidebarActiveTab() !== SIDEBAR_PAGES.SONGS.value) {
       return;
     }
 

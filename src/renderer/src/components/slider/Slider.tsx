@@ -108,7 +108,6 @@ export const SliderContext = createContext<Context>();
 const SliderRoot: ParentComponent<Props> = (props) => {
   const sliderContext = useProviderValue(props);
   const [slider, setSlider] = createSignal<HTMLElement>();
-  const [lastRect, setLastRect] = createSignal<DOMRect | undefined>();
 
   const getValueFromPointer = (pointerPosition: number) => {
     const sliderElement = slider();
@@ -116,16 +115,13 @@ const SliderRoot: ParentComponent<Props> = (props) => {
       return;
     }
 
-    const sliderRect = sliderElement.getBoundingClientRect();
-    const rect = lastRect() || sliderRect;
-
+    const rect = sliderElement.getBoundingClientRect();
     const min = sliderContext.min;
     const max = sliderContext.max;
     const input: [number, number] = [0, rect.width];
     const output: [number, number] = [min, max];
     const value = linearScale(input, output);
 
-    setLastRect(sliderRect);
     return clamp(min, max, value(pointerPosition - rect.left));
   };
 

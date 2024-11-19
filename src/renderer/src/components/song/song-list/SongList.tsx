@@ -3,12 +3,11 @@ import { namespace } from "@renderer/App";
 import Impulse from "@renderer/lib/Impulse";
 import { none, some } from "@shared/lib/rust-types/Optional";
 import InfiniteScroller from "@renderer/components/InfiniteScroller";
-import SongContextMenu from "@renderer/components/song/context-menu/SongContextMenu";
-import AddToPlaylist from "@renderer/components/song/context-menu/items/AddToPlaylist";
-import PlayNext from "@renderer/components/song/context-menu/items/PlayNext";
 import SongItem from "@renderer/components/song/song-item/SongItem";
 import SongListSearch from "@renderer/components/song/song-list-search/SongListSearch";
 import { songsSearch } from "./song-list.utils";
+import DropdownList from "@renderer/components/dropdown-list/DropdownList";
+import { ListPlus, ListStartIcon } from "lucide-solid";
 import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { SearchQueryError } from "@shared/types/search-parser.types";
 
@@ -22,10 +21,9 @@ const DEFAULT_TAGS_VALUE: Tag[] = [];
 const DEFAULT_ORDER_VALUE: Order = { option: "title", direction: "asc" };
 
 const SongList: Component<SongViewProps> = (props) => {
-  const [tags, setTags] = createSignal(DEFAULT_TAGS_VALUE, { equals: false });
+  const tagsSignal = createSignal(DEFAULT_TAGS_VALUE, { equals: false });
   const [order, setOrder] = createSignal(DEFAULT_ORDER_VALUE);
   const [count, setCount] = createSignal(0);
-  const [isQueueExist, setIsQueueExist] = createSignal(false);
 
   const [payload, setPayload] = createSignal<SongsQueryPayload>({
     view: props,
@@ -40,7 +38,7 @@ const SongList: Component<SongViewProps> = (props) => {
 
   const searchSongs = async () => {
     const o = order();
-    const t = tags();
+    const t = tagsSignal[0]();
     const parsedQuery = await window.api.request("parse::search", songsSearch());
 
     if (parsedQuery.type === "error") {
@@ -72,21 +70,13 @@ const SongList: Component<SongViewProps> = (props) => {
       startSong: songResource,
       ...payload(),
     });
-    setIsQueueExist(true);
   };
 
   const group = namespace.create(true);
 
   return (
-    <div class="flex h-full flex-col">
-      <div class="sticky top-0 z-10">
-        <SongListSearch
-          tags={[tags, setTags]}
-          setOrder={setOrder}
-          count={count}
-          error={searchError}
-        />
-      </div>
+    <>
+      <SongListSearch tags={tagsSignal} setOrder={setOrder} count={count} error={searchError} />
 
       <div class="flex-grow overflow-y-auto p-5 py-0">
         <InfiniteScroller
@@ -96,25 +86,38 @@ const SongList: Component<SongViewProps> = (props) => {
           apiInitData={payload()}
           setCount={setCount}
           reset={resetListing}
-          fallback={<div class="py-8 text-center text-text">No songs...</div>}
+          fallback={<div class="py-8 text-center text-lg uppercase text-subtext">No songs</div>}
           builder={(s) => (
-            <div>
-              <SongItem
-                song={s}
-                group={group}
-                onSelect={createQueue}
-                contextMenu={
-                  <SongContextMenu>
-                    <PlayNext path={s.path} disabled={!isQueueExist()} />
-                    <AddToPlaylist path={s.path} />
-                  </SongContextMenu>
-                }
-              ></SongItem>
-            </div>
+            <SongItem
+              song={s}
+              group={group}
+              onSelect={createQueue}
+              contextMenu={<SongListContextMenuContent song={s} />}
+            />
           )}
         />
       </div>
-    </div>
+    </>
+  );
+};
+
+type SongListContextMenuContentProps = { song: Song };
+const SongListContextMenuContent: Component<SongListContextMenuContentProps> = (props) => {
+  return (
+    <DropdownList class="w-40">
+      <DropdownList.Item>
+        <span>Add to Playlist</span>
+        <ListPlus class="text-subtext" size={20} />
+      </DropdownList.Item>
+      <DropdownList.Item
+        onClick={() => {
+          window.api.request("queue::playNext", props.song.path);
+        }}
+      >
+        <span>Play next</span>
+        <ListStartIcon class="text-subtext" size={20} />
+      </DropdownList.Item>
+    </DropdownList>
   );
 };
 

@@ -19,24 +19,27 @@ const SongDetail: Component = () => {
   const colorData = createMemo(() => extractColorFromImage(song()));
 
   return (
-    <div class="flex h-full w-full max-w-[800px] flex-col p-8">
+    <div class="z-10 flex h-full w-full max-w-[800px] flex-col p-10">
       <div class="mb-8 grid flex-grow place-items-center">
         <SongImage
           src={song().bg}
           instantLoad={true}
           onImageLoaded={colorData().processImage}
-          class="size-80 rounded-lg bg-cover bg-center object-cover shadow-lg ring-2 ring-stroke ring-inset"
+          class="size-80 rounded-lg bg-cover bg-center object-cover shadow-lg"
         />
       </div>
 
       <div class="w-full max-w-[800px] space-y-4">
         <div class="song-detail__texts">
-          <h2 class="text-2xl font-bold select-text">{song().title}</h2>
-          <span class="text-lg select-text">{song().artist}</span>
+          <h2 class="select-text text-2xl font-bold">{song().title}</h2>
+          <span class="select-text text-lg">{song().artist}</span>
         </div>
 
         <ProgressBar averageColor={colorData().primaryColor()} />
-        <SongControls averageColor={colorData().primaryColor()} />
+        <SongControls
+          secondatyColor={colorData().secondaryColor()}
+          averageColor={colorData().primaryColor()}
+        />
       </div>
     </div>
   );
@@ -61,7 +64,7 @@ const ProgressBar = (props: ProgressBarProps) => {
     >
       <Slider.Track class="flex h-7 items-center rounded-xl border border-stroke bg-thick-material p-1">
         <Slider.Range
-          class="block h-5 rounded-l-lg ring-inset ring-1 ring-stroke bg-surface shadow-[inset_-20px_0_10px_-10px_#00000033]"
+          class="block h-5 rounded-l-lg bg-surface shadow-[inset_-20px_0_10px_-10px_#00000033] ring-1 ring-inset ring-stroke"
           style={{
             "background-color": props.averageColor,
           }}

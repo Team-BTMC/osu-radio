@@ -1,12 +1,12 @@
 import { cn } from "@renderer/lib/css.utils";
-import Dropdown from "@renderer/components/dropdown/Dropdown";
+import Select from "@renderer/components/select/Select";
 import { changeAudioDevice } from "@renderer/components/song/song.utils";
 import { GlobeIcon, LucideIcon, Volume2Icon } from "lucide-solid";
 import { Component, createEffect, createSignal, For, JSX, onMount } from "solid-js";
 
 const Settings: Component = () => {
   return (
-    <div class="flex flex-col gap-10 p-8">
+    <div class="flex flex-col gap-10 px-5 py-8">
       <SettingsSection title="General" Icon={GlobeIcon}>
         Empty
       </SettingsSection>
@@ -73,23 +73,31 @@ const AudioDeviceSetting: Component = () => {
 
   const handleValueChange = (newSelectedOption: string) => {
     setSelectedAudioDevice(newSelectedOption);
-    setIsPopoverOpen(false);
     audioDevices().get(newSelectedOption)?.();
   };
 
   return (
     <Setting name="audio-device" label="Choose audio device">
-      <Dropdown isOpen={isPopoverOpen} onValueChange={setIsPopoverOpen}>
-        <Dropdown.SelectTrigger class="w-full rounded border border-stroke bg-surface px-2 py-1 text-text focus:outline-none focus:ring-2 focus:ring-overlay">
+      <Select isOpen={isPopoverOpen} onValueChange={setIsPopoverOpen}>
+        <Select.Trigger variant="outlined">
           {selectedAudioDevice() || "No device selected"}
-        </Dropdown.SelectTrigger>
+        </Select.Trigger>
 
-        <Dropdown.List value={selectedAudioDevice} onValueChange={handleValueChange}>
+        <Select.Content value={selectedAudioDevice} onValueChange={handleValueChange}>
           <For each={Array.from(audioDevices().keys())}>
-            {(audioDevice) => <Dropdown.Item value={audioDevice}>{audioDevice}</Dropdown.Item>}
+            {(audioDevice) => (
+              <Select.Option
+                onSelectedByClick={() => {
+                  setIsPopoverOpen(false);
+                }}
+                value={audioDevice}
+              >
+                {audioDevice}
+              </Select.Option>
+            )}
           </For>
-        </Dropdown.List>
-      </Dropdown>
+        </Select.Content>
+      </Select>
     </Setting>
   );
 };

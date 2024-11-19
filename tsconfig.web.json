@@ -3,6 +3,7 @@
   "include": ["src/renderer/src/**/*", "src/shared/**/*"],
   "compilerOptions": {
     "noImplicitAny": true,
+    "sourceMap": true,
     "composite": true,
     "types": ["vite/client"],
     "jsxImportSource": "solid-js",

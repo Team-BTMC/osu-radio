@@ -28,7 +28,6 @@ export function useColorExtractor() {
 
       try {
         const colors = await extractColorsFromImage(src);
-        console.log("colors", colors);
         if (!colors.primaryColor || !colors.secondaryColor) {
           return;
         }

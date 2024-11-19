@@ -1,8 +1,11 @@
 import { Optional, Order, Tag } from "@shared/types/common.types";
 import { setSongsSearch } from "@renderer/components/song/song-list/song-list.utils";
 import SongListSearchOrderBy from "./SongListSearchOrderBy";
-import { SearchIcon } from "lucide-solid";
-import { Accessor, Component, Setter, Signal } from "solid-js";
+import { SongListSearchTags } from "./SongListSearchTags";
+import Button from "@renderer/components/button/Button";
+import { Input } from "@renderer/components/input/Input";
+import { FilterIcon, SearchIcon, FilterXIcon } from "lucide-solid";
+import { Accessor, Component, createSignal, Match, Setter, Signal, Switch } from "solid-js";
 import { SearchQueryError } from "@shared/types/search-parser.types";
 
 export type SearchProps = {
@@ -13,6 +16,8 @@ export type SearchProps = {
 };
 
 const SongListSearch: Component<SearchProps> = (props) => {
+  const [filterExpanded, setFilterExpanded] = createSignal(false);
+
   // const [editable, setEditable] = createSignal<HTMLElement | undefined>();
   // const [doShowError, setDoShowError] = createSignal(false);
   // const [doShowSuggestion, setDoShowSuggestion] = createSignal(false);
@@ -62,27 +67,51 @@ const SongListSearch: Component<SearchProps> = (props) => {
   // });
 
   return (
-    <div class="p-5">
-      <div class="relative mb-4">
-        <input
-          class="h-10 w-full rounded-full bg-thin-material pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-overlay"
-          type="text"
-          id="search_input"
-          placeholder="Type to search songs..."
-          onInput={(e) => {
-            setSongsSearch(e.target.value);
-          }}
-        />
-        <label
-          class="absolute left-3 top-1/2 -translate-y-1/2 transform text-text"
-          for="search_input"
+    <div class="px-5 pb-2 pt-1">
+      <div class="flex gap-2">
+        <div class="relative flex-1">
+          <Input
+            variant="outlined"
+            type="text"
+            id="search_input"
+            placeholder="Type to search songs..."
+            onInput={(e) => {
+              setSongsSearch(e.target.value);
+            }}
+          />
+          <label
+            class="absolute right-3.5 top-1/2 -translate-y-1/2 transform text-subtext"
+            for="search_input"
+          >
+            <SearchIcon size={20} class="opacity-70" />
+          </label>
+        </div>
+        <Button
+          onClick={() => setFilterExpanded((e) => !e)}
+          size="square"
+          variant={filterExpanded() ? "secondary" : "outlined"}
         >
-          <SearchIcon size={20} class="opacity-70" />
-        </label>
+          <Switch>
+            <Match when={filterExpanded()}>
+              <FilterXIcon size={20} />
+            </Match>
+            <Match when={!filterExpanded()}>
+              <FilterIcon size={20} />
+            </Match>
+          </Switch>
+        </Button>
       </div>
-
-      <div class="flex items-center space-x-4">
-        <SongListSearchOrderBy setOrder={props.setOrder} />
+      <div
+        class="overflow-hidden transition-all"
+        classList={{
+          "h-0": !filterExpanded(),
+          "h-[46px]": filterExpanded(),
+        }}
+      >
+        <div class="mt-2 flex flex-nowrap items-center gap-2 overflow-y-auto">
+          <SongListSearchOrderBy disabled={!filterExpanded()} setOrder={props.setOrder} />
+          <SongListSearchTags disabled={!filterExpanded()} />
+        </div>
       </div>
     </div>
   );
