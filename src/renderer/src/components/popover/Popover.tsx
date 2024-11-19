@@ -63,10 +63,10 @@ function useProviderValue(props: Props) {
   const [id, setId] = createSignal<string>("");
 
   onMount(() => {
-    window.addEventListener("resize", listenResize);
+    window.addEventListener("resize", handleResize);
 
     onCleanup(() => {
-      window.removeEventListener("resize", listenResize);
+      window.removeEventListener("resize", handleResize);
     });
   });
 
@@ -82,8 +82,7 @@ function useProviderValue(props: Props) {
       resizeObserver = undefined;
     }
 
-    resizeObserver = new ResizeObserver(listenResize);
-
+    resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(triggerElement);
 
     onCleanup(() => {
@@ -93,12 +92,12 @@ function useProviderValue(props: Props) {
 
   const setTriggerRef = (element: HTMLElement) => {
     _setTriggerRef(element);
-    listenResize();
+    handleResize();
   };
 
   const setContentRef = (element: HTMLDivElement) => {
     _setContentRef(element);
-    listenResize();
+    handleResize();
   };
 
   let lastMousePos: [number, number];
@@ -119,7 +118,7 @@ function useProviderValue(props: Props) {
     },
   };
 
-  const listenResize = () => {
+  const handleResize = () => {
     const trigger = triggerRef();
     const content = contentRef();
 
