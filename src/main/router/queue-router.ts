@@ -1,3 +1,13 @@
+import { Router } from "@main/lib/route-pass/Router";
+import { filter } from "@main/lib/song/filter";
+import { indexMapper } from "@main/lib/song/indexMapper";
+import order from "@main/lib/song/order";
+import { Storage } from "@main/lib/storage/Storage";
+import { mainWindow } from "@main/main";
+import { none, some } from "@shared/lib/rust-types/Optional";
+import { fail, ok } from "@shared/lib/rust-types/Result";
+import { shuffle } from "@shared/lib/tungsten/collections";
+import errorIgnored from "@shared/lib/tungsten/errorIgnored";
 import {
   Optional,
   QueueCreatePayload,
@@ -6,16 +16,6 @@ import {
   Song,
   SongIndex,
 } from "@shared/types/common.types";
-import { Router } from "@main/lib/route-pass/Router";
-import { none, some } from "@shared/lib/rust-types/Optional";
-import { fail, ok } from "@shared/lib/rust-types/Result";
-import { filter } from "@main/lib/song/filter";
-import { indexMapper } from "@main/lib/song/indexMapper";
-import order from "@main/lib/song/order";
-import { Storage } from "@main/lib/storage/Storage";
-import { shuffle } from "@shared/lib/tungsten/collections";
-import errorIgnored from "@shared/lib/tungsten/errorIgnored";
-import { mainWindow } from "@main/main";
 
 let queue: Song[];
 

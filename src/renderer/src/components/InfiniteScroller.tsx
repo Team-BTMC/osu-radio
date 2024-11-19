@@ -1,6 +1,6 @@
+import Impulse from "@renderer/lib/Impulse";
 import { OmitPropsWithoutReturnType, Optional } from "@shared/types/common.types";
 import { RequestAPI } from "@shared/types/router.types";
-import Impulse from "@renderer/lib/Impulse";
 import {
   Component,
   createSignal,

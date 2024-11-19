@@ -1,8 +1,8 @@
-import { AudioSource, ImageSource, ResourceID, Result, Song } from "@shared/types/common.types";
+import { OsuFile } from "./OsuFile";
 import { access } from "@main/lib/fs-promises";
 import { fail, ok } from "@shared/lib/rust-types/Result";
 import { assertNever } from "@shared/lib/tungsten/assertNever";
-import { OsuFile } from "./OsuFile";
+import { AudioSource, ImageSource, ResourceID, Result, Song } from "@shared/types/common.types";
 import fs from "graceful-fs";
 import os from "os";
 import path from "path/posix";

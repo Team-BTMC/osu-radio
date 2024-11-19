@@ -1,7 +1,7 @@
-import { LoadingSceneUpdate } from "@shared/types/common.types";
-import { clamp } from "@shared/lib/tungsten/math";
 import "./styles.css";
 import Slider from "@renderer/components/slider/Slider";
+import { clamp } from "@shared/lib/tungsten/math";
+import { LoadingSceneUpdate } from "@shared/types/common.types";
 import { createMemo, createSignal, onCleanup, onMount } from "solid-js";
 
 export default function LoadingScene() {

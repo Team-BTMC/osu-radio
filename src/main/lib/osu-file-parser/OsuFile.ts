@@ -1,8 +1,8 @@
-import { AudioSource, ImageSource, Optional, Result, Song } from "@shared/types/common.types";
 import { access, readFile, stat } from "@main/lib/fs-promises";
+import { SongBuilder } from "@main/lib/song/SongBuilder";
 import { none, some } from "@shared/lib/rust-types/Optional";
 import { fail, ok } from "@shared/lib/rust-types/Result";
-import { SongBuilder } from "@main/lib/song/SongBuilder";
+import { AudioSource, ImageSource, Optional, Result, Song } from "@shared/types/common.types";
 import { getAudioDurationInSeconds } from "get-audio-duration";
 import fs from "graceful-fs";
 import path from "path";

@@ -1,10 +1,10 @@
-import { ResourceID, Song } from "@shared/types/common.types";
-import draggable from "@renderer/lib/draggable/draggable";
+import Popover from "@renderer/components/popover/Popover";
 import SongHint from "@renderer/components/song/SongHint";
 import SongImage from "@renderer/components/song/SongImage";
 import { useColorExtractor } from "@renderer/components/song/color-extractor";
 import { song as selectedSong } from "@renderer/components/song/song.utils";
-import Popover from "@renderer/components/popover/Popover";
+import draggable from "@renderer/lib/draggable/draggable";
+import { ResourceID, Song } from "@shared/types/common.types";
 import { EllipsisVerticalIcon } from "lucide-solid";
 import { transparentize } from "polished";
 import { Component, createSignal, JSXElement, onMount, createMemo, Show } from "solid-js";

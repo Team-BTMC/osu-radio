@@ -1,5 +1,3 @@
-import { isSongUndefined } from "@renderer/lib/song";
-import Popover from "@renderer/components/popover/Popover";
 import {
   isPlaying,
   next,
@@ -13,7 +11,9 @@ import {
   handleMuteSong,
 } from "../song.utils";
 import Button from "@renderer/components/button/Button";
+import Popover from "@renderer/components/popover/Popover";
 import Slider from "@renderer/components/slider/Slider";
+import { isSongUndefined } from "@renderer/lib/song";
 import {
   CirclePlusIcon,
   GaugeIcon,

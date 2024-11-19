@@ -1,9 +1,9 @@
-import { delay } from "@renderer/lib/delay";
-import { none, some } from "@shared/lib/rust-types/Optional";
-import { isSongUndefined, msToBPM } from "@renderer/lib/song";
-import { createEffect, createSignal } from "solid-js";
-import { AudioSource, Optional, Song } from "@shared/types/common.types";
 import DEFAULT_SONG_BG_SMALL from "@renderer/assets/osu-default-background-small.jpg";
+import { delay } from "@renderer/lib/delay";
+import { isSongUndefined, msToBPM } from "@renderer/lib/song";
+import { none, some } from "@shared/lib/rust-types/Optional";
+import { AudioSource, Optional, Song } from "@shared/types/common.types";
+import { createEffect, createSignal } from "solid-js";
 
 /** Range from 0 to 1. */
 export type ZeroToOne = number;

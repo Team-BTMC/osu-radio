@@ -1,3 +1,4 @@
+import { closestLevenDist } from "./levenshteinDistance";
 import {
   SearchPropertyValidation,
   SearchConfig,
@@ -6,7 +7,6 @@ import {
   ValidationSuggestion,
   SearchQuerySuggestion,
 } from "@shared/types/search-parser.types";
-import { closestLevenDist } from "./levenshteinDistance";
 
 type ComparisonExtractionTrue = {
   isPresent: true;

@@ -1,5 +1,5 @@
-import { BlobMap, TableMap } from "@shared/types/common.types";
 import { Table } from "./Table";
+import { BlobMap, TableMap } from "@shared/types/common.types";
 import { app } from "electron";
 import fs from "fs";
 import path from "path";

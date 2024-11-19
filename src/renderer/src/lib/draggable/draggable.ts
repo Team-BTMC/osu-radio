@@ -1,7 +1,7 @@
 //todo redo from parent perspective... how did i not think of this... I'm quite stupid
-import { Vec2, vec2Length } from "@shared/lib/tungsten/math";
 import defaultHint from "./defaultHint";
 import scrollAnimation from "./scrollAnimation";
+import { Vec2, vec2Length } from "@shared/lib/tungsten/math";
 
 export type DraggableOptions = {
   onClick: (event: MouseEvent) => any;

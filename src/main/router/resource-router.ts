@@ -1,7 +1,7 @@
 import { Router } from "@main/lib/route-pass/Router";
+import { Storage } from "@main/lib/storage/Storage";
 import { none, some } from "@shared/lib/rust-types/Optional";
 import { fail, ok } from "@shared/lib/rust-types/Result";
-import { Storage } from "@main/lib/storage/Storage";
 import path from "path";
 import sharp from "sharp";
 import { pathToFileURL } from "url";

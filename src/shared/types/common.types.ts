@@ -1,7 +1,7 @@
-import { IpcMainInvokeEvent } from "electron";
 import { ListenAPI, RequestAPI } from "./router.types";
-import { ConfigItem } from "./template-parser.types";
 import { SearchQuerySuccess } from "./search-parser.types";
+import { ConfigItem } from "./template-parser.types";
+import { IpcMainInvokeEvent } from "electron";
 
 declare global {
   interface Window {

@@ -1,10 +1,11 @@
-import { Result } from "@shared/types/common.types";
+import Notice, { IconNoticeType } from "./Notice";
 import { fail, ok } from "@shared/lib/rust-types/Result";
 import { TokenNamespace } from "@shared/lib/tungsten/token";
-import Notice, { IconNoticeType } from "./Notice";
+import { Result } from "@shared/types/common.types";
+import { NoticeTypeIconMap } from "@shared/types/common.types";
 import { For, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
-import { NoticeTypeIconMap } from "@shared/types/common.types";
+
 const [notices, setNotices] = createStore<IconNoticeType[]>([]);
 const namespace = new TokenNamespace();
 const [isPaused, setIsPaused] = createSignal(false);

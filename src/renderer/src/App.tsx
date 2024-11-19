@@ -1,15 +1,15 @@
-import { Scenes } from "@shared/types/common.types";
 import NoticeContainer from "./components/notice/NoticeContainer";
 import Popover from "./components/popover/Popover";
-import "@renderer/keyboard-registers/initialize";
 import { fetchOs, os, setOs } from "./lib/os";
-import { TokenNamespace } from "@shared/lib/tungsten/token";
+import { sidebarWidth } from "./scenes/main-scene/main.utils";
+import "@renderer/keyboard-registers/initialize";
 import ErrorScene from "@renderer/scenes/ErrorScene";
 import NoScene from "@renderer/scenes/NoScene";
 import DirSelectScene from "@renderer/scenes/dir-select-scene/DirSelectScene";
 import LoadingScene from "@renderer/scenes/loading-scene/LoadingScene";
 import MainScene from "@renderer/scenes/main-scene/MainScene";
-import { sidebarWidth } from "./scenes/main-scene/main.utils";
+import { TokenNamespace } from "@shared/lib/tungsten/token";
+import { Scenes } from "@shared/types/common.types";
 import type { JSX } from "solid-js";
 import { createMemo, createSignal, Match, onCleanup, onMount, Show, Switch } from "solid-js";
 

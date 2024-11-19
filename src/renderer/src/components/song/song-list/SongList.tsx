@@ -1,15 +1,16 @@
-import { Optional, Order, ResourceID, SongsQueryPayload, Tag } from "@shared/types/common.types";
+import { songsSearch } from "./song-list.utils";
 import { namespace } from "@renderer/App";
-import Impulse from "@renderer/lib/Impulse";
-import { none, some } from "@shared/lib/rust-types/Optional";
 import InfiniteScroller from "@renderer/components/InfiniteScroller";
+import DropdownList from "@renderer/components/dropdown-list/DropdownList";
 import SongItem from "@renderer/components/song/song-item/SongItem";
 import SongListSearch from "@renderer/components/song/song-list-search/SongListSearch";
-import { songsSearch } from "./song-list.utils";
-import DropdownList from "@renderer/components/dropdown-list/DropdownList";
+import Impulse from "@renderer/lib/Impulse";
+import { none, some } from "@shared/lib/rust-types/Optional";
+import { Optional, Order, ResourceID, SongsQueryPayload, Tag } from "@shared/types/common.types";
+import { Song } from "@shared/types/common.types";
+import { SearchQueryError } from "@shared/types/search-parser.types";
 import { ListPlus, ListStartIcon } from "lucide-solid";
 import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
-import { SearchQueryError } from "@shared/types/search-parser.types";
 
 export type SongViewProps = {
   isAllSongs?: boolean;

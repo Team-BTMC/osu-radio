@@ -1,8 +1,8 @@
+import { closestLevenDist } from "./levenshteinDistance";
 import {
   SearchPropertyValidation,
   SearchPropertyValidator,
 } from "@shared/types/search-parser.types";
-import { closestLevenDist } from "./levenshteinDistance";
 
 export const equalsSymbols = ["=", "==", "!="];
 export const greaterThanSymbols = [">", ">="];

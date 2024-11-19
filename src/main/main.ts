@@ -1,12 +1,12 @@
 import { DirParseResult, OsuParser } from "@main/lib/osu-file-parser/OsuParser";
 import { Router } from "@main/lib/route-pass/Router";
-import { orDefault } from "@shared/lib/rust-types/Optional";
 import { collectTagsAndIndexSongs } from "@main/lib/song";
 import { Storage } from "@main/lib/storage/Storage";
 import { throttle } from "@main/lib/throttle";
 import { dirSubmit } from "@main/router/dir-router";
 import { showError } from "@main/router/error-router";
 import "@main/router/import";
+import { orDefault } from "@shared/lib/rust-types/Optional";
 import { BrowserWindow } from "electron";
 
 export let mainWindow: BrowserWindow;

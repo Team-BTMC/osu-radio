@@ -1,10 +1,10 @@
-import { Song } from "@shared/types/common.types";
 import { namespace } from "@renderer/App";
+import InfiniteScroller from "@renderer/components/InfiniteScroller";
+import DropdownList from "@renderer/components/dropdown-list/DropdownList";
+import SongItem from "@renderer/components/song/song-item/SongItem";
 import Impulse from "@renderer/lib/Impulse";
 import scrollIfNeeded from "@shared/lib/tungsten/scroll-if-needed";
-import InfiniteScroller from "@renderer/components/InfiniteScroller";
-import SongItem from "@renderer/components/song/song-item/SongItem";
-import DropdownList from "@renderer/components/dropdown-list/DropdownList";
+import { Song } from "@shared/types/common.types";
 import { ListPlusIcon, DeleteIcon } from "lucide-solid";
 import { Component, createSignal, onCleanup, onMount } from "solid-js";
 
