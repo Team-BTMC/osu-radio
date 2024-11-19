@@ -82,9 +82,7 @@ function useProviderValue(props: Props) {
       resizeObserver = undefined;
     }
 
-    resizeObserver = new ResizeObserver(() => {
-      listenResize();
-    });
+    resizeObserver = new ResizeObserver(listenResize);
 
     resizeObserver.observe(triggerElement);
 
