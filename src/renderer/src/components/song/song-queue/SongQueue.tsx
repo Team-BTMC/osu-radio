@@ -4,9 +4,9 @@ import Impulse from "../../../lib/Impulse";
 import scrollIfNeeded from "../../../lib/tungsten/scroll-if-needed";
 import InfiniteScroller from "../../InfiniteScroller";
 import SongItem from "../song-item/SongItem";
-import { Component, createSignal, onCleanup, onMount } from "solid-js";
-import { DeleteIcon, ListPlus } from "lucide-solid";
 import DropdownList from "@renderer/components/dropdown-list/DropdownList";
+import { DeleteIcon, ListPlus } from "lucide-solid";
+import { Component, createSignal, onCleanup, onMount } from "solid-js";
 
 const SongQueue: Component = () => {
   const [count, setCount] = createSignal(0);
@@ -76,7 +76,7 @@ const SongQueue: Component = () => {
   });
 
   return (
-    <div class="flex flex-col w-full">
+    <div class="flex w-full flex-col">
       <div class="flex items-center justify-between px-5 pb-2 pt-5">
         <h2 class="text-sm font-bold">
           <span>Next songs on the queue</span>

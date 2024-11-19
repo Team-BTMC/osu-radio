@@ -23,7 +23,7 @@ const FilterOptionContainer: Component<FilterOptionContainerProps> = (_props) =>
 
   return (
     <Popover {...mergedPopoverProps}>
-      <div class={cn("flex p-0.5 items-center rounded-lg bg-surface", props.class)} {...rest} />
+      <div class={cn("flex items-center rounded-lg bg-surface p-0.5", props.class)} {...rest} />
     </Popover>
   );
 };
@@ -34,7 +34,7 @@ const FilterOptionContainer: Component<FilterOptionContainerProps> = (_props) =>
 type FilterOptionLabelProps = JSX.IntrinsicElements["p"];
 export const FilterOptionLabel: Component<FilterOptionLabelProps> = (_props) => {
   const [props, rest] = splitProps(_props, ["class"]);
-  return <p class={cn("py-1.5 px-3 text-sm", props.class)} {...rest} />;
+  return <p class={cn("px-3 py-1.5 text-sm", props.class)} {...rest} />;
 };
 
 // ------------
@@ -43,7 +43,7 @@ export const FilterOptionLabel: Component<FilterOptionLabelProps> = (_props) => 
 export const FilterOptionList: ParentComponent = (props) => {
   return (
     <div
-      class="bg-thick-material rounded-md flex items-center overflow-hidden border-2 border-thick-material gap-0.5"
+      class="flex items-center gap-0.5 overflow-hidden rounded-md border-2 border-thick-material bg-thick-material"
       {...props}
     />
   );
@@ -60,7 +60,7 @@ export const FilterOptionTrigger: Component<FilterOptionTriggerProps> = (_props)
     <Popover.Trigger
       {...rest}
       class={cn(
-        "hover:bg-surface py-1 px-2.5 rounded text-sm flex gap-1.5 items-center focus-visible:bg-surface focus-within:outline-none",
+        "flex items-center gap-1.5 rounded px-2.5 py-1 text-sm focus-within:outline-none hover:bg-surface focus-visible:bg-surface",
         props.class,
       )}
     >
@@ -81,7 +81,7 @@ export const FilterOptionItem: Component<FilterOptionItemProps> = (_props) => {
     <button
       {...rest}
       class={cn(
-        "hover:bg-surface py-1 px-2.5 rounded text-sm flex gap-1 items-center focus-within:bg-surface focus-within:outline-none",
+        "flex items-center gap-1 rounded px-2.5 py-1 text-sm focus-within:bg-surface focus-within:outline-none hover:bg-surface",
         props.class,
       )}
     >

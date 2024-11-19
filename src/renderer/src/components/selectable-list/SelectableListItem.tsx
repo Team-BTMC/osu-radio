@@ -1,8 +1,8 @@
+import { RawList } from "../raw-list/RawList";
 import { useSelectableList } from "./SelectableList";
+import { CheckIcon } from "lucide-solid";
 import { Component, createMemo, Show, splitProps } from "solid-js";
 import { JSX } from "solid-js/jsx-runtime";
-import { CheckIcon } from "lucide-solid";
-import { RawList } from "../raw-list/RawList";
 
 export type Props = JSX.IntrinsicElements["button"] & {
   value: string;

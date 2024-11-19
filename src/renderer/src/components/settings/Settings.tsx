@@ -1,8 +1,8 @@
 import { cn } from "../../lib/css.utils";
+import Select from "../select/Select";
 import { changeAudioDevice } from "@renderer/components/song/song.utils";
 import { GlobeIcon, LucideIcon, Volume2Icon } from "lucide-solid";
 import { Component, createEffect, createSignal, For, JSX, onMount } from "solid-js";
-import Select from "../select/Select";
 
 const Settings: Component = () => {
   return (

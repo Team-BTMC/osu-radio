@@ -6,7 +6,6 @@
   "author": "@CaptSiro",
   "type": "module",
   "main": "./out/main/index.js",
-  "packageManager": "^bun@1.1.33",
   "scripts": {
     "build": "bun run typecheck && electron-vite build",
     "build:linux": "electron-vite build && electron-builder --linux --config",
@@ -75,5 +74,6 @@
     "vite": "^5.4.8",
     "vite-plugin-lucide-preprocess": "^1.1.1",
     "vite-plugin-solid": "^2.7.0"
-  }
+  },
+  "packageManager": "^bun@1.1.33"
 }

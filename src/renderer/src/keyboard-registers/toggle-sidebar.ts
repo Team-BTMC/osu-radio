@@ -1,5 +1,5 @@
-import { setSidebarExpanded } from "@renderer/scenes/main-scene/main.utils";
 import { Keyboard } from "../lib/Keyboard";
+import { setSidebarExpanded } from "@renderer/scenes/main-scene/main.utils";
 
 Keyboard.register({
   key: "b",

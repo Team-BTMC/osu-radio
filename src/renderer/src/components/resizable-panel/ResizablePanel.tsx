@@ -1,8 +1,8 @@
-import { Accessor, createContext, createMemo, ParentComponent, useContext } from "solid-js";
 import { DragHandler } from "./DragHandler";
 import useControllableState from "@renderer/lib/controllable-state";
-import { DOMElement } from "solid-js/jsx-runtime";
 import { clamp } from "@renderer/lib/tungsten/math";
+import { Accessor, createContext, createMemo, ParentComponent, useContext } from "solid-js";
+import { DOMElement } from "solid-js/jsx-runtime";
 
 const DEFAULT_RESIZABLE_PANEL_VALUE = 100;
 const DEFAULT_MIN = 0;

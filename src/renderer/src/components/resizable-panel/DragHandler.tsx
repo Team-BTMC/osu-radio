@@ -1,6 +1,6 @@
-import { Component } from "solid-js";
 import { useResizablePanel } from "./ResizablePanel";
 import { cn } from "@renderer/lib/css.utils";
+import { Component } from "solid-js";
 
 type DragHandlerProps = {
   class?: string;
@@ -58,11 +58,11 @@ export const DragHandler: Component<DragHandlerProps> = (props) => {
         }
       }}
       class={cn(
-        "opacity-0 hover:opacity-100 focus:opacity-100 h-full w-4 translate-x-[-50%] cursor-w-resize flex flex-col items-center justify-center",
+        "flex h-full w-4 translate-x-[-50%] cursor-w-resize flex-col items-center justify-center opacity-0 hover:opacity-100 focus:opacity-100",
         props.class,
       )}
     >
-      <div class="bg-white/60 flex-1 w-0.5" />
+      <div class="w-0.5 flex-1 bg-white/60" />
     </div>
   );
 };

@@ -1,9 +1,8 @@
-import { Token, TokenNamespace } from "@renderer/lib/tungsten/token";
+import PopoverAnchor from "./PopoverAnchor";
 import PopoverContent from "./PopoverContent";
 import PopoverOverlay from "./PopoverOverlay";
+import { PopoverPortal, PopoverPortalMountStack } from "./PopoverPortal";
 import PopoverTrigger from "./PopoverTrigger";
-import PopoverAnchor from "./PopoverAnchor";
-
 import "./styles.css";
 import {
   computePosition,
@@ -18,6 +17,7 @@ import {
   ShiftOptions,
 } from "@floating-ui/dom";
 import useControllableState from "@renderer/lib/controllable-state";
+import { Token, TokenNamespace } from "@renderer/lib/tungsten/token";
 import {
   createSignal,
   createContext,
@@ -28,7 +28,6 @@ import {
   onMount,
   onCleanup,
 } from "solid-js";
-import { PopoverPortal, PopoverPortalMountStack } from "./PopoverPortal";
 
 export const DEFAULT_POPOVER_OPEN = false;
 

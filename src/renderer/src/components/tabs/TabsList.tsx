@@ -26,7 +26,7 @@ export const TabsList: ParentComponent<Props> = (_props) => {
         state.tryFocusFirstItem();
       }}
       class={cn(
-        "relative flex rounded-xl bg-thin-material p-1 gap-1 ring-1 ring-stroke",
+        "relative flex gap-1 rounded-xl bg-thin-material p-1 ring-1 ring-stroke",
         props.class,
       )}
     >

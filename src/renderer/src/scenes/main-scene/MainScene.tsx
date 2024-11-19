@@ -1,16 +1,5 @@
 import SongDetail from "../../components/song/song-detail/SongDetail";
-import "./styles.css";
-import Button from "@renderer/components/button/Button";
-import SongImage from "@renderer/components/song/SongImage";
-import { song } from "@renderer/components/song/song.utils";
-import { WindowsControls } from "@renderer/components/windows-control/WindowsControl";
-import { os } from "@renderer/lib/os";
-import { Layers3Icon } from "lucide-solid";
-import { Accessor, Component, createSignal, Match, Switch } from "solid-js";
 import { Sidebar } from "./Sidebar";
-import Popover from "@renderer/components/popover/Popover";
-import SongQueue from "@renderer/components/song/song-queue/SongQueue";
-import ResizablePanel from "@renderer/components/resizable-panel/ResizablePanel";
 import {
   setAnimateSidebar,
   setSidebarWidth,
@@ -18,11 +7,22 @@ import {
   sidebarWidth,
   useMainResizableOptions,
 } from "./main.utils";
+import "./styles.css";
+import Button from "@renderer/components/button/Button";
+import Popover from "@renderer/components/popover/Popover";
+import ResizablePanel from "@renderer/components/resizable-panel/ResizablePanel";
+import SongImage from "@renderer/components/song/SongImage";
+import SongQueue from "@renderer/components/song/song-queue/SongQueue";
+import { song } from "@renderer/components/song/song.utils";
+import { WindowsControls } from "@renderer/components/windows-control/WindowsControl";
+import { os } from "@renderer/lib/os";
+import { Layers3Icon } from "lucide-solid";
+import { Accessor, Component, createSignal, Match, Switch } from "solid-js";
 
 const MainScene: Component = () => {
   const { maxSidebarWidth, offsetFromPanel } = useMainResizableOptions();
   return (
-    <div class="min-h-screen h-full flex flex-col">
+    <div class="flex h-full min-h-screen flex-col">
       <Switch>
         <Match when={os() === "darwin"}>
           <MacNav />
@@ -44,7 +44,7 @@ const MainScene: Component = () => {
           settingsWriteSidebarWidth(width);
         }}
       >
-        <main class="main-scene relative flex-1 app-grid">
+        <main class="main-scene app-grid relative flex-1">
           <Sidebar />
           <div
             class="song relative flex flex-1 items-center justify-center"
@@ -65,7 +65,7 @@ const MainScene: Component = () => {
           </div>
         </main>
       </ResizablePanel>
-      <div class="pointer-events-none fixed h-full inset-0 z-[-1]">
+      <div class="pointer-events-none fixed inset-0 z-[-1] h-full">
         <SongImage
           src={song().bg}
           instantLoad={true}
@@ -73,7 +73,7 @@ const MainScene: Component = () => {
         />
       </div>
 
-      <div class="pointer-events-none fixed h-full inset-0 z-[-1] bg-black/80" />
+      <div class="pointer-events-none fixed inset-0 z-[-1] h-full bg-black/80" />
     </div>
   );
 };
@@ -98,7 +98,7 @@ const Queue: Component = () => {
 
       <Popover.Portal>
         <Popover.Overlay />
-        <Popover.Content class="w-[480px] max-h-[600px] flex p-0">
+        <Popover.Content class="flex max-h-[600px] w-[480px] p-0">
           <SongQueue />
         </Popover.Content>
       </Popover.Portal>

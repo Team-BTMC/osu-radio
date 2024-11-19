@@ -1,4 +1,5 @@
 import { isSongUndefined } from "../../../lib/song";
+import Popover from "../../popover/Popover";
 import {
   isPlaying,
   next,
@@ -27,7 +28,6 @@ import {
   VolumeXIcon,
 } from "lucide-solid";
 import { Component, createMemo, createSignal, Match, Show, Switch, For } from "solid-js";
-import Popover from "../../popover/Popover";
 import { ParentComponent } from "solid-js";
 import { Portal } from "solid-js/web";
 
@@ -76,7 +76,7 @@ const SongControls: Component<SongControlsProps> = (props) => {
           </Button>
 
           <button
-            class="flex h-12 w-12 items-center justify-center rounded-full ring-1 ring-stroke bg-surface text-2xl text-thick-material text-white transition-all active:scale-95 shadow-lg"
+            class="flex h-12 w-12 items-center justify-center rounded-full bg-surface text-2xl text-thick-material text-white shadow-lg ring-1 ring-stroke transition-all active:scale-95"
             onClick={() => togglePlay()}
             disabled={disable()}
             title={playHint()}
@@ -214,8 +214,8 @@ const RightPart = () => {
 
         <Portal>
           <Popover.Overlay />
-          <Popover.Content class="flex w-fit min-w-48 flex-col  rounded-xl ring-stroke ring-1 ring-inset bg-thick-material px-1.5 py-3 backdrop-blur-md shadow-xl">
-            <p class="font-medium text-sm text-subtext gap-1 px-2">Custom Speed</p>
+          <Popover.Content class="flex w-fit min-w-48 flex-col rounded-xl bg-thick-material px-1.5 py-3 shadow-xl ring-1 ring-inset ring-stroke backdrop-blur-md">
+            <p class="gap-1 px-2 text-sm font-medium text-subtext">Custom Speed</p>
             <div class="flex flex-col px-2">
               <Slider
                 class="flex h-8 flex-grow items-center"
@@ -230,9 +230,9 @@ const RightPart = () => {
                 </Slider.Track>
                 <Slider.Thumb class="mt-2 block h-4 w-4 rounded-full bg-white" />
               </Slider>
-              <div class="text-xs ">{Math.round(speed() * 100) / 100}x</div>
+              <div class="text-xs">{Math.round(speed() * 100) / 100}x</div>
             </div>
-            <div class="w-full bg-stroke h-px my-2" />
+            <div class="my-2 h-px w-full bg-stroke" />
 
             <For each={PREDEFINED_SPEEDS}>
               {(amount) => <SpeedOption amount={amount}>{amount}</SpeedOption>}
@@ -254,7 +254,7 @@ const SpeedOption: ParentComponent<SpeedOptionProps> = (props) => {
   return (
     <button
       onClick={() => setSpeed(props.amount)}
-      class="flex items-center justify-between rounded-md px-2 py-1.5 disabled:opacity-50 disabled:pointer-events-none focus:outline-none hover:bg-surface"
+      class="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-surface focus:outline-none disabled:pointer-events-none disabled:opacity-50"
     >
       {props.children}
     </button>

@@ -1,6 +1,6 @@
-import { cn, sn } from "@renderer/lib/css.utils";
 import { popoverStack, usePopover } from "./Popover";
 import { ComputePositionReturn } from "@floating-ui/dom";
+import { cn, sn } from "@renderer/lib/css.utils";
 import createFocusTrap from "solid-focus-trap";
 import { Component, createMemo, onCleanup, onMount, Show } from "solid-js";
 import { JSX } from "solid-js/jsx-runtime";
@@ -56,7 +56,7 @@ const PopoverContent: Component<Props> = (props) => {
       <div
         {...props}
         class={cn(
-          "popover-content rounded-lg p-2 border border-stroke bg-thick-material backdrop-blur-md",
+          "popover-content rounded-lg border border-stroke bg-thick-material p-2 backdrop-blur-md",
           props.class,
         )}
         ref={state.setContentRef}

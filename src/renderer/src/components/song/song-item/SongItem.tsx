@@ -4,9 +4,9 @@ import SongHint from "../SongHint";
 import SongImage from "../SongImage";
 import { useColorExtractor } from "../color-extractor";
 import { song as selectedSong } from "../song.utils";
-import { transparentize } from "polished";
 import Popover from "@renderer/components/popover/Popover";
 import { EllipsisVerticalIcon } from "lucide-solid";
+import { transparentize } from "polished";
 import { Component, createSignal, JSXElement, onMount, createMemo, Show } from "solid-js";
 import { twMerge } from "tailwind-merge";
 
@@ -103,7 +103,7 @@ const SongItem: Component<SongItemProps> = (props) => {
         onMouseLeave={() => {
           setIsHovering(false);
         }}
-        class="min-h-[72px] rounded-lg py-0.5 pl-1.5 pr-0.5 transition-colors active: group relative isolate overflow-hidden"
+        class="active: group relative isolate min-h-[72px] overflow-hidden rounded-lg py-0.5 pl-1.5 pr-0.5 transition-colors"
         classList={{
           "shadow-glow-blue": isSelected(),
         }}
@@ -117,12 +117,12 @@ const SongItem: Component<SongItemProps> = (props) => {
         }}
       >
         <div
-          class="relative isolate select-none rounded-lg h-full"
+          class="relative isolate h-full select-none rounded-lg"
           ref={item}
           data-url={props.song.bg}
         >
           <SongImage
-            class={`absolute z-[-1] inset-0 h-full w-full rounded-l-[9px] rounded-r-md bg-cover bg-center bg-no-repeat bg-scroll opacity-70 rounded-lg`}
+            class={`absolute inset-0 z-[-1] h-full w-full rounded-lg rounded-l-[9px] rounded-r-md bg-cover bg-scroll bg-center bg-no-repeat opacity-70`}
             classList={{
               "opacity-100": isSelected(),
             }}
@@ -132,12 +132,12 @@ const SongItem: Component<SongItemProps> = (props) => {
           />
 
           <div
-            class="flex flex-col justify-center overflow-hidden rounded-md p-3 pr-10 h-full"
+            class="flex h-full flex-col justify-center overflow-hidden rounded-md p-3 pr-10"
             style={{
               background: backgrund(),
             }}
           >
-            <h3 class="drop-shadow-md text-[22px] font-[740] leading-7">{props.song.title}</h3>
+            <h3 class="text-[22px] font-[740] leading-7 drop-shadow-md">{props.song.title}</h3>
             <p class="text-base text-subtext drop-shadow-sm">{props.song.artist}</p>
           </div>
         </div>
@@ -149,7 +149,7 @@ const SongItem: Component<SongItemProps> = (props) => {
               setMousePos(undefined);
               setLocalShow(true);
             }}
-            class="absolute right-0 top-0 h-full flex items-center text-subtext transition-colors hover:text-text rounded-r-lg animate-song-item-slide-in"
+            class="absolute right-0 top-0 flex h-full animate-song-item-slide-in items-center rounded-r-lg text-subtext transition-colors hover:text-text"
             title="Song options"
             classList={{
               "text-text": localShow(),
@@ -159,7 +159,7 @@ const SongItem: Component<SongItemProps> = (props) => {
             }}
           >
             <div
-              class={twMerge("transition-opacity z-10")}
+              class={twMerge("z-10 transition-opacity")}
               style={{
                 color: isSelected() ? secondaryColor() : undefined,
               }}

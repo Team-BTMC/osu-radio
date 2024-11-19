@@ -1,5 +1,5 @@
-import { Component, JSX } from "solid-js";
 import { usePopover } from "./Popover";
+import { Component, JSX } from "solid-js";
 
 export type PopoverAnchorProps = JSX.IntrinsicElements["div"];
 const PopoverAnchor: Component<PopoverAnchorProps> = (props) => {

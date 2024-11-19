@@ -1,5 +1,5 @@
-import { sn } from "@renderer/lib/css.utils";
 import { useSlider } from "./Slider";
+import { sn } from "@renderer/lib/css.utils";
 import { linearScale } from "@renderer/lib/linear-scale";
 import { Component, createMemo, JSX } from "solid-js";
 
