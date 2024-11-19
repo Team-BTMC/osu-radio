@@ -17,6 +17,7 @@ import { os } from "@renderer/lib/os";
 import ResizablePanel, {
   useResizablePanel,
 } from "@renderer/components/resizable-panel/ResizablePanel";
+import { cn } from "@renderer/lib/css.utils";
 
 function toPx(value: number) {
   return `${value}px`;
@@ -66,7 +67,12 @@ export const Sidebar: Component = () => {
       </div>
 
       <Show when={sidebarExpanded()}>
-        <ResizablePanel.DragHandler class="absolute -right-4 lg:-right-6 lg:pt-4 lg:pb-4" />
+        <ResizablePanel.DragHandler
+          class={cn(
+            "absolute -right-4 lg:-right-6 lg:pb-4",
+            os() === "darwin" ? "lg:pt-4" : "lg:pt-2",
+          )}
+        />
       </Show>
     </div>
   );
