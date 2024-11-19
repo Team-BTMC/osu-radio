@@ -63,12 +63,6 @@ function useProviderValue(props: Props) {
   const [id, setId] = createSignal<string>("");
 
   onMount(() => {
-    onCleanup(() => {
-      stackIds.destroy(id());
-    });
-  });
-
-  onMount(() => {
     window.addEventListener("resize", listenResize);
 
     onCleanup(() => {
@@ -93,6 +87,10 @@ function useProviderValue(props: Props) {
     });
 
     resizeObserver.observe(triggerElement);
+
+    onCleanup(() => {
+      resizeObserver?.disconnect();
+    });
   });
 
   const setTriggerRef = (element: HTMLElement) => {
@@ -159,6 +157,10 @@ function useProviderValue(props: Props) {
       setPopoverStack((p) => p.filter((popoverId) => popoverId !== id()));
       setId("");
     }
+
+    onCleanup(() => {
+      stackIds.destroy(id());
+    });
   });
 
   return {
