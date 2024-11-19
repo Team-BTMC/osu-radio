@@ -18,10 +18,4 @@ const PopoverTrigger: Component<Props> = (props) => {
   );
 };
 
-type PopoverAnchorProps = JSX.IntrinsicElements["div"];
-export const PopoverAnchor: Component<PopoverAnchorProps> = (props) => {
-  const state = usePopover();
-  return <div ref={state.setTriggerRef} {...props} />;
-};
-
 export default PopoverTrigger;

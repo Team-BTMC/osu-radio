@@ -1,7 +1,9 @@
 import { Token, TokenNamespace } from "@renderer/lib/tungsten/token";
 import PopoverContent from "./PopoverContent";
 import PopoverOverlay from "./PopoverOverlay";
-import PopoverTrigger, { PopoverAnchor } from "./PopoverTrigger";
+import PopoverTrigger from "./PopoverTrigger";
+import PopoverAnchor from "./PopoverAnchor";
+
 import "./styles.css";
 import {
   computePosition,
