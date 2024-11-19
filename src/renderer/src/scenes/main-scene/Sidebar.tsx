@@ -1,5 +1,3 @@
-import Tabs from "@renderer/components/tabs/Tabs";
-import { Component, createMemo, For, Show } from "solid-js";
 import {
   animateSidebar,
   NAV_ITEMS,
@@ -9,15 +7,17 @@ import {
   sidebarActiveTab,
   sidebarExpanded,
 } from "./main.utils";
-import SongList from "@renderer/components/song/song-list/SongList";
-import { SettingsIcon, SidebarIcon } from "lucide-solid";
 import Button from "@renderer/components/button/Button";
-import Settings from "@renderer/components/settings/Settings";
-import { os } from "@renderer/lib/os";
 import ResizablePanel, {
   useResizablePanel,
 } from "@renderer/components/resizable-panel/ResizablePanel";
+import Settings from "@renderer/components/settings/Settings";
+import SongList from "@renderer/components/song/song-list/SongList";
+import Tabs from "@renderer/components/tabs/Tabs";
 import { cn } from "@renderer/lib/css.utils";
+import { os } from "@renderer/lib/os";
+import { SettingsIcon, SidebarIcon } from "lucide-solid";
+import { Component, createMemo, For, Show } from "solid-js";
 
 function toPx(value: number) {
   return `${value}px`;
@@ -32,14 +32,14 @@ export const Sidebar: Component = () => {
 
   return (
     <div
-      class="sidebar absolute lg:relative z-40 h-full bg-black/80 backdrop-blur-md border-r-stroke border-e-2 lg:border-e-0 lg:bg-transparent shadow-2xl lg:shadow-none transition-colors transition-base"
+      class="sidebar transition-base absolute z-40 h-full border-e-2 border-r-stroke bg-black/80 shadow-2xl backdrop-blur-md transition-colors lg:relative lg:border-e-0 lg:bg-transparent lg:shadow-none"
       style={{
         "transition-property": animateSidebar() ? "width" : "none",
         width: toPx(sidebarExpanded() ? state.value() : 0),
       }}
     >
       <div
-        class="absolute right-0 bottom-0 h-full flex flex-col gap-2"
+        class="absolute bottom-0 right-0 flex h-full flex-col gap-2"
         style={{
           "min-width": toPx(state.value()),
         }}
@@ -85,7 +85,7 @@ const SidebarTabs: Component = () => {
 
   return (
     <div
-      class="flex pl-4 pr-5 mt-2 ml-9 items-center no-drag"
+      class="no-drag ml-9 mt-2 flex items-center pl-4 pr-5"
       classList={{
         // Mac - Offset for the traffic lights on the left
         "pl-[86px] pt-2": os() === "darwin",

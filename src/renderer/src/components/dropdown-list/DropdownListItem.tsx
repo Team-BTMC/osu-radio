@@ -1,7 +1,7 @@
+import { RawList } from "../raw-list/RawList";
 import { useDropdownList } from "./DropdownList";
 import { Component, onCleanup } from "solid-js";
 import { JSX } from "solid-js/jsx-runtime";
-import { RawList } from "../raw-list/RawList";
 
 export type Props = JSX.IntrinsicElements["button"];
 const DropdownListItem: Component<Props> = (props) => {

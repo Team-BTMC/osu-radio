@@ -14,7 +14,7 @@ export const WindowsControls: Component = () => {
   };
 
   return (
-    <div class="flex no-drag">
+    <div class="no-drag flex">
       <WindownButton onClick={minimize}>
         <MinusIcon size={20} />
       </WindownButton>
@@ -33,7 +33,7 @@ const WindownButton: Component<ButtonProps> = (_props) => {
   const [props, rest] = splitProps(_props, ["class"]);
   return (
     <button
-      class={cn("app-no-drag p-2 flex items-center justify-center hover:bg-surface", props.class)}
+      class={cn("app-no-drag flex items-center justify-center p-2 hover:bg-surface", props.class)}
       {...rest}
     />
   );

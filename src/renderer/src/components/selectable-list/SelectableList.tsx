@@ -1,8 +1,8 @@
+import { RawList } from "../raw-list/RawList";
 import SelectableListItem from "./SelectableListItem";
+import useControllableState from "@renderer/lib/controllable-state";
 import { useRovingFocusGroup } from "@renderer/lib/roving-focus-group/rovingFocusGroup";
 import { Accessor, createContext, JSX, ParentComponent, splitProps, useContext } from "solid-js";
-import useControllableState from "@renderer/lib/controllable-state";
-import { RawList } from "../raw-list/RawList";
 
 const DEFAULT_SELECTED_VALUE = "";
 

@@ -165,7 +165,7 @@ const Notice: Component<NoticeProps> = (props) => {
       </div>
 
       <div
-        class="absolute inset-0 m-px overflow-hidden pointer-events-none"
+        class="pointer-events-none absolute inset-0 m-px overflow-hidden"
         style={{
           "border-radius": "13px",
         }}

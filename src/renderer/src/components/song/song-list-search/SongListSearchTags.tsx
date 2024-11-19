@@ -1,5 +1,5 @@
-import { Component } from "solid-js";
 import FilterOption from "./FilterOption";
+import { Component } from "solid-js";
 
 type Props = {
   disabled?: boolean;

@@ -1,12 +1,12 @@
-import { Component, createMemo, ParentComponent, splitProps } from "solid-js";
+import { inputStyles } from "../input/Input";
 import Popover, { Props as PopoverProps, usePopover } from "../popover/Popover";
 import { Props as PopoverTriggerProps } from "../popover/PopoverTrigger";
-import { ChevronsUpDownIcon } from "lucide-solid";
 import SelectableList, { Props as ListProps } from "../selectable-list/SelectableList";
 import SelectableListItem, { Props as ListItemProps } from "../selectable-list/SelectableListItem";
 import { cn } from "@renderer/lib/css.utils";
-import { inputStyles } from "../input/Input";
 import { VariantProps } from "class-variance-authority";
+import { ChevronsUpDownIcon } from "lucide-solid";
+import { Component, createMemo, ParentComponent, splitProps } from "solid-js";
 
 export const SelectContainer: ParentComponent<PopoverProps> = (props) => {
   return (
@@ -28,11 +28,11 @@ export const SelectTrigger: ParentComponent<Props> = (_props) => {
       {...rest}
       class={cn(
         inputStyles({ variant: props.variant, class: props.class }),
-        "flex items-center justify-between gap-2 box-border h-auto min-h-[42px] hover:bg-surface data-[open='true']:bg-surface",
+        "box-border flex h-auto min-h-[42px] items-center justify-between gap-2 hover:bg-surface data-[open='true']:bg-surface",
       )}
     >
       <span class="text-base leading-6">{props.children}</span>
-      <ChevronsUpDownIcon size={20} class="text-subtext flex-shrink-0" />
+      <ChevronsUpDownIcon size={20} class="flex-shrink-0 text-subtext" />
     </Popover.Trigger>
   );
 };

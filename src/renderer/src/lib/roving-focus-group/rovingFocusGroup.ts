@@ -1,6 +1,6 @@
-import { DOMElement } from "solid-js/jsx-runtime";
 import useControllableState from "../controllable-state";
 import { Accessor, createMemo, createSignal, onCleanup, onMount } from "solid-js";
+import { DOMElement } from "solid-js/jsx-runtime";
 
 const ITEM_DATA_ATTR = "data-item";
 const DEFAULT_SELECTED_VALUE = "";

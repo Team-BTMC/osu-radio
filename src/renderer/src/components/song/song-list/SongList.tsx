@@ -7,9 +7,9 @@ import InfiniteScroller from "../../InfiniteScroller";
 import SongItem from "../song-item/SongItem";
 import SongListSearch from "../song-list-search/SongListSearch";
 import { songsSearch } from "./song-list.utils";
-import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
-import { ListPlus, ListStartIcon } from "lucide-solid";
 import DropdownList from "@renderer/components/dropdown-list/DropdownList";
+import { ListPlus, ListStartIcon } from "lucide-solid";
+import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 
 export type SongViewProps = {
   isAllSongs?: boolean;
