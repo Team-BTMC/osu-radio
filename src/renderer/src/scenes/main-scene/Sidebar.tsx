@@ -66,7 +66,7 @@ export const Sidebar: Component = () => {
       </div>
 
       <Show when={sidebarExpanded()}>
-        <ResizablePanel.DragHandler class="absolute -right-4 lg:-right-6 top-1 lg:pt-2 lg:pb-4" />
+        <ResizablePanel.DragHandler class="absolute -right-4 lg:-right-6 lg:pt-4 lg:pb-4" />
       </Show>
     </div>
   );
