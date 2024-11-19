@@ -2,13 +2,12 @@ import SliderRange from "./SliderRange";
 import SliderThumb from "./SliderThumb";
 import SliderTime from "./SliderTime";
 import SliderTrack from "./SliderTrack";
-import useControllableState from "@renderer/lib/controllable-state";
+import createControllableSignal from "@renderer/lib/controllable-signal";
 import { cn } from "@renderer/lib/css.utils";
 import { linearScale } from "@renderer/lib/linear-scale";
 import { throttle } from "@renderer/lib/throttle";
 import { clamp } from "@renderer/lib/tungsten/math";
 import {
-  Accessor,
   createContext,
   createMemo,
   createSignal,
@@ -25,7 +24,7 @@ const DEFAULT_MAX = 100;
 
 export type Props = {
   defaultValue?: number;
-  value?: Accessor<number>;
+  value?: number;
   onValueChange?: (newValue: number) => void;
   onValueCommit?: () => void;
   onValueStart?: () => void;
@@ -54,10 +53,11 @@ function useProviderValue(props: Props) {
   const [isDragging, setIsDragging] = createSignal(false);
   const [thumbWidth, setThumbWidth] = createSignal<number>(0);
   const [thumb, _setThumb] = createSignal<HTMLElement>();
-  const [value, setValue] = useControllableState({
-    defaultProp: props.defaultValue ?? DEFAULT_SLIDER_VALUE,
-    prop: props.value,
-    onChange: props.onValueChange,
+
+  const [value, setValue] = createControllableSignal({
+    defaultValue: props.defaultValue ?? DEFAULT_SLIDER_VALUE,
+    onChange: (newValue) => props.onValueChange?.(newValue),
+    value: () => props.value,
   });
 
   const setThumb = (node: HTMLElement) => {
@@ -74,10 +74,14 @@ function useProviderValue(props: Props) {
     setIsDragging(false);
   };
 
-  const min = props.min ?? DEFAULT_MIN;
-  const max = props.max ?? DEFAULT_MAX;
+  const min = () => props.min ?? DEFAULT_MIN;
+  const max = () => props.max ?? DEFAULT_MAX;
 
-  const percentage = createMemo(() => convertValueToPercentage(value(), min, max));
+  const percentage = createMemo(() => {
+    const currentValue = value() ?? min();
+    return convertValueToPercentage(currentValue, min(), max());
+  });
+
   const transitionStyleValue = createMemo<JSX.CSSProperties>(() => {
     if (!props.animate || isDragging()) {
       return {};
@@ -119,8 +123,8 @@ const SliderRoot: ParentComponent<Props> = (props) => {
     const sliderRect = sliderElement.getBoundingClientRect();
     const rect = lastRect() || sliderRect;
 
-    const min = sliderContext.min;
-    const max = sliderContext.max;
+    const min = sliderContext.min();
+    const max = sliderContext.max();
     const input: [number, number] = [0, rect.width];
     const output: [number, number] = [min, max];
     const value = linearScale(input, output);
@@ -154,19 +158,18 @@ const SliderRoot: ParentComponent<Props> = (props) => {
   };
 
   const handleHomePress = () => {
-    sliderContext.setValue(sliderContext.min);
+    sliderContext.setValue(sliderContext.min());
   };
-
   const handleEndPress = () => {
-    sliderContext.setValue(sliderContext.max);
+    sliderContext.setValue(sliderContext.max());
   };
 
   const [handleStep] = throttle((direction: "left" | "right") => {
     const stepDirection = direction === "left" ? -1 : 1;
-    const step = (sliderContext.max / 100) * 5;
+    const step = (sliderContext.max() / 100) * 5;
     const stepInDirection = step * stepDirection;
-    const min = sliderContext.min;
-    const max = sliderContext.max;
+    const min = sliderContext.min();
+    const max = sliderContext.max();
     sliderContext.setValue((value) => clamp(min, max, value + stepInDirection));
     sliderContext.thumb()?.focus();
   }, 50);

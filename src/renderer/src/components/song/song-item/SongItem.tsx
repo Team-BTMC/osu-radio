@@ -36,7 +36,7 @@ const SongItem: Component<SongItemProps> = (props) => {
 
     // Initialize draggable functionality
     draggable(item, {
-      onClick: ignoreClickInContextMenu(() => props.onSelect(props.song.path)),
+      onClick: () => ignoreClickInContextMenu(props.onSelect(props.song.path)),
       onDrop: props.onDrop ?? (() => {}),
       createHint: SongHint,
       useOnlyAsOnClickBinder: !props.draggable || selectedSong().path === props.song.path,

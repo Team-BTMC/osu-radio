@@ -51,7 +51,6 @@ const Setting: Component<SettingProps> = (props) => {
 };
 
 const AudioDeviceSetting: Component = () => {
-  const [isPopoverOpen, setIsPopoverOpen] = createSignal(false);
   const [selectedAudioDevice, setSelectedAudioDevice] = createSignal("");
   const [audioDevices, setAudioDevices] = createSignal(new Map<string, () => any>());
 
@@ -73,18 +72,17 @@ const AudioDeviceSetting: Component = () => {
 
   const handleValueChange = (newSelectedOption: string) => {
     setSelectedAudioDevice(newSelectedOption);
-    setIsPopoverOpen(false);
     audioDevices().get(newSelectedOption)?.();
   };
 
   return (
     <Setting name="audio-device" label="Choose audio device">
-      <Dropdown isOpen={isPopoverOpen} onValueChange={setIsPopoverOpen}>
+      <Dropdown>
         <Dropdown.SelectTrigger class="w-full rounded border border-stroke bg-surface px-2 py-1 text-text focus:outline-none focus:ring-2 focus:ring-overlay">
           {selectedAudioDevice() || "No device selected"}
         </Dropdown.SelectTrigger>
 
-        <Dropdown.List value={selectedAudioDevice} onValueChange={handleValueChange}>
+        <Dropdown.List value={selectedAudioDevice()} onValueChange={handleValueChange}>
           <For each={Array.from(audioDevices().keys())}>
             {(audioDevice) => <Dropdown.Item value={audioDevice}>{audioDevice}</Dropdown.Item>}
           </For>

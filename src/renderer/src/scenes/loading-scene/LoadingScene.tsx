@@ -37,7 +37,7 @@ export default function LoadingScene() {
     <div class="loading-scene">
       <h3 class="loading-scene__title">{title()}</h3>
 
-      <Slider max={1} min={0} value={progressValue}>
+      <Slider max={1} min={0} value={progressValue()}>
         <Slider.Track class="block h-2.5 w-[420px] overflow-hidden rounded bg-thick-material">
           <Slider.Range class="block h-full bg-white" />
         </Slider.Track>

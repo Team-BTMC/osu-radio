@@ -1,7 +1,7 @@
 import { usePopover } from "./Popover";
 import { ComputePositionReturn } from "@floating-ui/dom";
 import createFocusTrap from "solid-focus-trap";
-import { Component, Show } from "solid-js";
+import { Component, createEffect, Show } from "solid-js";
 import { JSX } from "solid-js/jsx-runtime";
 
 function stylesFromPosition(position: ComputePositionReturn | null): JSX.CSSProperties | undefined {
@@ -19,9 +19,11 @@ type Props = JSX.IntrinsicElements["div"];
 const PopoverContent: Component<Props> = (props) => {
   const state = usePopover();
 
-  createFocusTrap({
-    element: state.contentRef,
-    enabled: state.isOpen,
+  createEffect(() => {
+    createFocusTrap({
+      element: state.contentRef,
+      enabled: state.isOpen(),
+    });
   });
 
   return (

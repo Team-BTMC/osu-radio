@@ -14,8 +14,8 @@ import {
   shift,
   ShiftOptions,
 } from "@floating-ui/dom";
-import useControllableState from "@renderer/lib/controllable-state";
-import { createSignal, createContext, useContext, ParentComponent, Accessor } from "solid-js";
+import createControllableSignal from "@renderer/lib/controllable-signal";
+import { createSignal, createContext, useContext, ParentComponent } from "solid-js";
 
 export const DEFAULT_POPOVER_OPEN = false;
 
@@ -26,17 +26,17 @@ export type Props = {
   placement?: Placement;
   mousePos?: Accessor<[number, number]>; // [x, y]
   defaultProp?: boolean;
-  isOpen?: Accessor<boolean>;
+  isOpen?: boolean;
   onValueChange?: (newOpen: boolean) => void;
 };
 
 export type Context = ReturnType<typeof useProviderValue>;
 
 function useProviderValue(props: Props) {
-  const [isOpen, setIsOpen] = useControllableState<boolean>({
-    defaultProp: props.defaultProp || DEFAULT_POPOVER_OPEN,
-    onChange: props.onValueChange,
-    prop: props.isOpen,
+  const [isOpen, setIsOpen] = createControllableSignal<boolean>({
+    defaultValue: props.defaultProp || DEFAULT_POPOVER_OPEN,
+    onChange: (newValue) => props.onValueChange?.(newValue),
+    value: () => props.isOpen,
   });
 
   const [position, setPosition] = createSignal<ComputePositionReturn | null>(null);

@@ -10,7 +10,7 @@ const PopoverTrigger: Component<Props> = (props) => {
     <button
       ref={state.setTriggerRef}
       onClick={() => {
-        state?.toggle();
+        state.toggle();
       }}
       {...props}
     />

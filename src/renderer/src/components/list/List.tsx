@@ -1,21 +1,21 @@
 import ListItem from "./ListItem";
-import useControllableState from "@renderer/lib/controllable-state";
-import { Accessor, createContext, ParentComponent, useContext } from "solid-js";
+import createControllableSignal from "@renderer/lib/controllable-signal";
+import { createContext, ParentComponent, useContext } from "solid-js";
 
 const DEFAULT_SELECTED_VALUE = "";
 
 export type Props = {
   defaultValue?: string;
-  value?: Accessor<string>;
+  value?: string;
   onValueChange?: (newValue: string) => void;
 };
 
 export type Context = ReturnType<typeof useProviderValue>;
 function useProviderValue(props: Props) {
-  const [selectedValue, setSelectedValue] = useControllableState({
-    defaultProp: props.defaultValue || DEFAULT_SELECTED_VALUE,
-    onChange: props.onValueChange,
-    prop: props.value,
+  const [selectedValue, setSelectedValue] = createControllableSignal({
+    defaultValue: props.defaultValue || DEFAULT_SELECTED_VALUE,
+    onChange: (newValue) => props.onValueChange?.(newValue),
+    value: () => props.value,
   });
 
   return {
