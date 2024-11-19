@@ -51,7 +51,13 @@ export const setVolume = (newValue: ZeroToOne) => {
   _setVolume(newValue);
   setValueBeforeMute(undefined);
 };
-export { volume };
+
+const [speed, _setSpeed] = createSignal<ZeroToOne>(1);
+export const setSpeed = (newValue: ZeroToOne) => {
+  _setSpeed(newValue);
+  player.playbackRate = newValue;
+};
+export { volume, speed };
 
 let bgPath: Optional<string>;
 
@@ -295,6 +301,7 @@ window.api.listen("queue::songChanged", async (s) => {
   setSong(s);
   await window.api.request("discord::play", s);
   await play();
+  player.playbackRate = speed();
 });
 
 player.addEventListener("ended", async () => {
