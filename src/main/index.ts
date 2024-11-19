@@ -1,8 +1,8 @@
-import { Router } from "./lib/route-pass/Router";
-import createMenu from "./lib/window/menu";
-import trackBounds, { getBounds, wasMaximized } from "./lib/window/resizer";
-import { main } from "./main";
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
+import { Router } from "@main/lib/route-pass/Router";
+import createMenu from "@main/lib/window/menu";
+import trackBounds, { getBounds, wasMaximized } from "@main/lib/window/resizer";
+import { main } from "@main/main";
 import { app, BrowserWindow, dialog } from "electron";
 import { join } from "path";
 

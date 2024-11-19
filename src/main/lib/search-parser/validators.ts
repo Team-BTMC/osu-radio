@@ -1,5 +1,8 @@
-import { SearchPropertyValidation, SearchPropertyValidator } from "./@search-types";
 import { closestLevenDist } from "./levenshteinDistance";
+import {
+  SearchPropertyValidation,
+  SearchPropertyValidator,
+} from "@shared/types/search-parser.types";
 
 export const equalsSymbols = ["=", "==", "!="];
 export const greaterThanSymbols = [">", ">="];

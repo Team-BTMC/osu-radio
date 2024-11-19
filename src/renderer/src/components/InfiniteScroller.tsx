@@ -1,6 +1,6 @@
-import { OmitPropsWithoutReturnType, Optional } from "../../../@types";
-import { RequestAPI } from "../../../RequestAPI";
-import Impulse from "../lib/Impulse";
+import Impulse from "@renderer/lib/Impulse";
+import { OmitPropsWithoutReturnType, Optional } from "@shared/types/common.types";
+import { RequestAPI } from "@shared/types/router.types";
 import {
   Component,
   createSignal,

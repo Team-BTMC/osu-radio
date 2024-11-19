@@ -17,7 +17,7 @@ import {
   ShiftOptions,
 } from "@floating-ui/dom";
 import useControllableState from "@renderer/lib/controllable-state";
-import { Token, TokenNamespace } from "@renderer/lib/tungsten/token";
+import { Token, TokenNamespace } from "@shared/lib/tungsten/token";
 import {
   createSignal,
   createContext,

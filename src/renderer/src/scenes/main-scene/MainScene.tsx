@@ -1,4 +1,3 @@
-import SongDetail from "../../components/song/song-detail/SongDetail";
 import { Sidebar } from "./Sidebar";
 import {
   setAnimateSidebar,
@@ -12,6 +11,7 @@ import Button from "@renderer/components/button/Button";
 import Popover from "@renderer/components/popover/Popover";
 import ResizablePanel from "@renderer/components/resizable-panel/ResizablePanel";
 import SongImage from "@renderer/components/song/SongImage";
+import SongDetail from "@renderer/components/song/song-detail/SongDetail";
 import SongQueue from "@renderer/components/song/song-queue/SongQueue";
 import { song } from "@renderer/components/song/song.utils";
 import { WindowsControls } from "@renderer/components/windows-control/WindowsControl";

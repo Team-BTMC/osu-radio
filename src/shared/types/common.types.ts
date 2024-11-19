@@ -1,7 +1,7 @@
-import { ListenAPI } from "./ListenAPI";
-import { RequestAPI } from "./RequestAPI";
-import type { SearchQuerySuccess } from "./main/lib/search-parser/@search-types";
-import { ConfigItem } from "./main/lib/template-parser/parser/TemplateParser";
+import { ListenAPI, RequestAPI } from "./router.types";
+import { SearchQuerySuccess } from "./search-parser.types";
+import { ConfigItem } from "./template-parser.types";
+import { IpcMainInvokeEvent } from "electron";
 
 declare global {
   interface Window {
@@ -126,31 +126,29 @@ export type TableMap = {
   songs: { [key: ResourceID]: Song };
   audio: { [key: ResourceID]: AudioSource };
   images: { [key: ResourceID]: ImageSource };
-  colors: { [key: ResourceID]: ColorsSource };
   playlists: { [key: string]: ResourceID[] };
   settings: Settings;
   system: System;
 };
 
 // I guess this is definition of all binary blob files that can be access from the database code?
-export type BlobMap = {
-  times;
-};
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export type BlobMap = {};
 
 // Tables that work on ID -> Record relation
 export type ResourceTables = "songs" | "audio" | "images";
 
-type OmitPropsWithReturnType<O extends { [K: string]: (...args: any[]) => any }, V> = {
+export type OmitPropsWithReturnType<O extends { [K: string]: (...args: any[]) => any }, V> = {
   [K in keyof O as ReturnType<O[K]> extends V ? never : K]: O[K];
 };
 
 // Types as functions for type
-type OmitPropsWithoutReturnType<O extends { [K: string]: (...args: any[]) => any }, V> = {
+export type OmitPropsWithoutReturnType<O extends { [K: string]: (...args: any[]) => any }, V> = {
   [K in keyof O as ReturnType<O[K]> extends V ? K : never]: O[K];
 };
 
 export type APIFunction<F extends (...args: any) => any> = (
-  evt: Electron.IpcMainInvokeEvent,
+  evt: IpcMainInvokeEvent,
   ...args: Parameters<F>
 ) => ReturnType<F> | Promise<ReturnType<F>>;
 
@@ -239,3 +237,15 @@ export type InfiniteScrollerInitResponse = Optional<{
   initialIndex: number;
   count: number;
 }>;
+
+export type NoticeType = {
+  id?: string;
+  variant?: "neutral" | "success" | "error";
+  title?: string;
+  description?: string;
+};
+
+export type NoticeTypeIconMap = NoticeType & {
+  icon?: undefined;
+  // NOTE: add the icons like "a-arrow-down" | "a-arrow-up", etc.
+};

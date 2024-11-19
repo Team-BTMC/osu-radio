@@ -1,13 +1,14 @@
-import { Optional, Order, ResourceID, Song, SongsQueryPayload, Tag } from "../../../../../@types";
-import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-types";
-import { namespace } from "../../../App";
-import Impulse from "../../../lib/Impulse";
-import { none, some } from "../../../lib/rust-like-utils-client/Optional";
-import InfiniteScroller from "../../InfiniteScroller";
-import SongItem from "../song-item/SongItem";
-import SongListSearch from "../song-list-search/SongListSearch";
 import { songsSearch } from "./song-list.utils";
+import { namespace } from "@renderer/App";
+import InfiniteScroller from "@renderer/components/InfiniteScroller";
 import DropdownList from "@renderer/components/dropdown-list/DropdownList";
+import SongItem from "@renderer/components/song/song-item/SongItem";
+import SongListSearch from "@renderer/components/song/song-list-search/SongListSearch";
+import Impulse from "@renderer/lib/Impulse";
+import { none, some } from "@shared/lib/rust-types/Optional";
+import { Optional, Order, ResourceID, SongsQueryPayload, Tag } from "@shared/types/common.types";
+import { Song } from "@shared/types/common.types";
+import { SearchQueryError } from "@shared/types/search-parser.types";
 import { ListPlus, ListStartIcon } from "lucide-solid";
 import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 

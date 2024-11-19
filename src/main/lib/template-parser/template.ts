@@ -1,4 +1,4 @@
-import { ConfigItem } from "./parser/TemplateParser";
+import { ConfigItem } from "@shared/types/template-parser.types";
 
 export type IdentAccessor = (ident: string) => string;
 

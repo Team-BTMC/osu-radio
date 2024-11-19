@@ -1,6 +1,6 @@
 import { DragHandler } from "./DragHandler";
 import useControllableState from "@renderer/lib/controllable-state";
-import { clamp } from "@renderer/lib/tungsten/math";
+import { clamp } from "@shared/lib/tungsten/math";
 import { Accessor, createContext, createMemo, ParentComponent, useContext } from "solid-js";
 import { DOMElement } from "solid-js/jsx-runtime";
 

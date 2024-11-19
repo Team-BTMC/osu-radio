@@ -1,5 +1,10 @@
-import { OsuSearchAbleProperties, SongIndex, SongsQueryPayload, Tag } from "../../../@types";
-import { assertNever } from "../tungsten/assertNever";
+import { assertNever } from "@shared/lib/tungsten/assertNever";
+import {
+  OsuSearchAbleProperties,
+  SongIndex,
+  SongsQueryPayload,
+  Tag,
+} from "@shared/types/common.types";
 
 export function filter(indexes: SongIndex[], query: SongsQueryPayload): SongIndex[] {
   if (query.searchQuery === undefined) {

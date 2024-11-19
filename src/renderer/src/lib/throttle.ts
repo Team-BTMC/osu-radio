@@ -1,6 +1,6 @@
 export type ThrottledFunction<F extends (...args: any[]) => any> = (
   ...args: Parameters<F>
-) => NodeJS.Timeout;
+) => number;
 export type ThrottleCancel = () => void;
 
 /**
@@ -14,30 +14,30 @@ export function throttle<F extends (...args: any[]) => any>(
   fn: F,
   ms: number,
 ): [ThrottledFunction<F>, ThrottleCancel] {
-  let timeout: NodeJS.Timeout | undefined = undefined;
+  let timeoutId: number | undefined = undefined;
 
   return [
     (...args) => {
-      if (timeout !== undefined) {
+      if (timeoutId !== undefined) {
         // Ignore all calls
-        return timeout;
+        return timeoutId;
       }
 
       // Save timeout ID
-      timeout = setTimeout(() => {
+      timeoutId = window.setTimeout(() => {
         const got = fn(...args);
 
         // Remove timeout ID so that next call will get throttled
         if (got instanceof Promise) {
-          got.then(() => (timeout = undefined));
+          got.then(() => (timeoutId = undefined));
           return;
         }
 
-        timeout = undefined;
+        timeoutId = undefined;
       }, ms);
 
-      return timeout;
+      return timeoutId;
     },
-    () => clearTimeout(timeout),
+    () => clearTimeout(timeoutId),
   ];
 }

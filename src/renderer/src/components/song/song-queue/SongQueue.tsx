@@ -1,11 +1,11 @@
-import { Song } from "../../../../../@types";
-import { namespace } from "../../../App";
-import Impulse from "../../../lib/Impulse";
-import scrollIfNeeded from "../../../lib/tungsten/scroll-if-needed";
-import InfiniteScroller from "../../InfiniteScroller";
-import SongItem from "../song-item/SongItem";
+import { namespace } from "@renderer/App";
+import InfiniteScroller from "@renderer/components/InfiniteScroller";
 import DropdownList from "@renderer/components/dropdown-list/DropdownList";
-import { DeleteIcon, ListPlus } from "lucide-solid";
+import SongItem from "@renderer/components/song/song-item/SongItem";
+import Impulse from "@renderer/lib/Impulse";
+import scrollIfNeeded from "@shared/lib/tungsten/scroll-if-needed";
+import { Song } from "@shared/types/common.types";
+import { ListPlusIcon, DeleteIcon } from "lucide-solid";
 import { Component, createSignal, onCleanup, onMount } from "solid-js";
 
 const SongQueue: Component = () => {
@@ -114,7 +114,7 @@ const QueueContextMenuContent: Component<QueueContextMenuContentProps> = (props)
     <DropdownList class="w-52">
       <DropdownList.Item>
         <span>Add to Playlist</span>
-        <ListPlus class="text-subtext" size={20} />
+        <ListPlusIcon class="text-subtext" size={20} />
       </DropdownList.Item>
       <DropdownList.Item
         onClick={() => window.api.request("queue::removeSong", props.song.path)}
