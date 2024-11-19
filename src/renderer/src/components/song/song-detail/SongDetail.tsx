@@ -19,13 +19,13 @@ const SongDetail: Component = () => {
   const colorData = createMemo(() => extractColorFromImage(song()));
 
   return (
-    <div class="flex h-full w-full max-w-[800px] flex-col p-8">
+    <div class="z-10 flex h-full w-full max-w-[800px] flex-col p-10">
       <div class="mb-8 grid flex-grow place-items-center">
         <SongImage
           src={song().bg}
           instantLoad={true}
           onImageLoaded={colorData().processImage}
-          class="size-80 rounded-lg bg-cover bg-center object-cover shadow-lg ring-2 ring-stroke ring-inset"
+          class="size-80 rounded-lg bg-cover bg-center object-cover shadow-lg"
         />
       </div>
 
@@ -36,7 +36,10 @@ const SongDetail: Component = () => {
         </div>
 
         <ProgressBar averageColor={colorData().primaryColor()} />
-        <SongControls averageColor={colorData().primaryColor()} />
+        <SongControls
+          secondatyColor={colorData().secondaryColor()}
+          averageColor={colorData().primaryColor()}
+        />
       </div>
     </div>
   );

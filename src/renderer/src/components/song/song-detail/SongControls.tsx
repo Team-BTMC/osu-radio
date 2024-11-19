@@ -26,32 +26,29 @@ import {
   Volume2Icon,
   VolumeXIcon,
 } from "lucide-solid";
-import { Component, createEffect, createSignal, Match, Show, Switch, For } from "solid-js";
+import { Component, createMemo, createSignal, Match, Show, Switch, For } from "solid-js";
 import Popover from "../../popover/Popover";
 import { ParentComponent } from "solid-js";
 import { Portal } from "solid-js/web";
 
 // Add a prop to accept the averageColor
 type SongControlsProps = {
-  averageColor?: string;
+  averageColor: string | undefined;
+  secondatyColor: string | undefined;
 };
 
 const SongControls: Component<SongControlsProps> = (props) => {
-  const [disable, setDisable] = createSignal(isSongUndefined(song()));
-  const [playHint, setPlayHint] = createSignal("");
+  const [isHovering, setIsHovering] = createSignal(false);
 
-  createEffect(() => {
+  const disable = createMemo(() => isSongUndefined(song()));
+  const playHint = createMemo(() => {
     const disabled = disable();
-
     if (disabled) {
-      setPlayHint("");
-      return;
+      return "";
     }
 
-    setPlayHint(isPlaying() ? "Pause" : "Play");
+    return isPlaying() ? "Pause" : "Play";
   });
-
-  createEffect(() => setDisable(isSongUndefined(song())));
 
   return (
     <div class="flex w-full items-center gap-4" style={{ "--dynamic-color": props.averageColor }}>
@@ -79,12 +76,14 @@ const SongControls: Component<SongControlsProps> = (props) => {
           </Button>
 
           <button
-            class="flex h-12 w-12 items-center justify-center rounded-full border border-solid border-stroke bg-surface text-2xl text-thick-material text-white shadow-lg"
+            class="flex h-12 w-12 items-center justify-center rounded-full ring-1 ring-stroke bg-surface text-2xl text-thick-material text-white transition-all active:scale-95 shadow-lg"
             onClick={() => togglePlay()}
             disabled={disable()}
             title={playHint()}
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
             style={{
-              "background-color": props.averageColor, // Use the average color as background
+              "background-color": isHovering() ? props.secondatyColor : props.averageColor,
             }}
           >
             <Show when={!isPlaying()} fallback={<PauseIcon fill="white" size={20} />}>
@@ -125,21 +124,30 @@ const LeftPart = () => {
   const [isHoveringVolume, setIsHoveringVolume] = createSignal(false);
   let isHoverintTimeoutId: NodeJS.Timeout;
 
+  const showVolumeSlider = () => {
+    clearTimeout(isHoverintTimeoutId);
+    setIsHoveringVolume(true);
+  };
+  const hideVolumeSlider = () => {
+    isHoverintTimeoutId = setTimeout(() => {
+      setIsHoveringVolume(false);
+    }, 320);
+  };
+
   return (
     <div class="flex-1">
       <div
         class="group flex w-max items-center gap-4"
-        onMouseEnter={() => {
-          clearTimeout(isHoverintTimeoutId);
-          setIsHoveringVolume(true);
-        }}
-        onMouseLeave={() => {
-          isHoverintTimeoutId = setTimeout(() => {
-            setIsHoveringVolume(false);
-          }, 320);
-        }}
+        onMouseEnter={showVolumeSlider}
+        onMouseLeave={hideVolumeSlider}
       >
-        <Button size="icon" variant="ghost" onClick={handleMuteSong}>
+        <Button
+          size="icon"
+          variant="ghost"
+          onClick={handleMuteSong}
+          onFocus={showVolumeSlider}
+          onBlur={hideVolumeSlider}
+        >
           <Switch>
             <Match when={volume() === 0}>
               <VolumeXIcon size={20} />
@@ -155,7 +163,7 @@ const LeftPart = () => {
 
         <Show when={isHoveringVolume()}>
           <Slider
-            class="flex h-8 w-28 flex-grow items-center"
+            class="flex h-8 w-24 flex-grow items-center"
             min={0}
             max={1}
             value={volume}
@@ -165,7 +173,11 @@ const LeftPart = () => {
             <Slider.Track class="h-1 flex-1 rounded bg-thick-material ring-1 ring-stroke">
               <Slider.Range class="block h-1 rounded bg-white" />
             </Slider.Track>
-            <Slider.Thumb class="mt-2 block h-4 w-4 rounded-full bg-white" />
+            <Slider.Thumb
+              onFocus={showVolumeSlider}
+              onBlur={hideVolumeSlider}
+              class="mt-2 block h-4 w-4 rounded-full bg-white"
+            />
           </Slider>
         </Show>
       </div>

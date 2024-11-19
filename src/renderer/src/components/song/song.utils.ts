@@ -114,25 +114,26 @@ export async function play(): Promise<void> {
   }
 
   const currentSong = song();
-  await window.api.request("discord::play", currentSong, player.currentTime);
-  document.title = `${currentSong.artist} - ${currentSong.title}`;
 
   const m = media();
   if (m !== undefined && player.src !== m.href) {
     player.src = m.href;
   }
 
-  await player.play().catch((reason) => console.error(reason));
   setIsPlaying(true);
+  await player.play().catch((reason) => console.error(reason));
 
   await setMediaSession(currentSong);
+
+  await window.api.request("discord::play", currentSong, player.currentTime);
+  document.title = `${currentSong.artist} - ${currentSong.title}`;
 }
 
 export async function pause() {
   const currentSong = song();
-  await window.api.request("discord::pause", currentSong);
   setIsPlaying(false);
   player.pause();
+  await window.api.request("discord::pause", currentSong);
 }
 
 export async function changeAudioDevice(deviceId: string) {

@@ -112,6 +112,7 @@ export type System = {
 // Settings table definition
 export type Settings = {
   volume: number;
+  sidebarWidth: number;
   audioDeviceId: string;
   osuSongsDir: string;
   "window.width": number;
