@@ -194,11 +194,11 @@ export function usePopover(): Context {
 }
 
 const Popover = Object.assign(PopoverRoot, {
+  Anchor: PopoverAnchor,
+  Content: PopoverContent,
   Portal: PopoverPortal,
   PortalMountStack: PopoverPortalMountStack,
-  Content: PopoverContent,
   Trigger: PopoverTrigger,
-  Anchor: PopoverAnchor,
   Overlay: PopoverOverlay,
 });
 
