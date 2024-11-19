@@ -17,7 +17,7 @@ export async function main(window: BrowserWindow) {
   const settings = Storage.getTable("settings");
 
   // Deleting osuSongsDir will force initial beatmap import
-  settings.delete("osuSongsDir");
+  // settings.delete("osuSongsDir");
   const osuSongsDir = settings.get("osuSongsDir");
 
   if (osuSongsDir.isNone) {
