@@ -7,7 +7,7 @@ export type Props = JSX.IntrinsicElements["button"];
 const DropdownListItem: Component<Props> = (props) => {
   const state = useDropdownList();
   const value = state.namespace.create();
-  const { attrs, tabIndex, isSelected } = state.item(value, {
+  const { attrs, tabIndex } = state.item(value, {
     onPointerMove: state.handleItemPointerMove,
   });
 
@@ -19,10 +19,7 @@ const DropdownListItem: Component<Props> = (props) => {
     <RawList.Item
       onPointerLeave={state.handleItemPointerLeave}
       tabIndex={tabIndex()}
-      classList={{
-        "bg-overlay/30": state.isHighlighted() && isSelected(),
-      }}
-      {...attrs}
+      {...attrs()}
       {...props}
     />
   );

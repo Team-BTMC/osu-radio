@@ -16,7 +16,7 @@ const TabsTrigger: Component<Props> = (_props) => {
     <button
       data-selected={isSelected()}
       tabIndex={tabIndex()}
-      {...attrs}
+      {...attrs()}
       {...rest}
       class={cn(
         "ring-offset-background z-10 flex h-[33px] items-center gap-2 rounded-lg px-3 text-subtext transition-colors",
