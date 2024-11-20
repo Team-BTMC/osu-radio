@@ -13,6 +13,7 @@ import {
   handleMuteSong,
 } from "../song.utils";
 import Button from "@renderer/components/button/Button";
+import SelectableList from "@renderer/components/selectable-list/SelectableList";
 import Slider from "@renderer/components/slider/Slider";
 import {
   CirclePlusIcon,
@@ -28,7 +29,6 @@ import {
   VolumeXIcon,
 } from "lucide-solid";
 import { Component, createMemo, createSignal, Match, Show, Switch, For } from "solid-js";
-import { ParentComponent } from "solid-js";
 import { Portal } from "solid-js/web";
 
 // Add a prop to accept the averageColor
@@ -190,6 +190,7 @@ const MIN_SPEED_AMOUNT = PREDEFINED_SPEEDS[0];
 const MAX_SPEED_AMOUNT = PREDEFINED_SPEEDS.at(-1);
 const RightPart = () => {
   const [isPopoverOpen, setisPopoverOpen] = createSignal(false);
+  const stringSpeed = createMemo(() => String(speed()));
 
   return (
     <div class="flex flex-1 justify-end gap-4">
@@ -201,16 +202,13 @@ const RightPart = () => {
           mainAxis: 10,
         }}
       >
-        <Popover.Anchor>
-          <Button
-            onClick={() => setisPopoverOpen(true)}
-            size="icon"
-            variant="ghost"
-            title="Set speed"
-          >
-            <GaugeIcon size={20} />
-          </Button>
-        </Popover.Anchor>
+        <Popover.Trigger>
+          {(triggerProps) => (
+            <Button {...triggerProps} size="icon" variant="ghost" title="Set speed">
+              <GaugeIcon size={20} />
+            </Button>
+          )}
+        </Popover.Trigger>
 
         <Portal>
           <Popover.Overlay />
@@ -234,9 +232,16 @@ const RightPart = () => {
             </div>
             <div class="my-2 h-px w-full bg-stroke" />
 
-            <For each={PREDEFINED_SPEEDS}>
-              {(amount) => <SpeedOption amount={amount}>{amount}</SpeedOption>}
-            </For>
+            <SelectableList
+              value={stringSpeed}
+              onValueChange={(newSpeed) => setSpeed(Number(newSpeed))}
+            >
+              <For each={PREDEFINED_SPEEDS}>
+                {(amount) => (
+                  <SelectableList.Item value={String(amount)}>{amount}</SelectableList.Item>
+                )}
+              </For>
+            </SelectableList>
           </Popover.Content>
         </Portal>
       </Popover>
@@ -244,20 +249,6 @@ const RightPart = () => {
         <CirclePlusIcon size={20} />
       </Button>
     </div>
-  );
-};
-
-type SpeedOptionProps = {
-  amount: number;
-};
-const SpeedOption: ParentComponent<SpeedOptionProps> = (props) => {
-  return (
-    <button
-      onClick={() => setSpeed(props.amount)}
-      class="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-surface focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-    >
-      {props.children}
-    </button>
   );
 };
 

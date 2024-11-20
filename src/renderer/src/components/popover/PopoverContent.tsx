@@ -1,7 +1,7 @@
 import { popoverStack, usePopover } from "./Popover";
 import { ComputePositionReturn } from "@floating-ui/dom";
 import { cn, sn } from "@renderer/lib/css.utils";
-import createFocusTrap from "solid-focus-trap";
+import createFocusTrap from "@renderer/lib/focus-trap";
 import { Component, createMemo, onCleanup, onMount, Show } from "solid-js";
 import { JSX } from "solid-js/jsx-runtime";
 
@@ -20,18 +20,18 @@ export type Props = JSX.IntrinsicElements["div"];
 const PopoverContent: Component<Props> = (props) => {
   const state = usePopover();
 
-  const isLastPopoupOpen = createMemo(() => {
+  const isLastPopupOpen = createMemo(() => {
     return state.isOpen() && popoverStack().at(-1) === state.id();
   });
 
   createFocusTrap({
     element: state.contentRef,
-    enabled: isLastPopoupOpen,
+    enabled: () => isLastPopupOpen(),
   });
 
   onMount(() => {
     const handleKeyUp = (e: KeyboardEvent) => {
-      if (!isLastPopoupOpen()) {
+      if (!isLastPopupOpen()) {
         return;
       }
 

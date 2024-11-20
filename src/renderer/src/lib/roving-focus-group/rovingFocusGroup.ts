@@ -2,8 +2,11 @@ import useControllableState from "../controllable-state";
 import { Accessor, createMemo, createSignal, onCleanup, onMount } from "solid-js";
 import { DOMElement } from "solid-js/jsx-runtime";
 
-const ITEM_DATA_ATTR = "data-item";
-const DEFAULT_SELECTED_VALUE = "";
+export const ITEM_DATA_ATTR = "data-item";
+export const ITEM_DATA_FOCUSED = "data-focused";
+export const ITEM_DATA_FOCUS_KEYBOARD = "data-focused-keyboard";
+export const ITEM_DATA_FOCUS_MOUSE = "data-focused-mouse";
+export const DEFAULT_SELECTED_VALUE = "";
 
 const canFocus = (
   element: Element | null | undefined,
@@ -27,6 +30,9 @@ type Params = {
 export function useRovingFocusGroup(props: Params = {}) {
   let container!: HTMLElement;
 
+  const [currentInteractionMode, setCurrentInteractionMode] = createSignal<"mouse" | "keyboard">(
+    "mouse",
+  );
   const [registeredTabs, setRegisteredTabs] = createSignal<string[]>([]);
 
   const [hasMounted, setHasMounted] = createSignal(false);
@@ -72,6 +78,7 @@ export function useRovingFocusGroup(props: Params = {}) {
       return;
     }
 
+    setCurrentInteractionMode("keyboard");
     props.onKeyUp?.();
 
     const orderedNodes = findOrderedNodes();
@@ -152,6 +159,7 @@ export function useRovingFocusGroup(props: Params = {}) {
     currentlyActiveElement,
     onListmounted,
     tryFocusFirstItem,
+    currentInteractionMode,
     value: currentStopId,
     attrs: {
       ref: (node: HTMLElement) => {
@@ -176,6 +184,7 @@ export function useRovingFocusGroup(props: Params = {}) {
           return;
         }
 
+        setCurrentInteractionMode("mouse");
         const optionToFocus = getCurrentOption();
         if (!canFocus(optionToFocus)) {
           return;
@@ -225,12 +234,15 @@ export function useRovingFocusGroup(props: Params = {}) {
       return {
         isSelected,
         tabIndex,
-        attrs: {
+        attrs: () => ({
           onKeyUp: handleItemKeyUp,
           onClick: handleClick,
           onPointerMove: handlePointerMove,
           [ITEM_DATA_ATTR]: tabStopId ?? "fallback",
-        },
+          [ITEM_DATA_FOCUS_KEYBOARD]: isSelected() && currentInteractionMode() === "keyboard",
+          [ITEM_DATA_FOCUS_MOUSE]: isSelected() && currentInteractionMode() === "mouse",
+          [ITEM_DATA_FOCUSED]: isSelected(),
+        }),
       };
     },
   };

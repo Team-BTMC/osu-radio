@@ -6,7 +6,7 @@ import { SongListSearchTags } from "./SongListSearchTags";
 import Button from "@renderer/components/button/Button";
 import { Input } from "@renderer/components/input/Input";
 import { FilterIcon, SearchIcon, FilterXIcon } from "lucide-solid";
-import { Accessor, Component, createSignal, Match, Setter, Signal, Switch } from "solid-js";
+import { Accessor, Component, createSignal, Match, Setter, Signal, Switch, Show } from "solid-js";
 
 export type SearchProps = {
   tags: Signal<Tag[]>;
@@ -109,8 +109,10 @@ const SongListSearch: Component<SearchProps> = (props) => {
         }}
       >
         <div class="mt-2 flex flex-nowrap items-center gap-2 overflow-y-auto">
-          <SongListSearchOrderBy disabled={!filterExpanded()} setOrder={props.setOrder} />
-          <SongListSearchTags disabled={!filterExpanded()} />
+          <Show when={filterExpanded()}>
+            <SongListSearchOrderBy setOrder={props.setOrder} />
+            <SongListSearchTags />
+          </Show>
         </div>
       </div>
     </div>

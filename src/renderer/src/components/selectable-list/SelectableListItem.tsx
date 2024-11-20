@@ -12,11 +12,7 @@ const SelectableListItem: Component<Props> = (_props) => {
   const [props, rest] = splitProps(_props, ["value", "onSelectedByClick", "children"]);
 
   const state = useSelectableList();
-  const {
-    attrs,
-    isSelected: isFocused,
-    tabIndex,
-  } = state.item(props.value, {
+  const { attrs, tabIndex } = state.item(props.value, {
     onSelectedByClick: () => {
       props.onSelectedByClick?.();
       if (!props.value) {
@@ -32,14 +28,7 @@ const SelectableListItem: Component<Props> = (_props) => {
   });
 
   return (
-    <RawList.Item
-      tabIndex={tabIndex()}
-      classList={{
-        "bg-overlay/30": isFocused(),
-      }}
-      {...attrs}
-      {...rest}
-    >
+    <RawList.Item tabIndex={tabIndex()} {...attrs()} {...rest}>
       {props.children}
       <Show when={isSelected()}>
         <CheckIcon size={14} />

@@ -17,7 +17,7 @@ import { song } from "@renderer/components/song/song.utils";
 import { WindowsControls } from "@renderer/components/windows-control/WindowsControl";
 import { os } from "@renderer/lib/os";
 import { Layers3Icon } from "lucide-solid";
-import { Accessor, Component, createSignal, Match, Switch } from "solid-js";
+import { Accessor, Component, Match, Switch } from "solid-js";
 
 const MainScene: Component = () => {
   const { maxSidebarWidth, offsetFromPanel } = useMainResizableOptions();
@@ -79,22 +79,25 @@ const MainScene: Component = () => {
 };
 
 const Queue: Component = () => {
-  const [isOpen, setIsOpen] = createSignal(false);
-
   return (
     <Popover
       placement="bottom-end"
       offset={{
         mainAxis: 8,
       }}
-      onValueChange={setIsOpen}
-      isOpen={isOpen}
     >
-      <Popover.Anchor onClick={() => setIsOpen(true)} class="no-drag absolute right-2 top-2 z-10">
-        <Button size="square" variant="outlined" class="no-drag">
-          <Layers3Icon size={20} />
-        </Button>
-      </Popover.Anchor>
+      <Popover.Trigger>
+        {(triggerProps) => (
+          <Button
+            {...triggerProps}
+            class="no-drag absolute right-2 top-2 z-10"
+            size="square"
+            variant="outlined"
+          >
+            <Layers3Icon size={20} />
+          </Button>
+        )}
+      </Popover.Trigger>
 
       <Popover.Portal>
         <Popover.Overlay />

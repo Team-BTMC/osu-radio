@@ -10,7 +10,7 @@ export const RawListItem: Component<JSX.IntrinsicElements["button"]> = (_props) 
   return (
     <button
       class={cn(
-        "flex items-center justify-between rounded-md px-2 py-1.5 focus:outline-none disabled:pointer-events-none disabled:opacity-50",
+        "data-[focused-keyboard=true]:focus:outline-initial flex items-center justify-between rounded-md px-2 py-1.5 disabled:pointer-events-none disabled:opacity-50 data-[focused=true]:bg-overlay/30 data-[focused-mouse=true]:focus:outline-none",
         props.class,
       )}
       {...rest}

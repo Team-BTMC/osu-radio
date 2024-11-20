@@ -30,6 +30,7 @@ import {
 } from "solid-js";
 
 export const DEFAULT_POPOVER_OPEN = false;
+export const DEFAULT_CUSTOM_POSITION_PLACEMENT: Placement = "bottom-start";
 
 export type Props = {
   offset?: OffsetOptions;
@@ -99,24 +100,6 @@ function useProviderValue(props: Props) {
     handleResize();
   };
 
-  let lastMousePos: [number, number];
-  const useCustomCoords = {
-    name: "useCustomCoords",
-    fn() {
-      const position = props.position?.();
-      if (position === undefined || position === lastMousePos) {
-        return {};
-      }
-
-      const [x, y] = position;
-      if (x === 0 || y === 0) {
-        return {};
-      }
-
-      return { x, y };
-    },
-  };
-
   const handleResize = () => {
     const trigger = triggerRef();
     const content = contentRef();
@@ -125,9 +108,12 @@ function useProviderValue(props: Props) {
       return;
     }
 
-    const middleware: Middleware[] = [offset(props.offset)];
-    if (typeof props.position !== "undefined") {
-      middleware.push(useCustomCoords);
+    const [x, y] = props.position?.() ?? [];
+    const hasCustomPosition = x !== undefined && y !== undefined;
+
+    const middleware: Middleware[] = [];
+    if (!hasCustomPosition) {
+      middleware.push(offset(props.offset));
     }
     if (typeof props.flip !== "undefined") {
       middleware.push(flip(props.flip === true ? undefined : props.flip));
@@ -136,10 +122,35 @@ function useProviderValue(props: Props) {
       middleware.push(shift(props.shift === true ? undefined : props.shift));
     }
 
-    computePosition(trigger, content, {
-      placement: props.placement,
-      strategy: "fixed",
+    const getBoundingClientRect = () => {
+      const triggerRect = trigger.getBoundingClientRect();
+      if (!hasCustomPosition) {
+        return triggerRect;
+      }
+
+      return {
+        x,
+        y,
+        top: y,
+        right: x,
+        bottom: y,
+        left: x,
+        width: 0,
+        height: 0,
+      };
+    };
+
+    const getPlacement = () => {
+      if (hasCustomPosition) {
+        return DEFAULT_CUSTOM_POSITION_PLACEMENT;
+      }
+      return props.placement;
+    };
+
+    computePosition({ getBoundingClientRect }, content, {
       middleware,
+      strategy: "fixed",
+      placement: getPlacement(),
     }).then(setPosition);
   };
 
