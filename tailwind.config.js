@@ -1,14 +1,17 @@
 /** @type {import('tailwindcss').Config} */
 import { noticeAnimations } from "./src/renderer/src/components/notice/NoticeAnimations";
+import { songItemAnimations } from "./src/renderer/src/components/song/song-item/SongItemAnimations";
 
 export default {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
       keyframes: {
+        ...songItemAnimations.keyframes,
         ...noticeAnimations.keyframes,
       },
       animation: {
+        ...songItemAnimations.animation,
         ...noticeAnimations.animation,
       },
       colors: {
@@ -22,7 +25,7 @@ export default {
         overlay: "rgba(var(--color-overlay))",
         surface: "rgba(var(--color-surface), 0.2)",
         black: "rgba(var(--color-black))",
-        red: "rgba(var(--color-red))",
+        danger: "rgba(var(--color-red))",
         green: "rgba(var(--color-green))",
       },
       boxShadow: {

@@ -1,4 +1,4 @@
-type Modifiers = "ctrl" | "shift" | "alt";
+type Modifiers = "ctrl" | "shift" | "alt" | "cmd";
 
 export type KeyboardRegister = {
   onPress: () => any;
@@ -40,9 +40,14 @@ export class Keyboard {
           continue;
         }
 
+        if (r.modifiers?.includes("cmd") && evt.metaKey !== true) {
+          continue;
+        }
+
         const rModCount = r.modifiers !== undefined ? r.modifiers.length : 0;
 
-        const evtModCount = Number(evt.altKey) + Number(evt.shiftKey) + Number(evt.ctrlKey);
+        const evtModCount =
+          Number(evt.altKey) + Number(evt.shiftKey) + Number(evt.ctrlKey) + Number(evt.metaKey);
 
         if (rModCount !== evtModCount) {
           continue;

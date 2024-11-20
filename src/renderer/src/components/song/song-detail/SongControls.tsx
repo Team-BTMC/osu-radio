@@ -7,6 +7,8 @@ import {
   song,
   setVolume,
   volume,
+  setSpeed,
+  speed,
   handleMuteSong,
 } from "../song.utils";
 import Button from "@renderer/components/button/Button";
@@ -14,6 +16,7 @@ import Popover from "@renderer/components/popover/Popover";
 import Slider from "@renderer/components/slider/Slider";
 import {
   CirclePlusIcon,
+  GaugeIcon,
   PauseIcon,
   PlayIcon,
   RepeatIcon,
@@ -24,31 +27,30 @@ import {
   Volume2Icon,
   VolumeXIcon,
 } from "lucide-solid";
-import { Component, createEffect, createSignal, Match, Show, Switch } from "solid-js";
 import SongContextMenu from "../context-menu/SongContextMenu";
 import AddToPlaylist from "../context-menu/items/AddToPlaylist";
+import { Component, createMemo, createSignal, Match, Show, Switch, For } from "solid-js";
+import { ParentComponent } from "solid-js";
+import { Portal } from "solid-js/web";
 
 // Add a prop to accept the averageColor
 type SongControlsProps = {
-  averageColor?: string;
+  averageColor: string | undefined;
+  secondatyColor: string | undefined;
 };
 
 const SongControls: Component<SongControlsProps> = (props) => {
-  const [disable, setDisable] = createSignal(isSongUndefined(song()));
-  const [playHint, setPlayHint] = createSignal("");
+  const [isHovering, setIsHovering] = createSignal(false);
 
-  createEffect(() => {
+  const disable = createMemo(() => isSongUndefined(song()));
+  const playHint = createMemo(() => {
     const disabled = disable();
-
     if (disabled) {
-      setPlayHint("");
-      return;
+      return "";
     }
 
-    setPlayHint(isPlaying() ? "Pause" : "Play");
+    return isPlaying() ? "Pause" : "Play";
   });
-
-  createEffect(() => setDisable(isSongUndefined(song())));
 
   return (
     <div class="flex w-full items-center gap-4" style={{ "--dynamic-color": props.averageColor }}>
@@ -76,12 +78,14 @@ const SongControls: Component<SongControlsProps> = (props) => {
           </Button>
 
           <button
-            class="flex h-12 w-12 items-center justify-center rounded-full border border-solid border-stroke bg-surface text-2xl text-thick-material text-white shadow-lg"
+            class="flex h-12 w-12 items-center justify-center rounded-full bg-surface text-2xl text-thick-material text-white shadow-lg ring-1 ring-stroke transition-all active:scale-95"
             onClick={() => togglePlay()}
             disabled={disable()}
             title={playHint()}
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
             style={{
-              "background-color": props.averageColor, // Use the average color as background
+              "background-color": isHovering() ? props.secondatyColor : props.averageColor,
             }}
           >
             <Show when={!isPlaying()} fallback={<PauseIcon fill="white" size={20} />}>
@@ -122,21 +126,30 @@ const LeftPart = () => {
   const [isHoveringVolume, setIsHoveringVolume] = createSignal(false);
   let isHoverintTimeoutId: NodeJS.Timeout;
 
+  const showVolumeSlider = () => {
+    clearTimeout(isHoverintTimeoutId);
+    setIsHoveringVolume(true);
+  };
+  const hideVolumeSlider = () => {
+    isHoverintTimeoutId = setTimeout(() => {
+      setIsHoveringVolume(false);
+    }, 320);
+  };
+
   return (
     <div class="flex-1">
       <div
         class="group flex w-max items-center gap-4"
-        onMouseEnter={() => {
-          clearTimeout(isHoverintTimeoutId);
-          setIsHoveringVolume(true);
-        }}
-        onMouseLeave={() => {
-          isHoverintTimeoutId = setTimeout(() => {
-            setIsHoveringVolume(false);
-          }, 320);
-        }}
+        onMouseEnter={showVolumeSlider}
+        onMouseLeave={hideVolumeSlider}
       >
-        <Button size="icon" variant="ghost" onClick={handleMuteSong}>
+        <Button
+          size="icon"
+          variant="ghost"
+          onClick={handleMuteSong}
+          onFocus={showVolumeSlider}
+          onBlur={hideVolumeSlider}
+        >
           <Switch>
             <Match when={volume() === 0}>
               <VolumeXIcon size={20} />
@@ -152,7 +165,7 @@ const LeftPart = () => {
 
         <Show when={isHoveringVolume()}>
           <Slider
-            class="flex h-8 w-28 flex-grow items-center"
+            class="flex h-8 w-24 flex-grow items-center"
             min={0}
             max={1}
             value={volume}
@@ -162,7 +175,11 @@ const LeftPart = () => {
             <Slider.Track class="h-1 flex-1 rounded bg-thick-material ring-1 ring-stroke">
               <Slider.Range class="block h-1 rounded bg-white" />
             </Slider.Track>
-            <Slider.Thumb class="mt-2 block h-4 w-4 rounded-full bg-white" />
+            <Slider.Thumb
+              onFocus={showVolumeSlider}
+              onBlur={hideVolumeSlider}
+              class="mt-2 block h-4 w-4 rounded-full bg-white"
+            />
           </Slider>
         </Show>
       </div>
@@ -170,9 +187,61 @@ const LeftPart = () => {
   );
 };
 
+const PREDEFINED_SPEEDS: number[] = [0.25, 0.5, 1, 1.5, 2] as const;
+const MIN_SPEED_AMOUNT = PREDEFINED_SPEEDS[0];
+const MAX_SPEED_AMOUNT = PREDEFINED_SPEEDS.at(-1);
 const RightPart = () => {
+  const [isPopoverOpen, setisPopoverOpen] = createSignal(false);
+
   return (
-    <div class="flex flex-1 justify-end">
+    <div class="flex flex-1 justify-end gap-4">
+      <Popover
+        isOpen={isPopoverOpen}
+        onValueChange={setisPopoverOpen}
+        placement="top-end"
+        offset={{
+          mainAxis: 10,
+        }}
+      >
+        <Popover.Anchor>
+          <Button
+            onClick={() => setisPopoverOpen(true)}
+            size="icon"
+            variant="ghost"
+            title="Set speed"
+          >
+            <GaugeIcon size={20} />
+          </Button>
+        </Popover.Anchor>
+
+        <Portal>
+          <Popover.Overlay />
+          <Popover.Content class="flex w-fit min-w-48 flex-col rounded-xl bg-thick-material px-1.5 py-3 shadow-xl ring-1 ring-inset ring-stroke backdrop-blur-md">
+            <p class="gap-1 px-2 text-sm font-medium text-subtext">Custom Speed</p>
+            <div class="flex flex-col px-2">
+              <Slider
+                class="flex h-8 flex-grow items-center"
+                min={MIN_SPEED_AMOUNT}
+                max={MAX_SPEED_AMOUNT}
+                value={speed}
+                onValueChange={setSpeed}
+                enableWheelSlide
+              >
+                <Slider.Track class="h-1 flex-1 rounded bg-thick-material ring-1 ring-stroke">
+                  <Slider.Range class="block h-1 rounded bg-white" />
+                </Slider.Track>
+                <Slider.Thumb class="mt-2 block h-4 w-4 rounded-full bg-white" />
+              </Slider>
+              <div class="text-xs">{Math.round(speed() * 100) / 100}x</div>
+            </div>
+            <div class="my-2 h-px w-full bg-stroke" />
+
+            <For each={PREDEFINED_SPEEDS}>
+              {(amount) => <SpeedOption amount={amount}>{amount}</SpeedOption>}
+            </For>
+          </Popover.Content>
+        </Portal>
+      </Popover>
       <Popover flip={{}} shift={{}}>
         <Popover.Overlay />
         <Popover.Content>
@@ -187,6 +256,20 @@ const RightPart = () => {
         </Popover.Trigger>
       </Popover>
     </div>
+  );
+};
+
+type SpeedOptionProps = {
+  amount: number;
+};
+const SpeedOption: ParentComponent<SpeedOptionProps> = (props) => {
+  return (
+    <button
+      onClick={() => setSpeed(props.amount)}
+      class="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-surface focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+    >
+      {props.children}
+    </button>
   );
 };
 
