@@ -1,10 +1,10 @@
+import "../main-scene/styles.css";
 import osuLazerLogo from "@renderer/assets/osu-lazer-logo.png";
 import osuStableLogo from "@renderer/assets/osu-stable-logo.png";
 import Button from "@renderer/components/button/Button";
 import { WindowsControls } from "@renderer/components/windows-control/WindowsControl";
 import { Accessor, Component, createSignal, For, onMount, Setter, Show } from "solid-js";
 import { OsuDirectory } from "src/main/router/dir-router";
-import "../main-scene/styles.css";
 
 export default function DirSelectScene() {
   const [dirs, setDirs] = createSignal<OsuDirectory[]>([]);
@@ -61,7 +61,7 @@ export default function DirSelectScene() {
 
   return (
     <div class="relative grid h-screen place-items-center p-8" style={{ background: GRADIENT }}>
-      <div class="absolute top-0 left-0 w-full h-10 flex justify-end drag">
+      <div class="drag absolute left-0 top-0 flex h-10 w-full justify-end">
         {os() !== "darwin" && <WindowsControls />}
       </div>
       <div class="flex h-full max-h-[720px] w-full max-w-[860px] flex-col justify-between gap-12 overflow-y-auto rounded-2xl border border-stroke/10 bg-regular-material p-8 shadow-2xl">
@@ -80,7 +80,7 @@ export default function DirSelectScene() {
                 )}
               </For>
             </Show>
-            <div class="flex justify-between items-baseline pt-2">
+            <div class="flex items-baseline justify-between pt-2">
               <Button size="medium" variant="secondary" onClick={selectDir}>
                 Select a different installation
               </Button>
@@ -112,19 +112,19 @@ type InstallationCardProps = {
 const InstallationCard: Component<InstallationCardProps> = (props) => {
   return (
     <div
-      class={`w-full rounded-xl border border-white/5 h-[72px] p-3 flex items-center select-none hover:cursor-pointer bg-[#333333] ${props.selectedDir() === props.directory ? "bg-[#333333]" : "bg-regular-material"}`}
+      class={`flex h-[72px] w-full select-none items-center rounded-xl border border-white/5 bg-[#333333] p-3 hover:cursor-pointer ${props.selectedDir() === props.directory ? "bg-[#333333]" : "bg-regular-material"}`}
       onClick={() => props.setSelectedDir(props.directory)}
     >
       <img
         src={props.directory.version === "stable" ? osuStableLogo : osuLazerLogo}
-        class="w-[52px] h-[52px]"
+        class="h-[52px] w-[52px]"
         alt=""
       />
-      <div class="flex flex-col pl-4 gap-1">
+      <div class="flex flex-col gap-1 pl-4">
         <p class="font-bold">{props.directory.path}</p>
         <div class="flex items-center gap-3">
           <div
-            class="font-bold text-xs w-20 h-5 flex items-center justify-center rounded-full"
+            class="flex h-5 w-20 items-center justify-center rounded-full text-xs font-bold"
             classList={{
               "bg-pink-400": props.directory.version === "stable",
               "bg-teal-400": props.directory.version === "lazer",

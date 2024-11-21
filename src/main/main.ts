@@ -1,4 +1,3 @@
-import { BrowserWindow } from "electron";
 import { DirParseResult, OsuParser } from "./lib/osu-file-parser/OsuParser";
 import { Router } from "./lib/route-pass/Router";
 import { orDefault } from "./lib/rust-like-utils-backend/Optional";
@@ -8,6 +7,7 @@ import { throttle } from "./lib/throttle";
 import { dirSubmit } from "./router/dir-router";
 import { showError } from "./router/error-router";
 import "./router/import";
+import { BrowserWindow } from "electron";
 
 export let mainWindow: BrowserWindow;
 
