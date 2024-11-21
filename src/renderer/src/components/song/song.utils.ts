@@ -29,16 +29,16 @@ const [media, setMedia] = createSignal<URL>();
 export { media, setMedia };
 
 const [song, setSong] = createSignal<Song>(DEFAULT_SONG);
-export { song, setSong };
+export { setSong, song };
 
 const [duration, setDuration] = createSignal(0);
 export { duration, setDuration };
 
 const [timestamp, setTimestamp] = createSignal(0);
-export { timestamp, setTimestamp };
+export { setTimestamp, timestamp };
 
 const [valueBeforeMute, setValueBeforeMute] = createSignal<number | undefined>();
-export { valueBeforeMute, setValueBeforeMute };
+export { setValueBeforeMute, valueBeforeMute };
 
 const [isSeeking, setIsSeeking] = createSignal({
   value: false,
@@ -57,7 +57,7 @@ export const setSpeed = (newValue: ZeroToOne) => {
   _setSpeed(newValue);
   player.playbackRate = newValue;
 };
-export { volume, speed };
+export { speed, volume };
 
 let bgPath: Optional<string>;
 
@@ -123,10 +123,18 @@ export async function play(): Promise<void> {
   setIsPlaying(true);
   await player.play().catch((reason) => console.error(reason));
 
-  await setMediaSession(currentSong);
+  const waitForDuration = async (): Promise<number> => {
+    while (isNaN(player.duration)) {
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    }
+    return player.duration;
+  };
+  const duration = await waitForDuration();
+  await window.api.request("discord::play", currentSong, duration, player.currentTime);
 
-  await window.api.request("discord::play", currentSong, player.currentTime);
-  document.title = `${currentSong.artist} - ${currentSong.title}`;
+  setIsPlaying(true);
+
+  await setMediaSession(currentSong);
 }
 
 export async function pause() {
@@ -300,7 +308,6 @@ window.api.listen("queue::songChanged", async (s) => {
 
   setMedia(new URL(resource.value));
   setSong(s);
-  await window.api.request("discord::play", s);
   await play();
   player.playbackRate = speed();
 });
@@ -322,9 +329,6 @@ player.addEventListener("loadedmetadata", () => {
 player.addEventListener("timeupdate", async () => {
   setTimestamp(player.currentTime);
   const currentSong = song();
-
-  // Discord
-  await window.api.request("discord::play", currentSong, player.currentTime);
 
   // Media session
   setMediaSessionPosition();
@@ -378,7 +382,7 @@ export const handleSeekEnd = () => {
   }
 
   if (!pausedSeekingStart) {
-    player.play();
+    play();
   }
 };
 

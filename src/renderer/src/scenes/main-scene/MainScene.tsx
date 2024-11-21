@@ -15,12 +15,20 @@ import SongImage from "@renderer/components/song/SongImage";
 import SongQueue from "@renderer/components/song/song-queue/SongQueue";
 import { song } from "@renderer/components/song/song.utils";
 import { WindowsControls } from "@renderer/components/windows-control/WindowsControl";
-import { os } from "@renderer/lib/os";
 import { Layers3Icon } from "lucide-solid";
-import { Accessor, Component, createSignal, Match, Switch } from "solid-js";
+import { Accessor, Component, createSignal, Match, onMount, Switch } from "solid-js";
 
 const MainScene: Component = () => {
   const { maxSidebarWidth, offsetFromPanel } = useMainResizableOptions();
+  const [os, setOs] = createSignal<NodeJS.Platform>();
+
+  onMount(async () => {
+    const fetchOS = async () => {
+      return await window.api.request("os::platform");
+    };
+
+    setOs(await fetchOS());
+  });
   return (
     <div class="flex h-full min-h-screen flex-col">
       <Switch>
