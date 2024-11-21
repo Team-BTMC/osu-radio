@@ -7,7 +7,6 @@ import { ArrowLeftIcon, PencilIcon, Trash2Icon } from "lucide-solid";
 import { Component, createSignal, onCleanup, onMount, Show } from "solid-js";
 import { PlaylistSongsQueryPayload, ResourceID } from "src/@types";
 import SongContextMenu from "@renderer/components/song/context-menu/SongContextMenu";
-import PlayNext from "@renderer/components/song/context-menu/items/PlayNext";
 import RemoveFromPlaylist from "../context-menu-items/RemoveFromPlaylist";
 import { deleteSong, PLAYLIST_SCENE_LIST, setPlaylistActiveScene } from "../playlist.utils";
 
@@ -87,7 +86,6 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
                 onSelect={createQueue}
                 contextMenu={
                   <SongContextMenu>
-                    <PlayNext path={s.path} disabled={!isQueueExist()} />
                     <RemoveFromPlaylist playlistName={props.playlistName} song={s} />
                   </SongContextMenu>
                 }

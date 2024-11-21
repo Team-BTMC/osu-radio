@@ -1,9 +1,9 @@
 import { Accessor, Component, For, Setter, Show } from "solid-js";
 import { Song } from "src/@types";
-import SongContextMenuItem from "../SongContextMenuItem";
 import { noticeError } from "@renderer/components/playlist/playlist.utils";
 import { addNotice } from "@renderer/components/notice/NoticeContainer";
 import { BadgeCheckIcon, CheckIcon } from "lucide-solid";
+import DropdownList from "@renderer/components/dropdown-list/DropdownList";
 
 type PlaylistChooserProps = {
   song: Song;
@@ -37,37 +37,39 @@ const PlaylistChooser: Component<PlaylistChooserProps> = (props) => {
   };
 
   return (
-    <For
-      fallback={
-        <SongContextMenuItem disabled={true} onClick={() => {}}>
-          No playlists...
-        </SongContextMenuItem>
-      }
-      each={props.playlistNames}
-    >
-      {(child, index) => (
-        <SongContextMenuItem
-          onClick={() => {
-            addToPlaylist(props.playlistNames[index()]);
-          }}
-          onMouseOver={() => {
-            clearTimeout(props.timeoutId());
-          }}
-          onMouseLeave={() => {
-            props.setTimeoutId(
-              setTimeout(() => {
-                props.setShowChooser(false);
-              }, 320),
-            );
-          }}
-        >
-          <p>{child}</p>
-          <Show when={isInPlaylist(props.song, props.playlistNames[index()])}>
-            <CheckIcon size={20} />
-          </Show>
-        </SongContextMenuItem>
-      )}
-    </For>
+    <DropdownList class="w-40">
+      <For
+        fallback={
+          <DropdownList.Item disabled={true}>
+            No playlists...
+          </DropdownList.Item>
+        }
+        each={props.playlistNames}
+      >
+        {(child, index) => (
+          <DropdownList.Item
+            onClick={() => {
+              addToPlaylist(props.playlistNames[index()]);
+            }}
+            onMouseOver={() => {
+              clearTimeout(props.timeoutId());
+            }}
+            onMouseLeave={() => {
+              props.setTimeoutId(
+                setTimeout(() => {
+                  props.setShowChooser(false);
+                }, 320),
+              );
+            }}
+          >
+            <span>{child}</span>
+            <Show when={isInPlaylist(props.song, props.playlistNames[index()])}>
+              <CheckIcon size={20} />
+            </Show>
+          </DropdownList.Item>
+        )}
+      </For>
+    </DropdownList>
   );
 };
 

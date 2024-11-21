@@ -1,10 +1,9 @@
 import { Song } from "../../../../../../@types";
-import SongContextMenuItem from "../SongContextMenuItem";
 import { Component, createSignal, onMount } from "solid-js";
-import { ChevronRightIcon } from "lucide-solid";
 import Popover from "@renderer/components/popover/Popover";
 import PlaylistChooser from "./PlaylistChooser";
-import SongContextMenu from "../SongContextMenu";
+import DropdownList from "@renderer/components/dropdown-list/DropdownList";
+import { ChevronRightIcon } from "lucide-solid";
 
 type AddToPlaylistProps = {
   song: Song;
@@ -25,16 +24,32 @@ const AddToPlaylist: Component<AddToPlaylistProps> = (props) => {
   });
 
   return (
-    <Popover
-      isOpen={showChooser}
-      onValueChange={setShowChooser}
-      flip={{}}
-      shift={{}}
-      offset={10}
-      placement="right"
+    <DropdownList.Item
+      onClick={(e: MouseEvent) => {
+        e.stopPropagation();
+        setShowChooser(true);
+      }}
+      onMouseOver={() => {
+        setShowChooser(true);
+        clearTimeout(timeoutId());
+      }}
+      onMouseLeave={() => {
+        setTimeoutId(
+          setTimeout(() => {
+            setShowChooser(false);
+          }, 320),
+        );
+      }}
     >
-      <Popover.Content>
-        <SongContextMenu class="max-h-screen overflow-y-scroll overflow-x-hidden [scrollbar-width:none] backdrop-blur-md">
+      <Popover
+        isOpen={showChooser}
+        onValueChange={setShowChooser}
+        flip={{}}
+        shift={{}}
+        offset={{ mainAxis: 15 }}
+        placement="right"
+      >
+        <Popover.Content>
           <PlaylistChooser
             playlistNames={playlistNames()}
             song={props.song}
@@ -42,30 +57,12 @@ const AddToPlaylist: Component<AddToPlaylistProps> = (props) => {
             setTimeoutId={setTimeoutId}
             timeoutId={timeoutId}
           />
-        </SongContextMenu>
-      </Popover.Content>
-      <Popover.Trigger>
-        <SongContextMenuItem
-          onClick={(e: MouseEvent) => {
-            e.stopPropagation();
-          }}
-          onMouseOver={() => {
-            setShowChooser(true);
-            clearTimeout(timeoutId());
-          }}
-          onMouseLeave={() => {
-            setTimeoutId(
-              setTimeout(() => {
-                setShowChooser(false);
-              }, 320),
-            );
-          }}
-        >
-          <p>Add to Playlist</p>
-          <ChevronRightIcon />
-        </SongContextMenuItem>
-      </Popover.Trigger>
-    </Popover>
+        </Popover.Content>
+        <span>Add to Playlist</span>
+        <ChevronRightIcon class="text-subtext" />
+        <Popover.Anchor />
+      </Popover>
+    </DropdownList.Item>
   );
 };
 
