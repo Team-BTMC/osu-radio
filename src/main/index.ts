@@ -30,9 +30,10 @@ async function createWindow() {
     show: false,
     autoHideMenuBar: true,
     titleBarStyle: "hidden",
+    minWidth: 500,
     trafficLightPosition: {
       x: 20,
-      y: 20,
+      y: 28,
     },
     icon: getIcon(),
     webPreferences: {

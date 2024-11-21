@@ -51,7 +51,13 @@ export const setVolume = (newValue: ZeroToOne) => {
   _setVolume(newValue);
   setValueBeforeMute(undefined);
 };
-export { volume };
+
+const [speed, _setSpeed] = createSignal<ZeroToOne>(1);
+export const setSpeed = (newValue: ZeroToOne) => {
+  _setSpeed(newValue);
+  player.playbackRate = newValue;
+};
+export { speed, volume };
 
 let bgPath: Optional<string>;
 
@@ -109,13 +115,12 @@ export async function play(): Promise<void> {
 
   const currentSong = song();
 
-  document.title = `${currentSong.artist} - ${currentSong.title}`;
-
   const m = media();
   if (m !== undefined && player.src !== m.href) {
     player.src = m.href;
   }
 
+  setIsPlaying(true);
   await player.play().catch((reason) => console.error(reason));
 
   const waitForDuration = async (): Promise<number> => {
@@ -134,9 +139,9 @@ export async function play(): Promise<void> {
 
 export async function pause() {
   const currentSong = song();
-  await window.api.request("discord::pause", currentSong);
   setIsPlaying(false);
   player.pause();
+  await window.api.request("discord::pause", currentSong);
 }
 
 export async function changeAudioDevice(deviceId: string) {
@@ -304,6 +309,7 @@ window.api.listen("queue::songChanged", async (s) => {
   setMedia(new URL(resource.value));
   setSong(s);
   await play();
+  player.playbackRate = speed();
 });
 
 player.addEventListener("ended", async () => {
