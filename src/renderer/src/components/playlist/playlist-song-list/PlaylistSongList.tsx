@@ -1,14 +1,13 @@
 import InfiniteScroller from "../../InfiniteScroller";
 import SongItem from "../../song/song-item/SongItem";
+import { deleteSong, PLAYLIST_SCENE_LIST, setPlaylistActiveScene } from "../playlist.utils";
 import { namespace } from "@renderer/App";
 import Button from "@renderer/components/button/Button";
+import DropdownList from "@renderer/components/dropdown-list/DropdownList";
 import Impulse from "@renderer/lib/Impulse";
-import { ArrowLeftIcon, PencilIcon, Trash2Icon } from "lucide-solid";
+import { ArrowLeftIcon, DeleteIcon, PencilIcon, Trash2Icon } from "lucide-solid";
 import { Component, createSignal, onCleanup, onMount, Show } from "solid-js";
-import { PlaylistSongsQueryPayload, ResourceID } from "src/@types";
-import SongContextMenu from "@renderer/components/song/context-menu/SongContextMenu";
-import RemoveFromPlaylist from "../context-menu-items/RemoveFromPlaylist";
-import { deleteSong, PLAYLIST_SCENE_LIST, setPlaylistActiveScene } from "../playlist.utils";
+import { PlaylistSongsQueryPayload, ResourceID, Song } from "src/@types";
 
 type PlaylistSongListProps = {
   playlistName: string;
@@ -22,7 +21,7 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
   });
 
   const [editMode, setEditMode] = createSignal(false);
-  const [isQueueExist, setIsQueueExist] = createSignal(false);
+  const [, setIsQueueExist] = createSignal(false);
 
   const reset = new Impulse();
 
@@ -67,17 +66,17 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
           <PencilIcon class="size-5" />
         </Button>
       </div>
-      <div>
+      <div class="flex-grow">
         <InfiniteScroller
           apiKey={"query::playlistSongs"}
           apiData={payload()}
           apiInitKey={"query::playlistSongs::init"}
           apiInitData={payload()}
           reset={reset}
-          class="flex flex-col gap-4"
+          // class="flex flex-col gap-4"
           fallback={<div>No songs in playlist...</div>}
           builder={(s) => (
-            <div class="flex w-full flex-row items-center justify-center">
+            <div class="">
               <SongItem
                 song={s}
                 group={group}
@@ -85,9 +84,7 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
                 draggable={true}
                 onSelect={createQueue}
                 contextMenu={
-                  <SongContextMenu>
-                    <RemoveFromPlaylist playlistName={props.playlistName} song={s} />
-                  </SongContextMenu>
+                  <PlaylistSongListContextMenuContent song={s} playlistName={props.playlistName} />
                 }
               />
               <Show when={editMode() === true}>
@@ -105,6 +102,25 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
         />
       </div>
     </div>
+  );
+};
+
+type PlaylistSongListContextMenuContentProps = { song: Song; playlistName: string };
+const PlaylistSongListContextMenuContent: Component<PlaylistSongListContextMenuContentProps> = (
+  props,
+) => {
+  return (
+    <DropdownList class="w-52">
+      <DropdownList.Item
+        onClick={() => {
+          deleteSong(props.playlistName, props.song);
+        }}
+        class="text-danger"
+      >
+        <span>Remove from Playlist</span>
+        <DeleteIcon class="opacity-80" size={20} />
+      </DropdownList.Item>
+    </DropdownList>
   );
 };
 

@@ -1,9 +1,9 @@
+import DropdownList from "@renderer/components/dropdown-list/DropdownList";
+import { addNotice } from "@renderer/components/notice/NoticeContainer";
+import { noticeError } from "@renderer/components/playlist/playlist.utils";
+import { BadgeCheckIcon, CheckIcon } from "lucide-solid";
 import { Accessor, Component, For, Setter, Show } from "solid-js";
 import { Song } from "src/@types";
-import { noticeError } from "@renderer/components/playlist/playlist.utils";
-import { addNotice } from "@renderer/components/notice/NoticeContainer";
-import { BadgeCheckIcon, CheckIcon } from "lucide-solid";
-import DropdownList from "@renderer/components/dropdown-list/DropdownList";
 
 type PlaylistChooserProps = {
   song: Song;
@@ -39,11 +39,7 @@ const PlaylistChooser: Component<PlaylistChooserProps> = (props) => {
   return (
     <DropdownList class="w-40">
       <For
-        fallback={
-          <DropdownList.Item disabled={true}>
-            No playlists...
-          </DropdownList.Item>
-        }
+        fallback={<DropdownList.Item disabled={true}>No playlists...</DropdownList.Item>}
         each={props.playlistNames}
       >
         {(child, index) => (

@@ -1,8 +1,8 @@
+import { deleteSong } from "../playlist.utils";
 import SongContextMenuItem from "@renderer/components/song/context-menu/SongContextMenuItem";
 import { DeleteIcon } from "lucide-solid";
 import { Component } from "solid-js";
 import { Song } from "src/@types";
-import { deleteSong } from "../playlist.utils";
 
 type RemoveFromPlaylistProps = {
   playlistName: string;

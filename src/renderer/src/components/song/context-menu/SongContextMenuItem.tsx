@@ -23,13 +23,13 @@ const SongContextMenuItem: Component<SongContextMenuItemProps> = (props) => {
     <button
       ref={divAccessor}
       class={twMerge(
-        "flex flex-row items-center justify-between gap-3 rounded-md py-1.5 pl-2.5 pr-2 text-left hover:cursor-pointer hover:bg-surface align-baseline w-full max-w-40",
+        "flex w-full max-w-40 flex-row items-center justify-between gap-3 rounded-md py-1.5 pl-2.5 pr-2 text-left align-baseline hover:cursor-pointer hover:bg-surface",
         local.class,
         buttonDisabled && "text-overlay hover:cursor-auto hover:bg-transparent",
       )}
       {...other}
     >
-      <div class="flex flex-row items-center justify-between w-full gap-1">{local.children}</div>
+      <div class="flex w-full flex-row items-center justify-between gap-1">{local.children}</div>
     </button>
   );
 };

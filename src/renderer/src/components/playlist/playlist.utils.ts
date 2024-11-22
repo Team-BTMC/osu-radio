@@ -1,8 +1,8 @@
-import { BadgeCheckIcon, CircleXIcon } from "lucide-solid";
 import { addNotice } from "../notice/NoticeContainer";
 import Impulse from "@renderer/lib/Impulse";
-import { Song } from "src/@types";
+import { BadgeCheckIcon, CircleXIcon } from "lucide-solid";
 import { createSignal } from "solid-js";
+import { Song } from "src/@types";
 
 const PLAYLIST_SCENE_LIST = 0;
 const PLAYLIST_SCENE_SONGS = 1;

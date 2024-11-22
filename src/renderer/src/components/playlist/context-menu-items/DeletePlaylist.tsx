@@ -1,8 +1,8 @@
+import { deletePlaylist } from "../playlist.utils";
 import SongContextMenuItem from "@renderer/components/song/context-menu/SongContextMenuItem";
+import Impulse from "@renderer/lib/Impulse";
 import { ListXIcon } from "lucide-solid";
 import { Component } from "solid-js";
-import Impulse from "@renderer/lib/Impulse";
-import { deletePlaylist } from "../playlist.utils";
 
 type DeletePlaylistProps = {
   name: string;

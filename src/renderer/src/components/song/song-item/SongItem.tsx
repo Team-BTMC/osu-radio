@@ -34,7 +34,7 @@ const SongItem: Component<SongItemProps> = (props) => {
     // Initialize draggable functionality
     draggable(item, {
       onClick: () => props.onSelect(props.song.path),
-      onDrop: props.onDrop ?? (() => { }),
+      onDrop: props.onDrop ?? (() => {}),
       createHint: SongHint,
       useOnlyAsOnClickBinder: !props.draggable || selectedSong().path === props.song.path,
     });

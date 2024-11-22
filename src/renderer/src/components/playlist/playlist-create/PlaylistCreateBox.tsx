@@ -1,10 +1,10 @@
+import { noticeError } from "../playlist.utils";
 import Button from "@renderer/components/button/Button";
 import { addNotice } from "@renderer/components/notice/NoticeContainer";
 import SongImage from "@renderer/components/song/SongImage";
 import Impulse from "@renderer/lib/Impulse";
 import { CircleCheckIcon, XIcon } from "lucide-solid";
 import { Component, createSignal, Setter } from "solid-js";
-import { noticeError } from "../playlist.utils";
 
 export type PlaylistCreateBoxProps = {
   group: string;
@@ -59,13 +59,13 @@ const PlaylistCreateBox: Component<PlaylistCreateBoxProps> = (props) => {
           <input
             type="text"
             placeholder="Playlist name"
-            class="h-9 w-full rounded-lg border-none bg-surface py-[10px] pl-4 font-[inherit] text-base font-normal text-accent"
+            class="text-accent h-9 w-full rounded-lg border-none bg-surface py-[10px] pl-4 font-[inherit] text-base font-normal"
             onInput={(e) => {
               setPlaylistName(e.target.value);
             }}
           />
           <Button
-            class="text-center cursor-pointer"
+            class="cursor-pointer text-center"
             variant={"primary"}
             onClick={() => createPlaylist()}
           >

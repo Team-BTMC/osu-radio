@@ -25,7 +25,7 @@ const PlaylistList: Component = () => {
         <div class="mb-6 flex w-full flex-row items-center">
           <div class="mr-2 h-11 w-full rounded-lg border border-stroke">
             <input
-              class="h-11 w-full rounded-lg bg-transparent pl-3 focus:outline-none focus:ring-2 focus:ring-accent"
+              class="focus:ring-accent h-11 w-full rounded-lg bg-transparent pl-3 focus:outline-none focus:ring-2"
               type="text"
               id="search_input"
               placeholder="Search in your playlists... (WIP)"

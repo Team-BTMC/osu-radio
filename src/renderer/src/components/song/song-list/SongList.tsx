@@ -9,7 +9,7 @@ import SongItem from "../song-item/SongItem";
 import SongListSearch from "../song-list-search/SongListSearch";
 import { songsSearch } from "./song-list.utils";
 import DropdownList from "@renderer/components/dropdown-list/DropdownList";
-import { ChevronRightIcon, ListPlus, ListStartIcon } from "lucide-solid";
+import { ListStartIcon } from "lucide-solid";
 import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 
 export type SongViewProps = {

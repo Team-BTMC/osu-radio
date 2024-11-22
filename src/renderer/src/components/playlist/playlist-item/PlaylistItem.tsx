@@ -1,24 +1,24 @@
 import SongImage from "../../song/SongImage";
+import DeletePlaylist from "../context-menu-items/DeletePlaylist";
+import RenamePlaylist from "../context-menu-items/RenamePlaylist";
 import {
   PLAYLIST_SCENE_SONGS,
   setActivePlaylistName,
   setPlaylistActiveScene,
 } from "../playlist.utils";
+import { renamePlaylist } from "../playlist.utils";
 import { getSongImage } from "./playlist-item.utils";
 import Popover from "@renderer/components/popover/Popover";
 import SongContextMenu, {
   ignoreClickInContextMenu,
 } from "@renderer/components/song/context-menu/SongContextMenu";
 import Impulse from "@renderer/lib/Impulse";
+import draggable from "@renderer/lib/draggable/draggable";
 import { EllipsisVerticalIcon } from "lucide-solid";
 import { Component, createSignal, Match, onMount, Switch } from "solid-js";
 import { Portal } from "solid-js/web";
 import { Playlist } from "src/@types";
 import { twMerge } from "tailwind-merge";
-import DeletePlaylist from "../context-menu-items/DeletePlaylist";
-import RenamePlaylist from "../context-menu-items/RenamePlaylist";
-import draggable from "@renderer/lib/draggable/draggable";
-import { renamePlaylist } from "../playlist.utils";
 
 export type PlaylistItemProps = {
   playlist: Playlist;
@@ -57,7 +57,7 @@ const PlaylistItem: Component<PlaylistItemProps> = (props) => {
       offset={{ crossAxis: 5, mainAxis: 5 }}
       shift={{}}
       flip={{}}
-      mousePos={mousePos}
+      position={mousePos}
     >
       <Portal>
         <Popover.Overlay />
@@ -97,7 +97,7 @@ const PlaylistItem: Component<PlaylistItemProps> = (props) => {
               <Switch fallback={""}>
                 <Match when={editMode() === true}>
                   <input
-                    class="h-10 rounded-full border border-stroke bg-transparent pl-4 pr-4 focus:outline-none focus:ring-2 focus:ring-accent"
+                    class="focus:ring-accent h-10 rounded-full border border-stroke bg-transparent pl-4 pr-4 focus:outline-none focus:ring-2"
                     type="text"
                     id="playlist_name"
                     value={props.playlist.name}
@@ -121,7 +121,7 @@ const PlaylistItem: Component<PlaylistItemProps> = (props) => {
             </div>
             <Popover.Trigger
               class={twMerge(
-                "opacity-0 transition-opacity group-hover:opacity-100 hover:bg-surface size-9 inline-grid place-items-center aspect-square rounded",
+                "inline-grid aspect-square size-9 place-items-center rounded opacity-0 transition-opacity hover:bg-surface group-hover:opacity-100",
                 localShow() && "opacity-100",
               )}
             >

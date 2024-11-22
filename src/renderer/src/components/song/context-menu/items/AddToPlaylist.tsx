@@ -1,9 +1,9 @@
 import { Song } from "../../../../../../@types";
-import { Component, createSignal, onMount } from "solid-js";
-import Popover from "@renderer/components/popover/Popover";
 import PlaylistChooser from "./PlaylistChooser";
 import DropdownList from "@renderer/components/dropdown-list/DropdownList";
+import Popover from "@renderer/components/popover/Popover";
 import { ChevronRightIcon } from "lucide-solid";
+import { Component, createSignal, onMount } from "solid-js";
 
 type AddToPlaylistProps = {
   song: Song;
@@ -58,8 +58,10 @@ const AddToPlaylist: Component<AddToPlaylistProps> = (props) => {
             timeoutId={timeoutId}
           />
         </Popover.Content>
-        <span>Add to Playlist</span>
-        <ChevronRightIcon class="text-subtext" />
+        <div class="inline-flex w-full items-center justify-between">
+          <span>Add to Playlist</span>
+          <ChevronRightIcon class="text-subtext" />
+        </div>
         <Popover.Anchor />
       </Popover>
     </DropdownList.Item>
