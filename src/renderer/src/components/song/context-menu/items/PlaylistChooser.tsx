@@ -22,7 +22,7 @@ const PlaylistChooser: Component<PlaylistChooserProps> = (props) => {
     }
     addNotice({
       title: "Song added",
-      description: "Successfully added song to playlist!",
+      description: "Successfully added song to playlist " + name + "!",
       variant: "success",
       icon: <BadgeCheckIcon size={20} />,
     });
@@ -37,7 +37,7 @@ const PlaylistChooser: Component<PlaylistChooserProps> = (props) => {
   };
 
   return (
-    <DropdownList class="w-40">
+    <DropdownList class="max-h-[95vh] w-40 overflow-auto [scrollbar-width:none]">
       <For
         fallback={<DropdownList.Item disabled={true}>No playlists...</DropdownList.Item>}
         each={props.playlistNames}
@@ -60,7 +60,7 @@ const PlaylistChooser: Component<PlaylistChooserProps> = (props) => {
           >
             <span>{child}</span>
             <Show when={isInPlaylist(props.song, props.playlistNames[index()])}>
-              <CheckIcon size={20} />
+              <CheckIcon class="text-subtext" size={20} />
             </Show>
           </DropdownList.Item>
         )}

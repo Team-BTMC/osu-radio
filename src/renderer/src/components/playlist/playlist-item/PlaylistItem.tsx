@@ -1,21 +1,19 @@
 import SongImage from "../../song/SongImage";
-import DeletePlaylist from "../context-menu-items/DeletePlaylist";
-import RenamePlaylist from "../context-menu-items/RenamePlaylist";
 import {
+  deletePlaylist,
   PLAYLIST_SCENE_SONGS,
   setActivePlaylistName,
   setPlaylistActiveScene,
 } from "../playlist.utils";
 import { renamePlaylist } from "../playlist.utils";
 import { getSongImage } from "./playlist-item.utils";
+import DropdownList from "@renderer/components/dropdown-list/DropdownList";
 import Popover from "@renderer/components/popover/Popover";
-import SongContextMenu, {
-  ignoreClickInContextMenu,
-} from "@renderer/components/song/context-menu/SongContextMenu";
+import { ignoreClickInContextMenu } from "@renderer/components/song/context-menu/SongContextMenu";
 import Impulse from "@renderer/lib/Impulse";
 import draggable from "@renderer/lib/draggable/draggable";
-import { EllipsisVerticalIcon } from "lucide-solid";
-import { Component, createSignal, Match, onMount, Switch } from "solid-js";
+import { EllipsisVerticalIcon, ListXIcon, PencilLineIcon } from "lucide-solid";
+import { Component, createSignal, Match, onMount, Setter, Switch } from "solid-js";
 import { Portal } from "solid-js/web";
 import { Playlist } from "src/@types";
 import { twMerge } from "tailwind-merge";
@@ -68,10 +66,11 @@ const PlaylistItem: Component<PlaylistItemProps> = (props) => {
           }}
         >
           {/* can't pass this as a prop like in song-item because i need the editMode signal */}
-          <SongContextMenu>
-            <RenamePlaylist setEdit={setEditMode} />
-            <DeletePlaylist name={props.playlist.name} reset={props.reset} />
-          </SongContextMenu>
+          <PlaylistItemContextMenuContent
+            editMode={setEditMode}
+            reset={props.reset}
+            playlist={props.playlist}
+          />
         </Popover.Content>
       </Portal>
       <div
@@ -131,6 +130,35 @@ const PlaylistItem: Component<PlaylistItemProps> = (props) => {
         </div>
       </div>
     </Popover>
+  );
+};
+
+type PlaylistItemContextMenuContentProps = {
+  playlist: Playlist;
+  reset: Impulse;
+  editMode: Setter<boolean>;
+};
+const PlaylistItemContextMenuContent: Component<PlaylistItemContextMenuContentProps> = (props) => {
+  return (
+    <DropdownList class="w-40">
+      <DropdownList.Item
+        onClick={() => {
+          props.editMode(true);
+        }}
+      >
+        <span>Rename playlist</span>
+        <PencilLineIcon class="text-subtext" size={20} />
+      </DropdownList.Item>
+      <DropdownList.Item
+        onClick={() => {
+          deletePlaylist(props.playlist.name, props.reset);
+        }}
+        class="text-danger"
+      >
+        <span>Delete playlist</span>
+        <ListXIcon class="opacity-80" size={20} />
+      </DropdownList.Item>
+    </DropdownList>
   );
 };
 

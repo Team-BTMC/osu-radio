@@ -94,7 +94,7 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
                     class="ml-2 rounded-lg"
                     onClick={() => deleteSong(props.playlistName, s)}
                   >
-                    <Trash2Icon class="text-danger" />
+                    <Trash2Icon class="text-danger opacity-80" />
                   </Button>
                 </Show>
               </div>
