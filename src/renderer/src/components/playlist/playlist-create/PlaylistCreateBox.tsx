@@ -1,5 +1,6 @@
 import { noticeError } from "../playlist.utils";
 import Button from "@renderer/components/button/Button";
+import { Input } from "@renderer/components/input/Input";
 import { addNotice } from "@renderer/components/notice/NoticeContainer";
 import SongImage from "@renderer/components/song/SongImage";
 import Impulse from "@renderer/lib/Impulse";
@@ -39,27 +40,27 @@ const PlaylistCreateBox: Component<PlaylistCreateBoxProps> = (props) => {
   };
 
   return (
-    <div class="mb-6 rounded-xl bg-thick-material">
-      <div class="flex flex-row items-center justify-between p-4">
-        <h3 class="text-xl">Create a new playlist</h3>
-        <Button variant={"ghost"} size={"icon"} onClick={() => props.isOpen(false)}>
-          <XIcon />
+    <div class="my-2 rounded-xl">
+      <div class="flex flex-row items-center justify-between px-4 pb-2 pt-3">
+        <h3 class="text-xl text-text">Create a new playlist</h3>
+        <Button variant={"outlined"} size={"square"} onClick={() => props.isOpen(false)}>
+          <XIcon size={20} />
         </Button>
       </div>
       <div class="m-4 mt-0 flex flex-row">
-        <div class="mr-4 rounded-lg">
+        <div class="mr-4 flex items-center rounded-lg">
           <SongImage
             src={""}
             group={props.group}
             instantLoad={true}
-            class="h-[83px] w-[83px] rounded-lg bg-cover bg-center"
+            class="h-[92px] w-[92px] rounded-lg bg-cover bg-center"
           />
         </div>
         <div class="flex w-full flex-col gap-3">
-          <input
+          <Input
+            variant={"outlined"}
             type="text"
             placeholder="Playlist name"
-            class="text-accent h-9 w-full rounded-lg border-none bg-surface py-[10px] pl-4 font-[inherit] text-base font-normal"
             onInput={(e) => {
               setPlaylistName(e.target.value);
             }}

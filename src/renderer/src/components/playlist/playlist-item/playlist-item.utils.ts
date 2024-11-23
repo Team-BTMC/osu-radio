@@ -8,3 +8,15 @@ export function getSongImage(playlist: Playlist) {
     return songs[0].bg;
   }
 }
+
+export function ignoreClickInContextMenu(fn: (evt: MouseEvent) => any): (evt: MouseEvent) => void {
+  return (evt: MouseEvent) => {
+    const t = evt.target;
+
+    if (!(t instanceof HTMLElement)) {
+      return;
+    }
+
+    fn(evt);
+  };
+}

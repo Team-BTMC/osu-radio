@@ -6,10 +6,10 @@ import {
   setPlaylistActiveScene,
 } from "../playlist.utils";
 import { renamePlaylist } from "../playlist.utils";
-import { getSongImage } from "./playlist-item.utils";
+import { getSongImage, ignoreClickInContextMenu } from "./playlist-item.utils";
 import DropdownList from "@renderer/components/dropdown-list/DropdownList";
+import { Input } from "@renderer/components/input/Input";
 import Popover from "@renderer/components/popover/Popover";
-import { ignoreClickInContextMenu } from "@renderer/components/song/context-menu/SongContextMenu";
 import Impulse from "@renderer/lib/Impulse";
 import draggable from "@renderer/lib/draggable/draggable";
 import { EllipsisVerticalIcon, ListXIcon, PencilLineIcon } from "lucide-solid";
@@ -95,10 +95,10 @@ const PlaylistItem: Component<PlaylistItemProps> = (props) => {
             <div class="flex flex-col justify-center text-base font-medium text-text">
               <Switch fallback={""}>
                 <Match when={editMode() === true}>
-                  <input
-                    class="focus:ring-accent h-10 rounded-full border border-stroke bg-transparent pl-4 pr-4 focus:outline-none focus:ring-2"
+                  <Input
+                    variant={"outlined"}
+                    class="mb-1 max-w-48"
                     type="text"
-                    id="playlist_name"
                     value={props.playlist.name}
                     onInput={(e) => {
                       setPlaylistName(e.target.value);
@@ -109,6 +109,14 @@ const PlaylistItem: Component<PlaylistItemProps> = (props) => {
                         setEditMode(false);
                         props.reset.pulse();
                       }
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key == "Escape") {
+                        setEditMode(false);
+                      }
+                    }}
+                    onFocusOut={() => {
+                      setEditMode(false);
                     }}
                   />
                 </Match>

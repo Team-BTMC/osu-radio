@@ -5,8 +5,8 @@ import { namespace } from "@renderer/App";
 import Button from "@renderer/components/button/Button";
 import DropdownList from "@renderer/components/dropdown-list/DropdownList";
 import Impulse from "@renderer/lib/Impulse";
-import { ArrowLeftIcon, DeleteIcon, PencilIcon, Trash2Icon } from "lucide-solid";
-import { Component, createSignal, onCleanup, onMount, Show } from "solid-js";
+import { ArrowLeftIcon, DeleteIcon, PencilIcon, PencilOffIcon, Trash2Icon } from "lucide-solid";
+import { Component, createSignal, Match, onCleanup, onMount, Show, Switch } from "solid-js";
 import { PlaylistSongsQueryPayload, ResourceID, Song } from "src/@types";
 
 type PlaylistSongListProps = {
@@ -43,30 +43,37 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
   };
 
   return (
-    <div class="mx-5 my-6">
-      <div class="mb-6 flex w-full flex-row items-center justify-between">
-        <div class="flex flex-row items-center gap-5 text-xl font-medium">
+    <div class="flex h-full flex-col">
+      <div class="sticky top-0 z-10 mx-5 mb-4 mt-1 flex flex-row items-center">
+        <div class="flex w-full flex-row items-center gap-5 font-medium">
           <Button
             variant={"ghost"}
-            size={"icon"}
+            size={"square"}
             onClick={() => setPlaylistActiveScene(PLAYLIST_SCENE_LIST)}
           >
-            <ArrowLeftIcon class="text-overlay" />
+            <ArrowLeftIcon class="text-subtext" size={20} />
           </Button>
           <h3 class="text-xl">{props.playlistName}</h3>
         </div>
         <Button
-          variant={editMode() ? "primary" : "ghost"}
-          size={"icon"}
+          variant={editMode() ? "secondary" : "outlined"}
+          size={"square"}
           class="rounded-lg"
           onClick={() => {
             setEditMode(!editMode());
           }}
         >
-          <PencilIcon class="size-5" />
+          <Switch>
+            <Match when={editMode() === true}>
+              <PencilOffIcon size={20} />
+            </Match>
+            <Match when={editMode() === false}>
+              <PencilIcon size={20} />
+            </Match>
+          </Switch>
         </Button>
       </div>
-      <div class="flex-grow">
+      <div class="h-full flex-grow overflow-y-auto p-5 py-0">
         <InfiniteScroller
           apiKey={"query::playlistSongs"}
           apiData={payload()}
@@ -75,12 +82,10 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
           reset={reset}
           fallback={<div>No songs in playlist...</div>}
           builder={(s) => (
-            <div class="flex flex-row">
+            <div class="flex items-stretch">
               <SongItem
                 song={s}
                 group={group}
-                selectable={true}
-                draggable={true}
                 onSelect={createQueue}
                 contextMenu={
                   <PlaylistSongListContextMenuContent song={s} playlistName={props.playlistName} />
@@ -90,7 +95,7 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
                 <Show when={editMode() === true}>
                   <Button
                     variant={"ghost"}
-                    size={"icon"}
+                    size={"square"}
                     class="ml-2 rounded-lg"
                     onClick={() => deleteSong(props.playlistName, s)}
                   >

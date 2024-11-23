@@ -10,7 +10,7 @@ import { Component, Match, Switch } from "solid-js";
 
 const PlaylistView: Component = () => {
   return (
-    <div class="h-full overflow-y-auto">
+    <div class="overflow-auto">
       <Switch>
         <Match when={playlistActiveScene() == PLAYLIST_SCENE_LIST}>
           <PlaylistList />
