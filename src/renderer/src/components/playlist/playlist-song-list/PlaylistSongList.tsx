@@ -73,10 +73,9 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
           apiInitKey={"query::playlistSongs::init"}
           apiInitData={payload()}
           reset={reset}
-          // class="flex flex-col gap-4"
           fallback={<div>No songs in playlist...</div>}
           builder={(s) => (
-            <div class="">
+            <div class="flex flex-row">
               <SongItem
                 song={s}
                 group={group}
@@ -87,16 +86,18 @@ const PlaylistSongList: Component<PlaylistSongListProps> = (props) => {
                   <PlaylistSongListContextMenuContent song={s} playlistName={props.playlistName} />
                 }
               />
-              <Show when={editMode() === true}>
-                <Button
-                  variant={"ghost"}
-                  size={"icon"}
-                  class="ml-3 w-10 rounded-lg"
-                  onClick={() => deleteSong(props.playlistName, s)}
-                >
-                  <Trash2Icon class="text-red" />
-                </Button>
-              </Show>
+              <div class="flex items-center justify-center">
+                <Show when={editMode() === true}>
+                  <Button
+                    variant={"ghost"}
+                    size={"icon"}
+                    class="ml-2 rounded-lg"
+                    onClick={() => deleteSong(props.playlistName, s)}
+                  >
+                    <Trash2Icon class="text-danger" />
+                  </Button>
+                </Show>
+              </div>
             </div>
           )}
         />
