@@ -1,1 +1,13 @@
-{"version":"7","dialect":"sqlite","entries":[]}
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1732604465682,
+      "tag": "0000_naive_gamora",
+      "breakpoints": true
+    }
+  ]
+}
