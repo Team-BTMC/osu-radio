@@ -81,6 +81,9 @@ export type Song = {
   // Colors
   primaryColor?: string;
   secondaryColor?: string;
+
+  // Playlists
+  playlists?: string[];
 } & Resource;
 
 // Serialization is in JSON that's why properties are only single letter
@@ -126,10 +129,17 @@ export type TableMap = {
   songs: { [key: ResourceID]: Song };
   audio: { [key: ResourceID]: AudioSource };
   images: { [key: ResourceID]: ImageSource };
+  playlists: { [key: string]: Playlist };
   colors: { [key: ResourceID]: ColorsSource };
-  playlists: { [key: string]: ResourceID[] };
   settings: Settings;
   system: System;
+};
+
+export type Playlist = {
+  name: string;
+  count: number;
+  length: number; // total length in seconds
+  songs: Song[];
 };
 
 // I guess this is definition of all binary blob files that can be access from the database code?
@@ -174,7 +184,14 @@ export type Tag = {
   isSpecial?: boolean;
 };
 
-export type OrderOptions = "title" | "artist" | "creator" | "bpm" | "duration" | "dateAdded";
+export type OrderOptions =
+  | "title"
+  | "artist"
+  | "creator"
+  | "bpm"
+  | "duration"
+  | "dateAdded"
+  | "none";
 
 export type OrderDirection = "asc" | "desc";
 
@@ -199,6 +216,11 @@ export type QueueCreatePayload = {
   tags: Tag[];
   order: Order;
   startSong: ResourceID;
+};
+
+// idk if this is necessary because i'm only passing a string
+export type PlaylistSongsQueryPayload = {
+  playlistName: string;
 };
 
 export type OsuSearchAbleProperties =
@@ -238,4 +260,8 @@ export type InfiniteScrollerResponse<T = any> = Optional<{
 export type InfiniteScrollerInitResponse = Optional<{
   initialIndex: number;
   count: number;
+}>;
+
+export type PlaylistNamesResponse = Optional<{
+  playlistNames: string[];
 }>;

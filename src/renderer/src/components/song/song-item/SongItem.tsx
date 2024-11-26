@@ -103,7 +103,7 @@ const SongItem: Component<SongItemProps> = (props) => {
         onMouseLeave={() => {
           setIsHovering(false);
         }}
-        class="active: group relative isolate min-h-[72px] overflow-hidden rounded-lg py-0.5 pl-1.5 pr-0.5 transition-colors"
+        class="active: group relative isolate min-h-[72px] w-full overflow-hidden rounded-lg py-0.5 pl-1.5 pr-0.5 transition-colors"
         classList={{
           "shadow-glow-blue": isSelected(),
         }}

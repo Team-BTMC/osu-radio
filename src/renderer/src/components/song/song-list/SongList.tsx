@@ -4,11 +4,12 @@ import { namespace } from "../../../App";
 import Impulse from "../../../lib/Impulse";
 import { none, some } from "../../../lib/rust-like-utils-client/Optional";
 import InfiniteScroller from "../../InfiniteScroller";
+import AddToPlaylist from "../context-menu/items/AddToPlaylist";
 import SongItem from "../song-item/SongItem";
 import SongListSearch from "../song-list-search/SongListSearch";
 import { songsSearch } from "./song-list.utils";
 import DropdownList from "@renderer/components/dropdown-list/DropdownList";
-import { ListPlus, ListStartIcon } from "lucide-solid";
+import { ListStartIcon } from "lucide-solid";
 import { Component, createEffect, createSignal, onCleanup, onMount } from "solid-js";
 
 export type SongViewProps = {
@@ -105,10 +106,7 @@ type SongListContextMenuContentProps = { song: Song };
 const SongListContextMenuContent: Component<SongListContextMenuContentProps> = (props) => {
   return (
     <DropdownList class="w-40">
-      <DropdownList.Item>
-        <span>Add to Playlist</span>
-        <ListPlus class="text-subtext" size={20} />
-      </DropdownList.Item>
+      <AddToPlaylist song={props.song} />
       <DropdownList.Item
         onClick={() => {
           window.api.request("queue::playNext", props.song.path);

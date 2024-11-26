@@ -1,5 +1,5 @@
 import { isSongUndefined } from "../../../lib/song";
-import Popover from "../../popover/Popover";
+import AddToPlaylist from "../context-menu/items/AddToPlaylist";
 import {
   isPlaying,
   next,
@@ -13,6 +13,8 @@ import {
   handleMuteSong,
 } from "../song.utils";
 import Button from "@renderer/components/button/Button";
+import DropdownList from "@renderer/components/dropdown-list/DropdownList";
+import Popover from "@renderer/components/popover/Popover";
 import Slider from "@renderer/components/slider/Slider";
 import {
   CirclePlusIcon,
@@ -30,6 +32,7 @@ import {
 import { Component, createMemo, createSignal, Match, Show, Switch, For } from "solid-js";
 import { ParentComponent } from "solid-js";
 import { Portal } from "solid-js/web";
+import { Song } from "src/@types";
 
 // Add a prop to accept the averageColor
 type SongControlsProps = {
@@ -240,9 +243,17 @@ const RightPart = () => {
           </Popover.Content>
         </Portal>
       </Popover>
-      <Button size="icon" variant="ghost">
-        <CirclePlusIcon size={20} />
-      </Button>
+      <Popover flip={{}} shift={{}} placement="top-start">
+        <Popover.Overlay />
+        <Popover.Content>
+          <AddButtonContextMenuContent song={song()} />
+        </Popover.Content>
+        <Popover.Trigger>
+          <Button size="icon" variant="ghost">
+            <CirclePlusIcon size={20} />
+          </Button>
+        </Popover.Trigger>
+      </Popover>
     </div>
   );
 };
@@ -258,6 +269,15 @@ const SpeedOption: ParentComponent<SpeedOptionProps> = (props) => {
     >
       {props.children}
     </button>
+  );
+};
+
+type AddButtonContextMenuContentProps = { song: Song };
+const AddButtonContextMenuContent: Component<AddButtonContextMenuContentProps> = (props) => {
+  return (
+    <DropdownList class="w-40">
+      <AddToPlaylist song={props.song} />
+    </DropdownList>
   );
 };
 

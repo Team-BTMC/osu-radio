@@ -5,6 +5,9 @@ import type {
   InfiniteScrollerRequest,
   InfiniteScrollerResponse,
   Optional,
+  Playlist,
+  PlaylistNamesResponse,
+  PlaylistSongsQueryPayload,
   QueueCreatePayload,
   ResourceID,
   ResourceTables,
@@ -37,6 +40,12 @@ export type RequestAPI = {
   "queue::create": (payload: QueueCreatePayload) => void;
   "queue::shuffle": () => void;
 
+  "playlist::add": (playlistName: string, song: Song) => Result<void, string>;
+  "playlist::remove": (playlistName: string, song: Song) => Result<void, string>;
+  "playlist::create": (name: string) => Result<void, string>;
+  "playlist::delete": (name: string) => Result<void, string>;
+  "playlist::rename": (oldName: string, newName: string) => Result<void, string>;
+
   "dir::select": () => Optional<string>;
   "dir::autoGetOsuDir": () => Optional<string>;
   "dir::submit": (dir: string) => void;
@@ -66,6 +75,16 @@ export type RequestAPI = {
   ) => InfiniteScrollerResponse<Song>;
   "query::queue::init": () => InfiniteScrollerInitResponse;
   "query::queue": (request: InfiniteScrollerRequest) => InfiniteScrollerResponse<Song>;
+  "query::playlists::init": () => InfiniteScrollerInitResponse;
+  "query::playlists": (request: InfiniteScrollerRequest) => InfiniteScrollerResponse<Playlist>;
+  "query::playlistSongs::init": (
+    payload: PlaylistSongsQueryPayload,
+  ) => InfiniteScrollerInitResponse;
+  "query::playlistSongs": (
+    request: InfiniteScrollerRequest,
+    payload: PlaylistSongsQueryPayload,
+  ) => InfiniteScrollerResponse<Song>;
+  "query::playlistNames": () => PlaylistNamesResponse;
 
   "save::localVolume": (volume: number, song: ResourceID) => void;
 

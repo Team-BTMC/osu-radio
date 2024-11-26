@@ -79,8 +79,23 @@ function getIndexes(view: QueueView): SongIndex[] {
   }
 
   if (view.playlist) {
-    //todo get playlist
-    return [];
+    const indexes = Storage.getTable("system").get("indexes");
+    const playlist = Storage.getTable("playlists").get(view.playlist);
+
+    if (indexes.isNone || playlist.isNone) {
+      return [];
+    }
+
+    const songs: SongIndex[] = [];
+    // is there a more efficient way (or is this good enough)? for every song in the playlist it iterates the entire indexes array...
+    for (let i = 0; i < playlist.value.count; ++i) {
+      const song = indexes.value.find((v) => v.id === playlist.value.songs[i].audio);
+      if (song !== undefined) {
+        songs.push(song);
+      }
+    }
+
+    return songs;
   }
 
   return [];
