@@ -29,8 +29,12 @@ const PlaylistCreateBox: Component<PlaylistCreateBoxProps> = (props) => {
       return;
     }
 
+    const song = createPlaylistBoxSong();
+
     setPlaylistName("");
-    props.reset.pulse();
+    if (song === undefined) {
+      props.reset.pulse();
+    }
     setShowPlaylistCreateBox(false);
 
     addNotice({
@@ -40,7 +44,6 @@ const PlaylistCreateBox: Component<PlaylistCreateBoxProps> = (props) => {
       icon: <CircleCheckIcon size={20} />,
     });
 
-    const song = createPlaylistBoxSong();
     if (song !== undefined) {
       const songResult = await window.api.request("playlist::add", name, song);
       setCreatePlaylistBoxSong(undefined);
@@ -87,6 +90,11 @@ const PlaylistCreateBox: Component<PlaylistCreateBoxProps> = (props) => {
             placeholder="Playlist name"
             onInput={(e) => {
               setPlaylistName(e.target.value);
+            }}
+            onKeyPress={(k) => {
+              if (k.key == "Enter") {
+                createPlaylist();
+              }
             }}
           />
           <Button
