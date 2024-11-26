@@ -1,23 +1,30 @@
 import InfiniteScroller from "../../InfiniteScroller";
 import PlaylistCreateBox from "../playlist-create/PlaylistCreateBox";
 import PlaylistItem from "../playlist-item/PlaylistItem";
+import {
+  createPlaylistBoxSong,
+  setCreatePlaylistBoxSong,
+  setShowPlaylistCreateBox,
+  showPlaylistCreateBox,
+} from "../playlist.utils";
 import { namespace } from "@renderer/App";
 import Button from "@renderer/components/button/Button";
 import { Input } from "@renderer/components/input/Input";
 import Impulse from "@renderer/lib/Impulse";
 import { PlusIcon, SearchIcon } from "lucide-solid";
-import { Component, createSignal, onCleanup, onMount, Show } from "solid-js";
+import { Component, onCleanup, onMount, Show } from "solid-js";
 
 const PlaylistList: Component = () => {
   const resetListing = new Impulse();
-  const [showCreateBox, setShowCreateBox] = createSignal(false);
-
   const group = namespace.create(true);
 
-  onMount(() => window.api.listen("playlist::resetList", resetListing.pulse.bind(resetListing)));
-  onCleanup(() =>
-    window.api.removeListener("playlist::resetList", resetListing.pulse.bind(resetListing)),
-  );
+  onMount(() => {
+    window.api.listen("playlist::resetList", resetListing.pulse.bind(resetListing));
+  });
+
+  onCleanup(() => {
+    window.api.removeListener("playlist::resetList", resetListing.pulse.bind(resetListing));
+  });
 
   return (
     <div class="flex h-full flex-col">
@@ -39,17 +46,22 @@ const PlaylistList: Component = () => {
           </div>
           <Button
             onClick={() => {
-              setShowCreateBox(!showCreateBox());
+              setCreatePlaylistBoxSong(undefined);
+              setShowPlaylistCreateBox(!showPlaylistCreateBox());
             }}
             class="rounded-lg text-xl"
-            variant={showCreateBox() ? "secondary" : "outlined"}
+            variant={showPlaylistCreateBox() ? "secondary" : "outlined"}
             size="square"
           >
             <PlusIcon size={20} />
           </Button>
         </div>
-        <Show when={showCreateBox() === true}>
-          <PlaylistCreateBox group={group} isOpen={setShowCreateBox} reset={resetListing} />
+        <Show when={showPlaylistCreateBox() === true}>
+          <PlaylistCreateBox
+            songSignal={[createPlaylistBoxSong, setCreatePlaylistBoxSong]}
+            group={group}
+            reset={resetListing}
+          />
         </Show>
       </div>
 

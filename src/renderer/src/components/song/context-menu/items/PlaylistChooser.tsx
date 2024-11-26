@@ -1,7 +1,14 @@
 import DropdownList from "@renderer/components/dropdown-list/DropdownList";
 import { addNotice } from "@renderer/components/notice/NoticeContainer";
-import { noticeError } from "@renderer/components/playlist/playlist.utils";
-import { BadgeCheckIcon, CheckIcon } from "lucide-solid";
+import {
+  noticeError,
+  PLAYLIST_SCENE_LIST,
+  setCreatePlaylistBoxSong,
+  setPlaylistActiveScene,
+  setShowPlaylistCreateBox,
+} from "@renderer/components/playlist/playlist.utils";
+import { setSidebarActiveTab, SIDEBAR_PAGES } from "@renderer/scenes/main-scene/main.utils";
+import { CheckIcon, CircleCheckIcon, PlusIcon } from "lucide-solid";
 import { Accessor, Component, For, Setter, Show } from "solid-js";
 import { Song } from "src/@types";
 
@@ -24,7 +31,7 @@ const PlaylistChooser: Component<PlaylistChooserProps> = (props) => {
       title: "Song added",
       description: "Successfully added song to playlist " + name + "!",
       variant: "success",
-      icon: <BadgeCheckIcon size={20} />,
+      icon: <CircleCheckIcon size={20} />,
     });
   };
 
@@ -37,7 +44,30 @@ const PlaylistChooser: Component<PlaylistChooserProps> = (props) => {
   };
 
   return (
-    <DropdownList class="max-h-[95vh] w-40 overflow-auto [scrollbar-width:none]">
+    <DropdownList
+      onMouseOver={() => {
+        clearTimeout(props.timeoutId());
+      }}
+      onMouseLeave={() => {
+        props.setTimeoutId(
+          setTimeout(() => {
+            props.setShowChooser(false);
+          }, 320),
+        );
+      }}
+      class="max-h-[95vh] w-40 overflow-auto [scrollbar-width:none]"
+    >
+      <DropdownList.Item
+        onClick={() => {
+          setCreatePlaylistBoxSong(props.song);
+          setShowPlaylistCreateBox(true);
+          setSidebarActiveTab(SIDEBAR_PAGES.PLAYLISTS.value);
+          setPlaylistActiveScene(PLAYLIST_SCENE_LIST);
+        }}
+      >
+        <span>Create Playlist</span>
+        <PlusIcon class="text-subtext" size={20} />
+      </DropdownList.Item>
       <For
         fallback={<DropdownList.Item disabled={true}>No playlists...</DropdownList.Item>}
         each={props.playlistNames}
@@ -46,16 +76,6 @@ const PlaylistChooser: Component<PlaylistChooserProps> = (props) => {
           <DropdownList.Item
             onClick={() => {
               addToPlaylist(props.playlistNames[index()]);
-            }}
-            onMouseOver={() => {
-              clearTimeout(props.timeoutId());
-            }}
-            onMouseLeave={() => {
-              props.setTimeoutId(
-                setTimeout(() => {
-                  props.setShowChooser(false);
-                }, 320),
-              );
             }}
           >
             <span>{child}</span>
