@@ -55,7 +55,7 @@ const PlaylistChooser: Component<PlaylistChooserProps> = (props) => {
           }, 320),
         );
       }}
-      class="max-h-[95vh] w-40 overflow-auto [scrollbar-width:none]"
+      class="max-h-72 w-40 overflow-auto pr-1.5"
     >
       <DropdownList.Item
         onClick={() => {
