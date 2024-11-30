@@ -1,6 +1,7 @@
-import Button from "@renderer/components/button/Button";
-import Dropdown from "@renderer/components/dropdown/Dropdown";
-import { Component, createMemo, createSignal, Match, Setter, Switch } from "solid-js";
+import FilterOption from "./FilterOption";
+import SelectableList from "@renderer/components/selectable-list/SelectableList";
+import { SortAsc, SortDesc } from "lucide-solid";
+import { Component, createMemo, createSignal, For, Match, Setter, Switch } from "solid-js";
 import { OrderDirection, OrderOptions, Order } from "src/@types";
 
 type OrderOption = {
@@ -60,40 +61,53 @@ const SongListSearchOrderBy: Component<OrderSelectProps> = (props) => {
   });
 
   return (
-    <div class="flex items-center space-x-3">
-      <Button variant={"ghost"} size="icon" onClick={switchDirections}>
-        <Switch>
-          <Match when={direction() === "asc"}>
-            <i class="ri-sort-asc" />
-          </Match>
-          <Match when={direction() === "desc"}>
-            <i class="ri-sort-desc" />
-          </Match>
-        </Switch>
-      </Button>
-      <Dropdown isOpen={isOpen} onValueChange={setIsOpen}>
-        <Dropdown.Trigger class="rounded-md bg-thin-material px-3 py-1">
-          {optionLabel()}
-        </Dropdown.Trigger>
-        <Dropdown.List
+    <FilterOption
+      class="flex-shrink-0"
+      popoverProps={{
+        isOpen,
+        onValueChange: setIsOpen,
+      }}
+    >
+      <FilterOption.Label>Sort by</FilterOption.Label>
+      <FilterOption.List>
+        <FilterOption.Item
+          disabled={props.disabled}
+          onClick={switchDirections}
+          class="text-subtext"
+        >
+          <span class="p-0.5">
+            <Switch>
+              <Match when={direction() === "asc"}>
+                <SortAsc size={16} />
+              </Match>
+              <Match when={direction() === "desc"}>
+                <SortDesc size={16} />
+              </Match>
+            </Switch>
+          </span>
+        </FilterOption.Item>
+        <div class="h-4 w-px bg-stroke" />
+        <FilterOption.Trigger disabled={props.disabled}>{optionLabel()}</FilterOption.Trigger>
+      </FilterOption.List>
+
+      <FilterOption.Content class="w-48">
+        <SelectableList
           onValueChange={(newSelectedOption) => {
-            setIsOpen(false);
             setOption(newSelectedOption as OrderOptions);
             handlerOrderChanged();
           }}
           value={option}
         >
-          {orderOptions.map((option) => (
-            <Dropdown.Item
-              class="px-4 py-2 transition-colors duration-200 hover:bg-accent/20"
-              value={option.value}
-            >
-              {option.text}
-            </Dropdown.Item>
-          ))}
-        </Dropdown.List>
-      </Dropdown>
-    </div>
+          <For each={orderOptions}>
+            {(option) => (
+              <SelectableList.Item onSelectedByClick={() => setIsOpen(false)} value={option.value}>
+                {option.text}
+              </SelectableList.Item>
+            )}
+          </For>
+        </SelectableList>
+      </FilterOption.Content>
+    </FilterOption>
   );
 };
 

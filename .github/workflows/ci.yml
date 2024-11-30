@@ -22,7 +22,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Run TypeScript compiler
-        run: npm run typecheck
+        run: bun run typecheck
 
   lint:
     timeout-minutes: 10
@@ -35,7 +35,7 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Run Eslint
-        run: npm run lint:check
+        run: bun run lint
 
   format:
     timeout-minutes: 10
@@ -48,4 +48,4 @@ jobs:
         uses: ./.github/actions/setup
 
       - name: Run Prettier
-        run: npm run format:check
+        run: bun run format:check

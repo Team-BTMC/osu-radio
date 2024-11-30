@@ -1,6 +1,8 @@
-import Dropdown from "@renderer/components/dropdown/Dropdown";
+import FilterOption from "./FilterOption";
+import { Input } from "@renderer/components/input/Input";
 import useControllableState from "@renderer/lib/controllable-state";
 import { cva } from "class-variance-authority";
+import { XIcon } from "lucide-solid";
 import {
   Accessor,
   Component,
@@ -45,7 +47,23 @@ const tagsToLabel = (tags: [string, TagMode][]) => {
   };
 };
 
-const SongListSearchTags: Component<Props> = (props) => {
+/** Groups selected tags by mode, returns a map with include and discart tags, having the include tags first */
+function groupSelectedTagsByMode(selectedTags: Map<string, TagMode>): Map<string, TagMode> {
+  const include = new Map<string, TagMode>();
+  const discart = new Map<string, TagMode>();
+
+  selectedTags.forEach((mode, tag) => {
+    if (mode === "include") {
+      include.set(tag, mode);
+    } else if (mode === "discart") {
+      discart.set(tag, mode);
+    }
+  });
+
+  return new Map([...include, ...discart]);
+}
+
+export const SongListSearchTags: Component<Props> = (props) => {
   const [hasFetchedTags, setHasFetchedTags] = createSignal(false);
   const [isPopopOpen, setIsPopopOpen] = createSignal(false);
   const [tags, setTags] = createSignal<string[]>([]);
@@ -55,6 +73,8 @@ const SongListSearchTags: Component<Props> = (props) => {
     onChange: props.onValueChange,
     defaultProp: new Map<string, TagMode>(),
   });
+  const [search, setSearch] = createSignal("");
+  const [isScrolled, setIsScrolled] = createSignal(false);
 
   const label = createMemo(() => {
     const s = Array.from(selectedTags().entries());
@@ -94,40 +114,83 @@ const SongListSearchTags: Component<Props> = (props) => {
         newSelectedTags.delete(tag);
       }
 
-      return newSelectedTags;
+      return groupSelectedTagsByMode(newSelectedTags);
     });
   };
 
+  const removeTag = (tag: string) => {
+    setSelectedTags((oldSelectedTags) => {
+      const newSelectedTags = new Map(oldSelectedTags);
+      newSelectedTags.delete(tag);
+      return groupSelectedTagsByMode(newSelectedTags);
+    });
+  };
+
+  const filteredTags = createMemo(() => {
+    return tags().filter((tag) => tag.includes(search()));
+  });
+  const selectedTagsEntries = createMemo(() => Array.from(selectedTags().entries()));
+  const selectedTagsCount = createMemo(() => selectedTagsEntries().length);
+
   return (
-    <Dropdown isOpen={isPopopOpen} onValueChange={handlePopoverChange}>
-      <Dropdown.Trigger>
-        <Switch>
-          <Match when={typeof label() === "string"}>
-            <span>{label() as string}</span>
-          </Match>
-          <Match when={typeof label() !== "string"}>
-            <TagSelectedLabel label={label as Accessor<TagLabel>} />
-          </Match>
-        </Switch>
-      </Dropdown.Trigger>
-      <Dropdown.Content>
-        <div class="song-list-search-tags">
+    <FilterOption popoverProps={{ isOpen: isPopopOpen, onValueChange: handlePopoverChange }}>
+      <FilterOption.Label>Tags</FilterOption.Label>
+      <FilterOption.List>
+        <FilterOption.Trigger>
+          <Switch>
+            <Match when={typeof label() === "string"}>
+              <span>{label() as string}</span>
+            </Match>
+            <Match when={typeof label() !== "string"}>
+              <TagSelectedLabel label={label as Accessor<TagLabel>} />
+            </Match>
+          </Switch>
+        </FilterOption.Trigger>
+      </FilterOption.List>
+      <FilterOption.Content
+        class="max-h-[500px] max-w-sm overflow-y-auto"
+        onScroll={(e) => setIsScrolled(e.currentTarget.scrollTop > 80)}
+      >
+        <div>
           <Show when={showHint()}>
-            <div class="song-list-search-tags__hint">
-              <span>
+            <div class="px-1 text-sm">
+              <span class="text-subtext">
                 Click on any tag once to include it. Click on it again to exclude it. Click once
                 more to clear it
               </span>{" "}
-              <button
-                class="song-list-search-tags__hint-dismiss"
-                onClick={() => setShowHint(false)}
-              >
+              <button class="underline" onClick={() => setShowHint(false)}>
                 Dismiss
               </button>
             </div>
           </Show>
-          <div class="flex flex-wrap gap-x-1.5 gap-y-2 pt-2">
-            <For each={tags()}>
+
+          <div class="sticky -top-2 flex flex-wrap gap-x-1.5 gap-y-2 bg-thick-material p-1">
+            <Input
+              size="sm"
+              placeholder="Search tags"
+              value={search()}
+              onInput={(e) => setSearch(e.currentTarget.value)}
+            />
+            <Show when={selectedTagsCount() > 0 && isScrolled()}>
+              <For each={selectedTagsEntries()}>
+                {([tag, mode]) => (
+                  <div
+                    class={tagStyles({
+                      mode,
+                      className: "flex items-center gap-1 px-1.5 py-0.5 text-sm",
+                    })}
+                  >
+                    <span>{tag}</span>
+                    <button class="text-gray-500" onClick={() => removeTag(tag)}>
+                      <XIcon size={16} />
+                    </button>
+                  </div>
+                )}
+              </For>
+            </Show>
+          </div>
+          <div class="flex flex-wrap gap-2 px-1 pt-2">
+            <For each={filteredTags()}>
               {(tag) => (
                 <Tag tag={tag} onTagClick={handleTagClick} mode={selectedTags().get(tag)}>
                   {tag}
@@ -136,8 +199,8 @@ const SongListSearchTags: Component<Props> = (props) => {
             </For>
           </div>
         </div>
-      </Dropdown.Content>
-    </Dropdown>
+      </FilterOption.Content>
+    </FilterOption>
   );
 };
 
@@ -147,12 +210,12 @@ export type TagProps = {
   children: JSX.Element;
   onTagClick?: (tag: string) => void;
 };
-const tagStyles = cva(["select-none rounded px-3 py-1"], {
+const tagStyles = cva(["select-none rounded-md px-3 py-1 border"], {
   variants: {
     mode: {
-      default: "border-solid border-stroke",
+      default: "border-solid border-transparent bg-surface",
       include: "border-solid border-green bg-green/5",
-      discart: "border-dashed border-red bg-red/5",
+      discart: "border-dashed border-red-500 bg-red-500/5",
     },
   },
   defaultVariants: {
@@ -181,7 +244,7 @@ const TagSelectedLabel: Component<TagSelectedLabelProps> = (props) => {
       <span
         classList={{
           "text-green": firstTag().mode === "include",
-          "text-red": firstTag().mode === "discart",
+          "text-red-500": firstTag().mode === "discart",
         }}
       >
         {firstTag().name}
@@ -190,10 +253,8 @@ const TagSelectedLabel: Component<TagSelectedLabelProps> = (props) => {
         <span class="text-green">+{props.label().additionalInclude}</span>
       </Show>
       <Show when={props.label().additionalDiscart > 0}>
-        <span class="text-red">-{props.label().additionalDiscart}</span>
+        <span class="text-red-500">-{props.label().additionalDiscart}</span>
       </Show>
     </span>
   );
 };
-
-export default SongListSearchTags;

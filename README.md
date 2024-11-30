@@ -1,21 +1,38 @@
-# Current status: Pre-Alpha
+<h3 align="right">
+Development status: Pre-Alpha ⚠️
+</h3>
 
-Roadmap | Alpha Features & Issues: https://github.com/orgs/Team-BTMC/projects/2
-<br>
-Main Figma Design: [https://www.figma.com/design/tNBJr7TlEsoWsWdAewqoUg](https://www.figma.com/design/tNBJr7TlEsoWsWdAewqoUg/osu!-radio?node-id=0-1&t=aIuThZAj00HcSjM5-1)
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Team-BTMC/osu-radio/refs/heads/master/build/icon.png" alt="osu!radio logo" width="128" height="128"/>
+  <h1 align="center">osu!radio</h1>
+</p>
 
-# What is osu!radio
+<div align="center">
+  <a href="https://discord.gg/VvMzQ3AxFT" target="_blank">
+    <img src="https://img.shields.io/discord/1284644086820896879?color=7289da&label=BTMC Talent Server&logo=discord&logoColor=white" alt="Discord"/>
+  </a>
+  <br />
+  <a href="https://github.com/orgs/Team-BTMC/projects/2">
+    Roadmap
+  </a>
+  &nbsp;&nbsp;•&nbsp;&nbsp;
+  <a href="https://figma.com/design/tNBJr7TlEsoWsWdAewqoUg/osu!-radio?node-id=0-1&t=aIuThZAj00HcSjM5-1">
+    Figma
+  </a>
+</div>
 
-It's an application that plays your osu! songs!
+## What is osu!radio?
 
-![Song Tab](https://github.com/user-attachments/assets/da67b906-1429-4cc1-9087-76026e94b98a "The screen show a UI with all the buttons (Play, Pause, Forward and Rewind, as well as a Seek bar, with 4 songs on the left")
+osu!radio is a music player for the songs in your osu! library!
 
-### Download Guide
+![osu!radio screenshot](https://github.com/user-attachments/assets/da67b906-1429-4cc1-9087-76026e94b98a "A desktop music player UI. The left sidebar has tabs for Songs and Settings, a search bar with filters, and a list of four song cards with title, artist, and length. The right side has player controls, with a square song cover image, song title, and artist. Below, icons for volume, shuffle, previous, play/pause, next, repeat, and add to playlist. In the top-right there is a queue icon.")
+
+### Development Setup
 
 > [!NOTE]
-> To use `git` and `npm`, you need to have [git](https://git-scm.com/) & [node.js](https://nodejs.org/en) installed
+> To use `git` and `bun`, you need to have [Git](https://git-scm.com/), [Node.js](https://nodejs.org/en) and [Bun](https://bun.sh/) installed.
 
-`1` | Open the terminal in the directory in which you want to download osu!radio. Then run the 2 following commands,
+`1` | Open a terminal in the directory in which you want to download osu!radio. Then run the 2 following commands,
 
 ```sh
 git clone https://github.com/Team-BTMC/osu-radio.git
@@ -25,59 +42,56 @@ git clone https://github.com/Team-BTMC/osu-radio.git
 cd osu-radio
 ```
 
-`2` | Next, install the necessary files to run osu!radio,
+`2` | Next, install the necessary dependencies to run osu!radio,
 
 ```sh
-npm install
+bun install
 ```
 
 `A` | For a production (User) startup,
 
 ```
-npm run start
+bun run start
 ```
 
-`B` | For a hot reloading (Dev) launch,
+`B` | For a hot reloading (Development) startup,
 
 ```
-npm run dev
+bun run dev
 ```
 
 > [!WARNING]
-> If you're planning on reinstalling it
+> If you want to reset your osu!radio installation
 >
-> Windows: Be sure to go to `%appdata%` (`Win + R`, then type that in) and remove the folder `osu-radio-solidjs`
+> Windows: go to `%appdata%` (`Win + R`, type in `%appdata%`) and remove the `osu-radio` directory.
 >
-> Linux: Be sure to go to `~/.config/` and delete `osu-radio` directory
+> Linux: go to `$XDG_DATA_HOME` (generally `~/.config/`) and remove the `osu-radio` directory.
 
-### Contribution
+### Contributing
 
 > [!TIP]
-> To get started, it's highly recommended to make a [fork](https://github.com/Team-BTMC/osu-radio/fork) of this repository
+> To get started, it's recommended to make a [fork](https://github.com/Team-BTMC/osu-radio/fork) of the repository.
 
-If you're new to contributing, consider checking out [How to Contribute to an Open Source](https://opensource.guide/how-to-contribute/). It's the best and simplest guide to understand what contributing really is
+If you're new to contributing, consider checking out [How to Contribute to Open Source](https://opensource.guide/how-to-contribute/). This is a great guide to better understand what it means to contribute.
 
-If you're more interested in the coding side of things, be sure to read [Good Manners of a PR & Best Practices](https://medium.com/deliveryherotechhub/good-manners-of-a-pull-request-some-best-practices-cb2de3c3aea1), as well as [How to write a perfect PR](https://github.blog/developer-skills/github/how-to-write-the-perfect-pull-request/)
+If you're interested in contributing towards development, we'd recommend reading [Good Manners of a PR & Best Practices](https://medium.com/deliveryherotechhub/good-manners-of-a-pull-request-some-best-practices-cb2de3c3aea1), as well as [How to write a perfect PR](https://github.blog/developer-skills/github/how-to-write-the-perfect-pull-request/).
 
-If you're more interested in contributing as a designer, check out the [Figma](https://www.figma.com/design/tNBJr7TlEsoWsWdAewqoUg/osu!-radio?node-id=0-1&t=aIuThZAj00HcSjM5-1)
+If you're interested in contributing as a designer, check out the [Figma](https://www.figma.com/design/tNBJr7TlEsoWsWdAewqoUg/osu!-radio?node-id=0-1&t=aIuThZAj00HcSjM5-1)
 
 Remember! Contributions come in all shapes and sizes.
 
-# The Vision
+## The Vision
 
 Technologies:
 
 - Electron
-- Solid JS
+- SolidJS
 - TypeScript
 
-The main discussion is in the [BTMC TALENT SERVER](https://discord.gg/VvMzQ3AxFT), #prj-osu-radio
-<br>
-We'll be staying on Electron for the time being. As for UI, it will stay web-based for ease of use & cost of being web-based :)
-<br>
-For anything **code** related (Discussion, PR, Suggestions), contact **@CaptSiro**
-<br>
-
-For anything **design** related (UI / UX, Ideas, Suggestions), contact **@Dudu**
-
-###### Animations are subject to change (the very few osu!radio has).
+Discussion mainly happens in the [BTMC TALENT SERVER](https://discord.gg/VvMzQ3AxFT), in the `#prj-osu-radio` channel.
+<br />
+We're not interested in changing tech stacks for this project for the time being. We're sticking with Electron and web tech for now.
+<br />
+For major **code** related matters (Discussions, PRs, Suggestions), contact **@CaptSiro**
+<br />
+For **design** related matters (UI/UX, Ideas, Suggestions), contact **@Dudu**

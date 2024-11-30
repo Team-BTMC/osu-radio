@@ -3,10 +3,9 @@ import { namespace } from "../../../App";
 import Impulse from "../../../lib/Impulse";
 import scrollIfNeeded from "../../../lib/tungsten/scroll-if-needed";
 import InfiniteScroller from "../../InfiniteScroller";
-import SongContextMenuItem from "../context-menu/SongContextMenuItem";
 import SongItem from "../song-item/SongItem";
-import { setSongQueueModalOpen } from "./song-queue.utils";
-import Button from "@renderer/components/button/Button";
+import DropdownList from "@renderer/components/dropdown-list/DropdownList";
+import { DeleteIcon, ListPlus } from "lucide-solid";
 import { Component, createSignal, onCleanup, onMount } from "solid-js";
 
 const SongQueue: Component = () => {
@@ -66,10 +65,6 @@ const SongQueue: Component = () => {
     scrollIfNeeded(element, list);
   };
 
-  const handleCloseButtonClick = () => {
-    setSongQueueModalOpen(false);
-  };
-
   onMount(() => {
     window.api.listen("queue::created", resetListing.pulse.bind(resetListing));
     window.api.listen("queue::songChanged", changeSongHighlight);
@@ -81,12 +76,12 @@ const SongQueue: Component = () => {
   });
 
   return (
-    <div ref={view} class="flex h-full flex-col bg-regular-material backdrop-blur-md">
-      <div class="sticky top-0 z-10 flex items-center justify-between p-5">
-        <h2 class="text-lg font-semibold">Next songs on the queue ({count()})</h2>
-        <Button variant="ghost" onClick={handleCloseButtonClick}>
-          <i class="ri-close-line" />
-        </Button>
+    <div class="flex w-full flex-col">
+      <div class="flex items-center justify-between px-5 pb-2 pt-5">
+        <h2 class="text-sm font-bold">
+          <span>Next songs on the queue</span>
+          <span class="text-subtext"> ({count()})</span>
+        </h2>
       </div>
 
       <div class="flex-grow overflow-y-auto px-4">
@@ -102,18 +97,33 @@ const SongQueue: Component = () => {
               song={s}
               group={group}
               selectable={true}
-              draggable={true}
               onSelect={() => window.api.request("queue::play", s.path)}
               onDrop={onDrop(s)}
-            >
-              <SongContextMenuItem onClick={() => window.api.request("queue::removeSong", s.path)}>
-                Remove from queue
-              </SongContextMenuItem>
-            </SongItem>
+              contextMenu={<QueueContextMenuContent song={s} />}
+            />
           )}
         />
       </div>
     </div>
+  );
+};
+
+type QueueContextMenuContentProps = { song: Song };
+const QueueContextMenuContent: Component<QueueContextMenuContentProps> = (props) => {
+  return (
+    <DropdownList class="w-52">
+      <DropdownList.Item>
+        <span>Add to Playlist</span>
+        <ListPlus class="text-subtext" size={20} />
+      </DropdownList.Item>
+      <DropdownList.Item
+        onClick={() => window.api.request("queue::removeSong", props.song.path)}
+        class="text-danger"
+      >
+        <span>Remove from queue</span>
+        <DeleteIcon class="opacity-80" size={20} />
+      </DropdownList.Item>
+    </DropdownList>
   );
 };
 

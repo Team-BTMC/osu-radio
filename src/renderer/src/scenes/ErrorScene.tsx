@@ -1,4 +1,4 @@
-import "../assets/css/scenes/error.css";
+import Button from "@renderer/components/button/Button";
 import { createSignal, onCleanup, onMount } from "solid-js";
 
 export default function ErrorScene() {
@@ -17,9 +17,11 @@ export default function ErrorScene() {
   };
 
   return (
-    <div id="error" class="scene center col">
-      <h3 classList={{ "no-bg": msg() === "" }}>{msg()}</h3>
-      <button onClick={dismissed}>Dismiss</button>
+    <div id="error" class="grid h-screen w-full place-items-center">
+      <div class="space-y-4 rounded-2xl border border-danger/20 bg-danger/5 p-6 shadow-2xl">
+        <h2>{msg()}</h2>
+        <Button onClick={dismissed}>Dismiss</Button>
+      </div>
     </div>
   );
 }

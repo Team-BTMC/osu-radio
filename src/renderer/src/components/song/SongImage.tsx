@@ -11,6 +11,7 @@ type SongImageProps = {
   src: string | undefined | Accessor<string | undefined>;
   group?: string;
   instantLoad?: boolean;
+  onImageLoaded?: (src: string) => void;
 } & JSX.IntrinsicElements["div"];
 
 const SongImage: Component<SongImageProps> = (props) => {
@@ -23,6 +24,7 @@ const SongImage: Component<SongImageProps> = (props) => {
     }
 
     setSrc(evt.detail);
+    props.onImageLoaded?.(evt.detail);
     delete image?.dataset.eventHandler;
   };
 
