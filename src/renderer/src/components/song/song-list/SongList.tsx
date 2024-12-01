@@ -76,13 +76,7 @@ const SongList: Component<SongViewProps> = (props) => {
 
   return (
     <>
-      <SongListSearch
-        tags={tags}
-        setTags={setTags}
-        setOrder={setOrder}
-        count={count}
-        error={searchError}
-      />
+      <SongListSearch setTags={setTags} setOrder={setOrder} count={count} error={searchError} />
 
       <div class="flex-grow overflow-y-auto p-5 py-0">
         <InfiniteScroller

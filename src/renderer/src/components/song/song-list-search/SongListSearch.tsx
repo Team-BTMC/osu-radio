@@ -2,11 +2,11 @@ import { Optional, Order, Tag } from "../../../../../@types";
 import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-types";
 import { setSongsSearch } from "../song-list/song-list.utils";
 import SongListSearchOrderBy from "./SongListSearchOrderBy";
-import { SongListSearchTags } from "./SongListSearchTags";
+import { SongListSearchTags, TagMode } from "./SongListSearchTags";
 import Button from "@renderer/components/button/Button";
 import { Input } from "@renderer/components/input/Input";
 import { FilterIcon, SearchIcon, FilterXIcon } from "lucide-solid";
-import { Accessor, Component, createSignal, Match, Setter, Signal, Switch } from "solid-js";
+import { Accessor, Component, createSignal, Match, Setter, Switch } from "solid-js";
 
 export type SearchProps = {
   count: Accessor<number>;
@@ -67,8 +67,6 @@ const SongListSearch: Component<SearchProps> = (props) => {
   // });
 
   const handleValueChange = (tags: Map<string, TagMode>) => {
-    setSelectedTags(tags);
-
     const searchFormattedTags = Array.from(
       tags.entries(),
       ([tagName, mode]): Tag => ({
@@ -122,8 +120,8 @@ const SongListSearch: Component<SearchProps> = (props) => {
         }}
       >
         <div class="mt-2 flex flex-nowrap items-center gap-2 overflow-y-auto">
-          <SongListSearchOrderBy disabled={!filterExpanded()} setOrder={props.setOrder} />
-          <SongListSearchTags disabled={!filterExpanded()} />
+          <SongListSearchOrderBy setOrder={props.setOrder} />
+          <SongListSearchTags onValueChange={handleValueChange} />
         </div>
       </div>
     </div>
