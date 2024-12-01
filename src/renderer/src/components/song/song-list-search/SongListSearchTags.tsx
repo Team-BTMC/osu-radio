@@ -126,6 +126,10 @@ export const SongListSearchTags: Component<Props> = (props) => {
     });
   };
 
+  const clearAllTags = () => {
+    setSelectedTags(new Map<string, TagMode>());
+  };
+
   const filteredTags = createMemo(() => {
     return tags().filter((tag) => tag.includes(search()));
   });
@@ -149,29 +153,22 @@ export const SongListSearchTags: Component<Props> = (props) => {
       </FilterOption.List>
       <FilterOption.Content
         class="max-h-[500px] max-w-sm overflow-y-auto"
-        onScroll={(e) => setIsScrolled(e.currentTarget.scrollTop > 80)}
+        onScroll={(e) => setIsScrolled(e.currentTarget.scrollTop > 0)}
       >
         <div>
-          <Show when={showHint()}>
-            <div class="px-1 text-sm">
-              <span class="text-subtext">
-                Click on any tag once to include it. Click on it again to exclude it. Click once
-                more to clear it
-              </span>{" "}
-              <button class="underline" onClick={() => setShowHint(false)}>
-                Dismiss
-              </button>
-            </div>
-          </Show>
-
-          <div class="sticky -top-2 flex flex-wrap gap-x-1.5 gap-y-2 bg-thick-material p-1">
+          <div
+            class="sticky -top-2 flex flex-wrap gap-x-1.5 gap-y-2 border-b border-b-transparent bg-thick-material p-1"
+            classList={{
+              "border-b-stroke": isScrolled(),
+            }}
+          >
             <Input
               size="sm"
               placeholder="Search tags"
               value={search()}
               onInput={(e) => setSearch(e.currentTarget.value)}
             />
-            <Show when={selectedTagsCount() > 0 && isScrolled()}>
+            <Show when={selectedTagsCount() > 0}>
               <For each={selectedTagsEntries()}>
                 {([tag, mode]) => (
                   <div
@@ -187,8 +184,20 @@ export const SongListSearchTags: Component<Props> = (props) => {
                   </div>
                 )}
               </For>
+              <button onClick={clearAllTags}>Clear all</button>
             </Show>
           </div>
+          <Show when={showHint()}>
+            <div class="px-1 text-sm">
+              <span class="text-subtext">
+                Click on any tag once to include it. Click on it again to exclude it. Click once
+                more to clear it
+              </span>{" "}
+              <button class="underline" onClick={() => setShowHint(false)}>
+                Dismiss
+              </button>
+            </div>
+          </Show>
           <div class="flex flex-wrap gap-2 px-1 pt-2">
             <For each={filteredTags()}>
               {(tag) => (
