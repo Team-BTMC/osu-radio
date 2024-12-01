@@ -24,6 +24,8 @@ export class Keyboard {
       for (let i = 0; i < this.registers.length; i++) {
         const r = this.registers[i];
 
+        console.log(evt.key);
+
         if (r.key.toLowerCase() !== evt.key.toLowerCase()) {
           continue;
         }

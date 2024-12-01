@@ -21,7 +21,7 @@ const DEFAULT_TAGS_VALUE: Tag[] = [];
 const DEFAULT_ORDER_VALUE: Order = { option: "title", direction: "asc" };
 
 const SongList: Component<SongViewProps> = (props) => {
-  const tagsSignal = createSignal(DEFAULT_TAGS_VALUE, { equals: false });
+  const [tags, setTags] = createSignal(DEFAULT_TAGS_VALUE, { equals: false });
   const [order, setOrder] = createSignal(DEFAULT_ORDER_VALUE);
   const [count, setCount] = createSignal(0);
 
@@ -38,7 +38,7 @@ const SongList: Component<SongViewProps> = (props) => {
 
   const searchSongs = async () => {
     const o = order();
-    const t = tagsSignal[0]();
+    const t = tags();
     const parsedQuery = await window.api.request("parse::search", songsSearch());
 
     if (parsedQuery.type === "error") {
@@ -76,7 +76,7 @@ const SongList: Component<SongViewProps> = (props) => {
 
   return (
     <>
-      <SongListSearch tags={tagsSignal} setOrder={setOrder} count={count} error={searchError} />
+      <SongListSearch setTags={setTags} setOrder={setOrder} count={count} error={searchError} />
 
       <div class="flex-grow overflow-y-auto p-5 py-0">
         <InfiniteScroller

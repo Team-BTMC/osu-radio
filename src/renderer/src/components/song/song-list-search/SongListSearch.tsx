@@ -2,17 +2,17 @@ import { Optional, Order, Tag } from "../../../../../@types";
 import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-types";
 import { setSongsSearch } from "../song-list/song-list.utils";
 import SongListSearchOrderBy from "./SongListSearchOrderBy";
-import { SongListSearchTags } from "./SongListSearchTags";
+import { SongListSearchTags, TagMode } from "./SongListSearchTags";
 import Button from "@renderer/components/button/Button";
 import { Input } from "@renderer/components/input/Input";
 import { FilterIcon, SearchIcon, FilterXIcon } from "lucide-solid";
-import { Accessor, Component, createSignal, Match, Setter, Signal, Switch } from "solid-js";
+import { Accessor, Component, createSignal, Match, Setter, Switch } from "solid-js";
 
 export type SearchProps = {
-  tags: Signal<Tag[]>;
   count: Accessor<number>;
   error: Accessor<Optional<SearchQueryError>>;
   setOrder: Setter<Order>;
+  setTags: Setter<Tag[]>;
 };
 
 const SongListSearch: Component<SearchProps> = (props) => {
@@ -66,6 +66,17 @@ const SongListSearch: Component<SearchProps> = (props) => {
   //   }
   // });
 
+  const handleValueChange = (tags: Map<string, TagMode>) => {
+    const searchFormattedTags = Array.from(
+      tags.entries(),
+      ([tagName, mode]): Tag => ({
+        name: tagName,
+        isSpecial: mode === "discart",
+      }),
+    );
+    props.setTags(searchFormattedTags);
+  };
+
   return (
     <div class="px-5 pb-2 pt-1">
       <div class="flex gap-2">
@@ -109,8 +120,8 @@ const SongListSearch: Component<SearchProps> = (props) => {
         }}
       >
         <div class="mt-2 flex flex-nowrap items-center gap-2 overflow-y-auto">
-          <SongListSearchOrderBy disabled={!filterExpanded()} setOrder={props.setOrder} />
-          <SongListSearchTags disabled={!filterExpanded()} />
+          <SongListSearchOrderBy setOrder={props.setOrder} />
+          <SongListSearchTags onValueChange={handleValueChange} />
         </div>
       </div>
     </div>
