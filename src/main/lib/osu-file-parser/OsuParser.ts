@@ -137,6 +137,7 @@ export class OsuParser {
         for (const beatmap of beatmaps) {
           try {
             const song: Song = {
+              lazer: true,
               audio: "",
               osuFile: "",
               path: "",
@@ -300,6 +301,7 @@ export class OsuParser {
         }
 
         const song: Song = {
+          lazer: false,
           audio: "",
           osuFile: "",
           path: "",
