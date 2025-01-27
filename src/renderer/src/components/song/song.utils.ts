@@ -268,7 +268,7 @@ async function setMediaSessionMetadata() {
 function setMediaSessionPosition() {
   if ("setPositionState" in navigator.mediaSession) {
     navigator.mediaSession.setPositionState({
-      duration: song().duration,
+      duration: player.duration,
       playbackRate: player.playbackRate,
       position: player.currentTime,
     });
