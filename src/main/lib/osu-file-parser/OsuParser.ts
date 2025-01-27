@@ -118,10 +118,15 @@ export class OsuParser {
   ): DirParseResult {
     const currentDir = databasePath.replaceAll("\\", "/");
 
+    const sourceRealm = path.join(currentDir, "client.realm");
+    const destinationRealm = path.join(currentDir, "radio_client.realm");
+
+    // clone the realm file so it can be upgraded if needed by the realm sdk
+    // without bricking the user's lazer installation
+    fs.copyFileSync(sourceRealm, destinationRealm);
+
     const realm = await Realm.open({
-      path: currentDir + "/client.realm",
-      readOnly: true,
-      schemaVersion: 23,
+      path: currentDir + "/radio_client.realm",
     });
     const beatmapSets = realm.objects<BeatmapSet>("BeatmapSet");
 
@@ -214,6 +219,14 @@ export class OsuParser {
         console.error("Error while parsing beatmapset: ", err);
       }
     }
+
+    // Delete the cloned lazer realm file(s)
+    fs.unlinkSync(path.join(currentDir, "radio_client.realm"));
+    fs.unlinkSync(path.join(currentDir, "radio_client.realm.lock"));
+    fs.rmSync(path.join(currentDir, "radio_client.realm.management"), {
+      recursive: true,
+      force: true,
+    });
 
     return ok([songTable, audioTable, imageTable]);
   }
