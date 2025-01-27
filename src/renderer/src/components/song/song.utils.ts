@@ -1,26 +1,13 @@
 import { delay } from "@renderer/lib/delay";
 import { none, some } from "@renderer/lib/rust-like-utils-client/Optional";
-import { isSongUndefined, msToBPM } from "@renderer/lib/song";
+import { createDefaultSong, isSongUndefined, msToBPM } from "@renderer/lib/song";
 import { createEffect, createSignal } from "solid-js";
 import { AudioSource, Optional, Song } from "src/@types";
 
 /** Range from 0 to 1. */
 export type ZeroToOne = number;
 
-const DEFAULT_SONG: Song = {
-  dateAdded: "",
-  ctime: "",
-  path: "",
-  audio: "",
-  bg: "",
-  osuFile: "",
-  title: "",
-  artist: "",
-  creator: "",
-  duration: 0,
-  bpm: [],
-  diffs: [],
-};
+const DEFAULT_SONG = createDefaultSong();
 
 // ------------
 // State
