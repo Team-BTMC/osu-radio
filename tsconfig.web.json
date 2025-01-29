@@ -8,6 +8,7 @@
   ],
   "compilerOptions": {
     "noImplicitAny": true,
+    "sourceMap": true,
     "composite": true,
     "jsxImportSource": "solid-js",
     "baseUrl": ".",

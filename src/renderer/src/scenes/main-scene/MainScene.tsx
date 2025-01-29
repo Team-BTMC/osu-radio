@@ -1,212 +1,120 @@
 import SongDetail from "../../components/song/song-detail/SongDetail";
-import SongList from "../../components/song/song-list/SongList";
-import { mainActiveTab, setMainActiveTab, Tab, TABS } from "./main.utils";
+import { Sidebar } from "./Sidebar";
+import {
+  setAnimateSidebar,
+  setSidebarWidth,
+  settingsWriteSidebarWidth,
+  sidebarWidth,
+  useMainResizableOptions,
+} from "./main.utils";
 import "./styles.css";
 import Button from "@renderer/components/button/Button";
-import NoticeContainer from "@renderer/components/notice/NoticeContainer";
-import Settings from "@renderer/components/settings/Settings";
+import Popover from "@renderer/components/popover/Popover";
+import ResizablePanel from "@renderer/components/resizable-panel/ResizablePanel";
 import SongImage from "@renderer/components/song/SongImage";
 import SongQueue from "@renderer/components/song/song-queue/SongQueue";
-import {
-  songQueueModalOpen,
-  toggleSongQueueModalOpen,
-} from "@renderer/components/song/song-queue/song-queue.utils";
 import { song } from "@renderer/components/song/song.utils";
-import { LayersIcon, Minimize2Icon, MinusIcon, SquareIcon, XIcon } from "lucide-solid";
-import {
-  Accessor,
-  Component,
-  createEffect,
-  createSignal,
-  For,
-  JSXElement,
-  Match,
-  onCleanup,
-  onMount,
-  Setter,
-  Show,
-  Switch,
-} from "solid-js";
+import { WindowsControls } from "@renderer/components/windows-control/WindowsControl";
+import { os } from "@renderer/lib/os";
+import { Layers3Icon } from "lucide-solid";
+import { Accessor, Component, createSignal, Match, Switch } from "solid-js";
 
 const MainScene: Component = () => {
+  const { maxSidebarWidth, offsetFromPanel } = useMainResizableOptions();
   return (
-    <div class="main-scene flex h-screen flex-col overflow-hidden">
-      <NoticeContainer />
-      <Nav />
-      <main class="relative flex h-[calc(100vh-52px)]">
-        <TabContent />
-        <div class="flex flex-1 items-center justify-center song-detail-gradient">
-          <SongDetail />
-        </div>
-        <QueueModal />
-      </main>
+    <div class="flex h-full min-h-screen flex-col">
+      <Switch>
+        <Match when={os() === "darwin"}>
+          <MacNav />
+        </Match>
+        <Match when={os() !== "darwin"}>
+          <WindownsNav />
+        </Match>
+      </Switch>
 
-      <div class="pointer-events-none absolute inset-0 z-[-1] opacity-[0.12]">
+      <ResizablePanel
+        offsetFromPanel={offsetFromPanel()}
+        min={os() === "darwin" ? 432 : 390}
+        max={maxSidebarWidth()}
+        value={sidebarWidth as Accessor<number>}
+        onValueChange={setSidebarWidth}
+        onValueStart={() => setAnimateSidebar(false)}
+        onValueCommit={(width) => {
+          setAnimateSidebar(true);
+          settingsWriteSidebarWidth(width);
+        }}
+      >
+        <main class="main-scene app-grid relative flex-1">
+          <Sidebar />
+          <div
+            class="song relative flex flex-1 items-center justify-center"
+            classList={{
+              "m-2 rounded-3xl": os() === "darwin",
+              "mt-0 m-2": os() !== "darwin",
+            }}
+          >
+            <SongDetail />
+            <Queue />
+            <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-lg shadow-2xl ring-2 ring-inset ring-stroke">
+              <SongImage
+                src={song().bg}
+                instantLoad={true}
+                class="absolute inset-0 bg-cover bg-fixed bg-left-top opacity-30 blur-lg filter"
+              />
+            </div>
+          </div>
+        </main>
+      </ResizablePanel>
+      <div class="pointer-events-none fixed inset-0 z-[-1] h-full">
         <SongImage
           src={song().bg}
           instantLoad={true}
-          class="h-full w-full bg-cover blur-xl filter"
+          class="h-full w-full bg-cover bg-fixed bg-center blur-lg filter"
         />
       </div>
+
+      <div class="pointer-events-none fixed inset-0 z-[-1] h-full bg-black/80" />
     </div>
   );
 };
 
-const Nav: Component = () => {
-  const [os, setOs] = createSignal<NodeJS.Platform>();
-  const [maximized, setMaximized] = createSignal<boolean>(false);
-
-  onMount(async () => {
-    const fetchOS = async () => {
-      return await window.api.request("os::platform");
-    };
-
-    const fetchMaximized = async () => {
-      return await window.api.request("window::isMaximized");
-    };
-
-    setOs(await fetchOS());
-    setMaximized(await fetchMaximized());
-  });
-
-  createEffect(() => {
-    const resizeListener = (maximized: boolean) => {
-      setMaximized(maximized);
-    };
-
-    window.api.listen("window::maximizeChange", resizeListener);
-    return () => {
-      window.api.removeListener("window::maximizeChange", resizeListener);
-    };
-  });
+const Queue: Component = () => {
+  const [isOpen, setIsOpen] = createSignal(false);
 
   return (
-    <nav
-      class="nav"
-      style={os() === "darwin" ? { padding: "0px 0px 0px 95px" } : { padding: "0px 0px 0px 20px" }}
+    <Popover
+      placement="bottom-end"
+      offset={{
+        mainAxis: 8,
+      }}
+      onValueChange={setIsOpen}
+      isOpen={isOpen}
     >
-      <For each={Object.values(TABS)}>
-        {({ label, ...rest }) => <NavItem {...rest}>{label}</NavItem>}
-      </For>
-
-      <div class="nav__queue ml-auto">
-        <Button
-          variant="ghost"
-          size="icon"
-          classList={{
-            "text-text": songQueueModalOpen(),
-          }}
-          class="mr-2"
-          onClick={toggleSongQueueModalOpen}
-        >
-          <LayersIcon size={20} />
+      <Popover.Anchor onClick={() => setIsOpen(true)} class="no-drag absolute right-2 top-2 z-10">
+        <Button size="square" variant="outlined" class="no-drag">
+          <Layers3Icon size={20} />
         </Button>
-      </div>
-      {os() !== "darwin" && <WindowControls maximized={maximized} setMaximized={setMaximized} />}
+      </Popover.Anchor>
+
+      <Popover.Portal>
+        <Popover.Overlay />
+        <Popover.Content class="flex max-h-[600px] w-[480px] p-0">
+          <SongQueue />
+        </Popover.Content>
+      </Popover.Portal>
+    </Popover>
+  );
+};
+
+const MacNav: Component = () => {
+  return <nav class="drag fixed left-0 top-0 h-16 w-screen hover:bg-subtext" />;
+};
+
+const WindownsNav: Component = () => {
+  return (
+    <nav class="nav drag relative flex items-center justify-end">
+      <WindowsControls />
     </nav>
-  );
-};
-
-function WindowControls(props: { maximized: Accessor<boolean>; setMaximized: Setter<boolean> }) {
-  return (
-    <div class="nav-window-controls">
-      <button
-        onClick={async () => window.api.request("window::minimize")}
-        class="nav-window-control"
-      >
-        <MinusIcon size={20} />
-      </button>
-      <button
-        onClick={async () => {
-          window.api.request("window::maximize");
-          props.setMaximized(!props.maximized());
-        }}
-        class="nav-window-control"
-      >
-        {props.maximized() ? <Minimize2Icon size={20} /> : <SquareIcon size={18} />}
-      </button>
-      <button
-        onClick={async () => window.api.request("window::close")}
-        class="nav-window-control close"
-      >
-        <XIcon size={20} />
-      </button>
-    </div>
-  );
-}
-
-type NavItemProps = Pick<Tab, "value" | "Icon"> & {
-  children: JSXElement;
-};
-const NavItem: Component<NavItemProps> = (props) => {
-  return (
-    <button
-      class={`nav-item flex items-center gap-4 rounded-sm px-4 py-1 hover:bg-surface ${mainActiveTab() === props.value ? "bg-surface" : ""}`}
-      onClick={() => setMainActiveTab(props.value)}
-    >
-      <span class={`${mainActiveTab() === props.value ? "" : "opacity-70"}`}>
-        <props.Icon size={20} />
-      </span>
-      <span
-        class={`text-base font-semibold ${mainActiveTab() === props.value ? "text-text" : "text-subtext"}`}
-      >
-        {props.children}
-      </span>
-    </button>
-  );
-};
-
-const TabContent: Component = () => {
-  return (
-    <div class="h-full w-[480px] min-w-[320px] overflow-y-auto border-r border-stroke/10 bg-regular-material shadow-2xl">
-      <Switch fallback={<div>Tab not found</div>}>
-        <Match when={mainActiveTab() === TABS.SONGS.value}>
-          <SongList isAllSongs={true} />
-        </Match>
-        <Match when={mainActiveTab() === TABS.SETTINGS.value}>
-          <Settings />
-        </Match>
-      </Switch>
-    </div>
-  );
-};
-
-const QueueModal: Component = () => {
-  let queueModal: HTMLDivElement | undefined;
-
-  const handleOutsideClick = (event: MouseEvent) => {
-    if (event.target instanceof HTMLElement) {
-      if (
-        queueModal &&
-        !queueModal.contains(event.target as Node) &&
-        event.target.closest(".popover-overlay") === null
-      ) {
-        toggleSongQueueModalOpen();
-      }
-    }
-  };
-
-  createEffect(() => {
-    if (songQueueModalOpen()) {
-      document.addEventListener("click", handleOutsideClick);
-    } else {
-      document.removeEventListener("click", handleOutsideClick);
-    }
-
-    onCleanup(() => {
-      document.removeEventListener("click", handleOutsideClick);
-    });
-  });
-
-  return (
-    <Show when={songQueueModalOpen()}>
-      <div
-        class="queue-modal absolute bottom-0 right-0 top-0 z-20 h-full w-[480px] overflow-y-auto border-l border-stroke shadow-2xl"
-        ref={queueModal}
-      >
-        <SongQueue />
-      </div>
-    </Show>
   );
 };
 

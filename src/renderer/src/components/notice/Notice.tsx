@@ -10,7 +10,7 @@ const bgStyle = cva([], {
     variant: {
       success: "bg-green after:bg-green",
       neutral: "bg-overlay after:bg-overlay",
-      error: "bg-red after:bg-red",
+      error: "bg-danger after:bg-danger",
     },
   },
   defaultVariants: {
@@ -23,7 +23,7 @@ const textStyle = cva([], {
     variant: {
       success: "text-green",
       neutral: "text-subtext",
-      error: "text-red",
+      error: "text-danger",
     },
   },
   defaultVariants: {
@@ -165,7 +165,7 @@ const Notice: Component<NoticeProps> = (props) => {
       </div>
 
       <div
-        class="absolute inset-0 m-px overflow-hidden pointer-events-none"
+        class="pointer-events-none absolute inset-0 m-px overflow-hidden"
         style={{
           "border-radius": "13px",
         }}

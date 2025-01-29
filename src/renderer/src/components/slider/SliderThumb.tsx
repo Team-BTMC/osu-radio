@@ -1,4 +1,5 @@
 import { useSlider } from "./Slider";
+import { sn } from "@renderer/lib/css.utils";
 import { linearScale } from "@renderer/lib/linear-scale";
 import { Component, createMemo, JSX } from "solid-js";
 
@@ -29,9 +30,12 @@ const SliderThumb: Component<JSX.IntrinsicElements["span"]> = (props) => {
     >
       <span
         {...props}
-        style={{
-          transform: "translate(-50%)",
-        }}
+        style={sn(
+          {
+            transform: "translate(-50%)",
+          },
+          props.style,
+        )}
         tabIndex={0}
         ref={state.setThumb}
       />
