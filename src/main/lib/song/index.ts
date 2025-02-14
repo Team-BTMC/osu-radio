@@ -1,5 +1,5 @@
-import { Song, SongIndex } from "../../../@types";
 import { averageBPM, msToBPM } from "./average-bpm";
+import { Song, SongIndex } from "@shared/types/common.types";
 
 function createSongIndex(id: string, song: Song): SongIndex {
   return {

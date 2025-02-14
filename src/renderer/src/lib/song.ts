@@ -1,4 +1,4 @@
-import { Song } from "../../../@types";
+import { Song } from "@shared/types/common.types";
 
 /**
  * @returns Time difference between beats in ms

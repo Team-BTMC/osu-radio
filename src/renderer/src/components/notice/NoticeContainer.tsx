@@ -1,15 +1,25 @@
-import { Result } from "../../../../@types";
-import { fail, ok } from "../../lib/rust-like-utils-client/Result";
-import { TokenNamespace } from "../../lib/tungsten/token";
-import Notice, { NoticeType } from "./Notice";
+import Notice, { IconNoticeType } from "./Notice";
+import { fail, ok } from "@shared/lib/rust-types/Result";
+import { TokenNamespace } from "@shared/lib/tungsten/token";
+import { Result } from "@shared/types/common.types";
+import { NoticeTypeIconMap } from "@shared/types/common.types";
 import { For, createSignal } from "solid-js";
 import { createStore } from "solid-js/store";
 
-const [notices, setNotices] = createStore<NoticeType[]>([]);
+const [notices, setNotices] = createStore<IconNoticeType[]>([]);
 const namespace = new TokenNamespace();
 const [isPaused, setIsPaused] = createSignal(false);
 
-export function addNotice(notice: NoticeType): void {
+// NOTE: If you're looking to send a notice from the backend, do something like this:
+// Router.dispatch(window, "notify", {
+//   variant: "neutral",
+//   title: "",
+//   description: "",
+//   icon: "a-arrow-up"
+// });
+// Remember to add "a-arrow-up", etc into the NoticeTypeIconMap.
+
+export function addNotice(notice: IconNoticeType): void {
   if (notice.id === undefined) {
     notice.id = namespace.create();
   }
@@ -32,8 +42,22 @@ function hideNotice(id: string | undefined): Result<void, string> {
 
 export { notices, isPaused, setIsPaused };
 
-window.api.listen("notify", (n: NoticeType) => {
-  addNotice(n);
+window.api.listen("notify", (n: NoticeTypeIconMap) => {
+  const noticeParams: IconNoticeType = {
+    id: n.id,
+    variant: n.variant,
+    title: n.title,
+    description: n.description,
+  };
+
+  // NOTE: *No icons mapped yet. To add the mapping, do something like this:
+  // switch (n.icon) {
+  //   case "a-arrow-up":
+  //     noticeParams.icon = <...Icon />;
+  //     break;
+  // }
+
+  addNotice(noticeParams);
 });
 
 const NoticeContainer = () => {

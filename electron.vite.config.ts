@@ -7,14 +7,26 @@ import solid from "vite-plugin-solid";
 export default defineConfig({
   main: {
     plugins: [externalizeDepsPlugin()],
+    resolve: {
+      alias: {
+        "@main": resolve("src/main"),
+        "@shared": resolve("src/shared"),
+      },
+    },
   },
   preload: {
     plugins: [externalizeDepsPlugin()],
+    resolve: {
+      alias: {
+        "@shared": resolve("src/shared"),
+      },
+    },
   },
   renderer: {
     resolve: {
       alias: {
         "@renderer": resolve("src/renderer/src"),
+        "@shared": resolve("src/shared"),
       },
     },
     plugins: [

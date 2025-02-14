@@ -1,9 +1,8 @@
-import type { APIFunction, Packet } from "../../../@types";
-import { ListenAPI } from "../../../ListenAPI";
-import { RequestAPI } from "../../../RequestAPI";
-import { assertNever } from "../tungsten/assertNever";
-import { TokenNamespace } from "../tungsten/token";
 import { cratePacket } from "./Packet";
+import { assertNever } from "@shared/lib/tungsten/assertNever";
+import { TokenNamespace } from "@shared/lib/tungsten/token";
+import type { APIFunction, Packet } from "@shared/types/common.types";
+import { ListenAPI, RequestAPI } from "@shared/types/router.types";
 import { BrowserWindow, ipcMain } from "electron";
 
 type Pending = {

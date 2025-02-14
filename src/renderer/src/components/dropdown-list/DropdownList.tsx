@@ -1,7 +1,7 @@
 import { RawList } from "../raw-list/RawList";
 import DropdownListItem from "./DropdownListItem";
 import { useRovingFocusGroup } from "@renderer/lib/roving-focus-group/rovingFocusGroup";
-import { TokenNamespace } from "@renderer/lib/tungsten/token";
+import { TokenNamespace } from "@shared/lib/tungsten/token";
 import { createContext, createSignal, JSX, ParentComponent, useContext } from "solid-js";
 
 export type Props = JSX.IntrinsicElements["div"];

@@ -1,8 +1,8 @@
 import FilterOption from "./FilterOption";
 import SelectableList from "@renderer/components/selectable-list/SelectableList";
+import { OrderDirection, OrderOptions, Order } from "@shared/types/common.types";
 import { SortAsc, SortDesc } from "lucide-solid";
 import { Component, createMemo, createSignal, For, Match, Setter, Switch } from "solid-js";
-import { OrderDirection, OrderOptions, Order } from "src/@types";
 
 type OrderOption = {
   text: string;

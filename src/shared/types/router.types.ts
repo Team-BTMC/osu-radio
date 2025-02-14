@@ -12,9 +12,12 @@ import type {
   Settings,
   Song,
   SongsQueryPayload,
-} from "./@types";
-import type { SearchQuery } from "./main/lib/search-parser/@search-types";
-import type { ConfigError, ConfigSuccess } from "./main/lib/template-parser/parser/TemplateParser";
+  LoadingSceneUpdate,
+  NoticeTypeIconMap,
+  Scenes,
+} from "./common.types";
+import type { SearchQuery } from "./search-parser.types";
+import type { ConfigError, ConfigSuccess } from "./template-parser.types";
 
 export type RequestAPI = {
   "resource::get": (
@@ -22,7 +25,7 @@ export type RequestAPI = {
     table: ResourceTables,
   ) => Optional<Song | AudioSource | ImageSource>;
   "resource::getPath": (id: any) => Result<string, string>;
-  "resource::getMediaSessionImage": (bgPath: string) => Optional<string>;
+  "resource::getResizedBg": (bgPath: string) => Optional<string>;
 
   "queue::exists": () => boolean;
   "queue::current": () => Optional<Song>;
@@ -72,4 +75,23 @@ export type RequestAPI = {
   "save::songColors": (primaryColor: string, secondaryColor: string, song: ResourceID) => void;
 
   "dev::storeLocation": () => string;
+};
+
+export type ListenAPI = {
+  changeScene: (scene: Scenes) => void;
+
+  "loadingScene::setTitle": (title: string) => void;
+  "loadingScene::update": (update: LoadingSceneUpdate) => void;
+
+  "error::setMessage": (msg: string) => void;
+
+  "queue::songChanged": (song: Song) => void;
+  "queue::created": () => void;
+  "queue::destroyed": () => void;
+
+  "songView::reset": () => void;
+
+  "window::maximizeChange": (maximized: boolean) => void;
+
+  notify: (notice: NoticeTypeIconMap) => void;
 };

@@ -1,5 +1,5 @@
-import { Result } from "../../../@types";
-import { fail, ok } from "../rust-like-utils-backend/Result";
+import { fail, ok } from "@shared/lib/rust-types/Result";
+import { Result } from "@shared/types/common.types";
 import fs from "fs";
 import path from "path";
 
