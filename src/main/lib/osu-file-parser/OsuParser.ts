@@ -1,9 +1,9 @@
-import { AudioSource, ImageSource, ResourceID, Result, Song } from "../../../@types";
-import { access } from "../fs-promises";
-import { fail, ok } from "../rust-like-utils-backend/Result";
-import { assertNever } from "../tungsten/assertNever";
 import { BeatmapSet } from "./LazerTypes";
 import { OsuFile } from "./OsuFile";
+import { access } from "@main/lib/fs-promises";
+import { fail, ok } from "@shared/lib/rust-types/Result";
+import { assertNever } from "@shared/lib/tungsten/assertNever";
+import { AudioSource, ImageSource, ResourceID, Result, Song } from "@shared/types/common.types";
 import fs from "graceful-fs";
 import os from "os";
 import path from "path/posix";
@@ -355,21 +355,24 @@ export class OsuParser {
         db.readFloat(); // OD
         db.readDouble(); // slider multiplier
 
+        // star ratings were changed to be stored as floats instead of doubles in 20250108
+        const sr_skip_value = db_version >= 20250108 ? 1 + 4 + 1 + 4 : 1 + 4 + 1 + 8;
+
         // std
         let nb_star_ratings = db.readInt();
-        db.pos += nb_star_ratings * (1 + 4 + 1 + 8); // skipping star ratings
+        db.pos += nb_star_ratings * sr_skip_value; // skipping star ratings
 
         // taiko
         nb_star_ratings = db.readInt();
-        db.pos += nb_star_ratings * (1 + 4 + 1 + 8); // skipping star ratings
+        db.pos += nb_star_ratings * sr_skip_value; // skipping star ratings
 
         // ctb
         nb_star_ratings = db.readInt();
-        db.pos += nb_star_ratings * (1 + 4 + 1 + 8); // skipping star ratings
+        db.pos += nb_star_ratings * sr_skip_value; // skipping star ratings
 
         // mania
         nb_star_ratings = db.readInt();
-        db.pos += nb_star_ratings * (1 + 4 + 1 + 8); // skipping star ratings
+        db.pos += nb_star_ratings * sr_skip_value; // skipping star ratings
 
         db.readInt(); // drain time
         song.duration = db.readInt() / 1000.0;

@@ -6,7 +6,7 @@ import useControllableState from "@renderer/lib/controllable-state";
 import { cn } from "@renderer/lib/css.utils";
 import { linearScale } from "@renderer/lib/linear-scale";
 import { throttle } from "@renderer/lib/throttle";
-import { clamp } from "@renderer/lib/tungsten/math";
+import { clamp } from "@shared/lib/tungsten/math";
 import {
   Accessor,
   createContext,

@@ -1,4 +1,4 @@
-import { Song } from "../../../@types";
+import { Song } from "@shared/types/common.types";
 
 export class SongBuilder {
   private song: any = {};

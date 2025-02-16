@@ -1,10 +1,10 @@
-import { Optional, Order, Tag } from "../../../../../@types";
-import { SearchQueryError } from "../../../../../main/lib/search-parser/@search-types";
-import { setSongsSearch } from "../song-list/song-list.utils";
 import SongListSearchOrderBy from "./SongListSearchOrderBy";
 import { SongListSearchTags } from "./SongListSearchTags";
 import Button from "@renderer/components/button/Button";
 import { Input } from "@renderer/components/input/Input";
+import { setSongsSearch } from "@renderer/components/song/song-list/song-list.utils";
+import { Optional, Order, Tag } from "@shared/types/common.types";
+import { SearchQueryError } from "@shared/types/search-parser.types";
 import { FilterIcon, SearchIcon, FilterXIcon } from "lucide-solid";
 import { Accessor, Component, createSignal, Match, Setter, Signal, Switch } from "solid-js";
 

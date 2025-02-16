@@ -1,4 +1,5 @@
-import Button from "../button/Button";
+import Button from "@renderer/components/button/Button";
+import { NoticeType } from "@shared/types/common.types";
 import { cva } from "class-variance-authority";
 import { XIcon } from "lucide-solid";
 import { Component, createEffect, createMemo, createSignal, JSX, onMount, Show } from "solid-js";
@@ -31,16 +32,12 @@ const textStyle = cva([], {
   },
 });
 
-export type NoticeType = {
-  id?: string;
-  variant?: "neutral" | "success" | "error";
-  title?: string;
-  description?: string;
+export type IconNoticeType = NoticeType & {
   icon?: JSX.Element;
 };
 
 type NoticeProps = {
-  notice: NoticeType;
+  notice: IconNoticeType;
   onRemove: (id: string) => void;
   isPaused: boolean;
 };
