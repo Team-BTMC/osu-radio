@@ -18,6 +18,7 @@ import type {
 } from "./common.types";
 import type { SearchQuery } from "./search-parser.types";
 import type { ConfigError, ConfigSuccess } from "./template-parser.types";
+import { OsuDirectory } from "@main/router/dir-router";
 
 export type RequestAPI = {
   "resource::get": (
@@ -40,11 +41,11 @@ export type RequestAPI = {
   "queue::create": (payload: QueueCreatePayload) => void;
   "queue::shuffle": () => void;
 
-  "dir::select": () => Optional<string>;
-  "dir::autoGetOsuDir": () => Optional<string>;
-  "dir::submit": (dir: string) => void;
+  "dir::select": () => Optional<OsuDirectory>;
+  "dir::autoGetOsuDirs": () => Optional<OsuDirectory[]>;
+  "dir::submit": (dir: OsuDirectory) => void;
 
-  "discord::play": (song: Song, duration?: number) => void;
+  "discord::play": (song: Song, length: number, duration: number) => void;
   "discord::pause": (song: Song) => void;
 
   "error::dismissed": () => void;
