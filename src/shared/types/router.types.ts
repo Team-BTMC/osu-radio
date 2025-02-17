@@ -18,7 +18,11 @@ import type {
 } from "./common.types";
 import type { SearchQuery } from "./search-parser.types";
 import type { ConfigError, ConfigSuccess } from "./template-parser.types";
-import { OsuDirectory } from "@main/router/dir-router";
+
+export type OsuDirectory = {
+  version: "stable" | "lazer" | "none";
+  path: string;
+};
 
 export type RequestAPI = {
   "resource::get": (

@@ -3,8 +3,8 @@ import osuLazerLogo from "@renderer/assets/osu-lazer-logo.png";
 import osuStableLogo from "@renderer/assets/osu-stable-logo.png";
 import Button from "@renderer/components/button/Button";
 import { WindowsControls } from "@renderer/components/windows-control/WindowsControl";
+import { OsuDirectory } from "@shared/types/router.types";
 import { Accessor, Component, createSignal, For, onMount, Setter, Show } from "solid-js";
-import { OsuDirectory } from "src/main/router/dir-router";
 
 export default function DirSelectScene() {
   const [dirs, setDirs] = createSignal<OsuDirectory[]>([]);

@@ -1,13 +1,9 @@
 import { Router } from "@main/lib/route-pass/Router";
 import { none, some } from "@shared/lib/rust-types/Optional";
+import { OsuDirectory } from "@shared/types/router.types";
 import { dialog } from "electron";
 import fs from "fs";
 import path from "path";
-
-export type OsuDirectory = {
-  version: "stable" | "lazer" | "none";
-  path: string;
-};
 
 Router.respond("dir::select", () => {
   const result = dialog.showOpenDialogSync({
