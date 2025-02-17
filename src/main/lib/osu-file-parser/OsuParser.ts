@@ -220,6 +220,9 @@ export class OsuParser {
       }
     }
 
+    // Done with the file now
+    realm.close();
+
     // Delete the cloned lazer realm file(s)
     fs.unlinkSync(path.join(currentDir, "radio_client.realm"));
     fs.unlinkSync(path.join(currentDir, "radio_client.realm.lock"));
