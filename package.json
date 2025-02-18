@@ -36,9 +36,10 @@
     "fastest-levenshtein": "^1.0.16",
     "get-audio-duration": "^4.0.1",
     "graceful-fs": "^4.2.11",
-    "lucide-solid": "^0.452.0",
+    "lucide-solid": "^0.460.0",
     "node-addon-api": "^8.2.1",
     "polished": "^4.3.1",
+    "realm": "~20.1.0",
     "sharp": "^0.33.5",
     "solid-focus-trap": "^0.1.7",
     "tailwind-merge": "^2.5.3"

@@ -1,54 +1,126 @@
 import { Router } from "@main/lib/route-pass/Router";
 import { none, some } from "@shared/lib/rust-types/Optional";
+import { OsuDirectory } from "@shared/types/router.types";
 import { dialog } from "electron";
+import fs from "fs";
 import path from "path";
 
 Router.respond("dir::select", () => {
-  const path = dialog.showOpenDialogSync({
+  const result = dialog.showOpenDialogSync({
     title: "Select your osu! folder",
     properties: ["openDirectory"],
   });
 
-  if (path === undefined) {
+  if (result === undefined) {
     return none();
   }
+  const p = result[0];
 
-  return some(path[0]);
+  if (fs.existsSync(path.join(p, "osu!.db"))) {
+    return some({ version: "stable", path: p });
+  } else if (fs.existsSync(path.join(p, "client.realm"))) {
+    return some({ version: "lazer", path: p });
+  } else {
+    return none();
+  }
 });
 
-Router.respond("dir::autoGetOsuDir", () => {
+function getStoragePath(iniPath: string) {
+  const firstLine = fs.readFileSync(iniPath, "utf-8").split("=")[1];
+  return firstLine.trim();
+}
+
+Router.respond("dir::autoGetOsuDirs", () => {
   if (process.platform === "win32") {
-    if (process.env.LOCALAPPDATA === undefined) {
+    const dirs: OsuDirectory[] = [];
+
+    if (
+      process.env.LOCALAPPDATA != undefined &&
+      fs.existsSync(path.join(process.env.LOCALAPPDATA, "osu!"))
+    ) {
+      dirs.push({ version: "stable", path: path.join(process.env.LOCALAPPDATA, "osu!") });
+    }
+
+    if (process.env.APPDATA != undefined && fs.existsSync(path.join(process.env.APPDATA, "osu"))) {
+      if (fs.existsSync(path.join(process.env.APPDATA, "osu", "client.realm"))) {
+        dirs.push({ version: "lazer", path: path.join(process.env.APPDATA, "osu") });
+      } else if (fs.existsSync(path.join(process.env.APPDATA, "osu", "storage.ini"))) {
+        const p = getStoragePath(path.join(process.env.APPDATA, "osu", "storage.ini"));
+        dirs.push({ version: "lazer", path: p });
+      }
+    }
+
+    if (dirs.length > 0) {
+      return some(dirs);
+    } else {
       return none();
     }
-    return some(path.join(process.env.LOCALAPPDATA, "osu!"));
   } else if (process.platform === "linux") {
-    if (process.env.XDG_DATA_HOME === undefined) {
+    const dirs: OsuDirectory[] = [];
+    const homePath = process.env.XDG_DATA_HOME ?? `${process.env.HOME}/.local/share`;
+
+    if (homePath != undefined && fs.existsSync(path.join(homePath, "osu-wine", "osu!"))) {
+      dirs.push({
+        version: "stable",
+        path: path.join(homePath, "osu-wine", "osu!"),
+      });
+    }
+
+    if (homePath != undefined && fs.existsSync(path.join(homePath, "osu"))) {
+      if (fs.existsSync(path.join(homePath, "osu", "client.realm"))) {
+        dirs.push({ version: "lazer", path: path.join(homePath, "osu") });
+      } else if (fs.existsSync(path.join(homePath, "osu", "storage.ini"))) {
+        const p = getStoragePath(path.join(homePath, "osu", "storage.ini"));
+        dirs.push({ version: "lazer", path: p });
+      }
+    }
+
+    if (dirs.length > 0) {
+      return some(dirs);
+    } else {
       return none();
     }
-    return some(path.join(process.env.XDG_DATA_HOME, "osu-wine", "osu!"));
+  } else if (process.platform === "darwin" && process.env.HOME) {
+    if (
+      fs.existsSync(
+        path.join(process.env.HOME, "Library", "Application Support", "osu", "client.realm"),
+      )
+    ) {
+      return some([
+        {
+          version: "lazer",
+          path: path.join(process.env.HOME, "Library", "Application Support", "osu"),
+        },
+      ]);
+    } else if (
+      fs.existsSync(
+        path.join(process.env.HOME, "Library", "Application Support", "osu", "storage.ini"),
+      )
+    ) {
+      const p = getStoragePath(
+        path.join(process.env.HOME, "Library", "Application Support", "osu", "storage.ini"),
+      );
+      return some([{ version: "lazer", path: p }]);
+    }
+    return none();
   }
   return none();
 });
 
-let pendingDirRequests: ((dir: string) => void)[] = [];
+type DirSubmitResolve = (value: OsuDirectory) => void;
 
-Router.respond("dir::submit", (_evt, dir) => {
-  // Resolve all pending promises with value from client
-  for (let i = 0; i < pendingDirRequests.length; i++) {
-    pendingDirRequests[i](dir);
+let pendingDirRequest: DirSubmitResolve | undefined = undefined;
+
+Router.respond("dir::submit", (_evt, dir: OsuDirectory) => {
+  if (pendingDirRequest) {
+    pendingDirRequest(dir);
+
+    pendingDirRequest = undefined;
   }
-
-  pendingDirRequests = [];
 });
 
-/**
- * Await submitted directory from client. This function works on suspending promise's resolve function in array of
- * pending requests. When user clicks Submit button the directory is passed to all pending resolve functions and the
- * promises are resolved
- */
-export function dirSubmit(): Promise<string> {
+export function dirSubmit(): Promise<OsuDirectory> {
   return new Promise((resolve) => {
-    pendingDirRequests.push(resolve);
+    pendingDirRequest = resolve;
   });
 }

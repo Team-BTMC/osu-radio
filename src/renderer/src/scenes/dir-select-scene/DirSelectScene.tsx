@@ -1,20 +1,26 @@
+import "../main-scene/styles.css";
+import osuLazerLogo from "@renderer/assets/osu-lazer-logo.png";
+import osuStableLogo from "@renderer/assets/osu-stable-logo.png";
 import Button from "@renderer/components/button/Button";
-import { createSignal, onMount } from "solid-js";
+import { WindowsControls } from "@renderer/components/windows-control/WindowsControl";
+import { OsuDirectory } from "@shared/types/router.types";
+import { Accessor, Component, createSignal, For, onMount, Setter, Show } from "solid-js";
 
 export default function DirSelectScene() {
-  const [dir, setDir] = createSignal("");
+  const [dirs, setDirs] = createSignal<OsuDirectory[]>([]);
+  const [selectedDir, setSelectedDir] = createSignal<OsuDirectory>({ version: "none", path: "" });
 
-  onMount(() => {
-    autodetectDir();
+  onMount(async () => {
+    await autodetectDir();
   });
 
   const autodetectDir = async () => {
-    const autoGetDir = await window.api.request("dir::autoGetOsuDir");
+    const autoGetDir = await window.api.request("dir::autoGetOsuDirs");
     if (autoGetDir.isNone) {
       return;
     }
 
-    setDir(autoGetDir.value);
+    setDirs(autoGetDir.value);
   };
 
   const selectDir = async () => {
@@ -23,16 +29,27 @@ export default function DirSelectScene() {
       return;
     }
 
-    setDir(opt.value);
+    setDirs((dirs) => [...dirs, opt.value]);
+    setSelectedDir(opt.value);
   };
 
   const submitDir = async () => {
-    if (dir() === "") {
+    if (selectedDir().version === "none") {
       return;
     }
 
-    await window.api.request("dir::submit", dir());
+    await window.api.request("dir::submit", selectedDir());
   };
+
+  const [os, setOs] = createSignal<NodeJS.Platform>();
+
+  onMount(async () => {
+    const fetchOS = async () => {
+      return await window.api.request("os::platform");
+    };
+
+    setOs(await fetchOS());
+  });
 
   const GRADIENT = `radial-gradient(at 1% 75%, hsla(228,61%,67%,0.1) 0px, transparent 50%),
     radial-gradient(at 20% 56%, hsla(87,75%,61%,0.1) 0px, transparent 50%),
@@ -44,34 +61,40 @@ export default function DirSelectScene() {
 
   return (
     <div class="relative grid h-screen place-items-center p-8" style={{ background: GRADIENT }}>
+      <div class="drag absolute left-0 top-0 flex h-10 w-full justify-end">
+        {os() !== "darwin" && <WindowsControls />}
+      </div>
       <div class="flex h-full max-h-[720px] w-full max-w-[860px] flex-col justify-between gap-12 overflow-y-auto rounded-2xl border border-stroke/10 bg-regular-material p-8 shadow-2xl">
         <h1 class="pt-12 text-center text-2xl">Welcome to osu! radio</h1>
-
         <div class="flex flex-col gap-4">
           <div class="flex flex-col gap-1.5">
-            <label class="text-sm font-bold text-text">Your osu! folder</label>
-            <div
-              onClick={selectDir}
-              class="flex items-baseline justify-between rounded-xl border border-white/5 bg-regular-material p-1 pl-4"
-            >
-              {" "}
-              <span>{dir() === "" ? "[No folder selected]" : dir()}</span>{" "}
-              <Button
-                variant="secondary"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  selectDir();
-                }}
-              >
-                Select folder
+            <label class="text-md font-bold text-text">Select an osu! installation:</label>
+            <Show when={dirs().length > 0} fallback={<p>No directories found</p>}>
+              <For each={dirs()}>
+                {(dir) => (
+                  <InstallationCard
+                    directory={dir}
+                    selectedDir={selectedDir}
+                    setSelectedDir={setSelectedDir}
+                  />
+                )}
+              </For>
+            </Show>
+            <div class="flex items-baseline justify-between pt-2">
+              <Button size="medium" variant="secondary" onClick={selectDir}>
+                Select a different installation
               </Button>
+              <p class="text-sm text-subtext">You can always change this in settings.</p>
             </div>
-            <p class="pt-1 text-sm text-subtext">You can always change this in settings.</p>
           </div>
         </div>
 
         <div class="flex items-end justify-end">
-          <Button size="large" onClick={submitDir}>
+          <Button
+            size="large"
+            disabled={selectedDir().version === "none" ? true : false}
+            onClick={submitDir}
+          >
             <span>Submit</span>
           </Button>
         </div>
@@ -79,3 +102,38 @@ export default function DirSelectScene() {
     </div>
   );
 }
+
+type InstallationCardProps = {
+  directory: OsuDirectory;
+  selectedDir: Accessor<OsuDirectory>;
+  setSelectedDir: Setter<OsuDirectory>;
+};
+
+const InstallationCard: Component<InstallationCardProps> = (props) => {
+  return (
+    <div
+      class={`flex h-[72px] w-full select-none items-center rounded-xl border border-white/5 p-3 hover:cursor-pointer ${props.selectedDir() === props.directory ? "bg-surface" : "bg-regular-material"}`}
+      onClick={() => props.setSelectedDir(props.directory)}
+    >
+      <img
+        src={props.directory.version === "stable" ? osuStableLogo : osuLazerLogo}
+        class="h-[52px] w-[52px]"
+        alt=""
+      />
+      <div class="flex flex-col gap-1 pl-4">
+        <p class="font-bold">{props.directory.path}</p>
+        <div class="flex items-center gap-3">
+          <div
+            class="flex h-5 w-20 items-center justify-center rounded-full text-xs font-bold"
+            classList={{
+              "bg-pink-400": props.directory.version === "stable",
+              "bg-teal-400": props.directory.version === "lazer",
+            }}
+          >
+            {props.directory.version.toUpperCase()}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
