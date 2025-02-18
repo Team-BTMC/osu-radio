@@ -1,5 +1,5 @@
-import { BeatmapSet } from "./LazerTypes";
 import { OsuFile } from "./OsuFile";
+import { BeatmapSet } from "./lazer.types";
 import { access } from "@main/lib/fs-promises";
 import { fail, ok } from "@shared/lib/rust-types/Result";
 import { assertNever } from "@shared/lib/tungsten/assertNever";

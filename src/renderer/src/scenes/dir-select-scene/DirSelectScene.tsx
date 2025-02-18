@@ -112,7 +112,7 @@ type InstallationCardProps = {
 const InstallationCard: Component<InstallationCardProps> = (props) => {
   return (
     <div
-      class={`flex h-[72px] w-full select-none items-center rounded-xl border border-white/5 bg-[#333333] p-3 hover:cursor-pointer ${props.selectedDir() === props.directory ? "bg-[#333333]" : "bg-regular-material"}`}
+      class={`flex h-[72px] w-full select-none items-center rounded-xl border border-white/5 p-3 hover:cursor-pointer ${props.selectedDir() === props.directory ? "bg-surface" : "bg-regular-material"}`}
       onClick={() => props.setSelectedDir(props.directory)}
     >
       <img
