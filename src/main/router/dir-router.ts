@@ -26,37 +26,31 @@ Router.respond("dir::select", () => {
 });
 
 function getStoragePath(iniPath: string) {
-  const firstLine = fs.readFileSync(iniPath, "utf-8").split("=")[1];
-  return firstLine.trim();
+  return fs.readFileSync(iniPath, "utf-8").split("=")[1].trim();
 }
 
-Router.respond("dir::autoGetOsuDirs", () => {
-  if (process.platform === "win32") {
-    const dirs: OsuDirectory[] = [];
+function getOsuDirectoriesByOS(platform: string): OsuDirectory[] {
+  const dirs: OsuDirectory[] = [];
 
+  if (platform === "win32") {
+    // Windows
     if (
-      process.env.LOCALAPPDATA != undefined &&
+      process.env.LOCALAPPDATA !== undefined &&
       fs.existsSync(path.join(process.env.LOCALAPPDATA, "osu!"))
     ) {
       dirs.push({ version: "stable", path: path.join(process.env.LOCALAPPDATA, "osu!") });
     }
 
     if (process.env.APPDATA != undefined && fs.existsSync(path.join(process.env.APPDATA, "osu"))) {
-      if (fs.existsSync(path.join(process.env.APPDATA, "osu", "client.realm"))) {
-        dirs.push({ version: "lazer", path: path.join(process.env.APPDATA, "osu") });
-      } else if (fs.existsSync(path.join(process.env.APPDATA, "osu", "storage.ini"))) {
+      if (fs.existsSync(path.join(process.env.APPDATA, "osu", "storage.ini"))) {
         const p = getStoragePath(path.join(process.env.APPDATA, "osu", "storage.ini"));
         dirs.push({ version: "lazer", path: p });
+      } else if (fs.existsSync(path.join(process.env.APPDATA, "osu", "client.realm"))) {
+        dirs.push({ version: "lazer", path: path.join(process.env.APPDATA, "osu") });
       }
     }
-
-    if (dirs.length > 0) {
-      return some(dirs);
-    } else {
-      return none();
-    }
-  } else if (process.platform === "linux") {
-    const dirs: OsuDirectory[] = [];
+  } else if (platform === "linux") {
+    // Linux
     const homePath = process.env.XDG_DATA_HOME ?? `${process.env.HOME}/.local/share`;
 
     if (homePath != undefined && fs.existsSync(path.join(homePath, "osu-wine", "osu!"))) {
@@ -67,44 +61,36 @@ Router.respond("dir::autoGetOsuDirs", () => {
     }
 
     if (homePath != undefined && fs.existsSync(path.join(homePath, "osu"))) {
-      if (fs.existsSync(path.join(homePath, "osu", "client.realm"))) {
-        dirs.push({ version: "lazer", path: path.join(homePath, "osu") });
-      } else if (fs.existsSync(path.join(homePath, "osu", "storage.ini"))) {
+      if (fs.existsSync(path.join(homePath, "osu", "storage.ini"))) {
         const p = getStoragePath(path.join(homePath, "osu", "storage.ini"));
         dirs.push({ version: "lazer", path: p });
+      } else if (fs.existsSync(path.join(homePath, "osu", "client.realm"))) {
+        dirs.push({ version: "lazer", path: path.join(homePath, "osu") });
       }
     }
+  } else if (platform === "darwin" && process.env.HOME) {
+    // macOS
+    const macOsuPath = path.join(process.env.HOME, "Library", "Application Support", "osu");
 
-    if (dirs.length > 0) {
-      return some(dirs);
-    } else {
-      return none();
+    if (fs.existsSync(path.join(macOsuPath, "storage.ini"))) {
+      const p = getStoragePath(path.join(macOsuPath, "storage.ini"));
+      dirs.push({ version: "lazer", path: p });
+    } else if (fs.existsSync(path.join(macOsuPath, "client.realm"))) {
+      dirs.push({ version: "lazer", path: macOsuPath });
     }
-  } else if (process.platform === "darwin" && process.env.HOME) {
-    if (
-      fs.existsSync(
-        path.join(process.env.HOME, "Library", "Application Support", "osu", "client.realm"),
-      )
-    ) {
-      return some([
-        {
-          version: "lazer",
-          path: path.join(process.env.HOME, "Library", "Application Support", "osu"),
-        },
-      ]);
-    } else if (
-      fs.existsSync(
-        path.join(process.env.HOME, "Library", "Application Support", "osu", "storage.ini"),
-      )
-    ) {
-      const p = getStoragePath(
-        path.join(process.env.HOME, "Library", "Application Support", "osu", "storage.ini"),
-      );
-      return some([{ version: "lazer", path: p }]);
-    }
+  }
+
+  return dirs;
+}
+
+Router.respond("dir::autoGetOsuDirs", () => {
+  const dirs = getOsuDirectoriesByOS(process.platform);
+
+  if (dirs.length > 0) {
+    return some(dirs);
+  } else {
     return none();
   }
-  return none();
 });
 
 type DirSubmitResolve = (value: OsuDirectory) => void;
