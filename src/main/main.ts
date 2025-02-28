@@ -54,7 +54,7 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
 
   while (true) {
     await Router.dispatch(mainWindow, "changeScene", "dir-select");
-    const dir = await dirSubmit();
+    const dirData = await dirSubmit();
 
     await Router.dispatch(mainWindow, "changeScene", "loading");
     await Router.dispatch(mainWindow, "loadingScene::setTitle", "Importing songs from osu!");
@@ -68,7 +68,11 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
       });
     }, UPDATE_DELAY_MS);
 
-    tables = await OsuParser.parseDatabase(dir, update);
+    if (dirData.version == "stable") {
+      tables = await OsuParser.parseStableDatabase(dirData.path, update);
+    } else {
+      tables = await OsuParser.parseLazerDatabase(dirData.path, update);
+    }
     // Cancel ongoing throttled update, so it does not look bad when it finishes and afterward the update overwrites
     // finished state
     cancelUpdate();
@@ -82,14 +86,14 @@ async function configureOsuDir(mainWindow: BrowserWindow) {
     if (tables.value[SONGS].size === 0) {
       await showError(
         mainWindow,
-        `No songs found in folder: ${dir}. Please make sure this is the directory where you have all your songs saved.`,
+        `No songs found in folder: ${dirData.path}. Please make sure this is the directory where you have all your songs saved.`,
       );
       // Try again
       continue;
     }
 
     // All went smoothly. Save osu directory and continue with import procedure
-    settings.write("osuSongsDir", dir);
+    settings.write("osuSongsDir", dirData.path);
     break;
   }
 

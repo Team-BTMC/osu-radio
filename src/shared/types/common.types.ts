@@ -57,6 +57,7 @@ export type ImageSource = {
 } & Resource;
 
 export type Song = {
+  lazer: boolean;
   audio: ResourceID;
   bg?: ResourceID;
   osuFile: string;

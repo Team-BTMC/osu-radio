@@ -1,4 +1,5 @@
 import { OsuFile } from "./OsuFile";
+import { BeatmapSet } from "./lazer.types";
 import { access } from "@main/lib/fs-promises";
 import { fail, ok } from "@shared/lib/rust-types/Result";
 import { assertNever } from "@shared/lib/tungsten/assertNever";
@@ -7,6 +8,7 @@ import fs from "graceful-fs";
 import os from "os";
 import path from "path/posix";
 import readline from "readline";
+import Realm from "realm";
 
 const bgFileNameRegex = /.*"(?<!Video.*)(.*)".*/;
 const beatmapSetIDRegex = /([0-9]+) .*/;
@@ -31,9 +33,6 @@ type Table<T> = Map<ResourceID, T>;
 export type DirParseResult = Promise<
   Result<[Table<Song>, Table<AudioSource>, Table<ImageSource>], string>
 >;
-
-// Overriding Buffer prototype because I'm lazy.
-// Should probably get moved to another file, or make a wrapper instead.
 
 class BufferReader {
   buffer: Buffer;
@@ -113,7 +112,129 @@ class BufferReader {
 }
 
 export class OsuParser {
-  static async parseDatabase(
+  static async parseLazerDatabase(
+    databasePath: string,
+    update?: (i: number, total: number, file: string) => any,
+  ): DirParseResult {
+    const currentDir = databasePath.replaceAll("\\", "/");
+
+    const sourceRealm = path.join(currentDir, "client.realm");
+    const destinationRealm = path.join(currentDir, "radio_client.realm");
+
+    // clone the realm file so it can be upgraded if needed by the realm sdk
+    // without bricking the user's lazer installation
+    fs.copyFileSync(sourceRealm, destinationRealm);
+
+    const realm = await Realm.open({
+      path: currentDir + "/radio_client.realm",
+    });
+    const beatmapSets = realm.objects<BeatmapSet>("BeatmapSet");
+
+    const songTable = new Map<ResourceID, Song>();
+    const audioTable = new Map<ResourceID, AudioSource>();
+    const imageTable = new Map<ResourceID, ImageSource>();
+
+    let i = 0;
+    for (const beatmapSet of beatmapSets) {
+      try {
+        const beatmaps = beatmapSet.Beatmaps;
+
+        for (const beatmap of beatmaps) {
+          try {
+            const song: Song = {
+              lazer: true,
+              audio: "",
+              osuFile: "",
+              path: "",
+              ctime: "",
+              dateAdded: beatmapSet.DateAdded,
+              title: beatmap.Metadata.Title,
+              artist: beatmap.Metadata.Artist,
+              creator: beatmap.Metadata.Author?.Username ?? "No Creator",
+              bpm: [[beatmap.BPM]],
+              duration: beatmap.Length,
+              diffs: [beatmap.DifficultyName ?? "Unknown difficulty"],
+            };
+
+            song.osuFile = path.join(
+              currentDir,
+              "files",
+              beatmap.Hash[0],
+              beatmap.Hash.substring(0, 2),
+              beatmap.Hash,
+            );
+
+            const songHash = beatmapSet.Files.find(
+              (file) => file.Filename.toLowerCase() === beatmap.Metadata.AudioFile.toLowerCase(),
+            )?.File.Hash;
+
+            if (songHash) {
+              song.audio = path.join(
+                currentDir,
+                "files",
+                songHash[0],
+                songHash.substring(0, 2),
+                songHash,
+              );
+            }
+
+            const existingSong = songTable.get(song.audio);
+            if (existingSong) {
+              existingSong.diffs.push(song.diffs[0]);
+              continue;
+            }
+
+            /* Note: in lots of places throughout the application, it relies on the song.path parameter, which in the
+            stable parser is the path of the folder that holds all the files. This folder doesn't exist in lazer's
+            file structure, so for now I'm just passing the audio location as the path parameter. In initial testing
+            this doesn't seem to break anything but just leaving this note in case it does */
+            song.path = song.audio;
+
+            const bgHash = beatmapSet.Files.find(
+              (file) => file.Filename === beatmap.Metadata.BackgroundFile,
+            )?.File.Hash;
+
+            if (bgHash) {
+              song.bg = path.join(currentDir, "files", bgHash[0], bgHash.substring(0, 2), bgHash);
+            }
+
+            song.beatmapSetID = beatmapSet.OnlineID;
+
+            songTable.set(song.audio, song);
+            audioTable.set(song.audio, {
+              songID: song.audio,
+              path: song.audio,
+              ctime: String(beatmapSet.DateAdded),
+            });
+
+            if (update) {
+              update(i + 1, beatmapSets.length, song.title);
+              i++;
+            }
+          } catch (err) {
+            console.error("Error while parsing beatmap: ", err);
+          }
+        }
+      } catch (err) {
+        console.error("Error while parsing beatmapset: ", err);
+      }
+    }
+
+    // Done with the file now
+    realm.close();
+
+    // Delete the cloned lazer realm file(s)
+    fs.unlinkSync(path.join(currentDir, "radio_client.realm"));
+    fs.unlinkSync(path.join(currentDir, "radio_client.realm.lock"));
+    fs.rmSync(path.join(currentDir, "radio_client.realm.management"), {
+      recursive: true,
+      force: true,
+    });
+
+    return ok([songTable, audioTable, imageTable]);
+  }
+
+  static async parseStableDatabase(
     databasePath: string,
     update?: (i: number, total: number, file: string) => any,
   ): DirParseResult {
@@ -196,6 +317,7 @@ export class OsuParser {
         }
 
         const song: Song = {
+          lazer: false,
           audio: "",
           osuFile: "",
           path: "",
@@ -303,11 +425,11 @@ export class OsuParser {
         db.readInt(); // last edit time
         db.readByte(); // mania scroll speed
 
-        const audioFilePath = songsFolderPath + "/" + folder + "/" + audio_filename;
-        const osuFilePath = songsFolderPath + "/" + folder + "/" + osu_filename;
+        const audioFilePath = path.join(songsFolderPath, folder, audio_filename);
+        const osuFilePath = path.join(songsFolderPath, folder, osu_filename);
         song.osuFile = osuFilePath;
         song.audio = audioFilePath;
-        song.path = songsFolderPath + "/" + folder;
+        song.path = path.join(songsFolderPath, folder);
 
         // Check if the song has already been processed, and add the diff name to the existing song if so
         const existingSong = songTable.get(audioFilePath);
@@ -323,7 +445,9 @@ export class OsuParser {
         }
 
         const bgSrc = osuFile.value.props.get("bgSrc");
-        song.bg = songsFolderPath + "/" + folder + "/" + bgSrc;
+        if (bgSrc) {
+          song.bg = path.join(songsFolderPath, folder, bgSrc);
+        }
 
         if (song.audio != last_audio_filepath) {
           songTable.set(song.audio, song);

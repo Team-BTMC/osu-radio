@@ -45,6 +45,7 @@ export function msToBPM(ms: number): number {
 
 export function createDefaultSong(): Song {
   return {
+    lazer: false,
     dateAdded: "",
     ctime: "",
 
