@@ -1,5 +1,4 @@
 import { electronApp, is, optimizer } from "@electron-toolkit/utils";
-import { Router } from "@main/lib/route-pass/Router";
 import createMenu from "@main/lib/window/menu";
 import trackBounds, { getBounds, wasMaximized } from "@main/lib/window/resizer";
 import { main } from "@main/main";
@@ -60,13 +59,13 @@ async function createWindow() {
     window.focus();
   });
 
-  window.on("maximize", () => {
-    Router.dispatch(window, "window::maximizeChange", true);
-  });
+  // window.on("maximize", () => {
+  //   Router.dispatch(window, "window::maximizeChange", true);
+  // });
 
-  window.on("unmaximize", () => {
-    Router.dispatch(window, "window::maximizeChange", false);
-  });
+  // window.on("unmaximize", () => {
+  //   Router.dispatch(window, "window::maximizeChange", false);
+  // });
 
   if (wasMaximized()) {
     window.maximize();
@@ -76,7 +75,7 @@ async function createWindow() {
 
   window.on("ready-to-show", async () => {
     window.show();
-    await Router.dispatch(window, "changeScene", "main");
+    // await Router.dispatch(window, "changeScene", "main");
   });
 
   // HMR for renderer base on electron-vite cli.

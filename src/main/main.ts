@@ -23,7 +23,7 @@ export async function main(window: BrowserWindow) {
   if (osuSongsDir.isNone) {
     await configureOsuDir(window);
   } else {
-    //todo check for updates in song files
+    //TODO: check for updates in song files
   }
 
   const songsArray = Object.values(Storage.getTable("songs").getStruct());

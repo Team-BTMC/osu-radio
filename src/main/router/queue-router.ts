@@ -29,7 +29,7 @@ let lastPayload: QueueCreatePayload | undefined;
 Router.respond("queue::create", async (_evt, payload) => {
   if (comparePayload(payload, lastPayload)) {
     // Payload is practically same. Find start song and play queue from there
-    const newIndex = queue.findIndex((s) => s.path === payload.startSong);
+    const newIndex = queue.findIndex((s) => s.osuFile === payload.startSong);
 
     if (newIndex === -1 || newIndex === index) {
       return;
@@ -58,7 +58,7 @@ Router.respond("queue::create", async (_evt, payload) => {
   }
 
   // Set playing index
-  const songIndex = queue.findIndex((s) => s.path === payload.startSong);
+  const songIndex = queue.findIndex((s) => s.osuFile === payload.startSong);
 
   if (songIndex !== -1) {
     index = songIndex;
@@ -72,7 +72,7 @@ Router.respond("queue::create", async (_evt, payload) => {
 
 function getIndexes(view: QueueView): SongIndex[] {
   if (view.playlists !== undefined) {
-    //todo implement multi playlist playback
+    //TODO: implement multi playlist playback
     return [];
   }
 
@@ -86,7 +86,7 @@ function getIndexes(view: QueueView): SongIndex[] {
   }
 
   if (view.playlist) {
-    //todo get playlist
+    //TODO: get playlist
     return [];
   }
 
@@ -167,11 +167,11 @@ Router.respond("queue::shuffle", async () => {
     return;
   }
 
-  const current = queue[index].path;
+  const current = queue[index].osuFile;
   shuffle(queue);
 
   for (let i = 0; i < queue.length; i++) {
-    if (queue[i].path !== current) {
+    if (queue[i].osuFile !== current) {
       continue;
     }
 
@@ -193,7 +193,7 @@ Router.respond("queue::shuffle", async () => {
 
 Router.respond("queue::place", (_evt, what, after) => {
   // Find index of subject
-  const whatIndex = queue.findIndex((s) => s.path === what);
+  const whatIndex = queue.findIndex((s) => s.osuFile === what);
 
   if (whatIndex === -1) {
     return;
@@ -220,7 +220,7 @@ Router.respond("queue::place", (_evt, what, after) => {
     return;
   }
 
-  const afterIndex = queue.findIndex((s) => s.path === after);
+  const afterIndex = queue.findIndex((s) => s.osuFile === after);
 
   if (afterIndex === -1) {
     // After index was not found... put subject back
@@ -249,7 +249,7 @@ Router.respond("queue::place", (_evt, what, after) => {
 
 Router.respond("queue::play", async (_evt, song) => {
   // Point currently playing index to given song
-  const newIndex = queue.findIndex((s) => s.path === song);
+  const newIndex = queue.findIndex((s) => s.osuFile === song);
 
   if (newIndex === -1 || newIndex === index) {
     return;
@@ -264,7 +264,7 @@ Router.respond("queue::playNext", async (_evt, song) => {
     return;
   }
 
-  const songIndex = queue.findIndex((s) => s.path === song);
+  const songIndex = queue.findIndex((s) => s.osuFile === song);
 
   if (songIndex === index) {
     return;
@@ -297,7 +297,7 @@ Router.respond("queue::removeSong", async (_evt, what) => {
     return;
   }
 
-  const whatIndex = queue.findIndex((s) => s.path === what);
+  const whatIndex = queue.findIndex((s) => s.osuFile === what);
 
   if (whatIndex === -1) {
     return;

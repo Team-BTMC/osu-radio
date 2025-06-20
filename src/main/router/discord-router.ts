@@ -3,9 +3,11 @@ import { Client, SetActivity } from "@xhayper/discord-rpc";
 
 const client = new Client({ clientId: "1292942523425099826" });
 
-client.on("ready", () => client.user?.setActivity(defaultPresence));
+client.on("ready", () =>
+  client.user?.setActivity(defaultPresence).catch(catchDiscordActivityError),
+);
 
-client.login();
+client.login().catch(catchDiscordActivityError);
 
 const defaultPresence: SetActivity = {
   details: "Idle",
@@ -44,7 +46,7 @@ Router.respond("discord::play", async (_evt, song, length, position) => {
     });
   }
 
-  client.user?.setActivity(presence);
+  client.user?.setActivity(presence).catch(catchDiscordActivityError);
 });
 
 Router.respond("discord::pause", async (_evt, song) => {
@@ -73,5 +75,9 @@ Router.respond("discord::pause", async (_evt, song) => {
     });
   }
 
-  client.user?.setActivity(presence);
+  client.user?.setActivity(presence).catch(catchDiscordActivityError);
 });
+
+function catchDiscordActivityError(err: unknown) {
+  console.error("Discord activity error:\n", err);
+}

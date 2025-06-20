@@ -23,7 +23,7 @@ const TabsTrigger: Component<Props> = (_props) => {
         props.class,
       )}
       classList={{
-        "hover:bg-surface/15": !isSelected(),
+        "hover:bg-surface/15 cursor-pointer": !isSelected(),
       }}
     />
   );

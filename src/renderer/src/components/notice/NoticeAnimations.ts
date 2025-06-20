@@ -28,7 +28,7 @@ export const noticeAnimations = {
   },
   animation: {
     "notice-slide-in": "notice-slide-in 300ms cubic-bezier(0.4, 0, 0.2, 1) forwards",
-    // TODO: Make this 3000ms configurable
+    //TODO: Make this 3000ms configurable
     "notice-progress": "notice-progress 3000ms linear",
     "notice-slide-out": "notice-slide-out 300ms cubic-bezier(0.4, 0, 0.2, 1) forwards",
   },

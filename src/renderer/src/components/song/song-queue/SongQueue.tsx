@@ -32,8 +32,8 @@ const SongQueue: Component = () => {
     return async (before: Element | null) => {
       await window.api.request(
         "queue::place",
-        s.path,
-        (before as HTMLElement | null)?.dataset.path,
+        s.osuFile,
+        (before as HTMLElement | null)?.dataset.osuFile,
       );
     };
   };
@@ -97,7 +97,7 @@ const SongQueue: Component = () => {
               song={s}
               group={group}
               selectable={true}
-              onSelect={() => window.api.request("queue::play", s.path)}
+              onSelect={() => window.api.request("queue::play", s.osuFile)}
               onDrop={onDrop(s)}
               contextMenu={<QueueContextMenuContent song={s} />}
             />
@@ -117,7 +117,7 @@ const QueueContextMenuContent: Component<QueueContextMenuContentProps> = (props)
         <ListPlusIcon class="text-subtext" size={20} />
       </DropdownList.Item>
       <DropdownList.Item
-        onClick={() => window.api.request("queue::removeSong", props.song.path)}
+        onClick={() => window.api.request("queue::removeSong", props.song.osuFile)}
         class="text-danger"
       >
         <span>Remove from queue</span>

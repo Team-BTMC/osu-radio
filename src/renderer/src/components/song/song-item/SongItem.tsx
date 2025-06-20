@@ -23,6 +23,7 @@ type SongItemProps = {
 const SongItem: Component<SongItemProps> = (props) => {
   let item: HTMLDivElement | undefined;
   const { extractColorFromImage } = useColorExtractor();
+  // eslint-disable-next-line solid/reactivity
   const { primaryColor, secondaryColor, processImage } = extractColorFromImage(props.song);
   const [localShow, setLocalShow] = createSignal(false);
   const [isHovering, setIsHovering] = createSignal(false);
@@ -33,7 +34,7 @@ const SongItem: Component<SongItemProps> = (props) => {
 
     // Initialize draggable functionality
     draggable(item, {
-      onClick: () => props.onSelect(props.song.path),
+      onClick: () => props.onSelect(props.song.osuFile),
       onDrop: props.onDrop ?? (() => {}),
       createHint: SongHint,
       useOnlyAsOnClickBinder: !props.draggable || selectedSong().path === props.song.path,
@@ -117,7 +118,7 @@ const SongItem: Component<SongItemProps> = (props) => {
         }}
       >
         <div
-          class="relative isolate h-full select-none rounded-lg"
+          class="relative isolate h-full cursor-pointer select-none rounded-lg"
           ref={item}
           data-url={props.song.bg}
         >
@@ -149,7 +150,7 @@ const SongItem: Component<SongItemProps> = (props) => {
               setMousePos(undefined);
               setLocalShow(true);
             }}
-            class="absolute right-0 top-0 flex h-full animate-song-item-slide-in items-center rounded-r-lg text-subtext transition-colors hover:text-text"
+            class="absolute right-0 top-0 flex h-full animate-song-item-slide-in cursor-pointer items-center rounded-r-lg text-subtext transition-colors hover:text-text"
             title="Song options"
             classList={{
               "text-text": localShow(),
