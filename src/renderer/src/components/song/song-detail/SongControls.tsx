@@ -77,11 +77,9 @@ const SongControls: Component<SongControlsProps> = (props) => {
 
           <button
             class="flex h-12 w-12 cursor-pointer items-center justify-center rounded-full bg-surface text-2xl text-thick-material text-white shadow-lg ring-1 ring-stroke transition-all active:scale-95"
-            classList={
-              {
-                "opacity-50 !cursor-default": disable(),
-              }
-            }
+            classList={{
+              "opacity-50 !cursor-default": disable(),
+            }}
             onClick={() => togglePlay()}
             disabled={disable()}
             title={playHint()}
@@ -259,7 +257,7 @@ const SpeedOption: ParentComponent<SpeedOptionProps> = (props) => {
   return (
     <button
       onClick={() => setSpeed(props.amount)}
-      class="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-surface focus:outline-none disabled:pointer-events-none disabled:opacity-50 cursor-pointer"
+      class="flex cursor-pointer items-center justify-between rounded-md px-2 py-1.5 hover:bg-surface focus:outline-none disabled:pointer-events-none disabled:opacity-50"
     >
       {props.children}
     </button>
