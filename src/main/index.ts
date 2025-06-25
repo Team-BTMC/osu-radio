@@ -59,14 +59,6 @@ async function createWindow() {
     window.focus();
   });
 
-  // window.on("maximize", () => {
-  //   Router.dispatch(window, "window::maximizeChange", true);
-  // });
-
-  // window.on("unmaximize", () => {
-  //   Router.dispatch(window, "window::maximizeChange", false);
-  // });
-
   if (wasMaximized()) {
     window.maximize();
   }
@@ -75,7 +67,6 @@ async function createWindow() {
 
   window.on("ready-to-show", async () => {
     window.show();
-    // await Router.dispatch(window, "changeScene", "main");
   });
 
   // HMR for renderer base on electron-vite cli.
