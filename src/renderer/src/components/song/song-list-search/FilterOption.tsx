@@ -60,7 +60,7 @@ export const FilterOptionTrigger: Component<FilterOptionTriggerProps> = (_props)
     <Popover.Trigger
       {...rest}
       class={cn(
-        "flex items-center gap-1.5 rounded px-2.5 py-1 text-sm focus-within:outline-none hover:bg-surface focus-visible:bg-surface",
+        "flex cursor-pointer items-center gap-1.5 rounded px-2.5 py-1 text-sm focus-within:outline-none hover:bg-surface focus-visible:bg-surface",
         props.class,
       )}
     >
@@ -81,7 +81,7 @@ export const FilterOptionItem: Component<FilterOptionItemProps> = (_props) => {
     <button
       {...rest}
       class={cn(
-        "flex items-center gap-1 rounded px-2.5 py-1 text-sm focus-within:bg-surface focus-within:outline-none hover:bg-surface",
+        "flex cursor-pointer items-center gap-1 rounded px-2.5 py-1 text-sm focus-within:bg-surface focus-within:outline-none hover:bg-surface",
         props.class,
       )}
     >

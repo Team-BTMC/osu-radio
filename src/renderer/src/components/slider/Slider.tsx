@@ -198,7 +198,7 @@ type SlideImplementationProps = {
 const SlideImplementation: ParentComponent<SlideImplementationProps> = (props) => {
   return (
     <span
-      class={cn("relative", props.class)}
+      class={cn("relative cursor-pointer", props.class)}
       ref={props.ref}
       onPointerDown={(event) => {
         const target = event.target as HTMLElement;

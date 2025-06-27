@@ -59,6 +59,9 @@ export type RequestAPI = {
 
   "settings::write": <K extends keyof Settings>(key: K, value: any) => void;
   "settings::get": <K extends keyof Settings>(key: K) => Optional<any>;
+  "settings::DeleteSongData": () => void;
+
+  "app::restart": () => void;
 
   "os::platform": () => NodeJS.Platform;
 

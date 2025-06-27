@@ -1,5 +1,6 @@
 import { RawList } from "../raw-list/RawList";
 import { useDropdownList } from "./DropdownList";
+import { cn } from "@renderer/lib/css.utils";
 import { Component, onCleanup } from "solid-js";
 import { JSX } from "solid-js/jsx-runtime";
 
@@ -24,6 +25,7 @@ const DropdownListItem: Component<Props> = (props) => {
       }}
       {...attrs}
       {...props}
+      class={cn("cursor-pointer", props.class)}
     />
   );
 };

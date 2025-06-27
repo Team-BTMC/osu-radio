@@ -112,7 +112,7 @@ const SongListContextMenuContent: Component<SongListContextMenuContentProps> = (
       </DropdownList.Item>
       <DropdownList.Item
         onClick={() => {
-          window.api.request("queue::playNext", props.song.path);
+          window.api.request("queue::playNext", props.song.osuFile);
         }}
       >
         <span>Play next</span>

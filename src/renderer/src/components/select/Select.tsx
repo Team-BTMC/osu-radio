@@ -28,7 +28,7 @@ export const SelectTrigger: ParentComponent<Props> = (_props) => {
       {...rest}
       class={cn(
         inputStyles({ variant: props.variant, class: props.class }),
-        "box-border flex h-auto min-h-[42px] items-center justify-between gap-2 hover:bg-surface data-[open='true']:bg-surface",
+        "box-border flex h-auto min-h-[42px] cursor-pointer items-center justify-between gap-2 hover:bg-surface data-[open='true']:bg-surface",
       )}
     >
       <span class="text-base leading-6">{props.children}</span>

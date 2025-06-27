@@ -1,4 +1,4 @@
-//todo redo from parent perspective... how did i not think of this... I'm quite stupid
+//TODO: redo from parent perspective... how did i not think of this... I'm quite stupid
 import defaultHint from "./defaultHint";
 import scrollAnimation from "./scrollAnimation";
 import { Vec2, vec2Length } from "@shared/lib/tungsten/math";

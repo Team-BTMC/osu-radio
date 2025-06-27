@@ -33,6 +33,7 @@ const SelectableListItem: Component<Props> = (_props) => {
 
   return (
     <RawList.Item
+      class="cursor-pointer"
       tabIndex={tabIndex()}
       classList={{
         "bg-overlay/30": isFocused(),

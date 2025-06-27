@@ -3,7 +3,7 @@ import { delay } from "@renderer/lib/delay";
 import { createDefaultSong, isSongUndefined, msToBPM } from "@renderer/lib/song";
 import { none, some } from "@shared/lib/rust-types/Optional";
 import { AudioSource, Optional, Song } from "@shared/types/common.types";
-import { createEffect, createSignal } from "solid-js";
+import { createSignal } from "solid-js";
 
 /** Range from 0 to 1. */
 export type ZeroToOne = number;
@@ -25,7 +25,7 @@ export { duration, setDuration };
 const [timestamp, setTimestamp] = createSignal(0);
 export { setTimestamp, timestamp };
 
-const [valueBeforeMute, setValueBeforeMute] = createSignal<number | undefined>();
+const [valueBeforeMute, setValueBeforeMute] = createSignal<ZeroToOne>(0.3);
 export { setValueBeforeMute, valueBeforeMute };
 
 const [isSeeking, setIsSeeking] = createSignal({
@@ -35,9 +35,17 @@ const [isSeeking, setIsSeeking] = createSignal({
 export { isSeeking, setIsSeeking };
 
 const [volume, _setVolume] = createSignal<ZeroToOne>(0.3);
+
+const [writeVolume] = delay(async (volume: number) => {
+  await window.api.request("settings::write", "volume", volume);
+}, 200);
+
+const player = new Audio();
+
 export const setVolume = (newValue: ZeroToOne) => {
   _setVolume(newValue);
-  setValueBeforeMute(undefined);
+  player.volume = newValue;
+  writeVolume(newValue);
 };
 
 const [speed, _setSpeed] = createSignal<ZeroToOne>(1);
@@ -49,12 +57,11 @@ export { speed, volume };
 
 let resizedBg: Optional<string>;
 
-const player = new Audio();
-
 // Initialize settings
 window.api.request("settings::get", "volume").then((v) => {
   if (v.isNone) return;
   setVolume(v.value);
+  setValueBeforeMute(v.value);
 });
 
 window.api.request("settings::get", "audioDeviceId").then((v) => {
@@ -90,6 +97,13 @@ async function getCurrent(): Promise<{ song: Song; media: URL } | undefined> {
   };
 }
 
+const [updateDiscordPresence] = delay(
+  async (currentSong: Song, duration: number, currentTime: number) => {
+    await window.api.request("discord::play", currentSong, duration, currentTime);
+  },
+  2000,
+);
+
 export async function play(): Promise<void> {
   if (media() === undefined) {
     const current = await getCurrent();
@@ -118,7 +132,7 @@ export async function play(): Promise<void> {
     return player.duration;
   };
   const duration = await waitForDuration();
-  await window.api.request("discord::play", currentSong, duration, player.currentTime);
+  updateDiscordPresence(currentSong, duration, player.currentTime);
 
   setIsPlaying(true);
 
@@ -263,18 +277,6 @@ function setMediaSessionPosition() {
   }
 }
 
-createEffect(() => {
-  player.volume = volume();
-});
-
-const [writeVolume] = delay(async (volume: number) => {
-  await window.api.request("settings::write", "volume", volume);
-}, 200);
-createEffect(async () => {
-  const v = volume();
-  writeVolume(v);
-});
-
 export const saveLocalVolume = async (localVolume: ZeroToOne, song: Song) => {
   if (isSongUndefined(song) || localVolume === 0.5) return;
 
@@ -375,13 +377,11 @@ export const handleSeekEnd = () => {
 };
 
 export const handleMuteSong = () => {
-  const vBeforeMute = valueBeforeMute();
-  if (typeof vBeforeMute !== "undefined") {
-    _setVolume(vBeforeMute);
-    setValueBeforeMute(undefined);
+  if (volume() === 0) {
+    setVolume(valueBeforeMute());
     return;
   }
 
   setValueBeforeMute(volume());
-  _setVolume(0);
+  setVolume(0);
 };

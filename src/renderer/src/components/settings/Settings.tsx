@@ -1,7 +1,8 @@
+import Button from "../button/Button";
 import Select from "@renderer/components/select/Select";
 import { changeAudioDevice } from "@renderer/components/song/song.utils";
 import { cn } from "@renderer/lib/css.utils";
-import { GlobeIcon, LucideIcon, Volume2Icon } from "lucide-solid";
+import { GlobeIcon, LucideIcon, Volume2Icon, HardDrive } from "lucide-solid";
 import { Component, createEffect, createSignal, For, JSX, onMount } from "solid-js";
 
 const Settings: Component = () => {
@@ -12,6 +13,25 @@ const Settings: Component = () => {
       </SettingsSection>
       <SettingsSection title="Audio" Icon={Volume2Icon}>
         <AudioDeviceSetting />
+      </SettingsSection>
+      <SettingsSection title="Storage" Icon={HardDrive}>
+        {/*
+          Clicking this when running in dev mode, the app will not restart correctly.
+          You will need to manually close the app and start it again.
+        */}
+        {
+          //TODO: Add a confirmation dialog before deleting song data
+        }
+        <Button
+          variant={"danger-outlined"}
+          size="large"
+          onClick={() => {
+            window.api.request("settings::DeleteSongData");
+            window.api.request("app::restart");
+          }}
+        >
+          Delete Song Data
+        </Button>
       </SettingsSection>
     </div>
   );
@@ -57,9 +77,16 @@ const AudioDeviceSetting: Component = () => {
 
   const setAudioDevicesMap = () => {
     const audioMap = new Map<string, () => any>();
+    let currentDeviceId = "default";
+    window.api.request("settings::get", "audioDeviceId").then((v) => {
+      if (v.isNone) return;
+      currentDeviceId = v.value;
+    });
+
     navigator.mediaDevices.enumerateDevices().then((r) => {
       for (const device of r) {
         if (device.kind === "audiooutput") {
+          if (currentDeviceId == device.deviceId) setSelectedAudioDevice(device.label);
           audioMap.set(device.label, () => changeAudioDevice(device.deviceId));
         }
       }
@@ -77,7 +104,7 @@ const AudioDeviceSetting: Component = () => {
   };
 
   return (
-    <Setting name="audio-device" label="Choose audio device">
+    <Setting name="audio-device" label="Output audio device">
       <Select isOpen={isPopoverOpen} onValueChange={setIsPopoverOpen}>
         <Select.Trigger variant="outlined">
           {selectedAudioDevice() || "No device selected"}
